@@ -34,6 +34,7 @@
 *     Italy                                                                     *
 *********************************************************************************/
 #include <cinolib/io/read_VTK.h>
+#include <iostream>
 
 #ifdef CINOLIB_USES_VTK
 #include <vtkGenericDataObjectReader.h>

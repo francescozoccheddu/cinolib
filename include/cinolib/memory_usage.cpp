@@ -34,6 +34,7 @@
 *     Italy                                                                     *
 *********************************************************************************/
 #include <cinolib/memory_usage.h>
+#include <cassert>
 
 // Resources:
 // https://stackoverflow.com/questions/669438/how-to-get-memory-usage-at-runtime-using-c/19770392#19770392

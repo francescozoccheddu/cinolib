@@ -34,6 +34,10 @@
 *     Italy                                                                     *
 *********************************************************************************/
 #include <cinolib/boost_polygon_wrap.h>
+
+// FIXME (francescozoccheddu)
+#ifdef CINOLIB_USES_BOOST
+
 #include <cinolib/vector_serialization.h>
 
 #ifdef CINOLIB_USES_TRIANGLE
@@ -351,3 +355,5 @@ void triangulate_polygon(const BoostMultiPolygon       & poly,
 }
 
 }
+
+#endif // CINOLIB_USES_BOOST

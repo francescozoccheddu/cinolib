@@ -36,7 +36,7 @@
 #include "color.h"
 #include <cinolib/textures/texture_hsv.h>
 #include <cinolib/textures/texture_parula.h>
-#include <assert.h>
+#include <cassert>
 #include <algorithm>
 #include <cmath>
 

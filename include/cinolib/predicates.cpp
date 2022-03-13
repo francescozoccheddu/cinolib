@@ -36,6 +36,7 @@
 #include <cinolib/predicates.h>
 #include <algorithm>
 #include <bitset>
+#include <cassert>
 
 namespace cinolib
 {

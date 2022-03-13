@@ -42,6 +42,7 @@
 #include <cinolib/geometry/triangle.h>
 #include <cinolib/geometry/tetrahedron.h>
 #include <stack>
+#include <numeric>
 
 namespace cinolib
 {

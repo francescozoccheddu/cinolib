@@ -39,6 +39,7 @@
 #include <cinolib/Moller_Trumbore_intersection.h>
 #include <cinolib/geometry/triangle_utils.h>
 #include <set>
+#include <Eigen/Dense>
 
 namespace cinolib
 {

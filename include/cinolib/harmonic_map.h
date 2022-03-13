@@ -39,10 +39,12 @@
 #include <sys/types.h>
 #include <vector>
 #include <map>
+#include <cinolib/geometry/vec_mat.h>
 #include <cinolib/cino_inline.h>
 #include <cinolib/scalar_field.h>
 #include <cinolib/linear_solvers.h>
 #include <cinolib/symbols.h>
+#include <cinolib/meshes/abstract_mesh.h>
 
 namespace cinolib
 {

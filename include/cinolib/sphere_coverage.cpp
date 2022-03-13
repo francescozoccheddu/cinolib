@@ -39,7 +39,7 @@
 #include <math.h>   // sin(), cos(), sqrt(), pow()
 #include <time.h>   // time()
 #include <stddef.h> // NULL
-#include <assert.h> // assert()
+#include <cassert> // assert()
 
 namespace cinolib
 {

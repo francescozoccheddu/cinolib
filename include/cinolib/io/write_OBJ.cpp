@@ -37,7 +37,7 @@
 #include <cinolib/color.h>
 #include <cinolib/stl_container_utilities.h>
 #include <cinolib/string_utilities.h>
-
+#include <cassert>
 #include <iostream>
 #include <algorithm>
 #include <map>

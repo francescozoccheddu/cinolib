@@ -36,6 +36,9 @@
 #ifndef CINO_SLICED_OBJ
 #define CINO_SLICED_OBJ
 
+// FIXME (francescozoccheddu)
+#ifdef CINOLIB_USES_BOOST
+
 #include <cinolib/meshes/trimesh.h>
 #include <cinolib/boost_polygon_wrap.h>
 
@@ -105,6 +108,8 @@ class SlicedObj : public Trimesh<M,V,E,P>
 
 #ifndef  CINO_STATIC_LIB
 #include "sliced_object.cpp"
+#endif
+
 #endif
 
 #endif // CINO_DRAWABLE_SLICED_OBJ

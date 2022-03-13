@@ -36,6 +36,7 @@
 #include <cinolib/geometry/aabb.h>
 #include <algorithm>
 #include <cmath>
+#include <cassert>
 
 namespace cinolib
 {

@@ -42,7 +42,8 @@
 #include <cinolib/gl/camera.h>
 #include <cinolib/min_max_inf.h>
 #include <cinolib/color.h>
-
+#include <vector>
+#include <functional>
 #include <chrono>
 
 namespace cinolib

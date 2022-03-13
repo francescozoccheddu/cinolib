@@ -39,6 +39,7 @@
 #include <cinolib/geometry/vec_mat.h>
 #include <cinolib/serializable.h>
 #include <Eigen/Dense>
+#include <vector>
 
 namespace cinolib
 {

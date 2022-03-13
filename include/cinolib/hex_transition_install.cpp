@@ -39,6 +39,7 @@
 *********************************************************************************/
 #include <cinolib/hex_transition_install.h>
 #include <cinolib/hex_transition_orient.h>
+#include <unordered_map>
 
 namespace cinolib
 {

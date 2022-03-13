@@ -57,7 +57,7 @@ bool tangent_space_2d_coords(const vec3d & p0,  // 3D coordinates of triangle <p
                              const vec3d & p2,
                                    vec2d & P0,  // 2D coordinates of triangle <P0,P1,P2>
                                    vec2d & P1,  // in tangent space
-                                   vec3d & P2);
+                                   vec2d & P2);
 }
 
 #ifndef  CINO_STATIC_LIB

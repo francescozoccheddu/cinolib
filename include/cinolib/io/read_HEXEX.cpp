@@ -36,7 +36,7 @@
 #include <cinolib/io/read_HEXEX.h>
 #include <sstream>
 #include <iostream>
-#include <assert.h>
+#include <cassert>
 
 namespace cinolib
 {

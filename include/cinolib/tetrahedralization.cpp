@@ -37,6 +37,9 @@
 #include <cinolib/ipair.h>
 #include <cinolib/standard_elements_tables.h>
 #include <set>
+#include <cassert>
+#include <algorithm>
+#include <cinolib/stl_container_utilities.h>
 
 namespace cinolib
 {

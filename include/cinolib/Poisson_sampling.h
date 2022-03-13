@@ -38,6 +38,7 @@
 
 #include <cinolib/cino_inline.h>
 #include <sys/types.h>
+#include <vector>
 
 namespace cinolib
 {

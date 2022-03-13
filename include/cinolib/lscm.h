@@ -38,6 +38,7 @@
 
 #include <cinolib/meshes/trimesh.h>
 #include <cinolib/scalar_field.h>
+#include <map>
 
 namespace cinolib
 {

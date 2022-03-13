@@ -35,6 +35,7 @@
 *********************************************************************************/
 #include <cinolib/geometry/n_sided_poygon.h>
 #include <cinolib/pi.h>
+#include <cassert>
 
 namespace cinolib
 {

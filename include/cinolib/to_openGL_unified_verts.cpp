@@ -36,6 +36,7 @@
 #include <cinolib/to_openGL_unified_verts.h>
 #include <map>
 #include <tuple>
+#include <cassert>
 
 namespace cinolib
 {

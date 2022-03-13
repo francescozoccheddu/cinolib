@@ -49,7 +49,7 @@
 #include <fstream>
 #include <string>
 #include <string.h>
-#include <assert.h>
+#include <cassert>
 
 namespace cinolib
 {

@@ -35,7 +35,10 @@
 *********************************************************************************/
 #include <cinolib/geometry/tetrahedron.h>
 #include <cinolib/geometry/tetrahedron_utils.h>
+#include <cinolib/Moller_Trumbore_intersection.h>
 #include <cinolib/predicates.h>
+#include <algorithm>
+#include <cassert>
 
 namespace cinolib
 {

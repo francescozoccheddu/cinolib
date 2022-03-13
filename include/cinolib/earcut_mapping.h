@@ -38,6 +38,7 @@
 
 #include <cinolib/geometry/vec_mat.h>
 #include <cinolib/symbols.h>
+#include <vector>
 
 namespace cinolib
 {

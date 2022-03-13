@@ -36,6 +36,7 @@
 #include <cinolib/subdivision_midpoint.h>
 #include <cinolib/sort_poly_vertices.h>
 #include <map>
+#include <unordered_map>
 
 namespace cinolib
 {

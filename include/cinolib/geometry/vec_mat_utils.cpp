@@ -38,7 +38,7 @@
 #include <cinolib/deg_rad.h>
 #include <iostream>
 #include <cmath>
-#include <assert.h>
+#include <cassert>
 #include <Eigen/Dense>
 
 namespace cinolib

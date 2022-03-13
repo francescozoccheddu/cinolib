@@ -43,6 +43,7 @@
 #include <cinolib/gl/draw_sphere.h>
 #include <cinolib/gl/glproject.h>
 #include <cinolib/gl/glunproject.h>
+#include <cinolib/clamp.h>
 
 namespace cinolib
 {

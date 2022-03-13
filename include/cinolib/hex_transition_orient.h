@@ -42,6 +42,7 @@
 
 #include <cinolib/geometry/vec_mat.h>
 #include <map>
+#include <vector>
 
 namespace cinolib
 {

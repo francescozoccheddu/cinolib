@@ -35,6 +35,7 @@
 *********************************************************************************/
 #include <cinolib/non_manifold_edge_geometric_sorting.h>
 #include <cinolib/predicates.h>
+#include <cassert>
 
 namespace cinolib
 {

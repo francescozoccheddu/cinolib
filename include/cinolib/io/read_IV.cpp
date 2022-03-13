@@ -35,6 +35,7 @@
 *********************************************************************************/
 #include <cinolib/io/read_IV.h>
 #include <cinolib/io/io_utilities.h>
+#include <cassert>
 
 namespace cinolib
 {
