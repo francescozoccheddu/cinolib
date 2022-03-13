@@ -43,18 +43,18 @@ namespace cinolib
 {
 
 CINO_INLINE
-uint serialize_2D_index(const uint r, const uint c, const uint n_cols);
+unsigned int serialize_2D_index(const unsigned int r, const unsigned int c, const unsigned int n_cols);
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 CINO_INLINE
-ipair deserialize_2D_index(const uint i, const uint n_cols);
+ipair deserialize_2D_index(const unsigned int i, const unsigned int n_cols);
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint N, class GridPoint>
+template<unsigned int N, class GridPoint>
 CINO_INLINE
-unsigned long int serialize_nD_index(const std::array<uint,N> & dim_extent, const GridPoint & p);
+unsigned long int serialize_nD_index(const std::array<unsigned int,N> & dim_extent, const GridPoint & p);
 
 }
 

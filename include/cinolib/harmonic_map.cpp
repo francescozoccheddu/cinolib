@@ -43,8 +43,8 @@ namespace cinolib
 template<class M, class V, class E, class P>
 CINO_INLINE
 ScalarField harmonic_map(const AbstractMesh<M,V,E,P> & m,
-                         const std::map<uint,double> & bc,
-                         const uint                    n,
+                         const std::map<unsigned int,double> & bc,
+                         const unsigned int                    n,
                          const int                     laplacian_mode,
                          const int                     solver)
 {
@@ -59,7 +59,7 @@ ScalarField harmonic_map(const AbstractMesh<M,V,E,P> & m,
     Eigen::SparseMatrix<double> Ln = -L;
     Eigen::VectorXd             rhs = Eigen::VectorXd::Zero(m.num_verts());
 
-    for(uint i=1; i<n; ++i) Ln  = Ln * (-L); // keep it PSD
+    for(unsigned int i=1; i<n; ++i) Ln  = Ln * (-L); // keep it PSD
 
     solve_square_system_with_bc(Ln, rhs, f, bc, solver);
 
@@ -72,8 +72,8 @@ ScalarField harmonic_map(const AbstractMesh<M,V,E,P> & m,
 template<class M, class V, class E, class P>
 CINO_INLINE
 std::vector<vec3d> harmonic_map_3d(const AbstractMesh<M,V,E,P> & m,
-                                   const std::map<uint,vec3d>  & bc,
-                                   const uint                    n,
+                                   const std::map<unsigned int,vec3d>  & bc,
+                                   const unsigned int                    n,
                                    const int                     laplacian_mode,
                                    const int                     solver)
 {
@@ -88,14 +88,14 @@ std::vector<vec3d> harmonic_map_3d(const AbstractMesh<M,V,E,P> & m,
     Eigen::SparseMatrix<double> Ln = -L;
     Eigen::VectorXd             rhs = Eigen::VectorXd::Zero(3*m.num_verts());
 
-    for(uint i=1; i<n; ++i) Ln  = Ln * (-L); // keep it PSD
+    for(unsigned int i=1; i<n; ++i) Ln  = Ln * (-L); // keep it PSD
 
-    uint y_off = m.num_verts();
-    uint z_off = m.num_verts() + y_off;
-    std::map<uint,double> bc_1d;
+    unsigned int y_off = m.num_verts();
+    unsigned int z_off = m.num_verts() + y_off;
+    std::map<unsigned int,double> bc_1d;
     for(auto obj : bc)
     {
-        uint  vid = obj.first;
+        unsigned int  vid = obj.first;
         vec3d pos = obj.second;
         bc_1d[      vid] = pos.x();
         bc_1d[y_off+vid] = pos.y();
@@ -105,7 +105,7 @@ std::vector<vec3d> harmonic_map_3d(const AbstractMesh<M,V,E,P> & m,
     solve_square_system_with_bc(Ln, rhs, f, bc_1d, solver);
 
     std::vector<vec3d> res(m.num_verts());
-    for(uint vid=0; vid<m.num_verts(); ++vid)
+    for(unsigned int vid=0; vid<m.num_verts(); ++vid)
     {
         res.at(vid) = vec3d(f[vid], f[y_off+vid], f[z_off+vid]);
     }

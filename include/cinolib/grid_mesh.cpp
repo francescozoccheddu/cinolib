@@ -42,14 +42,14 @@ namespace cinolib
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-void grid_mesh(const uint                quads_per_row,
-               const uint                quads_per_col,
+void grid_mesh(const unsigned int                quads_per_row,
+               const unsigned int                quads_per_col,
                      Quadmesh<M,V,E,P> & m)
 {
     std::vector<vec3d> points;
-    std::vector<uint>  polys;
-    for(uint r=0; r<=quads_per_row; ++r)
-    for(uint c=0; c<=quads_per_col; ++c)
+    std::vector<unsigned int>  polys;
+    for(unsigned int r=0; r<=quads_per_row; ++r)
+    for(unsigned int c=0; c<=quads_per_col; ++c)
     {
         points.push_back(vec3d(c,r,0));
 

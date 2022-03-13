@@ -57,7 +57,7 @@ template<class M, class V, class E, class P>
 CINO_INLINE
 Polygonmesh<M,V,E,P>::Polygonmesh(const std::vector<vec3d> & verts)
 {
-    std::vector<uint> p(verts.size());
+    std::vector<unsigned int> p(verts.size());
     std::iota(p.begin(), p.end(), 0);
     this->init(verts, {p});
 }
@@ -67,7 +67,7 @@ Polygonmesh<M,V,E,P>::Polygonmesh(const std::vector<vec3d> & verts)
 template<class M, class V, class E, class P>
 CINO_INLINE
 Polygonmesh<M,V,E,P>::Polygonmesh(const std::vector<vec3d>             & verts,
-                                  const std::vector<std::vector<uint>> & polys)
+                                  const std::vector<std::vector<unsigned int>> & polys)
 {
     this->init(verts, polys);
 }
@@ -77,7 +77,7 @@ Polygonmesh<M,V,E,P>::Polygonmesh(const std::vector<vec3d>             & verts,
 template<class M, class V, class E, class P>
 CINO_INLINE
 Polygonmesh<M,V,E,P>::Polygonmesh(const std::vector<double>            & coords,
-                                  const std::vector<std::vector<uint>> & polys)
+                                  const std::vector<std::vector<unsigned int>> & polys)
 {
     this->init(vec3d_from_serialized_xyz(coords), polys);
 }

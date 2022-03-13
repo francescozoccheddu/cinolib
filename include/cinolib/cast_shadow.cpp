@@ -43,8 +43,8 @@ template<class Mesh>
 CINO_INLINE
 void cast_shadow(const Mesh    & m,    // mesh to be rendered
                  const vec3d   & dir,  // light direction
-                 const uint      w,    // width  (must be an EVEN number)
-                 const uint      h,    // height (must be an EVEN number)
+                 const unsigned int      w,    // width  (must be an EVEN number)
+                 const unsigned int      h,    // height (must be an EVEN number)
                        uint8_t * data) // w x h buffer, 8 bits per pixel
 {
     GLFWwindow* GL_context = create_offline_GL_context(w,h);
@@ -63,8 +63,8 @@ template<class Mesh>
 CINO_INLINE
 void cast_shadow(const Mesh       & m,           // mesh to be rendered
                  const vec3d      & dir,         // light direction
-                 const uint         w,           // width  (must be an EVEN number)
-                 const uint         h,           // height (must be an EVEN number)
+                 const unsigned int         w,           // width  (must be an EVEN number)
+                 const unsigned int         h,           // height (must be an EVEN number)
                        uint8_t    * data,        // w x h buffer, 8 bits per pixel
                        GLFWwindow * GL_context)  // cached GL context (for amortized calls)
 {

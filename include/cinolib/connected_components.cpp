@@ -41,9 +41,9 @@ namespace cinolib
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-uint connected_components(const AbstractMesh<M,V,E,P> & m)
+unsigned int connected_components(const AbstractMesh<M,V,E,P> & m)
 {
-    std::vector<std::unordered_set<uint>> ccs;
+    std::vector<std::unordered_set<unsigned int>> ccs;
     return connected_components(m, ccs);
 }
 
@@ -51,20 +51,20 @@ uint connected_components(const AbstractMesh<M,V,E,P> & m)
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-uint connected_components(const AbstractMesh<M,V,E,P> & m,
-                          std::vector<std::unordered_set<uint>> & ccs)
+unsigned int connected_components(const AbstractMesh<M,V,E,P> & m,
+                          std::vector<std::unordered_set<unsigned int>> & ccs)
 {
     ccs.clear();
-    uint seed = 0;
+    unsigned int seed = 0;
     std::vector<bool> visited(m.num_verts(), false);
 
     do
     {
-        std::unordered_set<uint> cc;
+        std::unordered_set<unsigned int> cc;
         bfs(m, seed, cc);
 
         ccs.push_back(cc);
-        for(uint vid : cc) visited.at(vid) = true;
+        for(unsigned int vid : cc) visited.at(vid) = true;
 
         seed = 0;
         while (seed < m.num_verts() && visited.at(seed)) ++seed;

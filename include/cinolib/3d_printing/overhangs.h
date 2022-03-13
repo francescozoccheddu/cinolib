@@ -47,7 +47,7 @@ CINO_INLINE
 void overhangs(const Trimesh<M,V,E,P>  & m,
                const float               thresh, // degrees
                const vec3d             & build_dir,
-                     std::vector<uint> & polys_hanging);
+                     std::vector<unsigned int> & polys_hanging);
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -73,7 +73,7 @@ CINO_INLINE
 void overhangs(const Trimesh<M,V,E,P>                  & m,
                const float                               thresh, // degrees
                const vec3d                             & build_dir,
-                     std::vector<std::pair<uint,uint>> & polys_hanging);
+                     std::vector<std::pair<unsigned int,unsigned int>> & polys_hanging);
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -85,7 +85,7 @@ CINO_INLINE
 void overhangs(const Trimesh<M,V,E,P>                  & m,
                const float                               thresh, // degrees
                const vec3d                             & build_dir,
-                     std::vector<std::pair<uint,uint>> & polys_hanging,
+                     std::vector<std::pair<unsigned int,unsigned int>> & polys_hanging,
                const Octree                            & octree); // cached
 }
 

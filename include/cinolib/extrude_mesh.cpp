@@ -42,20 +42,20 @@ template<class M, class V, class E, class P>
 CINO_INLINE
 void extrude_mesh(AbstractPolygonMesh<M,V,E,P> & m, const vec3d & dir) // encode amount of extrusion in dir magnitude
 {
-    uint nv = m.num_verts();
-    uint np = m.num_polys();
-    uint ne = m.num_edges();
+    unsigned int nv = m.num_verts();
+    unsigned int np = m.num_polys();
+    unsigned int ne = m.num_edges();
 
-    std::unordered_map<uint,uint> v_map;
-    for(uint vid=0; vid<nv; ++vid)
+    std::unordered_map<unsigned int,unsigned int> v_map;
+    for(unsigned int vid=0; vid<nv; ++vid)
     {
         v_map[vid] = m.vert_add(m.vert(vid) + dir);
     }
 
-    for(uint pid=0; pid<np; ++pid)
+    for(unsigned int pid=0; pid<np; ++pid)
     {
-        std::vector<uint> p;
-        for(uint vid : m.adj_p2v(pid)) p.push_back(v_map.at(vid));
+        std::vector<unsigned int> p;
+        for(unsigned int vid : m.adj_p2v(pid)) p.push_back(v_map.at(vid));
         if(dir.dot(m.poly_data(pid).normal)<0)
         {
             m.poly_flip_winding_order(pid);   // if extruding along the normal direction, flip winding order
@@ -67,16 +67,16 @@ void extrude_mesh(AbstractPolygonMesh<M,V,E,P> & m, const vec3d & dir) // encode
         m.poly_add(p);
     }
 
-    for(uint eid=0; eid<ne; ++eid)
+    for(unsigned int eid=0; eid<ne; ++eid)
     {
         if(m.edge_is_boundary(eid))
         {
-            uint A = m.edge_vert_id(eid, 0);
-            uint B = m.edge_vert_id(eid, 1);
-            uint pid = m.adj_e2p(eid).front();
+            unsigned int A = m.edge_vert_id(eid, 0);
+            unsigned int B = m.edge_vert_id(eid, 1);
+            unsigned int pid = m.adj_e2p(eid).front();
             if(!m.poly_verts_are_CCW(pid, A, B)) std::swap(A, B);
-            uint Ap = v_map.at(A);
-            uint Bp = v_map.at(B);
+            unsigned int Ap = v_map.at(A);
+            unsigned int Bp = v_map.at(B);
             m.poly_add({A, B,  Bp});
             m.poly_add({A, Bp, Ap});
         }

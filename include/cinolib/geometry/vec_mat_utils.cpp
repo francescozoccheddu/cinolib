@@ -44,22 +44,22 @@
 namespace cinolib
 {
 
-template<uint d, typename T>
+template<unsigned int d, typename T>
 CINO_INLINE
 void vec_set(T * v, const std::initializer_list<T> & il)
 {
     assert(il.size()==d);
     auto it = il.begin();
-    for(uint i=0; i<d; ++i,++it) v[i] = *it;
+    for(unsigned int i=0; i<d; ++i,++it) v[i] = *it;
 }
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint d, typename T>
+template<unsigned int d, typename T>
 CINO_INLINE
 void vec_set_dense(T * vec, const T val)
 {
-    for(uint i=0; i<d; ++i)
+    for(unsigned int i=0; i<d; ++i)
     {
         vec[i] = val;
     }
@@ -68,11 +68,11 @@ void vec_set_dense(T * vec, const T val)
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 // v2 = v0 + v1
-template<uint d, typename T>
+template<unsigned int d, typename T>
 CINO_INLINE
 void vec_plus(const T * v0, const T * v1, T * v2)
 {
-    for(uint i=0; i<d; ++i)
+    for(unsigned int i=0; i<d; ++i)
     {
         v2[i] = v0[i] + v1[i];
     }
@@ -81,11 +81,11 @@ void vec_plus(const T * v0, const T * v1, T * v2)
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 // v2 = v0 - v1
-template<uint d, typename T>
+template<unsigned int d, typename T>
 CINO_INLINE
 void vec_minus(const T * v0, const T * v1, T * v2)
 {
-    for(uint i=0; i<d; ++i)
+    for(unsigned int i=0; i<d; ++i)
     {
         v2[i] = v0[i] - v1[i];
     }
@@ -94,11 +94,11 @@ void vec_minus(const T * v0, const T * v1, T * v2)
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 // v = -v
-template<uint d, typename T>
+template<unsigned int d, typename T>
 CINO_INLINE
 void vec_minus(const T * v0, T * v1)
 {
-    for(uint i=0; i<d; ++i)
+    for(unsigned int i=0; i<d; ++i)
     {
         v1[i] = -v0[i];
     }
@@ -107,11 +107,11 @@ void vec_minus(const T * v0, T * v1)
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 // v1 = v0 * val (element-wise)
-template<uint d, typename T>
+template<unsigned int d, typename T>
 CINO_INLINE
 void vec_times(const T * v0, const T val, T * v1)
 {
-    for(uint i=0; i<d; ++i)
+    for(unsigned int i=0; i<d; ++i)
     {
         v1[i] = v0[i] * val;
     }
@@ -120,11 +120,11 @@ void vec_times(const T * v0, const T val, T * v1)
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 // v1 = v0 / val (element-wise)
-template<uint d, typename T>
+template<unsigned int d, typename T>
 CINO_INLINE
 void vec_divide(const T * v0, const T val, T * v1)
 {
-    for(uint i=0; i<d; ++i)
+    for(unsigned int i=0; i<d; ++i)
     {
         v1[i] = v0[i] / val;
     }
@@ -133,11 +133,11 @@ void vec_divide(const T * v0, const T val, T * v1)
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 // true if v0 == v1 (element-wise)
-template<uint d, typename T>
+template<unsigned int d, typename T>
 CINO_INLINE
 bool vec_equals(const T * v0, const T * v1)
 {
-    for(uint i=0; i<d; ++i)
+    for(unsigned int i=0; i<d; ++i)
     {
         if(v0[i] != v1[i]) return false;
     }
@@ -147,11 +147,11 @@ bool vec_equals(const T * v0, const T * v1)
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 // true if v0 < v1 (element-wise)
-template<uint d, typename T>
+template<unsigned int d, typename T>
 CINO_INLINE
 bool vec_less(const T * v0, const T * v1)
 {
-    for(uint i=0; i<d; ++i)
+    for(unsigned int i=0; i<d; ++i)
     {
         if(v0[i] < v1[i]) return true;
         if(v0[i] > v1[i]) return false;
@@ -161,12 +161,12 @@ bool vec_less(const T * v0, const T * v1)
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint d, typename T>
+template<unsigned int d, typename T>
 CINO_INLINE
 T vec_dot(const T * v0, const T * v1)
 {
     T res = 0;
-    for(uint i=0; i<d; ++i)
+    for(unsigned int i=0; i<d; ++i)
     {
         res += v0[i]*v1[i];
     }
@@ -186,7 +186,7 @@ void vec_cross(const T * v0, const T * v1, T * v2)
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint d, typename T>
+template<unsigned int d, typename T>
 CINO_INLINE
 T vec_angle_deg(const T * v0, const T * v1, const bool normalize)
 {
@@ -195,7 +195,7 @@ T vec_angle_deg(const T * v0, const T * v1, const bool normalize)
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint d, typename T>
+template<unsigned int d, typename T>
 CINO_INLINE
 T vec_angle_rad(const T * v0, const T * v1, const bool normalize)
 {
@@ -224,12 +224,12 @@ T vec_angle_rad(const T * v0, const T * v1, const bool normalize)
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 // vector distance (in the L2 sense)
-template<uint d, typename T>
+template<unsigned int d, typename T>
 CINO_INLINE
 double vec_dist_sqrd(const T * v_0, const T * v_1)
 {
     double res = 0.0;
-    for(uint i=0; i<d; ++i)
+    for(unsigned int i=0; i<d; ++i)
     {
         T tmp = v_0[i] - v_1[i];
         res += tmp*tmp;
@@ -240,12 +240,12 @@ double vec_dist_sqrd(const T * v_0, const T * v_1)
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 // L2 vector norm
-template<uint d, typename T>
+template<unsigned int d, typename T>
 CINO_INLINE
 double vec_norm_sqrd(const T * v)
 {
     double res = 0.0;
-    for(uint i=0; i<d; ++i)
+    for(unsigned int i=0; i<d; ++i)
     {
         res += v[i]*v[i];
     }
@@ -255,7 +255,7 @@ double vec_norm_sqrd(const T * v)
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 // vector distance (in the L2 sense)
-template<uint d, typename T>
+template<unsigned int d, typename T>
 CINO_INLINE
 double vec_dist(const T * v_0, const T * v_1)
 {
@@ -265,7 +265,7 @@ double vec_dist(const T * v_0, const T * v_1)
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 // L2 vector norm
-template<uint d, typename T>
+template<unsigned int d, typename T>
 CINO_INLINE
 double vec_norm(const T * v)
 {
@@ -275,12 +275,12 @@ double vec_norm(const T * v)
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 // Lp vector norm
-template<uint d, typename T>
+template<unsigned int d, typename T>
 CINO_INLINE
 double vec_norm_p(const T * v, const float p)
 {
     double res = 0.0;
-    for(uint i=0; i<d; ++i)
+    for(unsigned int i=0; i<d; ++i)
     {
         res += std::pow(std::fabs(v[i]),p);
     }
@@ -290,7 +290,7 @@ double vec_norm_p(const T * v, const float p)
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint d, typename T>
+template<unsigned int d, typename T>
 CINO_INLINE
 double vec_normalize(T * v)
 {
@@ -303,11 +303,11 @@ double vec_normalize(T * v)
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 // element-wise min
-template<uint d, typename T>
+template<unsigned int d, typename T>
 CINO_INLINE
 void vec_min(const T * v0, const T * v1, T * v2)
 {
-    for(uint i=0; i<d; ++i)
+    for(unsigned int i=0; i<d; ++i)
     {
         v2[i] = std::min(v0[i], v1[i]);
     }
@@ -316,11 +316,11 @@ void vec_min(const T * v0, const T * v1, T * v2)
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 // element-wise max
-template<uint d, typename T>
+template<unsigned int d, typename T>
 CINO_INLINE
 void vec_max(const T * v0, const T * v1, T * v2)
 {
-    for(uint i=0; i<d; ++i)
+    for(unsigned int i=0; i<d; ++i)
     {
         v2[i] = std::max(v0[i], v1[i]);
     }
@@ -328,7 +328,7 @@ void vec_max(const T * v0, const T * v1, T * v2)
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint d, typename T>
+template<unsigned int d, typename T>
 CINO_INLINE
 T vec_min_entry(const T * v)
 {
@@ -337,7 +337,7 @@ T vec_min_entry(const T * v)
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint d, typename T>
+template<unsigned int d, typename T>
 CINO_INLINE
 T vec_max_entry(const T * v)
 {
@@ -347,11 +347,11 @@ T vec_max_entry(const T * v)
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 // element-wise clamp
-template<uint d, typename T>
+template<unsigned int d, typename T>
 CINO_INLINE
 void vec_clamp(T * v, const T min, const T max)
 {
-    for(uint i=0; i<d; ++i)
+    for(unsigned int i=0; i<d; ++i)
     {
         v[i] = clamp(v[i], min, max);
     }
@@ -359,9 +359,9 @@ void vec_clamp(T * v, const T min, const T max)
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint d, typename T>
+template<unsigned int d, typename T>
 CINO_INLINE
-void vec_swap(T * v, const uint i, const uint j)
+void vec_swap(T * v, const unsigned int i, const unsigned int j)
 {
     assert(i<d && j<d);
     std::swap(v[i],v[j]);
@@ -370,11 +370,11 @@ void vec_swap(T * v, const uint i, const uint j)
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 // true if all entries are zero
-template<uint d, typename T>
+template<unsigned int d, typename T>
 CINO_INLINE
 bool vec_is_null(const T * v)
 {
-    for(uint i=0; i<d; ++i)
+    for(unsigned int i=0; i<d; ++i)
     {
         if(v[i] !=0) return false;
     }
@@ -384,11 +384,11 @@ bool vec_is_null(const T * v)
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 // true if at least one entry is NaN
-template<uint d, typename T>
+template<unsigned int d, typename T>
 CINO_INLINE
 bool vec_is_nan(const T * v)
 {
-    for(uint i=0; i<d; ++i)
+    for(unsigned int i=0; i<d; ++i)
     {
         if(std::isnan(v[i])) return true;
     }
@@ -398,11 +398,11 @@ bool vec_is_nan(const T * v)
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 // true if at least one entry is inf
-template<uint d, typename T>
+template<unsigned int d, typename T>
 CINO_INLINE
 bool vec_is_inf(const T * v)
 {
-    for(uint i=0; i<d; ++i)
+    for(unsigned int i=0; i<d; ++i)
     {
         if(std::isinf(v[i])) return true;
     }
@@ -413,11 +413,11 @@ bool vec_is_inf(const T * v)
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 // true if at least one entry is NaN or Inf, or all entries are zero
-template<uint d, typename T>
+template<unsigned int d, typename T>
 CINO_INLINE
 bool vec_is_deg(const T * v)
 {
-    for(uint i=0; i<d; ++i)
+    for(unsigned int i=0; i<d; ++i)
     {
         if(std::isinf(v[i]) || std::isnan(v[i])) return true;
     }
@@ -426,7 +426,7 @@ bool vec_is_deg(const T * v)
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint d, typename T>
+template<unsigned int d, typename T>
 CINO_INLINE
 void vec_copy(const T * v0, T * v1)
 {
@@ -435,11 +435,11 @@ void vec_copy(const T * v0, T * v1)
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint d, typename T>
+template<unsigned int d, typename T>
 CINO_INLINE
 void vec_print(const T * v)
 {
-    for(uint i=0; i<d; ++i)
+    for(unsigned int i=0; i<d; ++i)
     {
         std::cout << v[i] << " ";
     }
@@ -447,14 +447,14 @@ void vec_print(const T * v)
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint r, uint c, typename T>
+template<unsigned int r, unsigned int c, typename T>
 CINO_INLINE
 void mat_set(T m[][c], const std::initializer_list<T> & il)
 {
     assert(il.size()==r*c);
     auto it = il.begin();
-    for(uint i=0; i<r; ++i)
-    for(uint j=0; j<c; ++j)
+    for(unsigned int i=0; i<r; ++i)
+    for(unsigned int j=0; j<c; ++j)
     {
         m[i][j] = *it;
         ++it;
@@ -464,12 +464,12 @@ void mat_set(T m[][c], const std::initializer_list<T> & il)
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 // initialize diagonal matrix
-template<uint d, typename T>
+template<unsigned int d, typename T>
 CINO_INLINE
 void mat_set_diag(T m[][d], const T val)
 {
-    for(uint i=0; i<d; ++i)
-    for(uint j=0; j<d; ++j)
+    for(unsigned int i=0; i<d; ++i)
+    for(unsigned int j=0; j<d; ++j)
     {
         m[i][j] = (i==j) ? val : 0;
     }
@@ -478,12 +478,12 @@ void mat_set_diag(T m[][d], const T val)
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 // initialize diagonal matrix
-template<uint d, typename T>
+template<unsigned int d, typename T>
 CINO_INLINE
 void mat_set_diag(T m[][d], const T diag[])
 {
-    for(uint i=0; i<d; ++i)
-    for(uint j=0; j<d; ++j)
+    for(unsigned int i=0; i<d; ++i)
+    for(unsigned int j=0; j<d; ++j)
     {
         m[i][j] = (i==j) ? diag[i] : 0;
     }
@@ -491,12 +491,12 @@ void mat_set_diag(T m[][d], const T diag[])
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint r, uint c, typename T>
+template<unsigned int r, unsigned int c, typename T>
 CINO_INLINE
-void mat_set_row(T m[][c], const uint i, const T row[])
+void mat_set_row(T m[][c], const unsigned int i, const T row[])
 {
     assert(i<r);
-    for(uint j=0; j<c; ++j)
+    for(unsigned int j=0; j<c; ++j)
     {
         m[i][j] = row[j];
     }
@@ -504,12 +504,12 @@ void mat_set_row(T m[][c], const uint i, const T row[])
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint r, uint c, typename T>
+template<unsigned int r, unsigned int c, typename T>
 CINO_INLINE
-void mat_set_col(T m[][c], const uint i, const T col[])
+void mat_set_col(T m[][c], const unsigned int i, const T col[])
 {
     assert(i<c);
-    for(uint j=0; j<r; ++j)
+    for(unsigned int j=0; j<r; ++j)
     {
         m[j][i] = col[j];
     }
@@ -518,7 +518,7 @@ void mat_set_col(T m[][c], const uint i, const T col[])
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 // initialize 2D rotation matrix
-template<uint d,typename T>
+template<unsigned int d,typename T>
 CINO_INLINE
 void mat_set_rot_2d(T m[][d], const T ang_rad)
 {
@@ -536,7 +536,7 @@ void mat_set_rot_2d(T m[][d], const T ang_rad)
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 // initialize 3D rotation matrix
-template<uint d,typename T>
+template<unsigned int d,typename T>
 CINO_INLINE
 void mat_set_rot_3d(T m[][d], const T ang_rad, const T axis[])
 {
@@ -564,12 +564,12 @@ void mat_set_rot_3d(T m[][d], const T ang_rad, const T axis[])
 // initialize translation matrix
 // NOTE: translation is a non linear operation.
 // Homogeneous coordinates are assumed here, hence tx is supposed to be a (d-1) vector
-template<uint d, typename T>
+template<unsigned int d, typename T>
 CINO_INLINE
 void mat_set_trans(T m[][d], const T tx[])
 {
     mat_set_diag<d,T>(m,1);
-    for(uint i=0; i<d-1; ++i)
+    for(unsigned int i=0; i<d-1; ++i)
     {
         m[i][d-1] = tx[i];
     }
@@ -577,9 +577,9 @@ void mat_set_trans(T m[][d], const T tx[])
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint r, uint c, typename T>
+template<unsigned int r, unsigned int c, typename T>
 CINO_INLINE
-void mat_swap(T m[][c], const uint i, const uint j, const uint k, const uint l)
+void mat_swap(T m[][c], const unsigned int i, const unsigned int j, const unsigned int k, const unsigned int l)
 {
     assert(i<r && j<c && k<r && l<c);
     std::swap(m[i][j], m[k][l]);
@@ -588,12 +588,12 @@ void mat_swap(T m[][c], const uint i, const uint j, const uint k, const uint l)
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 // copy ith column
-template<uint r, uint c, typename T>
+template<unsigned int r, unsigned int c, typename T>
 CINO_INLINE
-void mat_col(const T m[][c], const uint i, T col[])
+void mat_col(const T m[][c], const unsigned int i, T col[])
 {
     assert(i<c);
-    for(uint j=0; j<r; ++j)
+    for(unsigned int j=0; j<r; ++j)
     {
         col[j] = m[j][i];
     }
@@ -602,9 +602,9 @@ void mat_col(const T m[][c], const uint i, T col[])
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 // copy ith row
-template<uint r, uint c, typename T>
+template<unsigned int r, unsigned int c, typename T>
 CINO_INLINE
-void mat_row(const T m[][c], const uint i, T row[])
+void mat_row(const T m[][c], const unsigned int i, T row[])
 {
     assert(i<r);
     std::copy(m[i], m[i]+c, row);
@@ -613,11 +613,11 @@ void mat_row(const T m[][c], const uint i, T row[])
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 // copy diagonal
-template<uint d, typename T>
+template<unsigned int d, typename T>
 CINO_INLINE
 void mat_diag(const T m[][d], T diag[])
 {
-    for(uint i=0; i<d; ++i)
+    for(unsigned int i=0; i<d; ++i)
     {
         diag[i] = m[i][i];
     }
@@ -626,12 +626,12 @@ void mat_diag(const T m[][d], T diag[])
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 // vector of pointers to elements in the ith column
-template<uint r, uint c, typename T>
+template<unsigned int r, unsigned int c, typename T>
 CINO_INLINE
-void mat_col_ptr(const T m[][c], const uint i, T * col[])
+void mat_col_ptr(const T m[][c], const unsigned int i, T * col[])
 {
     assert(i<c);
-    for(uint j=0; j<r; ++j)
+    for(unsigned int j=0; j<r; ++j)
     {
         col[j] = & m[j][i];
     }
@@ -640,12 +640,12 @@ void mat_col_ptr(const T m[][c], const uint i, T * col[])
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 // vector of pointers to elements in the ith row
-template<uint r, uint c, typename T>
+template<unsigned int r, unsigned int c, typename T>
 CINO_INLINE
-void mat_row_ptr(const T m[][c], const uint i, T * row[])
+void mat_row_ptr(const T m[][c], const unsigned int i, T * row[])
 {
     assert(i<r);
-    for(uint j=0; j<c; ++j)
+    for(unsigned int j=0; j<c; ++j)
     {
         row[j] = & m[i][j];
     }
@@ -654,12 +654,12 @@ void mat_row_ptr(const T m[][c], const uint i, T * row[])
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 // vector of pointers to elements in the diagonal
-template<uint d, typename T>
+template<unsigned int d, typename T>
 CINO_INLINE
 void mat_diag_ptr(const T m[][d], T * diag[])
 {
-    for(uint i=0; i<d; ++i)
-    for(uint j=0; j<d; ++j)
+    for(unsigned int i=0; i<d; ++i)
+    for(unsigned int j=0; j<d; ++j)
     {
         diag[i] = & m[i][j];
     }
@@ -667,12 +667,12 @@ void mat_diag_ptr(const T m[][d], T * diag[])
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint d, typename T>
+template<unsigned int d, typename T>
 CINO_INLINE
 bool mat_is_symmetric(const T m[][d])
 {
-    for(uint i=0;   i<d-1; ++i)
-    for(uint j=i+1; j<d;   ++j)
+    for(unsigned int i=0;   i<d-1; ++i)
+    for(unsigned int j=i+1; j<d;   ++j)
     {
         if(m[i][j]!=m[j][i]) return false;
     }
@@ -681,12 +681,12 @@ bool mat_is_symmetric(const T m[][d])
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint d, typename T>
+template<unsigned int d, typename T>
 CINO_INLINE
 T mat_trace(const T m[][d])
 {
     T res = 0;
-    for(uint i=0; i<d; ++i)
+    for(unsigned int i=0; i<d; ++i)
     {
         res += m[i][i];
     }
@@ -695,7 +695,7 @@ T mat_trace(const T m[][d])
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint d, typename T>
+template<unsigned int d, typename T>
 CINO_INLINE
 T mat_det(const T m[][d])
 {
@@ -742,12 +742,12 @@ T mat_det33(const T m00, const T m01, const T m02,
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint r, uint c, typename T>
+template<unsigned int r, unsigned int c, typename T>
 CINO_INLINE
 void mat_transpose(const T m[][c], T tr[][r])
 {
-    for(uint i=0; i<r; ++i)
-    for(uint j=0; j<c; ++j)
+    for(unsigned int i=0; i<r; ++i)
+    for(unsigned int j=0; j<c; ++j)
     {
         tr[j][i] = m[i][j];
     }
@@ -755,7 +755,7 @@ void mat_transpose(const T m[][c], T tr[][r])
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint d, typename T>
+template<unsigned int d, typename T>
 CINO_INLINE
 void mat_inverse(const T m[][d], T in[][d])
 {
@@ -785,7 +785,7 @@ void mat_inverse(const T m[][d], T in[][d])
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 // matrix eigen values and eigenvectors (from lowest to highest)
-template<uint r, uint c, typename T>
+template<unsigned int r, unsigned int c, typename T>
 CINO_INLINE
 void mat_eigendec(const T m[][c], T eval[], T evec[][c])
 {
@@ -844,9 +844,9 @@ void mat_eigendec(const T m[][c], T eval[], T evec[][c])
             Eigen::Map<const M> tmp(m[0]);
             Eigen::EigenSolver<Eigen::Matrix<T,r,c>> eig(tmp);
             assert(eig.info() == Eigen::Success);
-            for(uint i=0; i<r; ++i)
+            for(unsigned int i=0; i<r; ++i)
             {
-                for(uint j=0; j<r; ++j)
+                for(unsigned int j=0; j<r; ++j)
                 {
                     // WARNING: I am taking only the real part!
                     evec[j][i] = eig.eigenvectors()(j,i).real();
@@ -860,7 +860,7 @@ void mat_eigendec(const T m[][c], T eval[], T evec[][c])
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 // matrix eigen values (from highest to lowest)
-template<uint r, uint c, typename T>
+template<unsigned int r, unsigned int c, typename T>
 CINO_INLINE
 void mat_eigenval(const T m[][c], T eval[])
 {
@@ -870,7 +870,7 @@ void mat_eigenval(const T m[][c], T eval[])
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint r, uint c, typename T>
+template<unsigned int r, unsigned int c, typename T>
 CINO_INLINE
 void mat_eigenvec(const T m[][c], T evec[][c])
 {
@@ -880,7 +880,7 @@ void mat_eigenvec(const T m[][c], T evec[][c])
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint r, uint c, typename T>
+template<unsigned int r, unsigned int c, typename T>
 CINO_INLINE
 void mat_svd(const T m[][c], T U[][r], T S[], T V[][c])
 {
@@ -930,7 +930,7 @@ void mat_svd(const T m[][c], T U[][r], T S[], T V[][c])
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint r, uint c, typename T>
+template<unsigned int r, unsigned int c, typename T>
 CINO_INLINE
 void mat_ssvd(const T m[][c], T U[][r], T S[], T V[][c])
 {
@@ -982,7 +982,7 @@ void mat_ssvd(const T m[][c], T U[][r], T S[], T V[][c])
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint d, typename T>
+template<unsigned int d, typename T>
 CINO_INLINE
 void mat_solve_Cramer(const T m[][d], const T b[], T x[])
 {
@@ -992,7 +992,7 @@ void mat_solve_Cramer(const T m[][d], const T b[], T x[])
         vec_set_dense<d,T>(x,0);
         return;
     }
-    for(uint i=0; i<d; ++i)
+    for(unsigned int i=0; i<d; ++i)
     {
         T m_i[d][d];
         mat_copy<d,d,T>(m, m_i);
@@ -1003,7 +1003,7 @@ void mat_solve_Cramer(const T m[][d], const T b[], T x[])
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint r, uint c, typename T>
+template<unsigned int r, unsigned int c, typename T>
 CINO_INLINE
 void mat_copy(const T m1[][c], T m2[][c])
 {
@@ -1012,12 +1012,12 @@ void mat_copy(const T m1[][c], T m2[][c])
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint r, uint c, typename T>
+template<unsigned int r, unsigned int c, typename T>
 CINO_INLINE
 void mat_print(const T m[][c])
 {
-    for(uint i=0; i<r; ++i)
-    for(uint j=0; j<c; ++j)
+    for(unsigned int i=0; i<r; ++i)
+    for(unsigned int j=0; j<c; ++j)
     {
         if(i>0 && j%c==0) std::cout << "\n";
         std::cout << m[i][j] << " ";
@@ -1026,15 +1026,15 @@ void mat_print(const T m[][c])
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint r0, uint c0, uint c1, typename T>
+template<unsigned int r0, unsigned int c0, unsigned int c1, typename T>
 CINO_INLINE
 void mat_times(const T m0[][c0], const T m1[][c1], T m2[][c1])
 {
-    for(uint i=0; i<r0; ++i)
-    for(uint j=0; j<c1; ++j)
+    for(unsigned int i=0; i<r0; ++i)
+    for(unsigned int j=0; j<c1; ++j)
     {
         m2[i][j] = 0;
-        for(uint k=0; k<c0; ++k)
+        for(unsigned int k=0; k<c0; ++k)
         {
             m2[i][j] += m0[i][k] * m1[k][j];
         }

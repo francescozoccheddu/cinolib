@@ -392,7 +392,7 @@ void VolumeMeshControls<Mesh>::header_isosurface(const bool open)
             if(!filename.empty())
             {
                 ScalarField sf(filename.c_str());
-                if ((uint)sf.size() == m->num_verts()) sf.copy_to_mesh(*m);
+                if ((unsigned int)sf.size() == m->num_verts()) sf.copy_to_mesh(*m);
                 else std::cerr << "Could not load scalar field " << filename << " - array size mismatch!" << std::endl;
             }
         }
@@ -599,8 +599,8 @@ void VolumeMeshControls<Mesh>::header_manual_digging(const bool open)
             vec2d click = gui->cursor_pos();
             if(gui->unproject(click, p)) // transform click in a 3d point
             {
-                uint fid = m->pick_face(p);
-                for(uint pid : m->adj_f2p(fid))
+                unsigned int fid = m->pick_face(p);
+                for(unsigned int pid : m->adj_f2p(fid))
                 {
                     if(m->poly_data(pid).flags[HIDDEN] == false)
                     {
@@ -622,8 +622,8 @@ void VolumeMeshControls<Mesh>::header_manual_digging(const bool open)
             vec2d click = gui->cursor_pos();
             if(gui->unproject(click, p)) // transform click in a 3d point
             {
-                uint fid = m->pick_face(p);
-                for(uint pid : m->adj_f2p(fid))
+                unsigned int fid = m->pick_face(p);
+                for(unsigned int pid : m->adj_f2p(fid))
                 {
                     if(m->poly_data(pid).flags[HIDDEN] == true)
                     {
@@ -645,15 +645,15 @@ void VolumeMeshControls<Mesh>::header_manual_digging(const bool open)
             vec2d click = gui->cursor_pos();
             if(gui->unproject(click, p)) // transform click in a 3d point
             {
-                uint fid = m->pick_face(p);
-                uint pid_beneath;
+                unsigned int fid = m->pick_face(p);
+                unsigned int pid_beneath;
                 if(!m->face_is_visible(fid,pid_beneath))
                 {
                     // not a good selection...
                     return;
                 }
-                for(uint vid : m->adj_p2v(pid_beneath))
-                for(uint pid : m->adj_v2p(vid))
+                for(unsigned int vid : m->adj_p2v(pid_beneath))
+                for(unsigned int pid : m->adj_v2p(vid))
                 {
                     if(m->poly_data(pid).flags[HIDDEN] == false)
                     {
@@ -696,7 +696,7 @@ void VolumeMeshControls<Mesh>::header_debug(const bool open)
                 vert_normals.set_cheap_rendering(true);
                 vert_normals.set_color(vert_debug_color);
                 double l = gui->camera.scene_radius/5.0;
-                for(uint vid=0; vid<m->num_verts(); ++vid)
+                for(unsigned int vid=0; vid<m->num_verts(); ++vid)
                 {
                     if(m->vert_is_visible(vid))
                     {
@@ -720,9 +720,9 @@ void VolumeMeshControls<Mesh>::header_debug(const bool open)
                 face_normals.set_cheap_rendering(true);
                 face_normals.set_color(face_debug_color);
                 double l = gui->camera.scene_radius/5.0;
-                for(uint fid=0; fid<m->num_faces(); ++fid)
+                for(unsigned int fid=0; fid<m->num_faces(); ++fid)
                 {
-                    uint pid_beneath;
+                    unsigned int pid_beneath;
                     if(m->face_is_visible(fid, pid_beneath))
                     {
                         vec3d  n = m->poly_face_normal(pid_beneath,fid);
@@ -748,7 +748,7 @@ void VolumeMeshControls<Mesh>::header_debug(const bool open)
             gui->pop_all_markers();
             if(show_vert_ids)
             {
-                for(uint vid=0; vid<m->num_verts(); ++vid)
+                for(unsigned int vid=0; vid<m->num_verts(); ++vid)
                 {
                     if(m->vert_is_visible(vid))
                     {
@@ -758,9 +758,9 @@ void VolumeMeshControls<Mesh>::header_debug(const bool open)
             }
             if(show_face_ids)
             {
-                for(uint fid=0; fid<m->num_faces(); ++fid)
+                for(unsigned int fid=0; fid<m->num_faces(); ++fid)
                 {
-                    uint pid_beneath;
+                    unsigned int pid_beneath;
                     if(m->face_is_visible(fid, pid_beneath))
                     {
                         gui->push_marker(m->face_centroid(fid), std::to_string(fid), face_debug_color, marker_size, marker_font_size);

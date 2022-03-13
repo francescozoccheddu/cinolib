@@ -94,16 +94,16 @@ static const std::string ref_txt[3] =
 
 struct RefinementStats
 {
-   uint  splits_tot    = 0; // total number of splits
-   uint  splits_vert   = 0; // number of vert split operations
-   uint  splits_edge   = 0; // number of edge split operations
-   uint  splits_poly   = 0; // number of poly split operations
-   uint  vert_val_max  = 0; // maximum per vertex valence
+   unsigned int  splits_tot    = 0; // total number of splits
+   unsigned int  splits_vert   = 0; // number of vert split operations
+   unsigned int  splits_edge   = 0; // number of edge split operations
+   unsigned int  splits_poly   = 0; // number of poly split operations
+   unsigned int  vert_val_max  = 0; // maximum per vertex valence
    float vert_val_avg  = 0; // average per vertex valence
-   uint  num_verts_bef = 0; // verts in the input  mesh
-   uint  num_verts_now = 0; // verts in the input  mesh
-   uint  num_polys_bef = 0; // triangles in the output mesh
-   uint  num_polys_now = 0; // triangles in the output mesh
+   unsigned int  num_verts_bef = 0; // verts in the input  mesh
+   unsigned int  num_verts_now = 0; // verts in the input  mesh
+   unsigned int  num_polys_bef = 0; // triangles in the output mesh
+   unsigned int  num_polys_now = 0; // triangles in the output mesh
 };
 
 CINO_INLINE
@@ -115,7 +115,7 @@ struct HomotopyBasisData
 {
     // INPUT: SETTINGS
     bool  globally_shortest  = false; // cost for globally shortest is O(n^2 log n). When this is set to true, root will contain the root of the globally shortest basis
-    uint  root               = 0;     // cost for a base centered at root is O(n log n)
+    unsigned int  root               = 0;     // cost for a base centered at root is O(n log n)
 
     // INPUT: REFINEMENT OPTIONS AND STATISTICS
     bool  detach_loops       = false;                 // refine mesh topology to detach loops traversing the same edges
@@ -124,7 +124,7 @@ struct HomotopyBasisData
     RefinementStats refinement_stats;
 
     // OUTPUT: BASIS AND LENGTH
-    std::vector<std::vector<uint>> loops;
+    std::vector<std::vector<unsigned int>> loops;
     float length = 0.0; // length of the basis
 
     // OUTPUT: AUXILIARY DATA (may be useful for visual inspection/debugging)
@@ -148,8 +148,8 @@ void homotopy_basis(AbstractPolygonMesh<M,V,E,P> & m,
 template<class M, class V, class E, class P>
 CINO_INLINE
 double homotopy_basis(AbstractPolygonMesh<M,V,E,P>   & m,
-                      const uint                       root,
-                      std::vector<std::vector<uint>> & basis,
+                      const unsigned int                       root,
+                      std::vector<std::vector<unsigned int>> & basis,
                       std::vector<bool>              & tree,
                       std::vector<bool>              & cotree);
 
@@ -166,9 +166,9 @@ void detach_loops(Trimesh<M,V,E,P>  & m,
 // locally detaches loops in the homotopy basis around vertex vid
 template<class M, class V, class E, class P>
 CINO_INLINE
-uint detach_loops(Trimesh<M,V,E,P>  & m,
+unsigned int detach_loops(Trimesh<M,V,E,P>  & m,
                   HomotopyBasisData & data,
-                  const uint          vid);
+                  const unsigned int          vid);
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -189,29 +189,29 @@ void detach_loops_postproc(Trimesh<M,V,E,P>  & m,
 // locally detaches loops in the homotopy basis around vertex vid using a triangle split
 template<class M, class V, class E, class P>
 CINO_INLINE
-uint detach_loops_by_poly_split(Trimesh<M,V,E,P>  & m,
+unsigned int detach_loops_by_poly_split(Trimesh<M,V,E,P>  & m,
                                 HomotopyBasisData & data,
-                                const uint          e_in,
-                                const uint          e_out);
+                                const unsigned int          e_in,
+                                const unsigned int          e_out);
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 // locally detaches loops in the homotopy basis around vertex vid using a sequence of edge splits
 template<class M, class V, class E, class P>
 CINO_INLINE
-uint detach_loops_by_edge_split(Trimesh<M,V,E,P>        & m,
+unsigned int detach_loops_by_edge_split(Trimesh<M,V,E,P>        & m,
                                 HomotopyBasisData       & data,
-                                const std::vector<uint> & edge_fan);
+                                const std::vector<unsigned int> & edge_fan);
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 // locally detaches loops in the homotopy basis around vertex vid using a vertex split
 template<class M, class V, class E, class P>
 CINO_INLINE
-uint detach_loops_by_vert_split(Trimesh<M,V,E,P>  & m,
+unsigned int detach_loops_by_vert_split(Trimesh<M,V,E,P>  & m,
                                 HomotopyBasisData & data,
-                                const uint          e_in,
-                                const uint          e_out,
+                                const unsigned int          e_in,
+                                const unsigned int          e_out,
                                 const vec3d         new_pos = vec3d(inf_double, inf_double, inf_double));
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -220,7 +220,7 @@ uint detach_loops_by_vert_split(Trimesh<M,V,E,P>  & m,
 template<class M, class V, class E, class P>
 CINO_INLINE
 bool polys_are_planar(const Trimesh<M,V,E,P>  & m,
-                      const std::vector<uint> & edge_fan,
+                      const std::vector<unsigned int> & edge_fan,
                       const float               coplanarity_tresh);
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -229,8 +229,8 @@ bool polys_are_planar(const Trimesh<M,V,E,P>  & m,
 template<class M, class V, class E, class P>
 CINO_INLINE
 bool find_position_within_fan(const Trimesh<M,V,E,P>  & m,
-                              const std::vector<uint> & edge_fan,
-                              const uint                v_mid,
+                              const std::vector<unsigned int> & edge_fan,
+                              const unsigned int                v_mid,
                                     vec3d             & pos);
 }
 

@@ -49,7 +49,7 @@ class VectorField : public Eigen::VectorXd, public Serializable
     public:
 
         explicit VectorField();
-        explicit VectorField(const uint size);
+        explicit VectorField(const unsigned int size);
         explicit VectorField(const std::vector<vec3d> & data);
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::

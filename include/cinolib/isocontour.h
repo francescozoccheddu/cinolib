@@ -56,7 +56,7 @@ class Isocontour
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-        std::vector<uint> tessellate(Trimesh<M,V,E,P> & m) const;
+        std::vector<unsigned int> tessellate(Trimesh<M,V,E,P> & m) const;
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 

@@ -90,7 +90,7 @@ CINO_INLINE
 void solve_square_system_with_bc(const Eigen::SparseMatrix<double> & A,
                                  const Eigen::VectorXd             & b,
                                        Eigen::VectorXd             & x,
-                                 const std::map<uint,double>       & bc, // Dirichlet boundary conditions
+                                 const std::map<unsigned int,double>       & bc, // Dirichlet boundary conditions
                                  int   solver = SIMPLICIAL_LLT);
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -107,7 +107,7 @@ CINO_INLINE
 void solve_least_squares_with_bc(const Eigen::SparseMatrix<double> & A,
                                  const Eigen::VectorXd             & b,
                                        Eigen::VectorXd             & x,
-                                 const std::map<uint,double>       & bc, // Dirichlet boundary conditions
+                                 const std::map<unsigned int,double>       & bc, // Dirichlet boundary conditions
                                  int   solver = SIMPLICIAL_LLT);
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -126,7 +126,7 @@ void solve_weighted_least_squares_with_bc(const Eigen::SparseMatrix<double> & A,
                                           const Eigen::VectorXd             & w,
                                           const Eigen::VectorXd             & b,
                                                 Eigen::VectorXd             & x,
-                                          const std::map<uint,double>       & bc, // Dirichlet boundary conditions
+                                          const std::map<unsigned int,double>       & bc, // Dirichlet boundary conditions
                                           int   solver = SIMPLICIAL_LLT);
 
 }

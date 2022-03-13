@@ -45,7 +45,7 @@ namespace cinolib
 template<class M, class V, class E, class P>
 CINO_INLINE
 void MCF(AbstractPolygonMesh<M,V,E,P> & m,
-         const uint                     n_iters,
+         const unsigned int                     n_iters,
          const double                   time_scalar,
          const bool                     conformalized)
 {
@@ -60,7 +60,7 @@ void MCF(AbstractPolygonMesh<M,V,E,P> & m,
     Eigen::SparseMatrix<double> L  = laplacian(m, COTANGENT);
     Eigen::SparseMatrix<double> MM = mass_matrix(m);
 
-    for(uint i=1; i<=n_iters; ++i)
+    for(unsigned int i=1; i<=n_iters; ++i)
     {
         // optimize position and scale to get better numerical precision
         m.normalize_bbox();
@@ -69,12 +69,12 @@ void MCF(AbstractPolygonMesh<M,V,E,P> & m,
         // backward euler time integration of heat flow equation
         Eigen::SimplicialLLT<Eigen::SparseMatrix<double>> LLT(MM - time_scalar * L);
 
-        uint nv = m.num_verts();
+        unsigned int nv = m.num_verts();
         Eigen::VectorXd x(nv);
         Eigen::VectorXd y(nv);
         Eigen::VectorXd z(nv);
 
-        for(uint vid=0; vid<nv; ++vid)
+        for(unsigned int vid=0; vid<nv; ++vid)
         {
             vec3d pos = m.vert(vid);
             x[vid] = pos.x();
@@ -87,7 +87,7 @@ void MCF(AbstractPolygonMesh<M,V,E,P> & m,
         z = LLT.solve(MM * z);
 
         double residual = 0.0;
-        for(uint vid=0; vid<m.num_verts(); ++vid)
+        for(unsigned int vid=0; vid<m.num_verts(); ++vid)
         {
             vec3d new_pos(x[vid], y[vid], z[vid]);
             residual += (m.vert(vid) - new_pos).norm();

@@ -58,7 +58,7 @@ template<class M, class V, class E, class P>
 CINO_INLINE
 float shadow_on_build_platform(const DrawableTrimesh<M,V,E,P> & m,         //
                                const vec3d                    & build_dir, //
-                               const uint                       img_size,  // frame buffer will be img_size x img_size
+                               const unsigned int                       img_size,  // frame buffer will be img_size x img_size
                                      uint8_t                  * data);
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -67,7 +67,7 @@ template<class M, class V, class E, class P>
 CINO_INLINE
 float shadow_on_build_platform(const DrawableTrimesh<M,V,E,P> & m,           //
                                const vec3d                    & build_dir,   //
-                               const uint                       img_size,    // frame buffer will be img_size x img_size
+                               const unsigned int                       img_size,    // frame buffer will be img_size x img_size
                                      uint8_t                  * data,        //
                                      GLFWwindow               * GL_context); // cached for amortized computation
 

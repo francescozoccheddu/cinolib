@@ -43,7 +43,7 @@ namespace cinolib
 CINO_INLINE
 void write_MESH(const char                           * filename,
                 const std::vector<vec3d>             & verts,
-                const std::vector<std::vector<uint>> & polys,
+                const std::vector<std::vector<unsigned int>> & polys,
                 const std::vector<int>               & vert_labels,
                 const std::vector<int>               & poly_labels)
 {
@@ -63,9 +63,9 @@ void write_MESH(const char                           * filename,
     fprintf(fp, "MeshVersionFormatted 1\n" );
     fprintf(fp, "Dimension 3\n" );
 
-    uint nv = verts.size();
-    uint nt = 0;
-    uint nh = 0;
+    unsigned int nv = verts.size();
+    unsigned int nt = 0;
+    unsigned int nh = 0;
     for(auto p : polys)
     {
         if (p.size() == 4) ++nt; else
@@ -76,7 +76,7 @@ void write_MESH(const char                           * filename,
     {
         fprintf(fp, "Vertices\n" );
         fprintf(fp, "%d\n", nv);
-        for(uint vid=0; vid<nv; ++vid)
+        for(unsigned int vid=0; vid<nv; ++vid)
         {
             // http://stackoverflow.com/questions/16839658/printf-width-specifier-to-maintain-precision-of-floating-point-value
             //
@@ -88,9 +88,9 @@ void write_MESH(const char                           * filename,
     {
         fprintf(fp, "Tetrahedra\n" );
         fprintf(fp, "%d\n", nt );
-        for(uint pid=0; pid<polys.size(); ++pid)
+        for(unsigned int pid=0; pid<polys.size(); ++pid)
         {
-            const std::vector<uint> & tet = polys.at(pid);
+            const std::vector<unsigned int> & tet = polys.at(pid);
             if (tet.size() == 4)
             {
                 fprintf(fp, "%d %d %d %d %d\n", tet.at(0)+1, tet.at(1)+1, tet.at(2)+1, tet.at(3)+1, poly_labels.at(pid));
@@ -102,9 +102,9 @@ void write_MESH(const char                           * filename,
     {
         fprintf(fp, "Hexahedra\n" );
         fprintf(fp, "%d\n", nh );
-        for(uint pid=0; pid<polys.size(); ++pid)
+        for(unsigned int pid=0; pid<polys.size(); ++pid)
         {
-            const std::vector<uint> & hex = polys.at(pid);
+            const std::vector<unsigned int> & hex = polys.at(pid);
             if (hex.size() == 8)
             {
                 fprintf(fp, "%d %d %d %d %d %d %d %d %d\n", hex.at(0)+1, hex.at(1)+1, hex.at(2)+1, hex.at(3)+1,
@@ -123,7 +123,7 @@ void write_MESH(const char                           * filename,
 CINO_INLINE
 void write_MESH(const char                           * filename,
                 const std::vector<vec3d>             & verts,
-                const std::vector<std::vector<uint>> & polys)
+                const std::vector<std::vector<unsigned int>> & polys)
 {
     std::vector<int> vert_labels(verts.size(),0);
     std::vector<int> poly_labels(polys.size(),0);

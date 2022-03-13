@@ -46,7 +46,7 @@ float height_along_build_dir(const Trimesh<M,V,E,P> & m,
 {
     vec3d c = m.centroid();
     std::vector<float> vals(m.num_verts());
-    for(uint vid=0; vid<m.num_verts(); ++vid)
+    for(unsigned int vid=0; vid<m.num_verts(); ++vid)
     {
         vec3d v = m.vert(vid) - c;
         vals.at(vid) = (float)v.dot(build_dir);

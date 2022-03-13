@@ -57,16 +57,16 @@ void remesh_Botsch_Kobbelt_2004(DrawableTrimesh<M,V,E,P> & m,
 
     // 1) split too long edges
     //
-    uint count = 0;
-    uint ne = m.num_edges();
-    for(uint eid=0; eid<ne; ++eid)
+    unsigned int count = 0;
+    unsigned int ne = m.num_edges();
+    for(unsigned int eid=0; eid<ne; ++eid)
     {
         if (m.edge_length(eid) > 4./3.*l)
         {
             bool mark_children = (preserve_marked_features && m.edge_data(eid).flags[MARKED]);
-            uint vid0 = m.edge_vert_id(eid, 0);
-            uint vid1 = m.edge_vert_id(eid, 1);
-            uint vid  = m.edge_split(eid, 0.5);
+            unsigned int vid0 = m.edge_vert_id(eid, 0);
+            unsigned int vid1 = m.edge_vert_id(eid, 1);
+            unsigned int vid  = m.edge_split(eid, 0.5);
             ++count;
 
             if(mark_children)
@@ -83,15 +83,15 @@ void remesh_Botsch_Kobbelt_2004(DrawableTrimesh<M,V,E,P> & m,
     // 2) collapse too short edges
     //
     count = 0;
-    for(uint eid=0; eid<m.num_edges(); ++eid)
+    for(unsigned int eid=0; eid<m.num_edges(); ++eid)
     {
         bool inc_to_marked = false;
         if(preserve_marked_features)
         {
-            uint vid0 = m.edge_vert_id(eid,0);
-            uint vid1 = m.edge_vert_id(eid,1);
-            for(uint nbr : m.adj_v2e(vid0)) if (m.edge_data(nbr).flags[MARKED]) inc_to_marked = true;
-            for(uint nbr : m.adj_v2e(vid1)) if (m.edge_data(nbr).flags[MARKED]) inc_to_marked = true;
+            unsigned int vid0 = m.edge_vert_id(eid,0);
+            unsigned int vid1 = m.edge_vert_id(eid,1);
+            for(unsigned int nbr : m.adj_v2e(vid0)) if (m.edge_data(nbr).flags[MARKED]) inc_to_marked = true;
+            for(unsigned int nbr : m.adj_v2e(vid1)) if (m.edge_data(nbr).flags[MARKED]) inc_to_marked = true;
         }
         if (preserve_marked_features && inc_to_marked) continue;
 
@@ -106,29 +106,29 @@ void remesh_Botsch_Kobbelt_2004(DrawableTrimesh<M,V,E,P> & m,
     // 3) optimize per vert valence
     //
     count = 0;
-    for(uint eid=0; eid<m.num_edges(); ++eid)
+    for(unsigned int eid=0; eid<m.num_edges(); ++eid)
     {
         if (preserve_marked_features && m.edge_data(eid).flags[MARKED]) continue;
 
-        std::vector<uint> vopp = m.verts_opposite_to(eid);
+        std::vector<unsigned int> vopp = m.verts_opposite_to(eid);
         if (vopp.size()!=2) continue;
 
-        uint vid0 = m.edge_vert_id(eid,0);
-        uint vid1 = m.edge_vert_id(eid,1);
-        uint vid2 = vopp.at(0);
-        uint vid3 = vopp.at(1);
+        unsigned int vid0 = m.edge_vert_id(eid,0);
+        unsigned int vid1 = m.edge_vert_id(eid,1);
+        unsigned int vid2 = vopp.at(0);
+        unsigned int vid3 = vopp.at(1);
 
-        uint val0 = m.vert_valence(vid0);
-        uint val1 = m.vert_valence(vid1);
-        uint val2 = m.vert_valence(vid2);
-        uint val3 = m.vert_valence(vid3);
+        unsigned int val0 = m.vert_valence(vid0);
+        unsigned int val1 = m.vert_valence(vid1);
+        unsigned int val2 = m.vert_valence(vid2);
+        unsigned int val3 = m.vert_valence(vid3);
 
-        uint val_opt0 = m.vert_is_boundary(vid0) ? 4 : 6;
-        uint val_opt1 = m.vert_is_boundary(vid1) ? 4 : 6;
-        uint val_opt2 = m.vert_is_boundary(vid2) ? 4 : 6;
-        uint val_opt3 = m.vert_is_boundary(vid3) ? 4 : 6;
+        unsigned int val_opt0 = m.vert_is_boundary(vid0) ? 4 : 6;
+        unsigned int val_opt1 = m.vert_is_boundary(vid1) ? 4 : 6;
+        unsigned int val_opt2 = m.vert_is_boundary(vid2) ? 4 : 6;
+        unsigned int val_opt3 = m.vert_is_boundary(vid3) ? 4 : 6;
 
-        uint before = (val0 - val_opt0)*(val0 - val_opt0) +
+        unsigned int before = (val0 - val_opt0)*(val0 - val_opt0) +
                       (val1 - val_opt1)*(val1 - val_opt1) +
                       (val2 - val_opt2)*(val2 - val_opt2) +
                       (val3 - val_opt3)*(val3 - val_opt3);
@@ -136,7 +136,7 @@ void remesh_Botsch_Kobbelt_2004(DrawableTrimesh<M,V,E,P> & m,
         --val0; --val1;
         ++val2; ++val3;
 
-        uint after = (val0 - val_opt0)*(val0 - val_opt0) +
+        unsigned int after = (val0 - val_opt0)*(val0 - val_opt0) +
                      (val1 - val_opt1)*(val1 - val_opt1) +
                      (val2 - val_opt2)*(val2 - val_opt2) +
                      (val3 - val_opt3)*(val3 - val_opt3);
@@ -148,7 +148,7 @@ void remesh_Botsch_Kobbelt_2004(DrawableTrimesh<M,V,E,P> & m,
 
             if(new_eid>=0) // copy per poly attributes in the newly generated poly (but restore right normal!)
             {
-                for(uint pid : m.adj_e2p(new_eid))
+                for(unsigned int pid : m.adj_e2p(new_eid))
                 {
                     m.poly_data(pid) = data;
                     m.update_p_normal(pid);
@@ -164,10 +164,10 @@ void remesh_Botsch_Kobbelt_2004(DrawableTrimesh<M,V,E,P> & m,
 
     // 4) relocate vertices by tangential smoothing
     //
-    for(uint vid=0; vid<m.num_verts(); ++vid)
+    for(unsigned int vid=0; vid<m.num_verts(); ++vid)
     {
         bool anchored = false;
-        for(uint eid : m.adj_v2e(vid))
+        for(unsigned int eid : m.adj_v2e(vid))
         {
             if (preserve_marked_features && m.edge_data(eid).flags[MARKED]) anchored = true;
         }

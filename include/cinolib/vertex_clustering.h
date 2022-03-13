@@ -55,7 +55,7 @@ template<class Vertex>
 CINO_INLINE
 void vertex_clustering(const std::vector<Vertex>             & points,
                        const double                            proximity_thresh,
-                       std::vector<std::unordered_set<uint>> & clusters);
+                       std::vector<std::unordered_set<unsigned int>> & clusters);
 
 }
 

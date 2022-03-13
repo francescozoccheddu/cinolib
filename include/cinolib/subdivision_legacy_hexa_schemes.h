@@ -44,7 +44,7 @@
 //
 // std::vector<                  => one entry for each new polygon/polyhedron in the new subdivided mesh
 //      std::vector<             => one entry for each polygon/polyhedron vertex
-//           std::vector<uint>>> => points of the input polygon/polyhedron that contribute to define
+//           std::vector<unsigned int>>> => points of the input polygon/polyhedron that contribute to define
 //                                  the vertex position (as a linear combination).
 //                                  (NOTE: each entry contributes with 1/#entries. If a vertex wants to
 //                                   contribute more, it'll appear multiple times. Say I want a new vertex
@@ -53,14 +53,14 @@
 namespace cinolib
 {
 
-static const std::vector<std::vector<std::vector<uint>>> no_subdivision
+static const std::vector<std::vector<std::vector<unsigned int>>> no_subdivision
 {
     {{0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}}
 };
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-static const std::vector<std::vector<std::vector<uint>>> hex_to_grid_2x2x2
+static const std::vector<std::vector<std::vector<unsigned int>>> hex_to_grid_2x2x2
 {
     {{0}, {0,1}, {0,1,2,3}, {0,3}, {0,4}, {0,1,4,5}, {0,1,2,3,4,5,6,7}, {0,3,4,7}},
     {{0,1}, {1}, {1,2}, {0,1,2,3}, {0,1,4,5}, {1,5}, {1,2,5,6}, {0,1,2,3,4,5,6,7}},
@@ -74,7 +74,7 @@ static const std::vector<std::vector<std::vector<uint>>> hex_to_grid_2x2x2
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-static const std::vector<std::vector<std::vector<uint>>> hex_to_grid_3x3x3
+static const std::vector<std::vector<std::vector<unsigned int>>> hex_to_grid_3x3x3
 {
     {{0}, {0,0,1}, {0,0,2}, {0,0,3}, {0,0,4}, {0,0,5}, {0,0,2,0,0,2,4,4,6}, {0,0,7}},
     {{0,0,1}, {1,1,0}, {1,1,3}, {0,0,2}, {0,0,5}, {1,1,4}, {1,1,3,1,1,3,5,5,7}, {0,0,2,0,0,2,4,4,6}},
@@ -107,7 +107,7 @@ static const std::vector<std::vector<std::vector<uint>>> hex_to_grid_3x3x3
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-static const std::vector<std::vector<std::vector<uint>>> hex_to_grid_4x4x4
+static const std::vector<std::vector<std::vector<unsigned int>>> hex_to_grid_4x4x4
 {
     {{0}, {0,0,0,1}, {0,0,0,2}, {0,0,0,3}, {0,0,0,4}, {0,0,0,5}, {0,0,0,6}, {0,0,0,7}}, //0ok
     {{0,0,0,1}, {0,1}, {0,0,0,1,1,1,2,3}, {0,0,0,2}, {0,0,0,5}, {0,0,0,1,1,1,4,5}, {0,0,0,0,0,1,1,1,1,1,2,3,4,5,6,7}, {0,0,0,6}}, //1ok
@@ -177,7 +177,7 @@ static const std::vector<std::vector<std::vector<uint>>> hex_to_grid_4x4x4
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-static const std::vector<std::vector<std::vector<uint>>> hex_to_grid_4x4x4_old
+static const std::vector<std::vector<std::vector<unsigned int>>> hex_to_grid_4x4x4_old
 {
     {{0}, {0,0,0,1}, {0,0,0,2}, {0,0,0,3}, {0,0,0,4}, {0,0,0,5}, {0,0,0,6}, {0,0,0,7}}, //0ok
     {{0,0,0,1}, {0,1}, {0,0,1,2}, {0,0,0,2}, {0,0,0,5}, {0,0,1,5}, {0,0,1,6}, {0,0,0,6}}, //1ok
@@ -247,7 +247,7 @@ static const std::vector<std::vector<std::vector<uint>>> hex_to_grid_4x4x4_old
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-static const std::vector<std::vector<std::vector<uint>>> hex_to_cone_1x1_to_2x2
+static const std::vector<std::vector<std::vector<unsigned int>>> hex_to_cone_1x1_to_2x2
 {
     {{0,1}, {1}, {1,2}, {0,1,2,3}, {0,0,0,1,1,1,4,5}, {1,1,1,5}, {1,1,1,2,2,2,6,5}, {0,0,0,1,1,1,2,2,2,3,3,3,4,5,6,7}},
     {{0}, {0,1}, {0,1,2,3}, {0,3}, {0,4}, {0,0,0,1,1,1,4,5}, {0,0,0,1,1,1,2,2,2,3,3,3,4,5,6,7}, {0,3,4,7}},
@@ -262,7 +262,7 @@ static const std::vector<std::vector<std::vector<uint>>> hex_to_cone_1x1_to_2x2
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-static const std::vector<std::vector<std::vector<uint>>> hex_to_cone_1x1_to_3x3
+static const std::vector<std::vector<std::vector<unsigned int>>> hex_to_cone_1x1_to_3x3
 {
     {{0}, {0,0,1}, {0,0,2}, {0,0,3}, {0,4}, {0,0,1,0,0,1,0,0,1,4,4,5}, {0,0,2,0,0,2,0,0,2,4,4,6}, {0,0,3,4,4,7}},
     {{0,0,3}, {0,0,2}, {3,3,1}, {3,3,0}, {0,0,3,4,4,7}, {0,0,2,0,0,2,0,0,2,4,4,6}, {3,3,1,3,3,1,3,3,1,7,7,5}, {3,3,0,7,7,4}},
@@ -284,7 +284,7 @@ static const std::vector<std::vector<std::vector<uint>>> hex_to_cone_1x1_to_3x3
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-static const std::vector<std::vector<std::vector<uint>>> hex_to_cone_2x2_to_4x4
+static const std::vector<std::vector<std::vector<unsigned int>>> hex_to_cone_2x2_to_4x4
 {
     {{0}, {0,0,0,1}, {0,0,0,2}, {0,0,0,3}, {0,0,0,4}, {0,0,0,5}, {0,0,0,6}, {0,0,0,7}}, //0ok
     {{0,0,0,1}, {0,1}, {0,0,0,1,1,1,2,3}, {0,0,0,2}, {0,0,0,5}, {0,0,0,1,1,1,4,5}, {0,0,0,0,0,1,1,1,1,1,2,3,4,5,6,7}, {0,0,0,6}}, //1ok
@@ -332,7 +332,7 @@ static const std::vector<std::vector<std::vector<uint>>> hex_to_cone_2x2_to_4x4
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-static const std::vector<std::vector<std::vector<uint>>> hex_to_cone_2x2_to_4x4_old
+static const std::vector<std::vector<std::vector<unsigned int>>> hex_to_cone_2x2_to_4x4_old
 {
     {{0}, {0,0,0,1}, {0,0,0,2}, {0,0,0,3}, {0,0,0,4}, {0,0,0,5}, {0,0,0,6}, {0,0,0,7}}, //0ok
     {{0,0,0,1}, {0,1}, {0,0,1,2}, {0,0,0,2}, {0,0,0,5}, {0,0,1,5}, {0,0,1,6}, {0,0,0,6}}, //1

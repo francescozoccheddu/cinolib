@@ -55,7 +55,7 @@ class DrawableSphere : public DrawableObject
         DrawableSphere(const vec3d & center = vec3d(0,0,0),
                        const float   radius = 1.0,
                        const Color & color  = Color::RED(),
-                       const uint    subdiv = 1) // number of subdivisions of the regular icosahedron
+                       const unsigned int    subdiv = 1) // number of subdivisions of the regular icosahedron
             : center(center)
             , radius(radius)
             , color(color)
@@ -72,9 +72,9 @@ class DrawableSphere : public DrawableObject
         vec3d  center;
         double radius;
         Color  color;
-        uint   subdiv;
+        unsigned int   subdiv;
         std::vector<float> verts;
-        std::vector<uint>  tris;
+        std::vector<unsigned int>  tris;
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 

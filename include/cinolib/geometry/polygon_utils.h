@@ -84,13 +84,13 @@ bool polygon_flatten(const std::vector<vec3d> & poly3d,
 
 CINO_INLINE
 bool polygon_triangulate(std::vector<vec2d> & poly,
-                         std::vector<uint>  & tris);
+                         std::vector<unsigned int>  & tris);
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 CINO_INLINE
 bool polygon_triangulate(std::vector<vec3d> & poly,
-                         std::vector<uint>  & tris);
+                         std::vector<unsigned int>  & tris);
 
 }
 

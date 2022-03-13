@@ -114,21 +114,21 @@ namespace cinolib
     CINO_INLINE
     void polygon_get_edges(const std::vector<BoostPoint> & poly,
                                  std::vector<vec2d>      & verts,
-                                 std::vector<uint>       & edges);
+                                 std::vector<unsigned int>       & edges);
 
     //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
     CINO_INLINE
     void polygon_get_edges(const BoostPolygon       & poly,
                                  std::vector<vec2d> & verts,
-                                 std::vector<uint>  & edges);
+                                 std::vector<unsigned int>  & edges);
 
     //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
     CINO_INLINE
     void polygon_get_edges(const BoostMultiPolygon  & poly,
                                  std::vector<vec2d> & verts,
-                                 std::vector<uint>  & edges);
+                                 std::vector<unsigned int>  & edges);
 
     //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -136,7 +136,7 @@ namespace cinolib
     void polygon_get_edges(const BoostPolygon       & poly,
                            const double             & z, // adds third coordinate
                                  std::vector<vec3d> & verts,
-                                 std::vector<uint>  & edges);
+                                 std::vector<unsigned int>  & edges);
 
     //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -144,7 +144,7 @@ namespace cinolib
     void polygon_get_edges(const BoostMultiPolygon  & poly,
                            const double             & z, // adds third coordinate
                                  std::vector<vec3d> & verts,
-                                 std::vector<uint>  & edges);
+                                 std::vector<unsigned int>  & edges);
 
     //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -152,7 +152,7 @@ namespace cinolib
     void triangulate_polygon(const std::vector<BoostPoint> & poly,
                              const std::string               flags,
                                    std::vector<vec2d>      & verts,
-                                   std::vector<uint>       & tris);
+                                   std::vector<unsigned int>       & tris);
 
     //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -160,7 +160,7 @@ namespace cinolib
     void triangulate_polygon(const BoostPolygon            & poly,
                              const std::string               flags,
                                    std::vector<vec2d>      & verts,
-                                   std::vector<uint>       & tris);
+                                   std::vector<unsigned int>       & tris);
 
     //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -168,7 +168,7 @@ namespace cinolib
     void triangulate_polygon(const BoostMultiPolygon       & poly,
                              const std::string               flags,
                                    std::vector<vec2d>      & verts,
-                                   std::vector<uint>       & tris);
+                                   std::vector<unsigned int>       & tris);
 
     //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -177,7 +177,7 @@ namespace cinolib
                              const std::string               flags,
                              const double                  & z, // adds third coordinate
                                    std::vector<vec3d>      & verts,
-                                   std::vector<uint>       & tris);
+                                   std::vector<unsigned int>       & tris);
 
     //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -186,7 +186,7 @@ namespace cinolib
                              const std::string               flags,
                              const double                  & z, // adds third coordinate
                                    std::vector<vec3d>      & verts,
-                                   std::vector<uint>       & tris);
+                                   std::vector<unsigned int>       & tris);
 
     //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -195,7 +195,7 @@ namespace cinolib
                              const std::string               flags,
                              const double                  & z, // adds third coordinate
                                    std::vector<vec3d>      & verts,
-                                   std::vector<uint>       & tris);
+                                   std::vector<unsigned int>       & tris);
 }
 
 #ifndef  CINO_STATIC_LIB

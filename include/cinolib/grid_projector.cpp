@@ -48,7 +48,7 @@ double grid_projector(      Hexmesh<M1,V1,E1,F1,P1> & m,
 {
     struct Proj
     {
-        uint   vid;
+        unsigned int   vid;
         vec3d  target;
         double dist;
     };
@@ -58,10 +58,10 @@ double grid_projector(      Hexmesh<M1,V1,E1,F1,P1> & m,
     Octree o_srf;
     Octree o_corners;
     Octree o_lines;
-    for(uint vid=0; vid<srf.num_verts(); ++vid)
+    for(unsigned int vid=0; vid<srf.num_verts(); ++vid)
     {
-        uint count = 0;
-        for(uint eid : srf.adj_v2e(vid))
+        unsigned int count = 0;
+        for(unsigned int eid : srf.adj_v2e(vid))
         {
             if(srf.edge_data(eid).flags[CREASE]) ++count;
         }
@@ -72,7 +72,7 @@ double grid_projector(      Hexmesh<M1,V1,E1,F1,P1> & m,
             default : o_corners.push_point(vid, srf.vert(vid));
         }
     }
-    for(uint eid=0; eid<srf.num_edges(); ++eid)
+    for(unsigned int eid=0; eid<srf.num_edges(); ++eid)
     {
         if(srf.edge_data(eid).flags[CREASE])
         {
@@ -86,11 +86,11 @@ double grid_projector(      Hexmesh<M1,V1,E1,F1,P1> & m,
     // lavel mesh elements to set the target octree for projection
     enum { CORNER, LINE, REGULAR };
     m.vert_apply_label(REGULAR);
-    for(uint vid=0; vid<m.num_verts(); ++vid)
+    for(unsigned int vid=0; vid<m.num_verts(); ++vid)
     {
         if(!m.vert_is_on_srf(vid)) continue;
-        uint count = 0;
-        for(uint eid : m.adj_v2e(vid))
+        unsigned int count = 0;
+        for(unsigned int eid : m.adj_v2e(vid))
         {
             if(m.edge_data(eid).flags[CREASE]) ++count;
         }
@@ -108,24 +108,24 @@ double grid_projector(      Hexmesh<M1,V1,E1,F1,P1> & m,
     //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
     // for each surface point, find the closest point on srf
-    auto update_targets = [&](const uint smooth_iters, const bool sort_by_dist)
+    auto update_targets = [&](const unsigned int smooth_iters, const bool sort_by_dist)
     {
         // pre smooth the surface
         std::vector<vec3d> verts = m.vector_verts();
-        for(uint i=0; i<smooth_iters; ++i)
+        for(unsigned int i=0; i<smooth_iters; ++i)
         {
-            PARALLEL_FOR(0, m.num_verts(), 1000,[&](const uint vid)
+            PARALLEL_FOR(0, m.num_verts(), 1000,[&](const unsigned int vid)
             {
                 vec3d p;
                 if(m.vert_is_on_srf(vid))
                 {
-                    for(uint nbr : m.vert_adj_srf_verts(vid)) p += verts.at(nbr);
+                    for(unsigned int nbr : m.vert_adj_srf_verts(vid)) p += verts.at(nbr);
                     p /= static_cast<double>(m.vert_adj_srf_verts(vid).size());
                 }
                 else
                 {
                     double sum = 0.0;
-                    for(uint nbr : m.adj_v2v(vid))
+                    for(unsigned int nbr : m.adj_v2v(vid))
                     {
                         double w = (m.vert_is_on_srf(nbr)) ? 2.0 : 0.5;
                         p   += w * verts.at(nbr);
@@ -138,7 +138,7 @@ double grid_projector(      Hexmesh<M1,V1,E1,F1,P1> & m,
         }
 
         targets.clear();
-        for(uint vid=0; vid<m.num_verts(); ++vid)
+        for(unsigned int vid=0; vid<m.num_verts(); ++vid)
         {
             Proj proj;
             proj.vid    = vid;
@@ -159,7 +159,7 @@ double grid_projector(      Hexmesh<M1,V1,E1,F1,P1> & m,
     };
 
     // scaled jacobian
-    auto SJ_OK = [&](const uint pid, const uint vid, const vec3d & pos) -> bool
+    auto SJ_OK = [&](const unsigned int pid, const unsigned int vid, const vec3d & pos) -> bool
     {
         std::vector<vec3d> h = m.poly_verts(pid);
         double SJ_bef = hex_scaled_jacobian(h[0],h[1],h[2],h[3],h[4],h[5],h[6],h[7]);
@@ -171,16 +171,16 @@ double grid_projector(      Hexmesh<M1,V1,E1,F1,P1> & m,
     };
 
     // project a point on target, reverting with binary search if some element becomes degenerate
-    auto binary_search = [&](const uint vid, const vec3d & target) -> vec3d // returns dist to target
+    auto binary_search = [&](const unsigned int vid, const vec3d & target) -> vec3d // returns dist to target
     {
         float t       = 1.0;
-        uint  i       = 0;
+        unsigned int  i       = 0;
         vec3d new_pos = target;
         bool  all_good;
         do
         {
             all_good = true;
-            for(uint pid : m.adj_v2p(vid))
+            for(unsigned int pid : m.adj_v2p(vid))
             {
                 if(!SJ_OK(pid,vid,new_pos))
                 {
@@ -213,7 +213,7 @@ double grid_projector(      Hexmesh<M1,V1,E1,F1,P1> & m,
     //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
     bool converged = false;
-    for(uint i=0; i<opt.max_iter && !converged; ++i)
+    for(unsigned int i=0; i<opt.max_iter && !converged; ++i)
     {
         update_targets(3,true);
 

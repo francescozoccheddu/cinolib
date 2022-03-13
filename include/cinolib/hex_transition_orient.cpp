@@ -127,11 +127,11 @@ void try_rotations(std::vector<vec3d> & verts,
                    const vec3d        & poly_centroid)
 {
     auto tmp_verts = verts;
-    for(uint x=0; x<4; x++)
+    for(unsigned int x=0; x<4; x++)
     {
-        for(uint y=0; y<4; y++)
+        for(unsigned int y=0; y<4; y++)
         {
-            for(uint z=0; z<4; z++)
+            for(unsigned int z=0; z<4; z++)
             {
                 rotate(tmp_verts, "z", pi2);
                 AABB bbox(tmp_verts);
@@ -159,8 +159,8 @@ void try_rotations(std::vector<vec3d> & verts,
 
 CINO_INLINE
 void orient_flat(std::vector<vec3d>             & verts,
-                 std::vector<std::vector<uint>> & faces,
-                 std::vector<std::vector<uint>> & polys,
+                 std::vector<std::vector<unsigned int>> & faces,
+                 std::vector<std::vector<unsigned int>> & polys,
                  std::vector<std::vector<bool>> & winding,
                  SchemeInfo                     & info,
                  const vec3d                    & poly_centroid)
@@ -168,7 +168,7 @@ void orient_flat(std::vector<vec3d>             & verts,
     if(info.type == HexTransition::FLAT)
     {
         verts.reserve(Flat::verts.size()/3);
-        for(uint vid=0; vid<Flat::verts.size(); vid+=3)
+        for(unsigned int vid=0; vid<Flat::verts.size(); vid+=3)
         {
             verts.push_back(vec3d(Flat::verts[vid]-0.5, Flat::verts[vid+1]-0.5, Flat::verts[vid+2]-0.5));
         }
@@ -179,7 +179,7 @@ void orient_flat(std::vector<vec3d>             & verts,
     else
     {
         verts.reserve(Flat_Convex::verts.size()/3);
-        for(uint vid=0; vid<Flat_Convex::verts.size(); vid+=3)
+        for(unsigned int vid=0; vid<Flat_Convex::verts.size(); vid+=3)
         {
             verts.push_back(vec3d(Flat_Convex::verts[vid]-0.5, Flat_Convex::verts[vid+1]-0.5, Flat_Convex::verts[vid+2]-0.5));
         }
@@ -343,8 +343,8 @@ void orient_flat(std::vector<vec3d>             & verts,
 
 CINO_INLINE
 void orient_convex(std::vector<vec3d>             & verts,
-                   std::vector<std::vector<uint>> & faces,
-                   std::vector<std::vector<uint>> & polys,
+                   std::vector<std::vector<unsigned int>> & faces,
+                   std::vector<std::vector<unsigned int>> & polys,
                    std::vector<std::vector<bool>> & winding,
                    SchemeInfo                     & info,
                    const vec3d                    & poly_centroid)
@@ -352,7 +352,7 @@ void orient_convex(std::vector<vec3d>             & verts,
     if (info.type == HexTransition::CONVEX_1)
     {
         verts.reserve(Convex_1::verts.size()/3);
-        for(uint vid=0; vid<Convex_1::verts.size(); vid+=3)
+        for(unsigned int vid=0; vid<Convex_1::verts.size(); vid+=3)
         {
             verts.push_back(vec3d(Convex_1::verts[vid]-0.5, Convex_1::verts[vid+1]-0.5, Convex_1::verts[vid+2]-0.5));
         }
@@ -383,7 +383,7 @@ void orient_convex(std::vector<vec3d>             & verts,
     else if(info.type == HexTransition::CONVEX_2)
     {
         verts.reserve(Convex_2::verts.size()/3);
-        for(uint vid=0; vid<Convex_2::verts.size(); vid+=3)
+        for(unsigned int vid=0; vid<Convex_2::verts.size(); vid+=3)
         {
             verts.push_back(vec3d(Convex_2::verts[vid]-0.5, Convex_2::verts[vid+1]-0.5, Convex_2::verts[vid+2]-0.5));
         }
@@ -407,7 +407,7 @@ void orient_convex(std::vector<vec3d>             & verts,
     else if(info.type == HexTransition::CONVEX_3)
     {
         verts.reserve(Convex_3::verts.size()/3);
-        for(uint vid=0; vid<Convex_3::verts.size(); vid+=3)
+        for(unsigned int vid=0; vid<Convex_3::verts.size(); vid+=3)
         {
             verts.push_back(vec3d(Convex_3::verts[vid]-0.5, Convex_3::verts[vid+1]-0.5, Convex_3::verts[vid+2]-0.5));
         }
@@ -464,8 +464,8 @@ void orient_convex(std::vector<vec3d>             & verts,
 
 CINO_INLINE
 void orient_concave_edge(std::vector<vec3d>             & verts,
-                         std::vector<std::vector<uint>> & faces,
-                         std::vector<std::vector<uint>> & polys,
+                         std::vector<std::vector<unsigned int>> & faces,
+                         std::vector<std::vector<unsigned int>> & polys,
                          std::vector<std::vector<bool>> & winding,
                          SchemeInfo                     & info,
                          const vec3d                    & poly_centroid)
@@ -473,7 +473,7 @@ void orient_concave_edge(std::vector<vec3d>             & verts,
     if(info.type == HexTransition::EDGE)
     {
         verts.reserve(Edge::verts.size()/3);
-        for(uint vid=0; vid<Edge::verts.size(); vid+=3)
+        for(unsigned int vid=0; vid<Edge::verts.size(); vid+=3)
         {
             verts.push_back(vec3d(Edge::verts[vid]-0.5, Edge::verts[vid+1]-0.5, Edge::verts[vid+2]-0.5));
         }
@@ -484,7 +484,7 @@ void orient_concave_edge(std::vector<vec3d>             & verts,
     else
     {
         verts.reserve(Edge_WB::verts.size()/3);
-        for(uint vid=0; vid<Edge_WB::verts.size(); vid+=3)
+        for(unsigned int vid=0; vid<Edge_WB::verts.size(); vid+=3)
         {
             verts.push_back(vec3d(Edge_WB::verts[vid]-0.5, Edge_WB::verts[vid+1]-0.5, Edge_WB::verts[vid+2]-0.5));
         }
@@ -520,8 +520,8 @@ void orient_concave_edge(std::vector<vec3d>             & verts,
 
 CINO_INLINE
 void orient_concave_vert(std::vector<vec3d>             & verts,
-                         std::vector<std::vector<uint>> & faces,
-                         std::vector<std::vector<uint>> & polys,
+                         std::vector<std::vector<unsigned int>> & faces,
+                         std::vector<std::vector<unsigned int>> & polys,
                          std::vector<std::vector<bool>> & winding,
                          SchemeInfo                     & info,
                          const vec3d                    & poly_centroid)
@@ -529,7 +529,7 @@ void orient_concave_vert(std::vector<vec3d>             & verts,
     if(info.type == HexTransition::VERT_CENTER_WB_1)
     {
         verts.reserve(Vert_center_WB_1::verts.size()/3);
-        for(uint vid=0; vid<Vert_center_WB_1::verts.size(); vid+=3)
+        for(unsigned int vid=0; vid<Vert_center_WB_1::verts.size(); vid+=3)
         {
             verts.push_back(vec3d(Vert_center_WB_1::verts[vid]-0.5, Vert_center_WB_1::verts[vid+1]-0.5, Vert_center_WB_1::verts[vid+2]-0.5));
         }
@@ -540,7 +540,7 @@ void orient_concave_vert(std::vector<vec3d>             & verts,
     else if(info.type == HexTransition::VERT_CENTER_WB_2)
     {
         verts.reserve(Vert_center_WB_2::verts.size()/3);
-        for(uint vid=0; vid<Vert_center_WB_2::verts.size(); vid+=3)
+        for(unsigned int vid=0; vid<Vert_center_WB_2::verts.size(); vid+=3)
         {
             verts.push_back(vec3d(Vert_center_WB_2::verts[vid]-0.5, Vert_center_WB_2::verts[vid+1]-0.5, Vert_center_WB_2::verts[vid+2]-0.5));
         }
@@ -551,7 +551,7 @@ void orient_concave_vert(std::vector<vec3d>             & verts,
     else if(info.type == HexTransition::VERT_CENTER_WB_3)
     {
         verts.reserve(Vert_center_WB_3::verts.size()/3);
-        for(uint vid=0; vid<Vert_center_WB_3::verts.size(); vid+=3)
+        for(unsigned int vid=0; vid<Vert_center_WB_3::verts.size(); vid+=3)
         {
             verts.push_back(vec3d(Vert_center_WB_3::verts[vid]-0.5, Vert_center_WB_3::verts[vid+1]-0.5, Vert_center_WB_3::verts[vid+2]-0.5));
         }
@@ -562,7 +562,7 @@ void orient_concave_vert(std::vector<vec3d>             & verts,
     else
     {
         verts.reserve(Vert_center::verts.size()/3);
-        for(uint vid=0; vid<Vert_center::verts.size(); vid+=3)
+        for(unsigned int vid=0; vid<Vert_center::verts.size(); vid+=3)
         {
             verts.push_back(vec3d(Vert_center::verts[vid]-0.5, Vert_center::verts[vid+1]-0.5, Vert_center::verts[vid+2]-0.5));
         }
@@ -664,17 +664,17 @@ void orient_concave_vert(std::vector<vec3d>             & verts,
 
 CINO_INLINE
 void orient_concave_vert_side(std::vector<vec3d>             & verts,
-                              std::vector<std::vector<uint>> & faces,
-                              std::vector<std::vector<uint>> & polys,
+                              std::vector<std::vector<unsigned int>> & faces,
+                              std::vector<std::vector<unsigned int>> & polys,
                               std::vector<std::vector<bool>> & winding,
                               SchemeInfo                     & info,
                               const vec3d                    & poly_centroid)
 {
-    uint tv_idx = 0;
+    unsigned int tv_idx = 0;
     if(info.type == HexTransition::VERT_SIDE_WB)
     {
         verts.reserve(Vert_side_WB::verts.size()/3);
-        for(uint vid=0; vid<Vert_side_WB::verts.size(); vid+=3)
+        for(unsigned int vid=0; vid<Vert_side_WB::verts.size(); vid+=3)
         {
             verts.push_back(vec3d(Vert_side_WB::verts[vid]-0.5, Vert_side_WB::verts[vid+1]-0.5, Vert_side_WB::verts[vid+2]-0.5));
         }
@@ -687,7 +687,7 @@ void orient_concave_vert_side(std::vector<vec3d>             & verts,
     else
     {
         verts.reserve(Vert_side::verts.size()/3);
-        for(uint vid=0; vid<Vert_side::verts.size(); vid+=3)
+        for(unsigned int vid=0; vid<Vert_side::verts.size(); vid+=3)
         {
             verts.push_back(vec3d(Vert_side::verts[vid]-0.5, Vert_side::verts[vid+1]-0.5, Vert_side::verts[vid+2]-0.5));
         }
@@ -813,8 +813,8 @@ void orient_concave_vert_side(std::vector<vec3d>             & verts,
 
 CINO_INLINE
 void hex_transition_orient(std::vector<vec3d>             & verts,
-                           std::vector<std::vector<uint>> & faces,
-                           std::vector<std::vector<uint>> & polys,
+                           std::vector<std::vector<unsigned int>> & faces,
+                           std::vector<std::vector<unsigned int>> & polys,
                            std::vector<std::vector<bool>> & winding,
                            SchemeInfo                     & info,
                            const vec3d                    & poly_centroid)

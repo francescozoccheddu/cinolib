@@ -93,7 +93,7 @@ struct SchemeInfo
     SchemeType          scheme_type;
     double              scale;
     std::vector<vec3d>  t_verts;
-    std::map<uint,bool> cuts;
+    std::map<unsigned int,bool> cuts;
     std::vector<int>    orientations;
 };
 
@@ -107,8 +107,8 @@ struct SchemeInfo
  */
 CINO_INLINE
 void hex_transition_orient(std::vector<vec3d>             & verts,
-                           std::vector<std::vector<uint>> & faces,
-                           std::vector<std::vector<uint>> & polys,
+                           std::vector<std::vector<unsigned int>> & faces,
+                           std::vector<std::vector<unsigned int>> & polys,
                            std::vector<std::vector<bool>> & winding,
                            const SchemeInfo               & info,
                            const vec3d                      poly_centroid);

@@ -42,7 +42,7 @@ template<class M, class V, class E, class P>
 CINO_INLINE
 void cut_mesh_along_marked_edges(AbstractPolygonMesh<M,V,E,P> & m)
 {
-    std::unordered_map<uint,std::vector<uint>> v_map;
+    std::unordered_map<unsigned int,std::vector<unsigned int>> v_map;
     cut_mesh_along_marked_edges(m, v_map);
 }
 
@@ -51,33 +51,33 @@ void cut_mesh_along_marked_edges(AbstractPolygonMesh<M,V,E,P> & m)
 template<class M, class V, class E, class P>
 CINO_INLINE
 void cut_mesh_along_marked_edges(AbstractPolygonMesh<M,V,E,P>               & m,
-                                 std::unordered_map<uint,std::vector<uint>> & v_map)
+                                 std::unordered_map<unsigned int,std::vector<unsigned int>> & v_map)
 {
     m.vert_set_flag(MARKED,false);
     v_map.clear();
 
-    uint nv = m.num_verts();
-    for(uint vid=0; vid<nv; ++vid)
+    unsigned int nv = m.num_verts();
+    for(unsigned int vid=0; vid<nv; ++vid)
     {
         assert(nv<=m.num_verts());
 
         if(m.vert_data(vid).flags[MARKED]) continue;
         m.vert_data(vid).flags[MARKED] = true;
 
-        std::vector<std::vector<uint>> clusters;
+        std::vector<std::vector<unsigned int>> clusters;
         m.vert_cluster_one_ring(vid, clusters, true);
 
-        std::vector<uint> to_remove;
-        for(uint i=1; i<clusters.size(); ++i)
+        std::vector<unsigned int> to_remove;
+        for(unsigned int i=1; i<clusters.size(); ++i)
         {
-            uint new_vid = m.vert_add(m.vert(vid));
+            unsigned int new_vid = m.vert_add(m.vert(vid));
             m.vert_data(new_vid) = m.vert_data(vid);
             v_map[vid].push_back(new_vid);
 
-            for(uint pid : clusters.at(i))
+            for(unsigned int pid : clusters.at(i))
             {
                 auto verts = m.poly_verts_id(pid);
-                for(uint & id : verts) if(id==vid) id = new_vid;
+                for(unsigned int & id : verts) if(id==vid) id = new_vid;
                 m.poly_add(verts);
                 to_remove.push_back(pid);
             }

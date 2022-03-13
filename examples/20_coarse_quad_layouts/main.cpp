@@ -27,7 +27,7 @@ int main(int argc, char **argv)
     gui.push(&controls);
 
     float radius = m.bbox().diag() * 0.02;
-    for(uint vid=0; vid<m.num_verts(); ++vid)
+    for(unsigned int vid=0; vid<m.num_verts(); ++vid)
     {
         if(m.vert_is_singular(vid)) gui.push(new DrawableSphere(m.vert(vid), radius));
     }

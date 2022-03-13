@@ -57,7 +57,7 @@ CINO_INLINE
 void draw_cylinder(const mat<3,1,T>         & base,    // base
                    const mat<3,1,T>         & dir,     // axis orientation
                    const std::vector<float> & verts,   // tessellation verts
-                   const std::vector<uint>  & tris,    // tessellation triangles
+                   const std::vector<unsigned int>  & tris,    // tessellation triangles
                    const std::vector<float> & normals, // tessellation normals (per vertex)
                    const Color              & color)   // color
 {
@@ -100,11 +100,11 @@ void draw_cylinder(const mat<3,1,T> & bot,
                    const T            bot_radius,
                    const T            top_radius,
                    const Color      & color,
-                   const uint         n_sides = 6)
+                   const unsigned int         n_sides = 6)
 {
     // tessellation
     std::vector<float> verts, normals;
-    std::vector<uint>  tris;
+    std::vector<unsigned int>  tris;
     cylinder((float)bot.dist(top), (float)bot_radius, (float)top_radius, n_sides, verts, tris, normals);
     // rendering
     draw_cylinder(bot, top-bot, verts, tris, normals, color);

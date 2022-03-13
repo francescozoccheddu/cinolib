@@ -20,7 +20,7 @@ int main(int argc, char **argv)
 
     // tetrahedralize its (fattened) bounding box to evaluate the HRBF (1.5x)
     DrawableTetmesh<> vol_sampling;
-    std::vector<uint> dummy;
+    std::vector<unsigned int> dummy;
     tetgen_wrap(srf_target.bbox().corners(1.5), srf_target.bbox().tris(), dummy, "qa0.00002", vol_sampling);
 
     // HRBF computatin,  using x^3 as RBF kernel

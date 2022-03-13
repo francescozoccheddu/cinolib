@@ -65,7 +65,7 @@ namespace cinolib
 
             //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-            uint     id;
+            unsigned int     id;
             AABB     aabb;
             ItemType item_type = ABSTRACT;
 

@@ -60,7 +60,7 @@ template<class Mesh>
 CINO_INLINE
 IntegralCurve<Mesh>::IntegralCurve(const Mesh                & m,
                                    const VectorField         & grad,
-                                   const uint                  pid,
+                                   const unsigned int                  pid,
                                    const std::vector<double> & bary)
     : DrawableCurve()
     , status(COMPUTING)
@@ -70,7 +70,7 @@ IntegralCurve<Mesh>::IntegralCurve(const Mesh                & m,
     Sample seed;
     seed.pid  = pid;
     seed.bary = bary;
-    for(uint off=0; off<m.verts_per_poly(); ++off) seed.pos += bary.at(off) * m.poly_vert(pid, off);
+    for(unsigned int off=0; off<m.verts_per_poly(); ++off) seed.pos += bary.at(off) * m.poly_vert(pid, off);
 
     trace_curve(seed);
 }
@@ -79,16 +79,16 @@ template<class Mesh>
 CINO_INLINE
 IntegralCurve<Mesh>::IntegralCurve(const Mesh        & m,
                                    const VectorField & grad,
-                                   const uint          vid)
+                                   const unsigned int          vid)
     : DrawableCurve()
     , status(COMPUTING)
     , m_ptr(&m)
     , grad_ptr(&grad)
 {
     assert(!m.adj_v2p(vid).empty());
-    uint pid = m.adj_v2p(vid).front();
+    unsigned int pid = m.adj_v2p(vid).front();
 
-    uint off = 0;
+    unsigned int off = 0;
     while(off<m.verts_per_poly() && m.poly_vert_id(pid,off)!=vid) ++off;
     assert(m.poly_vert_id(pid,off)==vid && "Cannot find incident element to begin with");
 
@@ -123,12 +123,12 @@ void IntegralCurve<Mesh>::trace_curve(const Sample & seed)
 
 template<class Mesh>
 CINO_INLINE
-bool IntegralCurve<Mesh>::is_on_vertex(const Sample & s, uint & vid, const double tol) const
+bool IntegralCurve<Mesh>::is_on_vertex(const Sample & s, unsigned int & vid, const double tol) const
 {
     assert(s.pid!=-1);
 
-    std::vector<uint> non_zero_coords;
-    for(uint off=0; off<s.bary.size(); ++off)
+    std::vector<unsigned int> non_zero_coords;
+    for(unsigned int off=0; off<s.bary.size(); ++off)
     {
         if (s.bary.at(off) > tol) non_zero_coords.push_back(off);
     }
@@ -145,11 +145,11 @@ bool IntegralCurve<Mesh>::is_on_vertex(const Sample & s, uint & vid, const doubl
 
 template<class Mesh>
 CINO_INLINE
-bool IntegralCurve<Mesh>::is_on_edge(const Sample & s, uint & eid, const double tol) const
+bool IntegralCurve<Mesh>::is_on_edge(const Sample & s, unsigned int & eid, const double tol) const
 {
     assert(s.pid!=-1);
 
-    std::vector<uint> non_zero_coords;
+    std::vector<unsigned int> non_zero_coords;
     for(size_t off=0; off<s.bary.size(); ++off)
     {
         if (s.bary.at(off) > tol) non_zero_coords.push_back(off);
@@ -157,9 +157,9 @@ bool IntegralCurve<Mesh>::is_on_edge(const Sample & s, uint & eid, const double 
 
     if (non_zero_coords.size() == 2)
     {
-        uint vid0 = m_ptr->poly_vert_id(s.pid, non_zero_coords.at(0));
-        uint vid1 = m_ptr->poly_vert_id(s.pid, non_zero_coords.at(1));
-        for(uint id : m_ptr->adj_p2e(s.pid))
+        unsigned int vid0 = m_ptr->poly_vert_id(s.pid, non_zero_coords.at(0));
+        unsigned int vid1 = m_ptr->poly_vert_id(s.pid, non_zero_coords.at(1));
+        for(unsigned int id : m_ptr->adj_p2e(s.pid))
         {
             if (m_ptr->edge_contains_vert(id, vid0) &&
                 m_ptr->edge_contains_vert(id, vid1))
@@ -177,11 +177,11 @@ bool IntegralCurve<Mesh>::is_on_edge(const Sample & s, uint & eid, const double 
 
 template<class Mesh>
 CINO_INLINE
-Curve::Sample IntegralCurve<Mesh>::make_sample(const uint vid) const
+Curve::Sample IntegralCurve<Mesh>::make_sample(const unsigned int vid) const
 {
     assert(!m_ptr->adj_v2p(vid).empty());
-    uint pid = m_ptr->adj_v2p(vid).front();
-    uint off = m_ptr->poly_vert_offset(pid, vid);
+    unsigned int pid = m_ptr->adj_v2p(vid).front();
+    unsigned int off = m_ptr->poly_vert_offset(pid, vid);
     Sample s;
     s.pos  = m_ptr->vert(vid);
     s.pid  = pid;
@@ -200,12 +200,12 @@ Curve::Sample IntegralCurve<Mesh>::make_sample(const uint vid) const
 
 template<>
 CINO_INLINE
-bool IntegralCurve<Trimesh<>>::is_on_face(const Sample & s, uint & fid, const double tol) const
+bool IntegralCurve<Trimesh<>>::is_on_face(const Sample & s, unsigned int & fid, const double tol) const
 {
     assert(s.pid!=-1);
 
-    std::vector<uint> non_zero_coords;
-    for(uint off=0; off<s.bary.size(); ++off)
+    std::vector<unsigned int> non_zero_coords;
+    for(unsigned int off=0; off<s.bary.size(); ++off)
     {
         if (s.bary.at(off) > tol) non_zero_coords.push_back(off);
     }
@@ -222,26 +222,26 @@ bool IntegralCurve<Trimesh<>>::is_on_face(const Sample & s, uint & fid, const do
 
 template<>
 CINO_INLINE
-Curve::Sample IntegralCurve<Trimesh<>>::move_forward_from_vertex(const uint vid)
+Curve::Sample IntegralCurve<Trimesh<>>::move_forward_from_vertex(const unsigned int vid)
 {
     vec3d v = m_ptr->vert(vid);
     vec3d n = m_ptr->vert_data(vid).normal;
     Plane tangent_plane(v,n);
 
     vec3d grad(0,0,0);
-    for(uint fid : m_ptr->adj_v2p(vid)) grad += grad_ptr->vec_at(fid);
+    for(unsigned int fid : m_ptr->adj_v2p(vid)) grad += grad_ptr->vec_at(fid);
     grad = tangent_plane.project_onto(v+grad) - v;
     grad.normalize();
     assert(grad.norm() > 0);
 
-    std::map<uint,vec3d> tangent_space;
-    for(uint nbr : m_ptr->adj_v2v(vid))
+    std::map<unsigned int,vec3d> tangent_space;
+    for(unsigned int nbr : m_ptr->adj_v2v(vid))
     {
         tangent_space[nbr] = tangent_plane.project_onto(m_ptr->vert(nbr));
     }
     tangent_space[vid] = m_ptr->vert(vid);
 
-    for(uint fid : m_ptr->adj_v2p(vid))
+    for(unsigned int fid : m_ptr->adj_v2p(vid))
     {
         int     eid = m_ptr->edge_opposite_to(fid, vid); assert(eid >= 0);
         vec3d   e0  = tangent_space.at( m_ptr->edge_vert_id(eid,0) );
@@ -258,7 +258,7 @@ Curve::Sample IntegralCurve<Trimesh<>>::move_forward_from_vertex(const uint vid)
                                         tangent_space.at( m_ptr->poly_vert_id(fid,2) ),
                                         inters, sample.bary.data());
 
-            for(uint off=0; off<3; ++off) sample.pos += sample.bary.at(off) * m_ptr->poly_vert(fid, off);
+            for(unsigned int off=0; off<3; ++off) sample.pos += sample.bary.at(off) * m_ptr->poly_vert(fid, off);
 
             return sample;
         }
@@ -270,20 +270,20 @@ Curve::Sample IntegralCurve<Trimesh<>>::move_forward_from_vertex(const uint vid)
 
 template<>
 CINO_INLINE
-Curve::Sample IntegralCurve<Trimesh<>>::move_forward_from_edge(const uint eid, const vec3d & p)
+Curve::Sample IntegralCurve<Trimesh<>>::move_forward_from_edge(const unsigned int eid, const vec3d & p)
 {
     assert(m_ptr->edge_is_manifold(eid));
-    uint   f0 = m_ptr->adj_e2p(eid).front();
-    uint   f1 = m_ptr->adj_e2p(eid).back();
-    uint   v0 = m_ptr->edge_vert_id(eid,0);
-    uint   v1 = m_ptr->edge_vert_id(eid,1);
-    uint   v2 = m_ptr->vert_opposite_to(f0, v0, v1);
-    uint   v3 = m_ptr->vert_opposite_to(f1, v0, v1);
+    unsigned int   f0 = m_ptr->adj_e2p(eid).front();
+    unsigned int   f1 = m_ptr->adj_e2p(eid).back();
+    unsigned int   v0 = m_ptr->edge_vert_id(eid,0);
+    unsigned int   v1 = m_ptr->edge_vert_id(eid,1);
+    unsigned int   v2 = m_ptr->vert_opposite_to(f0, v0, v1);
+    unsigned int   v3 = m_ptr->vert_opposite_to(f1, v0, v1);
     vec3d n  = m_ptr->poly_data(f0).normal + m_ptr->poly_data(f1).normal; n.normalize();
 
     Plane tangent_plane(p,n);
 
-    std::map<uint,vec3d> tangent_space;
+    std::map<unsigned int,vec3d> tangent_space;
     tangent_space[v0] = m_ptr->vert(v0);
     tangent_space[v1] = m_ptr->vert(v1);
     tangent_space[v2] = tangent_plane.project_onto(m_ptr->vert(v2));
@@ -320,13 +320,13 @@ Curve::Sample IntegralCurve<Trimesh<>>::move_forward_from_edge(const uint eid, c
     assert(grad.norm() > 0);
 
     std::vector<ipair> edges_to_check;
-    for(uint e : m_ptr->adj_p2e(f0)) if (e!=eid) edges_to_check.push_back(std::make_pair(e,f0));
-    for(uint e : m_ptr->adj_p2e(f1)) if (e!=eid) edges_to_check.push_back(std::make_pair(e,f1));
+    for(unsigned int e : m_ptr->adj_p2e(f0)) if (e!=eid) edges_to_check.push_back(std::make_pair(e,f0));
+    for(unsigned int e : m_ptr->adj_p2e(f1)) if (e!=eid) edges_to_check.push_back(std::make_pair(e,f1));
 
     for(auto obj : edges_to_check)
     {
-        uint  e   = obj.first;
-        uint  fid = obj.second;
+        unsigned int  e   = obj.first;
+        unsigned int  fid = obj.second;
         vec3d v0  = tangent_space.at( m_ptr->edge_vert_id(e,0) );
         vec3d v1  = tangent_space.at( m_ptr->edge_vert_id(e,1) );
         vec3d inters;
@@ -341,7 +341,7 @@ Curve::Sample IntegralCurve<Trimesh<>>::move_forward_from_edge(const uint eid, c
                                         tangent_space.at( m_ptr->poly_vert_id(fid,2) ),
                                         inters, sample.bary.data());
 
-            for(uint off=0; off<3; ++off) sample.pos += sample.bary.at(off) * m_ptr->poly_vert(fid,off);
+            for(unsigned int off=0; off<3; ++off) sample.pos += sample.bary.at(off) * m_ptr->poly_vert(fid,off);
 
             return sample;
         }
@@ -353,12 +353,12 @@ Curve::Sample IntegralCurve<Trimesh<>>::move_forward_from_edge(const uint eid, c
 
 template<>
 CINO_INLINE
-Curve::Sample IntegralCurve<Trimesh<>>::move_forward_from_face(const uint fid, const vec3d & p)
+Curve::Sample IntegralCurve<Trimesh<>>::move_forward_from_face(const unsigned int fid, const vec3d & p)
 {
     vec3d grad = grad_ptr->vec_at(fid);
     grad.normalize();
 
-    for(uint e=0; e<3; ++e)
+    for(unsigned int e=0; e<3; ++e)
     {
         vec3d   e0  = m_ptr->poly_vert(fid,  TRI_EDGES[e][0]);
         vec3d   e1  = m_ptr->poly_vert(fid,  TRI_EDGES[e][1]);
@@ -388,7 +388,7 @@ template<>
 CINO_INLINE
 Curve::Sample IntegralCurve<Trimesh<>>::move_forward(const Sample & s)
 {
-    uint id;
+    unsigned int id;
     if (is_on_vertex(s,id))
     {
         return move_forward_from_vertex(id);
@@ -420,15 +420,15 @@ bool IntegralCurve<Trimesh<>>::is_converged(const Curve::Sample & sample)
 
     bool maxima_reached = false;
 
-    uint id;
+    unsigned int id;
     if (is_on_vertex(sample, id))
     {
         if (m_ptr->vert_is_local_max(id)) maxima_reached = true;
     }
     else if (is_on_edge(sample, id))
     {
-        uint vid0        = m_ptr->edge_vert_id(id,0);
-        uint vid1        = m_ptr->edge_vert_id(id,1);
+        unsigned int vid0        = m_ptr->edge_vert_id(id,0);
+        unsigned int vid1        = m_ptr->edge_vert_id(id,1);
         bool vid0_is_max = m_ptr->vert_is_local_max(vid0);
         bool vid1_is_max = m_ptr->vert_is_local_max(vid1);
 
@@ -436,9 +436,9 @@ bool IntegralCurve<Trimesh<>>::is_converged(const Curve::Sample & sample)
     }
     else if (is_on_face(sample, id))
     {
-        uint vid0        = m_ptr->poly_vert_id(id,0);
-        uint vid1        = m_ptr->poly_vert_id(id,1);
-        uint vid2        = m_ptr->poly_vert_id(id,2);
+        unsigned int vid0        = m_ptr->poly_vert_id(id,0);
+        unsigned int vid1        = m_ptr->poly_vert_id(id,1);
+        unsigned int vid2        = m_ptr->poly_vert_id(id,2);
         bool vid0_is_max = m_ptr->vert_is_local_max(vid0);
         bool vid1_is_max = m_ptr->vert_is_local_max(vid1);
         bool vid2_is_max = m_ptr->vert_is_local_max(vid2);
@@ -472,27 +472,27 @@ bool IntegralCurve<Trimesh<>>::is_converged(const Curve::Sample & sample)
 
 template<>
 CINO_INLINE
-bool IntegralCurve<Tetmesh<>>::is_on_face(const Curve::Sample & s, uint & tid, uint & fid, const double tol) const
+bool IntegralCurve<Tetmesh<>>::is_on_face(const Curve::Sample & s, unsigned int & tid, unsigned int & fid, const double tol) const
 {
     assert(s.pid!=-1);
 
-    std::vector<uint> non_zero_coords;
-    for(uint off=0; off<s.bary.size(); ++off)
+    std::vector<unsigned int> non_zero_coords;
+    for(unsigned int off=0; off<s.bary.size(); ++off)
     {
         if (s.bary.at(off) > tol) non_zero_coords.push_back(off);
     }
 
     if (non_zero_coords.size() == 3)
     {
-        std::vector<uint> my_f;
+        std::vector<unsigned int> my_f;
         my_f.push_back(m_ptr->poly_vert_id(s.pid, non_zero_coords.at(0)));
         my_f.push_back(m_ptr->poly_vert_id(s.pid, non_zero_coords.at(1)));
         my_f.push_back(m_ptr->poly_vert_id(s.pid, non_zero_coords.at(2)));
         std::sort(my_f.begin(), my_f.end());
 
-        for(uint f=0; f<4; ++f)
+        for(unsigned int f=0; f<4; ++f)
         {
-            std::vector<uint> curr_f;
+            std::vector<unsigned int> curr_f;
             curr_f.push_back(m_ptr->poly_vert_id(s.pid, TET_FACES[f][0]));
             curr_f.push_back(m_ptr->poly_vert_id(s.pid, TET_FACES[f][1]));
             curr_f.push_back(m_ptr->poly_vert_id(s.pid, TET_FACES[f][2]));
@@ -514,12 +514,12 @@ bool IntegralCurve<Tetmesh<>>::is_on_face(const Curve::Sample & s, uint & tid, u
 
 template<>
 CINO_INLINE
-bool IntegralCurve<Tetmesh<>>::is_on_poly(const Curve::Sample & s, uint & pid, const double tol) const
+bool IntegralCurve<Tetmesh<>>::is_on_poly(const Curve::Sample & s, unsigned int & pid, const double tol) const
 {
     assert(s.pid!=-1);
 
-    std::vector<uint> non_zero_coords;
-    for(uint off=0; off<s.bary.size(); ++off)
+    std::vector<unsigned int> non_zero_coords;
+    for(unsigned int off=0; off<s.bary.size(); ++off)
     {
         if (s.bary.at(off) > tol) non_zero_coords.push_back(off);
     }
@@ -536,17 +536,17 @@ bool IntegralCurve<Tetmesh<>>::is_on_poly(const Curve::Sample & s, uint & pid, c
 
 template<>
 CINO_INLINE
-Curve::Sample IntegralCurve<Tetmesh<>>::move_forward_from_vertex(const uint vid)
+Curve::Sample IntegralCurve<Tetmesh<>>::move_forward_from_vertex(const unsigned int vid)
 {
     vec3d p = m_ptr->vert(vid);
     vec3d grad(0,0,0);
-    for(uint pid : m_ptr->adj_v2p(vid)) grad += grad_ptr->vec_at(pid);
+    for(unsigned int pid : m_ptr->adj_v2p(vid)) grad += grad_ptr->vec_at(pid);
     grad.normalize();
     assert(grad.norm() > 0);
 
-    for(uint pid : m_ptr->adj_v2p(vid))
+    for(unsigned int pid : m_ptr->adj_v2p(vid))
     {
-        uint  fid = m_ptr->poly_face_opposite_to(pid, vid);
+        unsigned int  fid = m_ptr->poly_face_opposite_to(pid, vid);
         vec3d v0  = m_ptr->poly_vert(pid, TET_FACES[fid][0]);
         vec3d v1  = m_ptr->poly_vert(pid, TET_FACES[fid][1]);
         vec3d v2  = m_ptr->poly_vert(pid, TET_FACES[fid][2]);
@@ -573,19 +573,19 @@ Curve::Sample IntegralCurve<Tetmesh<>>::move_forward_from_vertex(const uint vid)
 
 template<>
 CINO_INLINE
-Curve::Sample IntegralCurve<Tetmesh<>>::move_forward_from_edge(const uint eid, const vec3d & p)
+Curve::Sample IntegralCurve<Tetmesh<>>::move_forward_from_edge(const unsigned int eid, const vec3d & p)
 {
     vec3d grad(0,0,0);
-    for(uint pid : m_ptr->adj_e2p(eid)) grad += grad_ptr->vec_at(pid);
+    for(unsigned int pid : m_ptr->adj_e2p(eid)) grad += grad_ptr->vec_at(pid);
     grad.normalize();
     assert(grad.norm() > 0);
 
-    uint v0 = m_ptr->edge_vert_id(eid, 0);
-    uint v1 = m_ptr->edge_vert_id(eid, 1);
+    unsigned int v0 = m_ptr->edge_vert_id(eid, 0);
+    unsigned int v1 = m_ptr->edge_vert_id(eid, 1);
 
-    for(uint pid : m_ptr->adj_e2p(eid))
+    for(unsigned int pid : m_ptr->adj_e2p(eid))
     {
-        for(uint f=0; f<m_ptr->faces_per_poly(); ++f)
+        for(unsigned int f=0; f<m_ptr->faces_per_poly(); ++f)
         {
             // skip faces containing the edge eid
             if (m_ptr->poly_vert_id(pid, TET_FACES[f][0]) == v0 &&
@@ -629,9 +629,9 @@ Curve::Sample IntegralCurve<Tetmesh<>>::move_forward_from_edge(const uint eid, c
 
 template<>
 CINO_INLINE
-Curve::Sample IntegralCurve<Tetmesh<>>::move_forward_from_face(const uint pid, const uint fid, const vec3d & p)
+Curve::Sample IntegralCurve<Tetmesh<>>::move_forward_from_face(const unsigned int pid, const unsigned int fid, const vec3d & p)
 {
-    std::vector<uint> polys_to_process;
+    std::vector<unsigned int> polys_to_process;
     polys_to_process.push_back(pid);
     vec3d grad = grad_ptr->vec_at(pid);
 
@@ -648,17 +648,17 @@ Curve::Sample IntegralCurve<Tetmesh<>>::move_forward_from_face(const uint pid, c
         return dummy;
     }
 
-    std::vector<uint> illegal_f;
+    std::vector<unsigned int> illegal_f;
     illegal_f.push_back(m_ptr->poly_vert_id(pid, TET_FACES[fid][0]));
     illegal_f.push_back(m_ptr->poly_vert_id(pid, TET_FACES[fid][1]));
     illegal_f.push_back(m_ptr->poly_vert_id(pid, TET_FACES[fid][2]));
     std::sort(illegal_f.begin(), illegal_f.end());
 
-    for(uint curr_poly : polys_to_process)
+    for(unsigned int curr_poly : polys_to_process)
     {
-        for(uint f=0; f<m_ptr->faces_per_poly(); ++f)
+        for(unsigned int f=0; f<m_ptr->faces_per_poly(); ++f)
         {
-            std::vector<uint> curr_f;
+            std::vector<unsigned int> curr_f;
             curr_f.push_back(m_ptr->poly_vert_id(curr_poly, TET_FACES[f][0]));
             curr_f.push_back(m_ptr->poly_vert_id(curr_poly, TET_FACES[f][1]));
             curr_f.push_back(m_ptr->poly_vert_id(curr_poly, TET_FACES[f][2]));
@@ -695,12 +695,12 @@ Curve::Sample IntegralCurve<Tetmesh<>>::move_forward_from_face(const uint pid, c
 
 template<>
 CINO_INLINE
-Curve::Sample IntegralCurve<Tetmesh<>>::move_forward_from_poly(const uint pid, const vec3d & p)
+Curve::Sample IntegralCurve<Tetmesh<>>::move_forward_from_poly(const unsigned int pid, const vec3d & p)
 {
     vec3d grad = grad_ptr->vec_at(pid);
     grad.normalize();
 
-    for(uint f=0; f<m_ptr->faces_per_poly(); ++f)
+    for(unsigned int f=0; f<m_ptr->faces_per_poly(); ++f)
     {
         vec3d v0 = m_ptr->poly_vert(pid, TET_FACES[f][0]);
         vec3d v1 = m_ptr->poly_vert(pid, TET_FACES[f][1]);
@@ -728,7 +728,7 @@ template<>
 CINO_INLINE
 Curve::Sample IntegralCurve<Tetmesh<>>::move_forward(const Curve::Sample & s)
 {
-    uint id, id2;
+    unsigned int id, id2;
     if (is_on_vertex(s,id)) // vid
     {
         return move_forward_from_vertex(id);
@@ -763,15 +763,15 @@ bool IntegralCurve<Tetmesh<>>::is_converged(const Curve::Sample & sample)
 
     bool maxima_reached = false;
 
-    uint id, id1;
+    unsigned int id, id1;
     if (is_on_vertex(sample, id))
     {
         if (m_ptr->vert_is_local_max(id))  maxima_reached = true;
     }
     else if (is_on_edge(sample, id))
     {
-        uint vid0        = m_ptr->edge_vert_id(id,0);
-        uint vid1        = m_ptr->edge_vert_id(id,1);
+        unsigned int vid0        = m_ptr->edge_vert_id(id,0);
+        unsigned int vid1        = m_ptr->edge_vert_id(id,1);
         bool vid0_is_max = m_ptr->vert_is_local_max(vid0);
         bool vid1_is_max = m_ptr->vert_is_local_max(vid1);
 
@@ -779,9 +779,9 @@ bool IntegralCurve<Tetmesh<>>::is_converged(const Curve::Sample & sample)
     }
     else if (is_on_face(sample, id, id1))
     {
-        uint vid0        = m_ptr->poly_vert_id(id, TET_FACES[id1][0]);
-        uint vid1        = m_ptr->poly_vert_id(id, TET_FACES[id1][1]);
-        uint vid2        = m_ptr->poly_vert_id(id, TET_FACES[id1][2]);
+        unsigned int vid0        = m_ptr->poly_vert_id(id, TET_FACES[id1][0]);
+        unsigned int vid1        = m_ptr->poly_vert_id(id, TET_FACES[id1][1]);
+        unsigned int vid2        = m_ptr->poly_vert_id(id, TET_FACES[id1][2]);
         bool vid0_is_max = m_ptr->vert_is_local_max(vid0);
         bool vid1_is_max = m_ptr->vert_is_local_max(vid1);
         bool vid2_is_max = m_ptr->vert_is_local_max(vid2);
@@ -790,10 +790,10 @@ bool IntegralCurve<Tetmesh<>>::is_converged(const Curve::Sample & sample)
     }
     else if (is_on_poly(sample, id))
     {
-        uint vid0        = m_ptr->poly_vert_id(id,0);
-        uint vid1        = m_ptr->poly_vert_id(id,1);
-        uint vid2        = m_ptr->poly_vert_id(id,2);
-        uint vid3        = m_ptr->poly_vert_id(id,3);
+        unsigned int vid0        = m_ptr->poly_vert_id(id,0);
+        unsigned int vid1        = m_ptr->poly_vert_id(id,1);
+        unsigned int vid2        = m_ptr->poly_vert_id(id,2);
+        unsigned int vid3        = m_ptr->poly_vert_id(id,3);
         bool vid0_is_max = m_ptr->vert_is_local_max(vid0);
         bool vid1_is_max = m_ptr->vert_is_local_max(vid1);
         bool vid2_is_max = m_ptr->vert_is_local_max(vid2);

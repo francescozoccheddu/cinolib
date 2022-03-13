@@ -44,7 +44,7 @@ namespace cinolib
 CINO_INLINE
 void write_STL(const char                           * filename,
                const std::vector<double>            & xyz,
-               const std::vector<std::vector<uint>> & poly,
+               const std::vector<std::vector<unsigned int>> & poly,
                const std::vector<double>            & normals);
 }
 

@@ -36,7 +36,7 @@ int main(int argc, char **argv)
             vec2d pos = gui.cursor_pos();
             if(gui.unproject(pos, p))
             {
-                uint  vid        = m.pick_vert(p);
+                unsigned int  vid        = m.pick_vert(p);
                 ScalarField f    = compute_geodesics_amortized(m, prefactored_matrices, {vid});
                 for(vid=0; vid<m.num_verts(); ++vid)
                 {

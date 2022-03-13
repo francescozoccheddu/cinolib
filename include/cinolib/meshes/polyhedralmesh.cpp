@@ -62,8 +62,8 @@ Polyhedralmesh<M,V,E,F,P>::Polyhedralmesh(const char * filename)
 template<class M, class V, class E, class F, class P>
 CINO_INLINE
 Polyhedralmesh<M,V,E,F,P>::Polyhedralmesh(const std::vector<vec3d>             & verts,
-                                          const std::vector<std::vector<uint>> & faces,
-                                          const std::vector<std::vector<uint>> & polys,
+                                          const std::vector<std::vector<unsigned int>> & faces,
+                                          const std::vector<std::vector<unsigned int>> & polys,
                                           const std::vector<std::vector<bool>> & polys_face_winding)
 {
     this->init(verts, faces, polys, polys_face_winding);
@@ -79,8 +79,8 @@ void Polyhedralmesh<M,V,E,F,P>::load(const char * filename)
     this->mesh_data().filename = std::string(filename);
 
     std::vector<vec3d>             tmp_verts;
-    std::vector<std::vector<uint>> tmp_faces;
-    std::vector<std::vector<uint>> tmp_polys;
+    std::vector<std::vector<unsigned int>> tmp_faces;
+    std::vector<std::vector<unsigned int>> tmp_polys;
     std::vector<std::vector<bool>> tmp_polys_face_winding;
     std::vector<int>               vert_labels;
     std::vector<int>               poly_labels;
@@ -148,11 +148,11 @@ void Polyhedralmesh<M,V,E,F,P>::save(const char * filename) const
 
 template<class M, class V, class E, class F, class P>
 CINO_INLINE
-void Polyhedralmesh<M,V,E,F,P>::update_f_normal(const uint fid)
+void Polyhedralmesh<M,V,E,F,P>::update_f_normal(const unsigned int fid)
 {
     assert(this->verts_per_face(fid)>2);
     std::vector<vec3d> points;
-    for(uint off=0; off<this->verts_per_face(fid); ++off) points.push_back(this->face_vert(fid,off));
+    for(unsigned int off=0; off<this->verts_per_face(fid); ++off) points.push_back(this->face_vert(fid,off));
     this->face_data(fid).normal = polygon_normal(points);
 }
 
@@ -160,7 +160,7 @@ void Polyhedralmesh<M,V,E,F,P>::update_f_normal(const uint fid)
 
 template<class M, class V, class E, class F, class P>
 CINO_INLINE
-double Polyhedralmesh<M,V,E,F,P>::poly_volume(const uint pid) const
+double Polyhedralmesh<M,V,E,F,P>::poly_volume(const unsigned int pid) const
 {
     if(this->poly_is_tetrahedron(pid))
     {

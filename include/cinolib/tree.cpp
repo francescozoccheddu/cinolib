@@ -54,11 +54,11 @@ Tree<T>::Tree()
 
 template<class T>
 CINO_INLINE
-uint Tree<T>::add_children(T item, uint father)
+unsigned int Tree<T>::add_children(T item, unsigned int father)
 {
     assert(father >= 0 && father < tree.size());
 
-    uint fresh_id = tree.size();
+    unsigned int fresh_id = tree.size();
     node(father).children.push_back(fresh_id);
 
     TreeNode<T> n;
@@ -74,11 +74,11 @@ uint Tree<T>::add_children(T item, uint father)
 
 template<class T>
 CINO_INLINE
-void Tree<T>::depth_first_traverse(std::vector<T> & items, const uint id) const
+void Tree<T>::depth_first_traverse(std::vector<T> & items, const unsigned int id) const
 {
     if (id > 0) items.push_back(node(id).item);
 
-    for(const uint c : node(id).children) depth_first_traverse(items, c);
+    for(const unsigned int c : node(id).children) depth_first_traverse(items, c);
 }
 
 }

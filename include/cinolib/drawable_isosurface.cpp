@@ -68,11 +68,11 @@ void DrawableIsosurface<M,V,E,F,P>::draw(const float) const
     glEnable(GL_COLOR_MATERIAL);
     glShadeModel(GL_SMOOTH);
 
-    for(uint i=0; i<this->tris.size(); i+=3)
+    for(unsigned int i=0; i<this->tris.size(); i+=3)
     {
-        uint vid0 = this->tris[i+0];
-        uint vid1 = this->tris[i+1];
-        uint vid2 = this->tris[i+2];
+        unsigned int vid0 = this->tris[i+0];
+        unsigned int vid1 = this->tris[i+1];
+        unsigned int vid2 = this->tris[i+2];
 
         glBegin(GL_TRIANGLES);
         glColor3fv(color.rgba);

@@ -44,7 +44,7 @@ namespace cinolib
 CINO_INLINE
 void write_TET(const char                           * filename,
                const std::vector<vec3d>             & verts,
-               const std::vector<std::vector<uint>> & tets)
+               const std::vector<std::vector<unsigned int>> & tets)
 {
     setlocale(LC_NUMERIC, "en_US.UTF-8"); // makes sure "." is the decimal separator
 
@@ -66,7 +66,7 @@ void write_TET(const char                           * filename,
         fprintf(fp, "%.17g %.17g %.17g\n", v.x(), v.y(), v.z());
     }
 
-    for(const std::vector<uint> & tet : tets)
+    for(const std::vector<unsigned int> & tet : tets)
     {
         fprintf(fp, "4 %d %d %d %d\n", tet.at(0), tet.at(1), tet.at(2), tet.at(3));
     }
@@ -79,7 +79,7 @@ void write_TET(const char                           * filename,
 CINO_INLINE
 void write_TET(const char                * filename,
                const std::vector<double> & xyz,
-               const std::vector<uint>   & tets)
+               const std::vector<unsigned int>   & tets)
 {
     setlocale(LC_NUMERIC, "en_US.UTF-8"); // makes sure "." is the decimal separator
 

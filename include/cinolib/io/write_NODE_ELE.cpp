@@ -42,7 +42,7 @@ namespace cinolib
 CINO_INLINE
 void write_NODE_ELE(const char                           * basename,
                     const std::vector<vec3d>             & verts,
-                    const std::vector<std::vector<uint>> & poly)
+                    const std::vector<std::vector<unsigned int>> & poly)
 {
     setlocale(LC_NUMERIC, "en_US.UTF-8"); // makes sure "." is the decimal separator
 
@@ -67,10 +67,10 @@ void write_NODE_ELE(const char                           * basename,
     }
 
     fprintf(f_ele, "%d\n", (int)poly.size());
-    for(const std::vector<uint> & p : poly)
+    for(const std::vector<unsigned int> & p : poly)
     {
         fprintf(f_ele, "%d ", (int)p.size());
-        for(uint vid : p) fprintf(f_ele, "%d ", vid+1);
+        for(unsigned int vid : p) fprintf(f_ele, "%d ", vid+1);
         fprintf(f_ele, "\n");
     }
 
@@ -84,7 +84,7 @@ void write_NODE_ELE(const char                           * basename,
 CINO_INLINE
 void write_NODE_ELE_2D(const char                           * basename,
                        const std::vector<vec3d>             & verts,
-                       const std::vector<std::vector<uint>> & poly)
+                       const std::vector<std::vector<unsigned int>> & poly)
 {
     setlocale(LC_NUMERIC, "en_US.UTF-8"); // makes sure "." is the decimal separator
 
@@ -109,10 +109,10 @@ void write_NODE_ELE_2D(const char                           * basename,
     }
 
     fprintf(f_ele, "%d\n", (int)poly.size());
-    for(const std::vector<uint> & p : poly)
+    for(const std::vector<unsigned int> & p : poly)
     {
         fprintf(f_ele, "%d ", (int)p.size());
-        for(uint vid : p) fprintf(f_ele, "%d ", vid+1);
+        for(unsigned int vid : p) fprintf(f_ele, "%d ", vid+1);
         fprintf(f_ele, "\n");
     }
 

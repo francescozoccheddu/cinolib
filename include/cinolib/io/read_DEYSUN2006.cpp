@@ -88,12 +88,12 @@ void read_DeyandSun2006(const char          * filename,
         // some stuff we don't need at all
         //
         float dummyF;
-        uint dummyD1, dummyD2;
+        unsigned int dummyD1, dummyD2;
         fscanf(f, "%f", &dummyF);
         fscanf(f, "%f", &dummyF);
         fscanf(f, "%f", &dummyF);
         fscanf(f, "%d", &dummyD1);
-        for(uint j = 0; j<dummyD1; ++j) fscanf(f, "%d", &dummyD2);
+        for(unsigned int j = 0; j<dummyD1; ++j) fscanf(f, "%d", &dummyD2);
     }
 
     fclose(f);

@@ -47,14 +47,14 @@ namespace cinolib
 CINO_INLINE
 void write_NODE_ELE(const char                           * basename,
                     const std::vector<vec3d>             & verts,
-                    const std::vector<std::vector<uint>> & poly);
+                    const std::vector<std::vector<unsigned int>> & poly);
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 CINO_INLINE
 void write_NODE_ELE_2D(const char                           * basename,
                        const std::vector<vec3d>             & verts, // z will be discarded
-                       const std::vector<std::vector<uint>> & poly);
+                       const std::vector<std::vector<unsigned int>> & poly);
 
 }
 

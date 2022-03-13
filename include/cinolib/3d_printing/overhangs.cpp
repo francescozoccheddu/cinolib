@@ -47,10 +47,10 @@ CINO_INLINE
 void overhangs(const Trimesh<M,V,E,P>  & m,
                const float               thresh, // degrees
                const vec3d             & build_dir,
-                     std::vector<uint> & polys_hanging)
+                     std::vector<unsigned int> & polys_hanging)
 {
     std::mutex mutex;
-    PARALLEL_FOR(0, m.num_polys(), 1000, [&](const uint pid)
+    PARALLEL_FOR(0, m.num_polys(), 1000, [&](const unsigned int pid)
     {
         float ang = build_dir.angle_deg(m.poly_data(pid).normal);
         if(ang-90.f > thresh)
@@ -68,20 +68,20 @@ CINO_INLINE
 void overhangs(const Trimesh<M,V,E,P>                  & m,
                const float                               thresh, // degrees
                const vec3d                             & build_dir,
-                     std::vector<std::pair<uint,uint>> & polys_hanging,
+                     std::vector<std::pair<unsigned int,unsigned int>> & polys_hanging,
                const Octree                            & octree) // cached
 {
     // find overhanging triangles
-    std::vector<uint> tmp;
+    std::vector<unsigned int> tmp;
     overhangs(m, thresh, build_dir, tmp);
 
     // cast a ray from each overhang to find the first triangle below it
     std::mutex mutex;
-    PARALLEL_FOR(0, tmp.size(), 1000, [&](const uint i)
+    PARALLEL_FOR(0, tmp.size(), 1000, [&](const unsigned int i)
     {
-        uint pid  = tmp[i];
+        unsigned int pid  = tmp[i];
         auto pair = std::make_pair(pid,pid);
-        std::set<std::pair<double,uint>> hits;
+        std::set<std::pair<double,unsigned int>> hits;
         if(octree.intersects_ray(m.poly_centroid(pid), -build_dir, hits))
         {
             auto hit = hits.begin();
@@ -106,7 +106,7 @@ CINO_INLINE
 void overhangs(const Trimesh<M,V,E,P>                  & m,
                const float                               thresh, // degrees
                const vec3d                             & build_dir,
-                     std::vector<std::pair<uint,uint>> & polys_hanging)
+                     std::vector<std::pair<unsigned int,unsigned int>> & polys_hanging)
 {
     Octree octree;
     octree.build_from_mesh_polys(m);

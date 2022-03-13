@@ -56,7 +56,7 @@ namespace cinolib
 //    Springer
 //
 CINO_INLINE
-void sphere_coverage(const uint n_samples, std::vector<vec3d> & points);
+void sphere_coverage(const unsigned int n_samples, std::vector<vec3d> & points);
 
 }
 

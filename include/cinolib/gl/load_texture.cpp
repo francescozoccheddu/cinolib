@@ -78,28 +78,28 @@ void load_texture_isolines2D(      Texture & texture,
     if(texture.id > 0) glDeleteTextures(1, &texture.id);
     glGenTextures(1, &texture.id);
 
-    const uint size = 8;
+    const unsigned int size = 8;
     uint8_t * data = new uint8_t[size*size*4];
-    for(uint r=0; r<size; ++r)
-    for(uint c=0; c<size; ++c)
+    for(unsigned int r=0; r<size; ++r)
+    for(unsigned int c=0; c<size; ++c)
     {
-        uint i = 4 * serialize_2D_index(r,c,size);
+        unsigned int i = 4 * serialize_2D_index(r,c,size);
         data[i  ] = background.r_uchar();
         data[i+1] = background.g_uchar();
         data[i+2] = background.b_uchar();
         data[i+3] = background.a_uchar();
     }
-    for(uint c=0; c<size; ++c)
+    for(unsigned int c=0; c<size; ++c)
     {
-        uint i = 4 * serialize_2D_index(0,c,size);
+        unsigned int i = 4 * serialize_2D_index(0,c,size);
         data[i  ] = u_isolines.r_uchar();
         data[i+1] = u_isolines.g_uchar();
         data[i+2] = u_isolines.b_uchar();
         data[i+3] = u_isolines.a_uchar();
     }
-    for(uint r=0; r<size; ++r)
+    for(unsigned int r=0; r<size; ++r)
     {
-        uint i = 4 * serialize_2D_index(r,0,size);
+        unsigned int i = 4 * serialize_2D_index(r,0,size);
         data[i  ] = v_isolines.r_uchar();
         data[i+1] = v_isolines.g_uchar();
         data[i+2] = v_isolines.b_uchar();
@@ -120,12 +120,12 @@ void load_texture_checkerboard(      Texture & texture,
     if(texture.id > 0) glDeleteTextures(1, &texture.id);
     glGenTextures(1, &texture.id);
 
-    const uint size = 8;
+    const unsigned int size = 8;
     uint8_t * data = new uint8_t[size*size*4];
-    for(uint r=0; r<size; ++r)
-    for(uint c=0; c<size; ++c)
+    for(unsigned int r=0; r<size; ++r)
+    for(unsigned int c=0; c<size; ++c)
     {
-        uint i = 4 * serialize_2D_index(r,c,size);
+        unsigned int i = 4 * serialize_2D_index(r,c,size);
         if(r%2 == c%2)
         {
             data[i  ] = c0.r_uchar();

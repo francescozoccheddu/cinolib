@@ -48,50 +48,50 @@ namespace cinolib
 
 CINO_INLINE
 void triangle_wrap(const std::vector<double> & coords_in,  // serialized input xy coordinates
-                   const std::vector<uint>   & segs_in,    // serialized segments
+                   const std::vector<unsigned int>   & segs_in,    // serialized segments
                    const std::vector<double> & holes_in,   // serialized xy holes
                    const std::string         & flags,      // https://www.cs.cmu.edu/~quake/triangle.switch.html
                          std::vector<double> & coords_out, // serialized output xy coordinates
-                         std::vector<uint>   & tris_out);  // serialized tris
+                         std::vector<unsigned int>   & tris_out);  // serialized tris
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 CINO_INLINE
 void triangle_wrap(const std::vector<vec2d> & verts_in,
-                   const std::vector<uint>  & segs_in,
+                   const std::vector<unsigned int>  & segs_in,
                    const std::vector<vec2d> & holes_in,
                    const std::string        & flags,
                          std::vector<vec2d> & verts_out,
-                         std::vector<uint>  & tris_out);
+                         std::vector<unsigned int>  & tris_out);
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 CINO_INLINE
 void triangle_wrap(const std::vector<double> & coords_in,  // serialized input xy coordinates
-                   const std::vector<uint>   & segs_in,    // serialized segments
+                   const std::vector<unsigned int>   & segs_in,    // serialized segments
                    const std::vector<double> & holes_in,   // serialized xy holes
                    const double                z_coord,    // lift triangulation to z_coord
                    const std::string         & flags,      // https://www.cs.cmu.edu/~quake/triangle.switch.html
                          std::vector<double> & coords_out, // serialized output xy+z_coord coordinates
-                         std::vector<uint>   & tris_out);  // serialized tris
+                         std::vector<unsigned int>   & tris_out);  // serialized tris
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 CINO_INLINE
 void triangle_wrap(const std::vector<vec2d>  & verts_in,  // serialized input xy coordinates
-                   const std::vector<uint>   & segs_in,    // serialized segments
+                   const std::vector<unsigned int>   & segs_in,    // serialized segments
                    const std::vector<vec2d>  & holes_in,   // serialized xy holes
                    const double                z_coord,    // lift triangulation to z_coord
                    const std::string         & flags,      // https://www.cs.cmu.edu/~quake/triangle.switch.html
                          std::vector<vec2d>  & verts_out, // serialized output xy+z_coord coordinates
-                         std::vector<uint>   & tris_out);  // serialized tris
+                         std::vector<unsigned int>   & tris_out);  // serialized tris
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 template<class M, class V, class E, class P>
 CINO_INLINE
 void triangle_wrap(const std::vector<double> & coords_in, // serialized input xy coordinates
-                   const std::vector<uint>   & segs_in,   // serialized segments
+                   const std::vector<unsigned int>   & segs_in,   // serialized segments
                    const std::vector<double> & holes_in,  // serialized xy holes
                    const double                z_coord,   // lift triangulation to z_coord
                    const std::string         & flags,     // https://www.cs.cmu.edu/~quake/triangle.switch.html
@@ -103,7 +103,7 @@ void triangle_wrap(const std::vector<double> & coords_in, // serialized input xy
 template<class M, class V, class E, class P>
 CINO_INLINE
 void triangle_wrap(const std::vector<vec2d> & verts_in,
-                   const std::vector<uint>  & segs_in,   // serialized segments
+                   const std::vector<unsigned int>  & segs_in,   // serialized segments
                    const std::vector<vec2d> & holes_in,
                    const double               z_coord,   // lift triangulation to z_coord
                    const std::string        & flags,     // https://www.cs.cmu.edu/~quake/triangle.switch.html
@@ -114,7 +114,7 @@ void triangle_wrap(const std::vector<vec2d> & verts_in,
 template<class M, class V, class E, class P>
 CINO_INLINE
 void triangle_wrap(const std::vector<vec3d> & verts_in,
-                   const std::vector<uint>  & segs_in,   // serialized segments
+                   const std::vector<unsigned int>  & segs_in,   // serialized segments
                    const std::vector<vec3d> & holes_in,
                    const double               z_coord,   // lift triangulation to z_coord
                    const std::string        & flags,     // https://www.cs.cmu.edu/~quake/triangle.switch.html

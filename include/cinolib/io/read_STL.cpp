@@ -52,7 +52,7 @@ namespace cinolib
 CINO_INLINE
 void read_STL(const char         * filename,
               std::vector<vec3d> & verts,
-              std::vector<uint>  & tris,
+              std::vector<unsigned int>  & tris,
               const bool           merge_duplicated_verts)
 {
     std::vector<vec3d> normals;
@@ -65,7 +65,7 @@ CINO_INLINE
 void read_STL(const char         * filename,
               std::vector<vec3d> & verts,
               std::vector<vec3d> & normals,
-              std::vector<uint>  & tris,
+              std::vector<unsigned int>  & tris,
               const bool           merge_duplicated_verts)
 {
     // https://en.wikipedia.org/wiki/STL_(file_format)
@@ -83,7 +83,7 @@ void read_STL(const char         * filename,
         exit(-1);
     }
 
-    std::map<vec3d,uint> vmap;
+    std::map<vec3d,unsigned int> vmap;
 
     /* This is a horrible trick to cope with the fact that in Thingi10K
      * binary files start with the header of ASCII files even if they shouldn't.
@@ -121,7 +121,7 @@ void read_STL(const char         * filename,
                     auto it = vmap.find(v);
                     if(it == vmap.end())
                     {
-                        uint fresh_id = vmap.size();
+                        unsigned int fresh_id = vmap.size();
                         vmap[v] = fresh_id;
                         verts.push_back(v);
                         tris.push_back(fresh_id);
@@ -155,9 +155,9 @@ void read_STL(const char         * filename,
         if(fread(header, 1, 80, fp)!=80) assert(false && "error reading STL binary header");
 
         // read triangles
-        uint nt;
-        if(fread(&nt, sizeof(uint), 1, fp)!=1) assert(false && "error reading number of triangles");
-        for(uint i=0; i<nt; ++i)
+        unsigned int nt;
+        if(fread(&nt, sizeof(unsigned int), 1, fp)!=1) assert(false && "error reading number of triangles");
+        for(unsigned int i=0; i<nt; ++i)
         {
             // read normal
             float nf[3];
@@ -177,7 +177,7 @@ void read_STL(const char         * filename,
                     auto it = vmap.find(v);
                     if(it == vmap.end())
                     {
-                        uint fresh_id = vmap.size();
+                        unsigned int fresh_id = vmap.size();
                         vmap[v] = fresh_id;
                         verts.push_back(v);
                         tris.push_back(fresh_id);

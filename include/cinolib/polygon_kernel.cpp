@@ -93,7 +93,7 @@ double polygon_kernel(std::vector<vec2d>   poly,
 
     // define half spaces
     std::vector<BoostPolygon> half_spaces;
-    for(uint i=0; i<poly.size(); ++i)
+    for(unsigned int i=0; i<poly.size(); ++i)
     {
         vec2d A   = poly.at(i);
         vec2d B   = poly.at((i+1)%poly.size());
@@ -115,7 +115,7 @@ double polygon_kernel(std::vector<vec2d>   poly,
 
     // define kernel as intersection of half-spaces
     BoostPolygon kernel_boost = half_spaces.front();
-    for(uint i=1; i<half_spaces.size(); ++i)
+    for(unsigned int i=1; i<half_spaces.size(); ++i)
     {
         std::vector<BoostPolygon> res;
         boost::geometry::intersection(kernel_boost, half_spaces.at(i), res);
@@ -125,7 +125,7 @@ double polygon_kernel(std::vector<vec2d>   poly,
     }
 
     // convert from BoostPolygon to vec2d array
-    for(uint i=0; i<kernel_boost.outer().size()-1; ++i)
+    for(unsigned int i=0; i<kernel_boost.outer().size()-1; ++i)
     {
         kernel.push_back(vec2d(boost::geometry::get<0>(kernel_boost.outer()[i]),
                                boost::geometry::get<1>(kernel_boost.outer()[i])));

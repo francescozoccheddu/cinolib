@@ -45,7 +45,7 @@ namespace cinolib
 template<class M, class V, class E, class P>
 CINO_INLINE
 ScalarField heat_flow(const AbstractMesh<M,V,E,P> & m,
-                      const std::vector<uint>     & heat_charges,
+                      const std::vector<unsigned int>     & heat_charges,
                       const double                  time,
                       const int                     laplacian_mode,
                       const bool                    hard_contraint_bcs)
@@ -60,13 +60,13 @@ ScalarField heat_flow(const AbstractMesh<M,V,E,P> & m,
 
     if (hard_contraint_bcs) // heat flow as a boundary problem (charges do not lose heat)
     {
-        std::map<uint,double> bcs;
-        for(uint vid: heat_charges) bcs[vid] = 1.0;
+        std::map<unsigned int,double> bcs;
+        for(unsigned int vid: heat_charges) bcs[vid] = 1.0;
         solve_square_system_with_bc(MM - time * L, rhs, heat, bcs);
     }
     else // heat flow as a diffusion problem (charges lose heat)
     {
-        for(uint vid : heat_charges) rhs[vid] = 1.0;
+        for(unsigned int vid : heat_charges) rhs[vid] = 1.0;
         solve_square_system(MM - time * L, rhs, heat);
     }
 

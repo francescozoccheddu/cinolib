@@ -41,8 +41,8 @@ namespace cinolib
 {
 
 CINO_INLINE
-DrawableOctree::DrawableOctree(const uint max_depth,
-                                  const uint items_per_leaf)
+DrawableOctree::DrawableOctree(const unsigned int max_depth,
+                                  const unsigned int items_per_leaf)
 : Octree(max_depth, items_per_leaf)
 {
     updateGL();

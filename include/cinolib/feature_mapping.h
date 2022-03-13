@@ -62,9 +62,9 @@ template<class M1, class V1, class E1, class P1,
          class M2, class V2, class E2, class P2>
 CINO_INLINE
 bool feature_mapping(const AbstractPolygonMesh<M1,V1,E1,P1> & m_source,
-                     const std::vector<std::vector<uint>>   & f_source,
+                     const std::vector<std::vector<unsigned int>>   & f_source,
                            AbstractPolygonMesh<M2,V2,E2,P2> & m_target,
-                           std::vector<std::vector<uint>>   & f_target);
+                           std::vector<std::vector<unsigned int>>   & f_target);
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 

@@ -41,7 +41,7 @@ namespace cinolib
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-void sample_mesh(AbstractPolygonMesh<M,V,E,P> & m, const uint n_samples, std::vector<uint> & samples)
+void sample_mesh(AbstractPolygonMesh<M,V,E,P> & m, const unsigned int n_samples, std::vector<unsigned int> & samples)
 {
     assert(n_samples > 0);
 
@@ -51,11 +51,11 @@ void sample_mesh(AbstractPolygonMesh<M,V,E,P> & m, const uint n_samples, std::ve
     GeodesicsCache cache;
     ScalarField f = compute_geodesics_amortized(m, cache, samples);
 
-    for(uint i=1; i<n_samples; ++i)
+    for(unsigned int i=1; i<n_samples; ++i)
     {
         double dist = f[samples.back()];
-        uint   sample;
-        for(uint vid=0; vid<m.num_verts(); ++vid)
+        unsigned int   sample;
+        for(unsigned int vid=0; vid<m.num_verts(); ++vid)
         {
             if(f[vid] < dist)
             {

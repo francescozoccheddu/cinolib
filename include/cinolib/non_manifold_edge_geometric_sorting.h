@@ -52,8 +52,8 @@ CINO_INLINE
 void non_manifold_edge_geometric_sorting(const vec3d              & e0,
                                          const vec3d              & e1,
                                          const std::vector<vec3d> & tris,
-                                               std::vector<uint>  & ordering,
-                                         const uint                 first_elem = 0);
+                                               std::vector<unsigned int>  & ordering,
+                                         const unsigned int                 first_elem = 0);
 }
 
 #ifndef  CINO_STATIC_LIB

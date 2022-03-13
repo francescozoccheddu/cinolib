@@ -54,7 +54,7 @@ namespace cinolib
 template<class M, class V, class E, class P>
 CINO_INLINE
 void MCF(AbstractPolygonMesh<M,V,E,P> & m,
-         const uint                     n_iters,
+         const unsigned int                     n_iters,
          const double                   time_scalar = 0.01, // I suggest very small steps for the conformalized version
          const bool                     conformalized = true);
 

@@ -43,12 +43,12 @@ template<class Vertex>
 CINO_INLINE
 void vertex_clustering(const std::vector<Vertex>             & points,
                        const double                            proximity_thresh,
-                       std::vector<std::unordered_set<uint>> & clusters)
+                       std::vector<std::unordered_set<unsigned int>> & clusters)
 {
     // build v2v connectivity based on point proximity
-    std::vector<std::vector<uint>> v2v(points.size());
-    for(uint vid0=0;      vid0<points.size()-1; ++vid0)
-    for(uint vid1=vid0+1; vid1<points.size();   ++vid1)
+    std::vector<std::vector<unsigned int>> v2v(points.size());
+    for(unsigned int vid0=0;      vid0<points.size()-1; ++vid0)
+    for(unsigned int vid1=vid0+1; vid1<points.size();   ++vid1)
     {
         if (points.at(vid0).dist(points.at(vid1)) < proximity_thresh)
         {
@@ -59,16 +59,16 @@ void vertex_clustering(const std::vector<Vertex>             & points,
 
     // visit the resulting graph with BFS to
     // isolate clusters of adjacent vertices
-    uint nv   = points.size();
-    uint seed = 0;
+    unsigned int nv   = points.size();
+    unsigned int seed = 0;
     std::vector<bool> visited(nv, false);
     do
     {
-        std::unordered_set<uint> cluster;
+        std::unordered_set<unsigned int> cluster;
         bfs(v2v, seed, cluster);
 
         clusters.push_back(cluster);
-        for(uint vid : cluster) visited.at(vid) = true;
+        for(unsigned int vid : cluster) visited.at(vid) = true;
 
         seed = 0;
         while (seed < nv && visited.at(seed)) ++seed;

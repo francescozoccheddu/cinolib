@@ -46,15 +46,15 @@ namespace cinolib
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 CINO_INLINE
-void sort_poly_vertices_as_hexa(const std::vector<std::vector<uint>> & poly_faces,
+void sort_poly_vertices_as_hexa(const std::vector<std::vector<unsigned int>> & poly_faces,
                                 const std::vector<bool>              & poly_winding,
-                                      std::vector<uint>              & hexa)
+                                      std::vector<unsigned int>              & hexa)
 {
     assert(poly_faces.size()==6);
     assert(poly_winding.size()==6);
 
     // vertex 2 vertex adjacency
-    std::map<uint,std::set<uint>> v2v;
+    std::map<unsigned int,std::set<unsigned int>> v2v;
     for(auto f : poly_faces)
     {
         assert(f.size()==4);
@@ -73,8 +73,8 @@ void sort_poly_vertices_as_hexa(const std::vector<std::vector<uint>> & poly_face
     if(poly_winding.at(0)) std::swap(hexa.at(1),hexa.at(3));
 
     // determine opposite face using v2v
-    for(uint i=0; i<4; ++i)
-    for(uint vid : v2v.at(hexa.at(i)))
+    for(unsigned int i=0; i<4; ++i)
+    for(unsigned int vid : v2v.at(hexa.at(i)))
     {
         if(!CONTAINS_VEC(hexa,vid)) hexa.push_back(vid);
     }
@@ -85,16 +85,16 @@ void sort_poly_vertices_as_hexa(const std::vector<std::vector<uint>> & poly_face
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 CINO_INLINE
-void sort_poly_vertices_as_hexa(const std::vector<std::vector<uint>> & faces,
-                                const std::vector<std::vector<uint>> & polys,
+void sort_poly_vertices_as_hexa(const std::vector<std::vector<unsigned int>> & faces,
+                                const std::vector<std::vector<unsigned int>> & polys,
                                 const std::vector<std::vector<bool>> & winding,
-                                      std::vector<std::vector<uint>> & hexas)
+                                      std::vector<std::vector<unsigned int>> & hexas)
 {
     hexas.resize(polys.size());
-    for(uint pid=0; pid<polys.size(); ++pid)
+    for(unsigned int pid=0; pid<polys.size(); ++pid)
     {
-        std::vector<std::vector<uint>> f;
-        for(uint fid : polys.at(pid)) f.push_back(faces.at(fid));
+        std::vector<std::vector<unsigned int>> f;
+        for(unsigned int fid : polys.at(pid)) f.push_back(faces.at(fid));
         sort_poly_vertices_as_hexa(f, winding.at(pid), hexas.at(pid));
     }
 }

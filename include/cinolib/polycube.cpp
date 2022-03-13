@@ -42,21 +42,21 @@ namespace cinolib
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-void polycube(Trimesh<M,V,E,P> & pc, const uint genus)
+void polycube(Trimesh<M,V,E,P> & pc, const unsigned int genus)
 {
     pc = Trimesh<M,V,E,P>();
 
-    uint nrows = 3;
-    uint ncols = 1 + 2*genus;
+    unsigned int nrows = 3;
+    unsigned int ncols = 1 + 2*genus;
 
-    for(uint r=0; r<=nrows; ++r)
-    for(uint c=0; c<=ncols; ++c)
+    for(unsigned int r=0; r<=nrows; ++r)
+    for(unsigned int c=0; c<=ncols; ++c)
     {
         pc.vert_add(vec3d(c,r,0));
     }
 
-    for(uint r=0; r<=nrows; ++r)
-    for(uint c=0; c<=ncols; ++c)
+    for(unsigned int r=0; r<=nrows; ++r)
+    for(unsigned int c=0; c<=ncols; ++c)
     {
         if(r<nrows && c<ncols)
         {

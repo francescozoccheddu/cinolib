@@ -15,7 +15,7 @@ int main(int argc, char **argv)
     m_in.update_bbox();
 
     // make tetmesh
-    std::vector<uint>   edges, tets;
+    std::vector<unsigned int>   edges, tets;
     std::vector<double> verts;
     double vol_thresh = 0.01 * m_in.bbox().diag(); // force tets to be smaller than 5% of bbox diag
     char opt[100];

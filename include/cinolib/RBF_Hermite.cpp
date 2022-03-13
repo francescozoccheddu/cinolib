@@ -45,34 +45,34 @@ Hermite_RBF<RBF>::Hermite_RBF(const std::vector<vec3d> & points,
 {
     assert(points.size()==normals.size());
 
-    uint np = points.size();
+    unsigned int np = points.size();
     alpha.resize(np);
     beta.resize(3, np);
     center.resize(3, np);
 
-    uint size = 4*np;
+    unsigned int size = 4*np;
     Eigen::MatrixXd A(size, size);
     Eigen::VectorXd f(size);
     Eigen::VectorXd x(size);
 
     // copy the node centers
-    for(uint i=0; i<np; ++i)
+    for(unsigned int i=0; i<np; ++i)
     {
         center.col(i) = Eigen::Vector3d(points.at(i).x(), points.at(i).y(), points.at(i).z());
     }
 
-    for(uint i=0; i<np; ++i)
+    for(unsigned int i=0; i<np; ++i)
     {
         Eigen::Vector3d p = Eigen::Vector3d(points.at(i).x(),  points.at(i).y(),  points.at(i).z());
         Eigen::Vector3d n = Eigen::Vector3d(normals.at(i).x(), normals.at(i).y(), normals.at(i).z());
 
-        uint ii = 4*i;
+        unsigned int ii = 4*i;
         f(ii) = 0;
         f.template segment<3>(ii+1) = n;
 
-        for(uint j=0; j<np; ++j)
+        for(unsigned int j=0; j<np; ++j)
         {
-            uint jj = 4*j;
+            unsigned int jj = 4*j;
             Eigen::Vector3d diff = p-center.col(j);
             double len=diff.norm();
             if(len==0)
@@ -108,7 +108,7 @@ CINO_INLINE
 ScalarField Hermite_RBF<RBF>::eval(const std::vector<vec3d> & plist) const
 {
     ScalarField f(plist.size());
-    for(uint i=0; i<plist.size(); ++i) f[i] = eval(plist.at(i));
+    for(unsigned int i=0; i<plist.size(); ++i) f[i] = eval(plist.at(i));
     return f;
 }
 
@@ -120,7 +120,7 @@ double Hermite_RBF<RBF>::eval(const vec3d & p) const
 {
     Eigen::Vector3d pp(p.x(), p.y(), p.z());
     double val = 0;
-    for(uint i=0; i<center.cols(); ++i)
+    for(unsigned int i=0; i<center.cols(); ++i)
     {
         Eigen::Vector3d diff = pp-center.col(i);
         double l = diff.norm();
@@ -142,7 +142,7 @@ vec3d Hermite_RBF<RBF>::eval_grad(const vec3d &p) const
     Eigen::Vector3d pp(p.x(), p.y(), p.z());
     Eigen::Vector3d grad = Eigen::Vector3d::Zero();
 
-    for(uint i=0; i<center.cols(); i++)
+    for(unsigned int i=0; i<center.cols(); i++)
     {
         Eigen::Vector3d node = center.col(i);
         Eigen::Vector3d beta = this->beta.col(i);

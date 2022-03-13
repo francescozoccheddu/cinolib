@@ -101,12 +101,12 @@ CINO_INLINE
 void solve_square_system_with_bc(const Eigen::SparseMatrix<double> & A,
                                  const Eigen::VectorXd             & b,
                                        Eigen::VectorXd             & x,
-                                 const std::map<uint,double>       & bc, // Dirichlet boundary conditions
+                                 const std::map<unsigned int,double>       & bc, // Dirichlet boundary conditions
                                  int   solver)
 {
     std::vector<int> col_map(A.rows(), -1);
-    uint fresh_id = 0;
-    for(uint col=0; col<A.cols(); ++col)
+    unsigned int fresh_id = 0;
+    for(unsigned int col=0; col<A.cols(); ++col)
     {
         if (DOES_NOT_CONTAIN(bc, col))
         {
@@ -114,12 +114,12 @@ void solve_square_system_with_bc(const Eigen::SparseMatrix<double> & A,
         }
     }
 
-    uint size = A.rows() - bc.size();
+    unsigned int size = A.rows() - bc.size();
 
     std::vector<Entry> Aprime_entries;
     Eigen::VectorXd    bprime(size);
 
-    for(uint row=0; row<A.rows(); ++row)
+    for(unsigned int row=0; row<A.rows(); ++row)
     {
         if (col_map[row] >= 0)
         {
@@ -131,12 +131,12 @@ void solve_square_system_with_bc(const Eigen::SparseMatrix<double> & A,
     // iterate over the non-zero entries
     // of sparse matrix A
     //
-    for (uint i=0; i<A.outerSize(); ++i)
+    for (unsigned int i=0; i<A.outerSize(); ++i)
     {
         for (Eigen::SparseMatrix<double>::InnerIterator it(A,i); it; ++it)
         {
-            uint    row = it.row();
-            uint    col = it.col();
+            unsigned int    row = it.row();
+            unsigned int    col = it.col();
             double val = it.value();
 
             if (col_map[row] < 0) continue;
@@ -160,7 +160,7 @@ void solve_square_system_with_bc(const Eigen::SparseMatrix<double> & A,
     solve_square_system(Aprime, bprime, tmp_x, solver);
 
     x.resize(A.cols());
-    for(uint col=0; col<A.cols(); ++col)
+    for(unsigned int col=0; col<A.cols(); ++col)
     {
         if (col_map[col] >= 0)
         {
@@ -194,7 +194,7 @@ CINO_INLINE
 void solve_least_squares_with_bc(const Eigen::SparseMatrix<double> & A,
                                  const Eigen::VectorXd             & b,
                                        Eigen::VectorXd             & x,
-                                 const std::map<uint,double>       & bc, // Dirichlet boundary conditions
+                                 const std::map<unsigned int,double>       & bc, // Dirichlet boundary conditions
                                  int   solver)
 {
     Eigen::SparseMatrix<double> At  = A.transpose();
@@ -227,7 +227,7 @@ void solve_weighted_least_squares_with_bc(const Eigen::SparseMatrix<double> & A,
                                           const Eigen::VectorXd             & w,
                                           const Eigen::VectorXd             & b,
                                                 Eigen::VectorXd             & x,
-                                          const std::map<uint,double>       & bc, // Dirichlet boundary conditions
+                                          const std::map<unsigned int,double>       & bc, // Dirichlet boundary conditions
                                           int   solver)
 {
     Eigen::SparseMatrix<double> At   = A.transpose();

@@ -47,14 +47,14 @@ namespace cinolib
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-uint connected_components(const AbstractMesh<M,V,E,P> & m);
+unsigned int connected_components(const AbstractMesh<M,V,E,P> & m);
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-uint connected_components(const AbstractMesh<M,V,E,P> & m,
-                          std::vector<std::unordered_set<uint>> & ccs);
+unsigned int connected_components(const AbstractMesh<M,V,E,P> & m,
+                          std::vector<std::unordered_set<unsigned int>> & ccs);
 
 }
 

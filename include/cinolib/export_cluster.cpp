@@ -45,25 +45,25 @@ CINO_INLINE
 void export_cluster(const AbstractPolygonMesh<M,V,E,P>  & m,
                     const std::unordered_set<int>       & labels,
                           AbstractPolygonMesh<M,V,E,P>  & subm,
-                          std::unordered_map<uint,uint> & m2subm_vmap,
-                          std::unordered_map<uint,uint> & subm2m_vmap)
+                          std::unordered_map<unsigned int,unsigned int> & m2subm_vmap,
+                          std::unordered_map<unsigned int,unsigned int> & subm2m_vmap)
 {
     m2subm_vmap.clear();
     subm2m_vmap.clear();
 
     std::vector<vec3d>             verts;
-    std::vector<std::vector<uint>> polys;
+    std::vector<std::vector<unsigned int>> polys;
 
-    uint fresh_vid = 0;
-    for(uint pid=0; pid<m.num_polys(); ++pid)
+    unsigned int fresh_vid = 0;
+    for(unsigned int pid=0; pid<m.num_polys(); ++pid)
     {
         if(CONTAINS(labels,m.poly_data(pid).label))
         {
-            std::vector<uint> p;
-            for(uint off=0; off<m.verts_per_poly(pid); ++off)
+            std::vector<unsigned int> p;
+            for(unsigned int off=0; off<m.verts_per_poly(pid); ++off)
             {
-                uint vid  = m.poly_vert_id(pid,off);
-                uint vnew = fresh_vid++;
+                unsigned int vid  = m.poly_vert_id(pid,off);
+                unsigned int vnew = fresh_vid++;
 
                 auto query = m2subm_vmap.find(vid);
                 if (query == m2subm_vmap.end())
@@ -102,7 +102,7 @@ void export_cluster(const AbstractPolygonMesh<M,V,E,P> & m,
                     const std::unordered_set<int>      & labels,
                           AbstractPolygonMesh<M,V,E,P> & subm)
 {
-    std::unordered_map<uint,uint> m2subm_vmap, subm2m_vmap;
+    std::unordered_map<unsigned int,unsigned int> m2subm_vmap, subm2m_vmap;
     export_cluster(m, labels, subm, m2subm_vmap, subm2m_vmap);
 }
 
@@ -113,8 +113,8 @@ CINO_INLINE
 void export_cluster(const AbstractPolygonMesh<M,V,E,P>  & m,
                     const int                             label,
                           AbstractPolygonMesh<M,V,E,P>  & subm,
-                          std::unordered_map<uint,uint> & m2subm_vmap,
-                          std::unordered_map<uint,uint> & subm2m_vmap)
+                          std::unordered_map<unsigned int,unsigned int> & m2subm_vmap,
+                          std::unordered_map<unsigned int,unsigned int> & subm2m_vmap)
 {
     std::unordered_set<int> s;
     s.insert(label);
@@ -131,7 +131,7 @@ void export_cluster(const AbstractPolygonMesh<M,V,E,P> & m,
 {
     std::unordered_set<int> s;
     s.insert(label);
-    std::unordered_map<uint,uint> m2subm_vmap, subm2m_vmap;
+    std::unordered_map<unsigned int,unsigned int> m2subm_vmap, subm2m_vmap;
     export_cluster(m, s, subm, m2subm_vmap, subm2m_vmap);
 }
 
@@ -142,15 +142,15 @@ CINO_INLINE
 void export_cluster(const AbstractPolyhedralMesh<M,V,E,F,P>  & m,
                     const std::unordered_set<int>            & labels,
                           AbstractPolyhedralMesh<M,V,E,F,P>  & subm,
-                          std::unordered_map<uint,uint>      & m2subm_vmap,
-                          std::unordered_map<uint,uint>      & subm2m_vmap)
+                          std::unordered_map<unsigned int,unsigned int>      & m2subm_vmap,
+                          std::unordered_map<unsigned int,unsigned int>      & subm2m_vmap)
 {
     m2subm_vmap.clear();
     subm2m_vmap.clear();
 
     std::vector<vec3d>             verts;
-    std::vector<std::vector<uint>> faces;
-    std::vector<std::vector<uint>> polys;
+    std::vector<std::vector<unsigned int>> faces;
+    std::vector<std::vector<unsigned int>> polys;
     std::vector<std::vector<bool>> polys_face_winding;
 
     if (m.mesh_type()!=POLYHEDRALMESH)
@@ -158,16 +158,16 @@ void export_cluster(const AbstractPolyhedralMesh<M,V,E,F,P>  & m,
         // for TETMESH and HEXMESH, define polyhedra as list of 4 or 8 vertices
         // connectivity is instrinsically defined in vertex order
 
-        uint fresh_vid = 0;
-        for(uint pid=0; pid<m.num_polys(); ++pid)
+        unsigned int fresh_vid = 0;
+        for(unsigned int pid=0; pid<m.num_polys(); ++pid)
         {
             if(CONTAINS(labels, m.poly_data(pid).label))
             {
-                std::vector<uint> p;
-                for(uint off=0; off<m.verts_per_poly(pid); ++off)
+                std::vector<unsigned int> p;
+                for(unsigned int off=0; off<m.verts_per_poly(pid); ++off)
                 {
-                    uint vid  = m.poly_vert_id(pid,off);
-                    uint vnew = fresh_vid++;
+                    unsigned int vid  = m.poly_vert_id(pid,off);
+                    unsigned int vnew = fresh_vid++;
 
                     auto query = m2subm_vmap.find(vid);
                     if (query == m2subm_vmap.end())
@@ -201,27 +201,27 @@ void export_cluster(const AbstractPolyhedralMesh<M,V,E,F,P>  & m,
         // faces and polyhedra (with per face winding)
 
         // select the faces incident to polyhedra with legal label
-        std::vector<uint> f_list;
-        for(uint fid=0; fid<m.num_faces(); ++fid)
+        std::vector<unsigned int> f_list;
+        for(unsigned int fid=0; fid<m.num_faces(); ++fid)
         {
             bool has_label = false;
-            for(uint pid : m.adj_f2p(fid))
+            for(unsigned int pid : m.adj_f2p(fid))
             {
                 if(CONTAINS(labels,m.poly_data(pid).label)) has_label = true;
             }
             if (has_label) f_list.push_back(fid);
         }
 
-        std::unordered_map<uint,uint> fmap;
-        uint fresh_vid = 0;
-        for(uint fresh_fid=0; fresh_fid<f_list.size(); ++fresh_fid)
+        std::unordered_map<unsigned int,unsigned int> fmap;
+        unsigned int fresh_vid = 0;
+        for(unsigned int fresh_fid=0; fresh_fid<f_list.size(); ++fresh_fid)
         {
-            uint fid = f_list.at(fresh_fid);
+            unsigned int fid = f_list.at(fresh_fid);
 
-            std::vector<uint> f;
-            for(uint vid : m.adj_f2v(fid)) // note: ordered list!
+            std::vector<unsigned int> f;
+            for(unsigned int vid : m.adj_f2v(fid)) // note: ordered list!
             {
-                uint vnew  = fresh_vid++;
+                unsigned int vnew  = fresh_vid++;
                 auto query = m2subm_vmap.find(vid);
                 if (query == m2subm_vmap.end())
                 {
@@ -240,13 +240,13 @@ void export_cluster(const AbstractPolyhedralMesh<M,V,E,F,P>  & m,
             fmap[fid] = fresh_fid;
         }
 
-        for(uint pid=0; pid<m.num_polys(); ++pid)
+        for(unsigned int pid=0; pid<m.num_polys(); ++pid)
         {
             if(CONTAINS(labels, m.poly_data(pid).label))
             {
-                std::vector<uint> p;
+                std::vector<unsigned int> p;
                 std::vector<bool> w;
-                for(uint fid : m.adj_p2f(pid))
+                for(unsigned int fid : m.adj_p2f(pid))
                 {
                     auto query = fmap.find(fid);
                     assert(query != fmap.end());
@@ -270,7 +270,7 @@ void export_cluster(const AbstractPolyhedralMesh<M,V,E,F,P> & m,
                     const std::unordered_set<int>           & labels,
                           AbstractPolyhedralMesh<M,V,E,F,P> & subm)
 {
-    std::unordered_map<uint,uint> m2subm_vmap, subm2m_vmap;
+    std::unordered_map<unsigned int,unsigned int> m2subm_vmap, subm2m_vmap;
     export_cluster(m, labels, subm, m2subm_vmap, subm2m_vmap);
 }
 
@@ -281,8 +281,8 @@ CINO_INLINE
 void export_cluster(const AbstractPolyhedralMesh<M,V,E,F,P>  & m,
                     const int                                  label,
                           AbstractPolyhedralMesh<M,V,E,F,P>  & subm,
-                          std::unordered_map<uint,uint>      & m2subm_vmap,
-                          std::unordered_map<uint,uint>      & subm2m_vmap)
+                          std::unordered_map<unsigned int,unsigned int>      & m2subm_vmap,
+                          std::unordered_map<unsigned int,unsigned int>      & subm2m_vmap)
 {
     std::unordered_set<int> s;
     s.insert(label);
@@ -299,7 +299,7 @@ void export_cluster(const AbstractPolyhedralMesh<M,V,E,F,P> & m,
 {
     std::unordered_set<int> s;
     s.insert(label);
-    std::unordered_map<uint,uint> m2subm_vmap, subm2m_vmap;
+    std::unordered_map<unsigned int,unsigned int> m2subm_vmap, subm2m_vmap;
     export_cluster(m, s, subm, m2subm_vmap, subm2m_vmap);
 }
 

@@ -51,7 +51,7 @@ CINO_INLINE
 void marching_tets(const Tetmesh<M,V,E,F,P> & m,
                    const double               isovalue,
                    std::vector<vec3d>       & verts,
-                   std::vector<uint>        & tris,
+                   std::vector<unsigned int>        & tris,
                    std::vector<vec3d>       & norms);
 }
 

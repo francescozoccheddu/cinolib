@@ -52,7 +52,7 @@ namespace cinolib
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-void tangential_smoothing(Trimesh<M,V,E,P> & m, const uint vid);
+void tangential_smoothing(Trimesh<M,V,E,P> & m, const unsigned int vid);
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 

@@ -86,12 +86,12 @@ void AbstractDrawablePolygonMesh<Mesh>::updateGL_marked()
     drawlist_marked.seg_coords.clear();
     drawlist_marked.seg_colors.clear();
 
-    for(uint eid=0; eid<this->num_edges(); ++eid)
+    for(unsigned int eid=0; eid<this->num_edges(); ++eid)
     {
         if(!this->edge_data(eid).flags[MARKED]) continue;
 
         bool hidden = true;
-        for(uint pid : this->adj_e2p(eid))
+        for(unsigned int pid : this->adj_e2p(eid))
         {
             if(!this->poly_data(pid).flags[HIDDEN])
             {
@@ -146,7 +146,7 @@ void AbstractDrawablePolygonMesh<Mesh>::updateGL_mesh()
     {
         drawlist.tri_coords.reserve(this->num_verts()*3);
         drawlist.tri_v_colors.reserve(this->num_verts()*4);
-        for(uint vid=0; vid<this->num_verts(); ++vid)
+        for(unsigned int vid=0; vid<this->num_verts(); ++vid)
         {
             drawlist.tri_coords.push_back(this->vert(vid).x());
             drawlist.tri_coords.push_back(this->vert(vid).y());
@@ -160,17 +160,17 @@ void AbstractDrawablePolygonMesh<Mesh>::updateGL_mesh()
     }
     else
     {
-        for(uint pid=0; pid<this->num_polys(); ++pid)
+        for(unsigned int pid=0; pid<this->num_polys(); ++pid)
         {
             if (this->poly_data(pid).flags[HIDDEN]) continue;
 
             vec3d n = this->poly_data(pid).normal;
 
-            for(uint i=0; i<this->poly_tessellation(pid).size()/3; ++i)
+            for(unsigned int i=0; i<this->poly_tessellation(pid).size()/3; ++i)
             {
-                uint vid0 = this->poly_tessellation(pid).at(3*i+0);
-                uint vid1 = this->poly_tessellation(pid).at(3*i+1);
-                uint vid2 = this->poly_tessellation(pid).at(3*i+2);
+                unsigned int vid0 = this->poly_tessellation(pid).at(3*i+0);
+                unsigned int vid1 = this->poly_tessellation(pid).at(3*i+1);
+                unsigned int vid2 = this->poly_tessellation(pid).at(3*i+2);
 
                 // average AO with adjacent visible faces having dihedral angle lower than 60 degrees
                 auto  vid0_vis_pids = this->vert_adj_visible_polys(vid0, n, 60.0);
@@ -179,14 +179,14 @@ void AbstractDrawablePolygonMesh<Mesh>::updateGL_mesh()
                 float AO_vid0 = 0.0;
                 float AO_vid1 = 0.0;
                 float AO_vid2 = 0.0;
-                for(uint pid : vid0_vis_pids) AO_vid0 += this->poly_data(pid).AO*AO_alpha + (1.0 - AO_alpha);
-                for(uint pid : vid1_vis_pids) AO_vid1 += this->poly_data(pid).AO*AO_alpha + (1.0 - AO_alpha);
-                for(uint pid : vid2_vis_pids) AO_vid2 += this->poly_data(pid).AO*AO_alpha + (1.0 - AO_alpha);
+                for(unsigned int pid : vid0_vis_pids) AO_vid0 += this->poly_data(pid).AO*AO_alpha + (1.0 - AO_alpha);
+                for(unsigned int pid : vid1_vis_pids) AO_vid1 += this->poly_data(pid).AO*AO_alpha + (1.0 - AO_alpha);
+                for(unsigned int pid : vid2_vis_pids) AO_vid2 += this->poly_data(pid).AO*AO_alpha + (1.0 - AO_alpha);
                 AO_vid0 /= static_cast<float>(vid0_vis_pids.size());
                 AO_vid1 /= static_cast<float>(vid1_vis_pids.size());
                 AO_vid2 /= static_cast<float>(vid2_vis_pids.size());
 
-                uint base_addr = drawlist.tri_coords.size()/3;
+                unsigned int base_addr = drawlist.tri_coords.size()/3;
 
                 drawlist.tris.push_back(base_addr    );
                 drawlist.tris.push_back(base_addr + 1);
@@ -208,9 +208,9 @@ void AbstractDrawablePolygonMesh<Mesh>::updateGL_mesh()
                     vec3d n_vid0(0,0,0);
                     vec3d n_vid1(0,0,0);
                     vec3d n_vid2(0,0,0);
-                    for(uint pid : vid0_vis_pids) n_vid0 += this->poly_data(pid).normal;
-                    for(uint pid : vid1_vis_pids) n_vid1 += this->poly_data(pid).normal;
-                    for(uint pid : vid2_vis_pids) n_vid2 += this->poly_data(pid).normal;
+                    for(unsigned int pid : vid0_vis_pids) n_vid0 += this->poly_data(pid).normal;
+                    for(unsigned int pid : vid1_vis_pids) n_vid1 += this->poly_data(pid).normal;
+                    for(unsigned int pid : vid2_vis_pids) n_vid2 += this->poly_data(pid).normal;
                     n_vid0 /= static_cast<double>(vid0_vis_pids.size());
                     n_vid1 /= static_cast<double>(vid1_vis_pids.size());
                     n_vid2 /= static_cast<double>(vid2_vis_pids.size());
@@ -304,10 +304,10 @@ void AbstractDrawablePolygonMesh<Mesh>::updateGL_mesh()
             }
         }
 
-        for(uint eid=0; eid<this->num_edges(); ++eid)
+        for(unsigned int eid=0; eid<this->num_edges(); ++eid)
         {
             bool hidden = true;
-            for(uint pid : this->adj_e2p(eid))
+            for(unsigned int pid : this->adj_e2p(eid))
             {
                 if(!this->poly_data(pid).flags[HIDDEN])
                 {

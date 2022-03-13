@@ -46,7 +46,7 @@ CINO_INLINE
 void export_surface(const AbstractPolyhedralMesh<M,V,E,F,P> & m,
                           AbstractPolygonMesh<M,V,E,F>      & srf)
 {
-    std::unordered_map<uint,uint> m2srf_vmap, srf2m_vmap;
+    std::unordered_map<unsigned int,unsigned int> m2srf_vmap, srf2m_vmap;
     export_surface(m, srf, m2srf_vmap, srf2m_vmap);
 }
 
@@ -57,26 +57,26 @@ template<class M, class V, class E, class F, class P>
 CINO_INLINE
 void export_surface(const AbstractPolyhedralMesh<M,V,E,F,P> & m,
                           AbstractPolygonMesh<M,V,E,F>      & srf,
-                          std::unordered_map<uint,uint>     & m2srf_vmap,
-                          std::unordered_map<uint,uint>     & srf2m_vmap)
+                          std::unordered_map<unsigned int,unsigned int>     & m2srf_vmap,
+                          std::unordered_map<unsigned int,unsigned int>     & srf2m_vmap)
 {
     m2srf_vmap.clear();
     srf2m_vmap.clear();
 
     std::vector<vec3d>             verts;
-    std::vector<std::vector<uint>> polys;
+    std::vector<std::vector<unsigned int>> polys;
 
-    uint fresh_id = 0;
+    unsigned int fresh_id = 0;
 
-    for(uint fid=0; fid<m.num_faces(); ++fid)
+    for(unsigned int fid=0; fid<m.num_faces(); ++fid)
     {
         if (m.face_is_on_srf(fid))
         {
-            std::vector<uint> p;
-            for(uint off=0; off<m.verts_per_face(fid); ++off)
+            std::vector<unsigned int> p;
+            for(unsigned int off=0; off<m.verts_per_face(fid); ++off)
             {
-                uint vid   = m.face_vert_id(fid,off);
-                uint vsrf  = fresh_id++;
+                unsigned int vid   = m.face_vert_id(fid,off);
+                unsigned int vsrf  = fresh_id++;
 
                 auto query = m2srf_vmap.find(vid);
                 if (query == m2srf_vmap.end())

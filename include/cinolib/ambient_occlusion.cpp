@@ -49,7 +49,7 @@ template<class Mesh>
 CINO_INLINE
 void ambient_occlusion_srf_meshes(      Mesh & m,
                                   const int    buffer_size,
-                                  const uint   sample_dirs)
+                                  const unsigned int   sample_dirs)
 {
     std::vector<float> ao(m.num_polys(),0);
     std::vector<vec3d> dirs;
@@ -100,7 +100,7 @@ void ambient_occlusion_srf_meshes(      Mesh & m,
 
         // accumulate AO values, weighting views with the dot between
         // local surface normal and ray direction
-        PARALLEL_FOR(0, m.num_polys(), 1000, [&](const uint pid)
+        PARALLEL_FOR(0, m.num_polys(), 1000, [&](const unsigned int pid)
         {
             if(!m.poly_data(pid).flags[HIDDEN])
             {
@@ -123,7 +123,7 @@ void ambient_occlusion_srf_meshes(      Mesh & m,
     auto min_max = std::minmax_element(ao.begin(), ao.end());
     auto min     = *min_max.first;
     auto max     = *min_max.second;
-    for(uint pid=0; pid<m.num_polys(); ++pid)
+    for(unsigned int pid=0; pid<m.num_polys(); ++pid)
     {
         m.poly_data(pid).AO = (m.poly_data(pid).flags[HIDDEN]) ? 1.0 : (ao[pid]-min)/max;
     }
@@ -135,7 +135,7 @@ template<class Mesh>
 CINO_INLINE
 void ambient_occlusion_vol_meshes(      Mesh & m,
                                   const int    buffer_size,
-                                  const uint   sample_dirs)
+                                  const unsigned int   sample_dirs)
 {
     std::vector<float> ao(m.num_faces(),0);
     std::vector<bool>  face_visible(m.num_faces(),false);
@@ -187,9 +187,9 @@ void ambient_occlusion_vol_meshes(      Mesh & m,
 
         // accumulate AO values, weighting views with the dot between
         // local surface normal and ray direction
-        PARALLEL_FOR(0, m.num_faces(), 1000, [&](const uint fid)
+        PARALLEL_FOR(0, m.num_faces(), 1000, [&](const unsigned int fid)
         {
-            uint pid_beneath;
+            unsigned int pid_beneath;
             if(m.face_is_visible(fid, pid_beneath))
             {
                 face_visible.at(fid) = true;
@@ -212,7 +212,7 @@ void ambient_occlusion_vol_meshes(      Mesh & m,
     auto min_max = std::minmax_element(ao.begin(), ao.end());
     auto min     = *min_max.first;
     auto max     = *min_max.second;
-    for(uint fid=0; fid<m.num_faces(); ++fid)
+    for(unsigned int fid=0; fid<m.num_faces(); ++fid)
     {
         m.face_data(fid).AO = (face_visible.at(fid)) ? (ao[fid]-min)/max : 1.0;
     }

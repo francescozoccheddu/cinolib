@@ -53,15 +53,15 @@ void MST_on_dual_mask_on_edges(const AbstractPolygonMesh<M,V,E,P> & m,
     cost.at(0) = 0.f; // start with poly #0
 
     // enqueue all elements
-    std::set<std::pair<float,uint>> q;
-    for(uint pid=0; pid<m.num_polys(); ++pid) q.insert(std::make_pair(cost.at(pid), pid));
+    std::set<std::pair<float,unsigned int>> q;
+    for(unsigned int pid=0; pid<m.num_polys(); ++pid) q.insert(std::make_pair(cost.at(pid), pid));
 
     // initialize an empty MST
     tree = std::vector<bool>(m.num_edges(), false);
 
     while(!q.empty())
     {
-        uint pid = q.begin()->second;
+        unsigned int pid = q.begin()->second;
         q.erase(q.begin());
         dequeued.at(pid) = true;
 
@@ -71,7 +71,7 @@ void MST_on_dual_mask_on_edges(const AbstractPolygonMesh<M,V,E,P> & m,
             tree.at(eid) = true;
         }
 
-        for(uint nbr : m.adj_p2p(pid))
+        for(unsigned int nbr : m.adj_p2p(pid))
         {
             if(!dequeued.at(nbr)) // element is still in the queue
             {

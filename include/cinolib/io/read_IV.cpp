@@ -43,7 +43,7 @@ namespace cinolib
 CINO_INLINE
 void read_IV(const char          * filename,
              std::vector<double> & xyz,
-             std::vector<uint>   & tri,
+             std::vector<unsigned int>   & tri,
              std::vector<int>    & patch)
 {
     setlocale(LC_NUMERIC, "en_US.UTF-8"); // makes sure "." is the decimal separator

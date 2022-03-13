@@ -32,15 +32,15 @@ int main(int argc, char **argv)
         if(ImGui::SmallButton("Pad Creases"))
         {
             // split triangles to make sure that each triangles has at most one crease edge
-            std::vector<uint> to_split;
-            for(uint pid=0; pid<m.num_polys(); ++pid)
+            std::vector<unsigned int> to_split;
+            for(unsigned int pid=0; pid<m.num_polys(); ++pid)
             {
-                uint count=0;
-                for(uint eid : m.adj_p2e(pid)) if(m.edge_data(eid).flags[MARKED]) ++count;
+                unsigned int count=0;
+                for(unsigned int eid : m.adj_p2e(pid)) if(m.edge_data(eid).flags[MARKED]) ++count;
                 if(count>1) to_split.push_back(pid);
             }
             SORT_VEC(to_split, true);
-            for(uint pid : to_split) m.poly_split(pid, m.poly_centroid(pid));
+            for(unsigned int pid : to_split) m.poly_split(pid, m.poly_centroid(pid));
             std::cout << "Padding sharp creases ("<< to_split.size() << " triangles were split)" << std::endl;
             m.updateGL();
         }
@@ -53,7 +53,7 @@ int main(int argc, char **argv)
                 std::ofstream f;
                 f.open(filename + "sharp_creases.txt");
                 assert(f.is_open());
-                for(uint eid=0; eid<m.num_edges(); ++eid)
+                for(unsigned int eid=0; eid<m.num_edges(); ++eid)
                 {
                     if(m.edge_data(eid).flags[MARKED]) f << m.edge_vert_id(eid,0) << " " << m.edge_vert_id(eid,1) << "\n";
                 }
@@ -71,7 +71,7 @@ int main(int argc, char **argv)
             vec2d click = gui.cursor_pos();
             if(gui.unproject(click, p)) // transform click in a 3d point
             {
-                uint eid = m.pick_edge(p);
+                unsigned int eid = m.pick_edge(p);
                 m.edge_data(eid).flags[MARKED] = !m.edge_data(eid).flags[MARKED];
                 m.updateGL();
             }

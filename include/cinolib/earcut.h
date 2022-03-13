@@ -79,7 +79,7 @@ enum class EarSorting
 template<class point>
 CINO_INLINE
 bool earcut(const std::vector<point> & poly,
-                  std::vector<uint>  & tris,
+                  std::vector<unsigned int>  & tris,
             const EarSorting           sort = EarSorting::SEQUENTIAL);
 }
 

@@ -80,9 +80,9 @@ namespace cinolib
 */
 
 template<typename Func>
-inline void PARALLEL_FOR(      uint   beg,
-                               uint   end,
-                         const uint   serial_if_less_than,
+inline void PARALLEL_FOR(      unsigned int   beg,
+                               unsigned int   end,
+                         const unsigned int   serial_if_less_than,
                          const Func & func);
 }
 
@@ -94,18 +94,18 @@ namespace cinolib
 {
 
     template<typename Func>
-    inline void PARALLEL_FOR(uint   beg,
-        uint   end,
-        const uint   serial_if_less_than,
+    inline void PARALLEL_FOR(unsigned int   beg,
+        unsigned int   end,
+        const unsigned int   serial_if_less_than,
         const Func& func)
     {
 #ifndef SERIALIZE_PARALLEL_FOR
 
-        uint n = end - beg + 1;
+        unsigned int n = end - beg + 1;
 
         if (n < serial_if_less_than)
         {
-            for (uint i = beg; i < end; ++i) func(i);
+            for (unsigned int i = beg; i < end; ++i) func(i);
         }
         else
         {
@@ -114,21 +114,21 @@ namespace cinolib
             const static unsigned n_threads = (n_threads_hint == 0u) ? 8u : n_threads_hint;
 
             // split the full range into sub ranges of equal size
-            uint slice = (uint)std::round(n / static_cast<double>(n_threads));
-            slice = std::max(slice, uint(1));
+            unsigned int slice = (unsigned int)std::round(n / static_cast<double>(n_threads));
+            slice = std::max(slice, unsigned int(1));
 
             // helper function that handles a sub range
-            auto subrange_helper = [&func](uint k1, uint k2)
+            auto subrange_helper = [&func](unsigned int k1, unsigned int k2)
             {
-                for (uint k = k1; k < k2; ++k) func(k);
+                for (unsigned int k = k1; k < k2; ++k) func(k);
             };
 
             // create pool and launch jobs
             std::vector<std::thread> pool;
             pool.reserve(n_threads);
-            uint i1 = beg;
-            uint i2 = std::min(beg + slice, end);
-            for (uint i = 0; i + 1 < n_threads && i1 < end; ++i)
+            unsigned int i1 = beg;
+            unsigned int i2 = std::min(beg + slice, end);
+            for (unsigned int i = 0; i + 1 < n_threads && i1 < end; ++i)
             {
                 pool.emplace_back(subrange_helper, i1, i2);
                 i1 = i2;
@@ -143,7 +143,7 @@ namespace cinolib
             }
         }
 #else
-        for (uint i = beg; i < end; ++i) func(i);
+        for (unsigned int i = beg; i < end; ++i) func(i);
 #endif
     }
 

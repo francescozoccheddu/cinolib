@@ -170,11 +170,11 @@ BoostMultiPolygon polygon_intersection(const Poly0 & p0, const Poly1 & p1)
 CINO_INLINE
 void polygon_get_edges(const std::vector<BoostPoint> & poly,
                              std::vector<vec2d>      & verts,
-                             std::vector<uint>       & edges)
+                             std::vector<unsigned int>       & edges)
 {
-    uint base = verts.size();
-    uint nv   = poly.size()-1; // first and last verts coincide...
-    for(uint vid=0; vid<nv; ++vid)
+    unsigned int base = verts.size();
+    unsigned int nv   = poly.size()-1; // first and last verts coincide...
+    for(unsigned int vid=0; vid<nv; ++vid)
     {
         verts.push_back(vec2d(boost::geometry::get<0>(poly.at(vid)),
                               boost::geometry::get<1>(poly.at(vid))));
@@ -188,7 +188,7 @@ void polygon_get_edges(const std::vector<BoostPoint> & poly,
 CINO_INLINE
 void polygon_get_edges(const BoostPolygon       & poly,
                              std::vector<vec2d> & verts,
-                             std::vector<uint>  & edges)
+                             std::vector<unsigned int>  & edges)
 {
     polygon_get_edges(poly.outer(), verts, edges);
     for(auto hole : poly.inners()) polygon_get_edges(hole, verts, edges);
@@ -199,15 +199,15 @@ void polygon_get_edges(const BoostPolygon       & poly,
 CINO_INLINE
 void polygon_get_edges(const BoostMultiPolygon  & poly,
                              std::vector<vec2d> & verts,
-                             std::vector<uint>  & edges)
+                             std::vector<unsigned int>  & edges)
 {
     for(const BoostPolygon & p : poly)
     {
         std::vector<vec2d> v;
-        std::vector<uint>  e;
+        std::vector<unsigned int>  e;
         polygon_get_edges(p, v, e);
 
-        uint base_addr = verts.size();
+        unsigned int base_addr = verts.size();
         std::copy(v.begin(), v.end(), std::back_inserter(verts));
         for(auto vid : e) edges.push_back(base_addr + vid);
     }
@@ -219,7 +219,7 @@ CINO_INLINE
 void polygon_get_edges(const BoostPolygon       & poly,
                        const double             & z, // add third coordinate
                              std::vector<vec3d> & verts,
-                             std::vector<uint>  & edges)
+                             std::vector<unsigned int>  & edges)
 {
     std::vector<vec2d> v2d;
     polygon_get_edges(poly, v2d, edges);
@@ -232,7 +232,7 @@ CINO_INLINE
 void polygon_get_edges(const BoostMultiPolygon  & poly,
                        const double             & z, // add third coordinate
                              std::vector<vec3d> & verts,
-                             std::vector<uint>  & edges)
+                             std::vector<unsigned int>  & edges)
 {
     std::vector<vec2d> v2d;
     polygon_get_edges(poly, v2d, edges);
@@ -245,10 +245,10 @@ CINO_INLINE
 void triangulate_polygon(const std::vector<BoostPoint> & poly,
                          const std::string               flags,
                                std::vector<vec2d>      & verts,
-                               std::vector<uint>       & tris)
+                               std::vector<unsigned int>       & tris)
 {
     std::vector<vec2d> v, h;
-    std::vector<uint>  e;
+    std::vector<unsigned int>  e;
     polygon_get_edges(poly, v, e);
     triangle_wrap(v, e, h, flags, verts, tris);
 }
@@ -259,24 +259,24 @@ CINO_INLINE
 void triangulate_polygon(const BoostPolygon            & poly,
                          const std::string               flags,
                                std::vector<vec2d>      & verts,
-                               std::vector<uint>       & tris)
+                               std::vector<unsigned int>       & tris)
 {
     // find one seed per hole (to robustly clear holes from triangulation)
     std::vector<vec2d> h_seeds;
-    for(uint hid=0; hid<poly.inners().size(); ++hid)
+    for(unsigned int hid=0; hid<poly.inners().size(); ++hid)
     {
         std::vector<vec2d> v_in, h, v_out;
-        std::vector<uint>  e, t;
+        std::vector<unsigned int>  e, t;
         polygon_get_edges(poly.inners().at(hid), v_in, e);
         triangle_wrap(v_in, e, h, "Q", v_out, t);
-        uint v0 = t.at(0);
-        uint v1 = t.at(1);
-        uint v2 = t.at(2);
+        unsigned int v0 = t.at(0);
+        unsigned int v1 = t.at(1);
+        unsigned int v2 = t.at(2);
         h_seeds.push_back((v_out.at(v0)+v_out.at(v1)+v_out.at(v2))/3.0);
     }
 
     std::vector<vec2d> v;
-    std::vector<uint>  e;
+    std::vector<unsigned int>  e;
     polygon_get_edges(poly, v, e);
     triangle_wrap(v, e, h_seeds, flags, verts, tris);
 }
@@ -287,27 +287,27 @@ CINO_INLINE
 void triangulate_polygon(const BoostMultiPolygon       & poly,
                          const std::string               flags,
                                std::vector<vec2d>      & verts,
-                               std::vector<uint>       & tris)
+                               std::vector<unsigned int>       & tris)
 {
     // find one seed per hole (to robustly clear holes from triangulation)
     std::vector<vec2d> h_seeds;
     for(const BoostPolygon & p : poly)
     {
-        for(uint hid=0; hid<p.inners().size(); ++hid)
+        for(unsigned int hid=0; hid<p.inners().size(); ++hid)
         {
             std::vector<vec2d> v_in, h, v_out;
-            std::vector<uint>  e, t;
+            std::vector<unsigned int>  e, t;
             polygon_get_edges(p.inners().at(hid), v_in, e);
             triangle_wrap(v_in, e, h, "Q", v_out, t);
-            uint v0 = t.at(0);
-            uint v1 = t.at(1);
-            uint v2 = t.at(2);
+            unsigned int v0 = t.at(0);
+            unsigned int v1 = t.at(1);
+            unsigned int v2 = t.at(2);
             h_seeds.push_back((v_out.at(v0)+v_out.at(v1)+v_out.at(v2))/3.0);
         }
     }
 
     std::vector<vec2d> v;
-    std::vector<uint>  e;
+    std::vector<unsigned int>  e;
     polygon_get_edges(poly, v, e);
     triangle_wrap(v, e, h_seeds, flags, verts, tris);
 }
@@ -319,7 +319,7 @@ void triangulate_polygon(const std::vector<BoostPoint> & poly,
                          const std::string               flags,
                          const double                  & z, // adds third coordinate
                                std::vector<vec3d>      & verts,
-                               std::vector<uint>       & tris)
+                               std::vector<unsigned int>       & tris)
 {
     std::vector<vec2d> v;
     triangulate_polygon(poly, flags, v, tris);
@@ -333,7 +333,7 @@ void triangulate_polygon(const BoostPolygon            & poly,
                          const std::string               flags,
                          const double                  & z, // adds third coordinate
                                std::vector<vec3d>      & verts,
-                               std::vector<uint>       & tris)
+                               std::vector<unsigned int>       & tris)
 {
     std::vector<vec2d> v;
     triangulate_polygon(poly, flags, v, tris);
@@ -347,7 +347,7 @@ void triangulate_polygon(const BoostMultiPolygon       & poly,
                          const std::string               flags,
                          const double                  & z, // adds third coordinate
                                std::vector<vec3d>      & verts,
-                               std::vector<uint>       & tris)
+                               std::vector<unsigned int>       & tris)
 {
     std::vector<vec2d> v;
     triangulate_polygon(poly, flags, v, tris);

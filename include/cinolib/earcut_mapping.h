@@ -96,7 +96,7 @@ typedef struct
 {
     std::vector<vec3d> poly_A; // circular list of vertices for polygon A
     std::vector<vec3d> poly_B; // circular list of vertices for polygon A
-    std::vector<uint>  tris;   // serialized triangles (for both A and B)
+    std::vector<unsigned int>  tris;   // serialized triangles (for both A and B)
 
     bool   strictly_convex = true;     // true if polygon B is strictly convex, false otherwise
     vec3d  disk_center = vec3d(0,0,0); // center of a disk inside polygon B (used when strictly_convex is false)

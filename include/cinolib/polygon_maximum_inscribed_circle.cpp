@@ -156,7 +156,7 @@ void polygon_maximum_inscribed_circle(const std::vector<vec2d> & poly,
     // as I can in order to minimize loss of precision during integer roundoff...
 
     std::vector<polygon_segment> segments;
-    for(uint i=0; i<poly.size(); ++i)
+    for(unsigned int i=0; i<poly.size(); ++i)
     {
         vec2d v0 = scale_factor * poly.at(i);
         vec2d v1 = scale_factor * poly.at((i+1)%poly.size());

@@ -68,7 +68,7 @@ vec3d optimal_build_dir(const DrawableTrimesh<M,V,E,P> & m,
     std::vector<float> c(opt.n_dirs, inf_float); // area of the contacts between model and supports
     std::vector<float> v(opt.n_dirs, inf_float); // volume of the supports
     //
-    for(uint i=0; i<opt.n_dirs; ++i)
+    for(unsigned int i=0; i<opt.n_dirs; ++i)
     {
         bool skip = false;
         for(const vec3d & fd : opt.forb_dirs)
@@ -82,7 +82,7 @@ vec3d optimal_build_dir(const DrawableTrimesh<M,V,E,P> & m,
         if(skip) continue;
 
         // NOTE: this call is 90% of the computational cost
-        std::vector<std::pair<uint,uint>> polys_hanging;
+        std::vector<std::pair<unsigned int,unsigned int>> polys_hanging;
         overhangs(m, opt.overhang_threshold, dirs[i], polys_hanging, octree);
 
         // projection of the "lowest" mesh vertex along the build direction
@@ -137,7 +137,7 @@ vec3d optimal_build_dir(const DrawableTrimesh<M,V,E,P> & m,
 
     // compute global scores
     std::vector<float> scores(opt.n_dirs);
-    for(uint i=0; i<opt.n_dirs; ++i)
+    for(unsigned int i=0; i<opt.n_dirs; ++i)
     {
         scores[i] = opt.w_height          * h[i] +
                     opt.w_shadow_area     * a[i] +
