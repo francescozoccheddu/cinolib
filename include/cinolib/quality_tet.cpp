@@ -34,6 +34,8 @@
 *     Italy                                                                     *
 *********************************************************************************/
 #include <cinolib/quality_tet.h>
+#include <algorithm>
+#include <cinolib/min_max_inf.h>
 
 /*
  * All metrics implemented here all based on:

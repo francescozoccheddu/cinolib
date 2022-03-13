@@ -35,7 +35,7 @@
 *********************************************************************************/
 #include <cinolib/undo_redo.h>
 #include <cinolib/cino_inline.h>
-#include <assert.h>
+#include <cassert>
 
 namespace cinolib
 {

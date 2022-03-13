@@ -34,7 +34,7 @@
 *     Italy                                                                     *
 *********************************************************************************/
 #include <cinolib/gl/offline_gl_context.h>
-#include <assert.h>
+#include <cassert>
 
 namespace cinolib
 {

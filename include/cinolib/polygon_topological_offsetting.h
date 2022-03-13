@@ -37,6 +37,7 @@
 #define CINO_POLYGON_TOPOLOGICAL_OFFSETTING_H
 
 #include <cinolib/geometry/vec_mat.h>
+#include <vector>
 
 namespace cinolib
 {

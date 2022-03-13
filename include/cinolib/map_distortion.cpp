@@ -36,6 +36,7 @@
 #include <cinolib/map_distortion.h>
 #include <cinolib/geometry/vec_mat.h>
 #include <Eigen/Dense>
+#include <cstdlib> // for abort()
 
 namespace cinolib
 {
@@ -46,7 +47,9 @@ double aspect_ratio_distortion(const double m[3][3])
     using namespace Eigen;
 
     Matrix3d M;
-    from_std_3x3_to_Eigen_3x3(m,M);
+    // FIXME (francescozoccheddu)
+    //from_std_3x3_to_Eigen_3x3(m,M);
+    abort(); // remove when fixed
 
     JacobiSVD<Matrix3d> svd(M);
     DiagonalMatrix<double,3> s = DiagonalMatrix<double,3>(svd.singularValues());

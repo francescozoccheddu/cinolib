@@ -37,6 +37,7 @@
 #define CINO_SUBDIVISION_MIDPOINT_H
 
 #include <cinolib/meshes/meshes.h>
+#include <map>
 
 namespace cinolib
 {

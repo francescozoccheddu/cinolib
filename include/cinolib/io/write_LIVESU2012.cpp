@@ -34,8 +34,10 @@
 *     Italy                                                                     *
 *********************************************************************************/
 #include <cinolib/io/write_LIVESU2012.h>
-
+#include <clocale>
 #include <vector>
+#include <iostream>
+#include <cinolib/geometry/vec_mat.h>
 
 namespace cinolib
 {

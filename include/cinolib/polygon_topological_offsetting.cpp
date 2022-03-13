@@ -36,6 +36,7 @@
 #include <cinolib/polygon_topological_offsetting.h>
 #include <cinolib/meshes/trimesh.h>
 #include <cinolib/earcut.h>
+#include <cassert>
 
 namespace cinolib
 {

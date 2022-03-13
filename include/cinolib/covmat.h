@@ -37,6 +37,7 @@
 #define CINO_COVMAT_H
 
 #include <cinolib/geometry/vec_mat.h>
+#include <vector>
 
 namespace cinolib
 {

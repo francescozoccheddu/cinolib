@@ -36,6 +36,7 @@
 #include <cinolib/polygon_kernel.h>
 #include <cinolib/min_max_inf.h>
 #include <cinolib/geometry/polygon_utils.h>
+#include <iostream>
 
 #ifdef CINOLIB_USES_BOOST
 #include <boost/geometry/geometries/polygon.hpp>

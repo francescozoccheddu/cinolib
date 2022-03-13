@@ -151,6 +151,9 @@ std::vector<int> graph_cut_wrap(const AbstractMesh<M,V,E,P>             & m,
 
 
 #else
+
+// FIXME (francescozoccheddu)
+/*
 template<class M, class V, class E, class P>
 CINO_INLINE
 std::vector<int> graph_cut_wrap(const AbstractMesh<M,V,E,P>             &,
@@ -177,6 +180,8 @@ std::vector<int> graph_cut_wrap(const AbstractMesh<M,V,E,P>             &,
     std::cerr << "ERROR : Graph Cut disabled. Recompile defining symbol CINOLIB_USES_GRAPH_CUT" << std::endl;
     exit(-1);
 }
+*/
+
 #endif
 
 }

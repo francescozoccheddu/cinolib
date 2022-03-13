@@ -44,6 +44,7 @@
 #include <cinolib/io/read_STL.h>
 #include <cinolib/io/io_utilities.h>
 #include <map>
+#include <cassert>
 
 namespace cinolib
 {
@@ -154,9 +155,9 @@ void read_STL(const char         * filename,
         if(fread(header, 1, 80, fp)!=80) assert(false && "error reading STL binary header");
 
         // read triangles
-        unsigned int nt;
-        if(fread(&nt, sizeof(unsigned int), 1, fp)!=1) assert(false && "error reading number of triangles");
-        for(unsigned int i=0; i<nt; ++i)
+        uint nt;
+        if(fread(&nt, sizeof(uint), 1, fp)!=1) assert(false && "error reading number of triangles");
+        for(uint i=0; i<nt; ++i)
         {
             // read normal
             float nf[3];

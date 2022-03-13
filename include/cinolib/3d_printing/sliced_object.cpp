@@ -34,6 +34,10 @@
 *     Italy                                                                     *
 *********************************************************************************/
 #include <cinolib/3d_printing/sliced_object.h>
+
+// FIXME (francescozoccheddu)
+#ifdef CINOLIB_USES_BOOST
+
 #include <cinolib/io/read_CLI.h>
 #include <cinolib/triangle_wrap.h>
 #include <cinolib/vector_serialization.h>
@@ -235,3 +239,5 @@ bool SlicedObj<M,V,E,P>::slice_contains(const uint sid, const vec2d & p) const
 }
 
 }
+
+#endif

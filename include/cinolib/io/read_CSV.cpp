@@ -34,7 +34,8 @@
 *     Italy                                                                     *
 *********************************************************************************/
 #include <cinolib/io/read_CSV.h>
-
+#include <clocale>
+#include <iostream>
 
 namespace cinolib
 {

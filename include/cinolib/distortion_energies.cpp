@@ -43,6 +43,7 @@
 *********************************************************************************/
 #include <cinolib/distortion_energies.h>
 #include <cinolib/linear_map.h>
+#include <cassert>
 
 namespace cinolib
 {

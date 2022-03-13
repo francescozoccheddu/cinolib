@@ -41,6 +41,7 @@
 #include <cinolib/cino_inline.h>
 #include <cinolib/meshes/meshes.h>
 #include <unordered_map>
+#include <unordered_set>
 
 /* 
 * These methods take in input a surface/volumetric mesh M and a label L, and output

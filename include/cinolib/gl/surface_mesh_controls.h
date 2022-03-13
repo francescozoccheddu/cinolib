@@ -43,6 +43,7 @@
 #include <cinolib/drawable_isocontour.h>
 #include <cinolib/drawable_vector_field.h>
 #include <cinolib/drawable_segment_soup.h>
+#include <imgui.h>
 
 namespace cinolib
 {

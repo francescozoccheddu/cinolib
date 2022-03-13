@@ -34,7 +34,8 @@
 *     Italy                                                                     *
 *********************************************************************************/
 #include <cinolib/io/read_TAGLIASACCHI2012.h>
-
+#include <clocale>
+#include <iostream>
 
 namespace cinolib
 {

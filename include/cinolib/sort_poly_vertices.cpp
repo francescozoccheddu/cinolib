@@ -38,6 +38,7 @@
 #include <cinolib/ipair.h>
 #include <map>
 #include <set>
+#include <cassert>
 
 namespace cinolib
 {

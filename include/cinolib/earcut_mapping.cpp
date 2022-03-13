@@ -36,6 +36,7 @@
 #include <cinolib/earcut_mapping.h>
 #include <cinolib/earcut.h>
 #include <cinolib/polygon_topological_offsetting.h>
+#include <cstdlib> // for abort()
 
 namespace cinolib
 {
@@ -88,11 +89,15 @@ void earcut_mapping(EarcutMapping_data & data)
                 double alpha = u.angle_rad(v) * 0.5; // take opnly half of the available cone to avoid flips
                 double step = alpha/static_cast<double>(vmap.at(i));
                 double M[3][3];
-                bake_rotation_matrix(axis, step, M);
+                // FIXME (francescozoccheddu)
+                // bake_rotation_matrix(axis, step, M);
+                abort(); // remove when fixed
                 for(uint j=1;j<vmap.at(i); ++j)
                 {
                     vec3d p = data.poly_B.back();
-                    center_and_rotate(p, data.disk_center, M);
+                    // FIXME (francescozoccheddu)
+                    // center_and_rotate(p, data.disk_center, M);
+                    abort(); // remove when fixed
                     data.poly_B.push_back(p);
                 }
             }

@@ -39,6 +39,8 @@
 #include <cinolib/geometry/spatial_data_structure_item.h>
 #include <cinolib/meshes/meshes.h>
 #include <queue>
+#include <unordered_set>
+#include <cassert>
 
 namespace cinolib
 {

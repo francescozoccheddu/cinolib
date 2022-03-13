@@ -37,6 +37,7 @@
 #include <cinolib/vector_serialization.h>
 #include <cinolib/io/io_utilities.h>
 #include <iostream>
+#include <cassert>
 #include <unordered_set>
 
 namespace cinolib

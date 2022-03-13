@@ -34,6 +34,7 @@
 *     Italy                                                                     *
 *********************************************************************************/
 #include <cinolib/io/write_VTK.h>
+#include <iostream>
 
 
 #ifdef CINOLIB_USES_VTK

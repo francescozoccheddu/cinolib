@@ -37,6 +37,7 @@
 #include <cinolib/cino_inline.h>
 #include <cinolib/gl/draw_sphere.h>
 #include <cinolib/gl/draw_cylinder.h>
+#include <cassert>
 
 namespace cinolib
 {

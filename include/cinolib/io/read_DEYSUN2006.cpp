@@ -34,8 +34,8 @@
 *     Italy                                                                     *
 *********************************************************************************/
 #include <cinolib/io/read_DEYSUN2006.h>
-
-
+#include <clocale>
+#include <iostream>
 
 namespace cinolib
 {

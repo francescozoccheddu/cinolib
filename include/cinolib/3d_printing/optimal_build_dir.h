@@ -36,7 +36,9 @@
 #ifndef CINO_OPTIMAL_BUILD_DIR_H
 #define CINO_OPTIMAL_BUILD_DIR_H
 
+#include <cinolib/cino_inline.h>
 #include <cinolib/meshes/drawable_trimesh.h>
+#include <unordered_set>
 
 namespace cinolib
 {

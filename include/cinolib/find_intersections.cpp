@@ -36,6 +36,7 @@
 #include <cinolib/find_intersections.h>
 #include <cinolib/parallel_for.h>
 #include <cinolib/octree.h>
+#include <cinolib/geometry/triangle.h>
 #include <mutex>
 
 namespace cinolib

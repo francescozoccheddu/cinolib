@@ -66,12 +66,12 @@ unsigned long int serialize_nD_index(const std::array<uint,N> & dim_extent, cons
        index=(unsigned long int)p[N-1];
        if(index>=dim_extent[N-1]) index=dim_extent[N-1]-1;
     }
-    for(unsigned int i=N-1; i>0; --i)
+    for(uint i=N-1; i>0; --i)
     {
        index*=dim_extent[i-1];
        if(p[i-1]>=0)
        {
-          unsigned int j=(int)p[i-1];
+          uint j=(int)p[i-1];
           if(j>=dim_extent[i-1]) j=dim_extent[i-1]-1;
           index+=j;
        }

@@ -34,9 +34,10 @@
 *     Italy                                                                     *
 *********************************************************************************/
 #include <cinolib/io/read_LIVESU2012.h>
-
+#include <clocale>
 #include <map>
 #include <set>
+#include <iostream>
 
 namespace cinolib
 {

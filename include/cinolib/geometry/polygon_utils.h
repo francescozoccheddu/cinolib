@@ -37,6 +37,7 @@
 #define CINO_POLYGON_UTILS_H
 
 #include <cinolib/geometry/vec_mat.h>
+#include <vector>
 
 /*
  * Utilities for convex or concave, simply connected, non self-intersecting polygons

@@ -34,7 +34,7 @@
 *     Italy                                                                     *
 *********************************************************************************/
 #include <cinolib/io/write_VTU.h>
-
+#include <iostream>
 
 #ifdef CINOLIB_USES_VTK
 #include <vtkSmartPointer.h>
