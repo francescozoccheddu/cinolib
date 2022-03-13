@@ -51,6 +51,10 @@
 #include <iterator>
 
 #define STB_IMAGE_IMPLEMENTATION
+// if cinolib is used as header-only library, STB definitions must be inlined
+#ifndef CINO_STATIC_LIB
+#define STBIDEF inline
+#endif
 #include "../external/stb/stb_image.h"
 
 // this is the only symbol not in OpenGL 1.1 in the whole library.
