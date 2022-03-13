@@ -46,7 +46,7 @@ namespace cinolib
 template<class Mesh>
 CINO_INLINE
 ScalarField compute_geodesics(      Mesh              & m,
-                              const std::vector<uint> & heat_charges,
+                              const std::vector<unsigned int> & heat_charges,
                               const int                 laplacian_mode,
                               const float               time_scalar,
                               const bool                hard_constrain_charges)
@@ -67,7 +67,7 @@ ScalarField compute_geodesics(      Mesh              & m,
     Eigen::SparseMatrix<double> G   = gradient_matrix(m);
     Eigen::VectorXd             rhs = Eigen::VectorXd::Zero(m.num_verts());
 
-    for(uint vid : heat_charges) rhs[vid] = 1.0;
+    for(unsigned int vid : heat_charges) rhs[vid] = 1.0;
 
     ScalarField heat(m.num_verts());
     solve_square_system(MM - time * L, rhs, heat);
@@ -81,8 +81,8 @@ ScalarField compute_geodesics(      Mesh              & m,
     // as the matrix changes every time
     if(hard_constrain_charges)
     {
-        std::map<uint,double> bcs;
-        for(uint vid : heat_charges) bcs[vid] = 1.0;
+        std::map<unsigned int,double> bcs;
+        for(unsigned int vid : heat_charges) bcs[vid] = 1.0;
         solve_square_system_with_bc(-L, G.transpose() * grad, geodesics, bcs, SIMPLICIAL_LDLT);
     }
     else
@@ -104,7 +104,7 @@ template<class Mesh>
 CINO_INLINE
 ScalarField compute_geodesics_amortized(      Mesh              & m,
                                               GeodesicsCache    & cache,
-                                        const std::vector<uint> & heat_charges,
+                                        const std::vector<unsigned int> & heat_charges,
                                         const int                 laplacian_mode,
                                         const float               time_scalar)
 {
@@ -126,7 +126,7 @@ ScalarField compute_geodesics_amortized(      Mesh              & m,
         Eigen::SparseMatrix<double> MM  = mass_matrix(m);
         Eigen::VectorXd             rhs = Eigen::VectorXd::Zero(m.num_verts());
 
-        for(uint vid : heat_charges) rhs[vid] = 1.0;
+        for(unsigned int vid : heat_charges) rhs[vid] = 1.0;
 
         ScalarField heat(m.num_verts());
         cache.heat_flow_cache = new Eigen::SimplicialLLT<Eigen::SparseMatrix<double>>(MM - time * L);
@@ -151,7 +151,7 @@ ScalarField compute_geodesics_amortized(      Mesh              & m,
     else // solve by back-substitution using pre-factored matrices
     {
         Eigen::VectorXd rhs = Eigen::VectorXd::Zero(m.num_verts());
-        for(uint vid : heat_charges) rhs[vid] = 1.0;
+        for(unsigned int vid : heat_charges) rhs[vid] = 1.0;
         ScalarField heat = cache.heat_flow_cache->solve(rhs).eval();
 
         VectorField grad = cache.gradient_matrix * heat;

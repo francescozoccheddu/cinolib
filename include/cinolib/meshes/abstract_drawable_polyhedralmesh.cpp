@@ -94,15 +94,15 @@ void AbstractDrawablePolyhedralMesh<Mesh>::updateGL_marked()
     drawlist_marked.seg_coords.clear();
     drawlist_marked.seg_colors.clear();
 
-    for(uint fid=0; fid<this->num_faces(); ++fid)
+    for(unsigned int fid=0; fid<this->num_faces(); ++fid)
     {
         if(!this->face_data(fid).flags[MARKED]) continue;
 
-        for(uint i=0; i<this->face_tessellation(fid).size()/3; ++i)
+        for(unsigned int i=0; i<this->face_tessellation(fid).size()/3; ++i)
         {
-            uint vid0 = this->face_tessellation(fid).at(3*i+0);
-            uint vid1 = this->face_tessellation(fid).at(3*i+1);
-            uint vid2 = this->face_tessellation(fid).at(3*i+2);
+            unsigned int vid0 = this->face_tessellation(fid).at(3*i+0);
+            unsigned int vid1 = this->face_tessellation(fid).at(3*i+1);
+            unsigned int vid2 = this->face_tessellation(fid).at(3*i+2);
 
             int base_addr = drawlist_marked.tri_coords.size()/3;
 
@@ -145,7 +145,7 @@ void AbstractDrawablePolyhedralMesh<Mesh>::updateGL_marked()
         }
     }
 
-    for(uint eid=0; eid<this->num_edges(); ++eid)
+    for(unsigned int eid=0; eid<this->num_edges(); ++eid)
     {
         if(!this->edge_data(eid).flags[MARKED]) continue;
 
@@ -190,20 +190,20 @@ void AbstractDrawablePolyhedralMesh<Mesh>::updateGL_out()
     drawlist_out.seg_coords.clear();
     drawlist_out.seg_colors.clear();
 
-    for(uint fid=0; fid<this->num_faces(); ++fid)
+    for(unsigned int fid=0; fid<this->num_faces(); ++fid)
     {
         if (!this->face_is_on_srf(fid)) continue;
 
-        uint pid_beneath;
+        unsigned int pid_beneath;
         if(!this->face_is_visible(fid,pid_beneath)) continue;
 
         vec3d n = this->poly_face_normal(pid_beneath, fid);
 
-        for(uint i=0; i<this->face_tessellation(fid).size()/3; ++i)
+        for(unsigned int i=0; i<this->face_tessellation(fid).size()/3; ++i)
         {
-            uint vid0 = this->face_tessellation(fid).at(3*i+0);
-            uint vid1 = this->face_tessellation(fid).at(3*i+1);
-            uint vid2 = this->face_tessellation(fid).at(3*i+2);
+            unsigned int vid0 = this->face_tessellation(fid).at(3*i+0);
+            unsigned int vid1 = this->face_tessellation(fid).at(3*i+1);
+            unsigned int vid2 = this->face_tessellation(fid).at(3*i+2);
 
             // average AO with adjacent visible faces having dihedral angle lower than 60 degrees
             auto  vid0_vis_fids = this->vert_adj_visible_faces(vid0, n, 60.0);
@@ -337,7 +337,7 @@ void AbstractDrawablePolyhedralMesh<Mesh>::updateGL_out()
         }
     }
 
-    for(uint eid=0; eid<this->num_edges(); ++eid)
+    for(unsigned int eid=0; eid<this->num_edges(); ++eid)
     {
         vec3d vid0 = this->edge_vert(eid,0);
         vec3d vid1 = this->edge_vert(eid,1);
@@ -345,7 +345,7 @@ void AbstractDrawablePolyhedralMesh<Mesh>::updateGL_out()
         if (this->edge_is_on_srf(eid))
         {
             bool hidden = true;
-            for(uint pid : this->adj_e2p(eid))
+            for(unsigned int pid : this->adj_e2p(eid))
             {
                 if(!this->poly_data(pid).flags[HIDDEN])
                 {
@@ -417,30 +417,30 @@ void AbstractDrawablePolyhedralMesh<Mesh>::updateGL_in()
     drawlist_in.seg_coords.clear();
     drawlist_in.seg_colors.clear();
 
-    std::unordered_set<uint> edges_to_render;
+    std::unordered_set<unsigned int> edges_to_render;
 
-    for(uint fid=0; fid<this->num_faces(); ++fid)
+    for(unsigned int fid=0; fid<this->num_faces(); ++fid)
     {
         if(this->face_is_on_srf(fid)) continue;
 
-        uint pid_beneath;
+        unsigned int pid_beneath;
         if(!this->face_is_visible(fid, pid_beneath)) continue;
 
         bool is_CW = this->poly_face_is_CW(pid_beneath, fid);
 
         vec3d n = this->poly_face_normal(pid_beneath, fid);
 
-        for(uint eid : this->adj_f2e(fid))
+        for(unsigned int eid : this->adj_f2e(fid))
         {
             if (this->edge_is_on_srf(eid)) continue; // updateGL_out() will consider it
             edges_to_render.insert(eid);
         }
 
-        for(uint i=0; i<this->face_tessellation(fid).size()/3; ++i)
+        for(unsigned int i=0; i<this->face_tessellation(fid).size()/3; ++i)
         {
-            uint vid0 = this->face_tessellation(fid).at(3*i+0);
-            uint vid1 = this->face_tessellation(fid).at(3*i+1);
-            uint vid2 = this->face_tessellation(fid).at(3*i+2);
+            unsigned int vid0 = this->face_tessellation(fid).at(3*i+0);
+            unsigned int vid1 = this->face_tessellation(fid).at(3*i+1);
+            unsigned int vid2 = this->face_tessellation(fid).at(3*i+2);
             if (is_CW) std::swap(vid1,vid2); // flip triangle orientation
 
             // average AO with adjacent visible faces having dihedral angle lower than 60 degrees
@@ -575,9 +575,9 @@ void AbstractDrawablePolyhedralMesh<Mesh>::updateGL_in()
         }
     }
 
-    for(uint eid : edges_to_render)
+    for(unsigned int eid : edges_to_render)
     {
-        uint base_addr = drawlist_in.seg_coords.size()/3;
+        unsigned int base_addr = drawlist_in.seg_coords.size()/3;
         drawlist_in.segs.push_back(base_addr    );
         drawlist_in.segs.push_back(base_addr + 1);
 
@@ -825,7 +825,7 @@ template<class Mesh>
 CINO_INLINE
 void AbstractDrawablePolyhedralMesh<Mesh>::show_out_wireframe_color(const Color & c)
 {
-    for(uint eid=0; eid<this->num_edges(); ++eid)
+    for(unsigned int eid=0; eid<this->num_edges(); ++eid)
     {
         if (this->edge_is_on_srf(eid)) this->edge_data(eid).color = c;
     }
@@ -847,7 +847,7 @@ template<class Mesh>
 CINO_INLINE
 void AbstractDrawablePolyhedralMesh<Mesh>::show_out_wireframe_transparency(const float alpha)
 {
-    for(uint eid=0; eid<this->num_edges(); ++eid)
+    for(unsigned int eid=0; eid<this->num_edges(); ++eid)
     {
         if (this->edge_is_on_srf(eid)) this->edge_data(eid).color.a = alpha;
     }
@@ -956,7 +956,7 @@ template<class Mesh>
 CINO_INLINE
 void AbstractDrawablePolyhedralMesh<Mesh>::show_in_wireframe_color(const Color & c)
 {
-    for(uint eid=0; eid<this->num_edges(); ++eid)
+    for(unsigned int eid=0; eid<this->num_edges(); ++eid)
     {
         if (!this->edge_is_on_srf(eid)) this->edge_data(eid).color = c;
     }
@@ -978,7 +978,7 @@ template<class Mesh>
 CINO_INLINE
 void AbstractDrawablePolyhedralMesh<Mesh>::show_in_wireframe_transparency(const float alpha)
 {
-    for(uint eid=0; eid<this->num_edges(); ++eid)
+    for(unsigned int eid=0; eid<this->num_edges(); ++eid)
     {
         if (!this->edge_is_on_srf(eid)) this->edge_data(eid).color.a = alpha;
     }

@@ -50,13 +50,13 @@ std::vector<Eigen::Triplet<double>> laplacian_matrix_entries(const AbstractMesh<
 {
     std::vector<Entry> entries;
 
-    uint nv = m.num_verts();
-    std::vector<uint> base(n);
+    unsigned int nv = m.num_verts();
+    std::vector<unsigned int> base(n);
     for(int i=0; i<n; ++i) base[i] = nv*i;
 
-    for(uint vid=0; vid<m.num_verts(); ++vid)
+    for(unsigned int vid=0; vid<m.num_verts(); ++vid)
     {
-        std::vector<std::pair<uint,double>> wgts;
+        std::vector<std::pair<unsigned int,double>> wgts;
         m.vert_weights(vid, mode, wgts);
         double sum = 0.0;
         for(auto item : wgts)
@@ -89,7 +89,7 @@ Eigen::SparseMatrix<double> laplacian(const AbstractMesh<M,V,E,P> & m, const int
 {
     std::vector<Entry> entries = laplacian_matrix_entries(m, mode, n);
 
-    uint nv = n*m.num_verts();
+    unsigned int nv = n*m.num_verts();
     Eigen::SparseMatrix<double> L(nv,nv);
     L.setFromTriplets(entries.begin(), entries.end());
 

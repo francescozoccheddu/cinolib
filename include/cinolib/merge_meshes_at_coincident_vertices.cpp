@@ -47,16 +47,16 @@ void merge_meshes_at_coincident_vertices(const AbstractPolyhedralMesh<M,V,E,F,P>
                                          const double                              proximity_thresh)
 {
     Octree o;
-    for(uint vid=0; vid<m1.num_verts(); ++vid) o.push_sphere(vid, m1.vert(vid), proximity_thresh);
+    for(unsigned int vid=0; vid<m1.num_verts(); ++vid) o.push_sphere(vid, m1.vert(vid), proximity_thresh);
     o.build();
 
     res = m1;
 
-    std::map<uint,uint> vmap;
-    for(uint vid=0; vid<m2.num_verts(); ++vid)
+    std::map<unsigned int,unsigned int> vmap;
+    for(unsigned int vid=0; vid<m2.num_verts(); ++vid)
     {
         vec3d p = m2.vert(vid);
-        std::unordered_set<uint> ids;
+        std::unordered_set<unsigned int> ids;
         if(o.contains(p, false, ids))
         {
             // WARNING: I am assuming that the mapping is one to one at most
@@ -65,13 +65,13 @@ void merge_meshes_at_coincident_vertices(const AbstractPolyhedralMesh<M,V,E,F,P>
         }
         else
         {
-            uint fresh_id = res.vert_add(p);
+            unsigned int fresh_id = res.vert_add(p);
             vmap[vid] = fresh_id;
         }
     }
 
-    std::map<uint,uint> fmap;
-    for(uint fid=0; fid<m2.num_faces(); ++fid)
+    std::map<unsigned int,unsigned int> fmap;
+    for(unsigned int fid=0; fid<m2.num_faces(); ++fid)
     {
         auto f = m2.face_verts_id(fid);
         for(auto & vid : f) vid = vmap.at(vid);
@@ -83,12 +83,12 @@ void merge_meshes_at_coincident_vertices(const AbstractPolyhedralMesh<M,V,E,F,P>
         }
         else
         {
-            uint fresh_id = res.face_add(f);
+            unsigned int fresh_id = res.face_add(f);
             fmap[fid] = fresh_id;
         }
     }
 
-    for(uint pid=0; pid<m2.num_polys(); ++pid)
+    for(unsigned int pid=0; pid<m2.num_polys(); ++pid)
     {
         auto p = m2.poly_faces_id(pid);
         for(auto & fid : p) fid = fmap.at(fid);

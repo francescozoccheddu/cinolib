@@ -14,8 +14,8 @@ int main(int argc, char **argv)
     }
 
     std::vector<vec3d>             verts;
-    std::vector<std::vector<uint>> faces;
-    std::vector<std::vector<uint>> polys;
+    std::vector<std::vector<unsigned int>> faces;
+    std::vector<std::vector<unsigned int>> polys;
     std::vector<std::vector<bool>> winding;
 
     // input extension
@@ -31,7 +31,7 @@ int main(int argc, char **argv)
     }
     else if(ext.compare("STL")==0 || ext.compare("stl")==0)
     {
-        std::vector<uint> tris;
+        std::vector<unsigned int> tris;
         read_STL(argv[1], verts, tris);
         polys = polys_from_serialized_vids(tris,3);
     }

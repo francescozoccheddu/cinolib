@@ -46,7 +46,7 @@ class Point : public SpatialDataStructureItem
 {
     public:
 
-        Point(const uint id, const vec3d & v)
+        Point(const unsigned int id, const vec3d & v)
         {
             this->v   = v;
             this->id  = id;

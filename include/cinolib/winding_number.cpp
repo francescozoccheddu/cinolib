@@ -41,11 +41,11 @@ namespace cinolib
 
 CINO_INLINE
 int winding_number(const std::vector<vec3d> & verts,
-                   const std::vector<uint>  & tris,
+                   const std::vector<unsigned int>  & tris,
                    const vec3d              & p)
 {
     double w = 0;
-    for(uint i=0; i<tris.size(); i+=3)
+    for(unsigned int i=0; i<tris.size(); i+=3)
     {
         w += solid_angle(verts.at(tris.at( i )),
                          verts.at(tris.at(i+1)),
@@ -63,10 +63,10 @@ int winding_number(const AbstractPolygonMesh<M,V,E,P> & m,
                    const vec3d                        & p)
 {
     double w = 0;
-    for(uint pid=0; pid<m.num_polys(); ++pid)
+    for(unsigned int pid=0; pid<m.num_polys(); ++pid)
     {
         const auto & tris = m.poly_tessellation(pid);
-        for(uint i=0; i<tris.size(); i+=3)
+        for(unsigned int i=0; i<tris.size(); i+=3)
         {
             w += solid_angle(m.vert(tris.at( i )),
                              m.vert(tris.at(i+1)),

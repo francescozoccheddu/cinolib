@@ -44,9 +44,9 @@ namespace cinolib
 // repeatable stateless pseudo-random numbers in [0,1], or in the custom interval [min,max]
 
 CINO_INLINE
-uint random_uint(const uint seed)
+unsigned int random_uint(const unsigned int seed)
 {
-   uint i=(seed^12345391u)*2654435769u;
+   unsigned int i=(seed^12345391u)*2654435769u;
    i^=(i<<6)^(i>>26);
    i*=2654435769u;
    i+=(i<<5)^(i>>12);
@@ -56,7 +56,7 @@ uint random_uint(const uint seed)
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 CINO_INLINE
-float random_float(const uint seed)
+float random_float(const unsigned int seed)
 {
     return random_uint(seed)/static_cast<float>(max_uint);
 }
@@ -64,7 +64,7 @@ float random_float(const uint seed)
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 CINO_INLINE
-float random_float(const uint seed, const float min, const float max)
+float random_float(const unsigned int seed, const float min, const float max)
 {
     return ((max-min)*random_uint(seed)/static_cast<float>(max_uint) + min);
 }
@@ -72,7 +72,7 @@ float random_float(const uint seed, const float min, const float max)
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 CINO_INLINE
-double random_double(const uint seed)
+double random_double(const unsigned int seed)
 {
     return random_uint(seed)/static_cast<double>(max_uint);
 }
@@ -80,7 +80,7 @@ double random_double(const uint seed)
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 CINO_INLINE
-double random_double(const  uint seed, const double min, const double max)
+double random_double(const  unsigned int seed, const double min, const double max)
 {
     return (max-min)*random_uint(seed)/static_cast<double>(max_uint) + min;
 }

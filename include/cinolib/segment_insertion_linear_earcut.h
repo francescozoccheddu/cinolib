@@ -61,7 +61,7 @@ namespace cinolib
 template<class vec>
 CINO_INLINE
 void segment_insertion_linear_earcut(const std::vector<vec>  & poly,
-                                           std::vector<uint> & tris);
+                                           std::vector<unsigned int> & tris);
 }
 
 #ifndef  CINO_STATIC_LIB

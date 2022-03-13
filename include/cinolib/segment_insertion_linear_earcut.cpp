@@ -42,21 +42,21 @@ namespace cinolib
 template<class vec>
 CINO_INLINE
 void segment_insertion_linear_earcut(const std::vector<vec>  & poly,
-                                           std::vector<uint> & tris)
+                                           std::vector<unsigned int> & tris)
 {
     assert(poly.size()>=3);
 
     // doubly linked list for fast polygon inspection
-    uint size = poly.size();
-    std::vector<uint> prev(size);
-    std::vector<uint> next(size);
+    unsigned int size = poly.size();
+    std::vector<unsigned int> prev(size);
+    std::vector<unsigned int> next(size);
     std::iota(prev.begin(), prev.end(),-1);
     std::iota(next.begin(), next.end(), 1);
     prev.front() = size-1;
     next.back()  = 0;
 
     // keep a list of the ears to be cut
-    std::vector<uint> ears;
+    std::vector<unsigned int> ears;
     ears.reserve(size);
 
     // this always has size |poly|, and keeps track of ears
@@ -65,7 +65,7 @@ void segment_insertion_linear_earcut(const std::vector<vec>  & poly,
 
     // detect all safe ears in O(n).
     // This amounts to finding all convex vertices but the endpoints of the constrained edge
-    for(uint curr=1; curr<size-1; ++curr)
+    for(unsigned int curr=1; curr<size-1; ++curr)
     {
         // NOTE: the polygon may contain dangling edges,
         // clause prev!=next avoids to even do the ear test for them
@@ -79,10 +79,10 @@ void segment_insertion_linear_earcut(const std::vector<vec>  & poly,
     }
 
     // progressively delete all ears, also updating the data structure
-    uint length = size;
+    unsigned int length = size;
     while(true)
     {
-        uint curr = ears.back();
+        unsigned int curr = ears.back();
         ears.pop_back();
 
         // make new tri

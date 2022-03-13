@@ -57,8 +57,8 @@ struct Marker
     vec3d       pos_3d      = vec3d(inf_double); // used to position a 3D marker IFF pos_2d is INF
     std::string text        = "";                // text to render. Set to the empty string to not render the text
     Color       color       = Color::BLUE();     // color, for both the text and the disk
-    uint        disk_radius =  1;                // disk radius (in pixels). Set to zero to not render the disk
-    uint        font_size   = 12;                // font size;
+    unsigned int        disk_radius =  1;                // disk radius (in pixels). Set to zero to not render the disk
+    unsigned int        font_size   = 12;                // font size;
 };
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -142,14 +142,14 @@ class GLcanvas
         void push_marker(const vec2d       & p,
                          const std::string & text        = "",
                          const Color         color       = Color::BLUE(),
-                         const uint          disk_radius =  5,
-                         const uint          font_size   = 10);
+                         const unsigned int          disk_radius =  5,
+                         const unsigned int          font_size   = 10);
 
         void push_marker(const vec3d       & p,
                          const std::string & text        = "",
                          const Color         color       = Color::BLUE(),
-                         const uint          disk_radius =  5,
-                         const uint          font_size   = 10);
+                         const unsigned int          disk_radius =  5,
+                         const unsigned int          font_size   = 10);
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 

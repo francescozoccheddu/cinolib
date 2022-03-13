@@ -68,8 +68,8 @@ CINO_INLINE std::vector<double> serialized_xy_from_serialized_xyz(const std::vec
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-CINO_INLINE std::vector<std::vector<uint>> polys_from_serialized_vids(const std::vector<uint> & vids, const uint vids_per_poly);
-CINO_INLINE std::vector<uint>              serialized_vids_from_polys(const std::vector<std::vector<uint>> & polys);
+CINO_INLINE std::vector<std::vector<unsigned int>> polys_from_serialized_vids(const std::vector<unsigned int> & vids, const unsigned int vids_per_poly);
+CINO_INLINE std::vector<unsigned int>              serialized_vids_from_polys(const std::vector<std::vector<unsigned int>> & polys);
 
 }
 

@@ -53,17 +53,17 @@ void mesh_smoother(      AbstractPolygonMesh<M1,V1,E1,P1> & m,
     Octree o_line;   // for feature lines
     Octree o_corner; // for feature corners (i.e. points where feature lines meet or terminate)
     //
-    for(uint eid=0; eid<target.num_edges(); ++eid)
+    for(unsigned int eid=0; eid<target.num_edges(); ++eid)
     {
         if(target.edge_data(eid).flags[MARKED]) // marked => flagged as a sharp feature
         {
             o_line.push_segment(eid, target.edge_verts(eid));
         }
     }
-    for(uint vid=0; vid<target.num_verts(); ++vid)
+    for(unsigned int vid=0; vid<target.num_verts(); ++vid)
     {
-        uint count = 0;
-        for(uint eid : target.adj_v2e(vid))
+        unsigned int count = 0;
+        for(unsigned int eid : target.adj_v2e(vid))
         {
             if(target.edge_data(eid).flags[MARKED]) ++count;
         }
@@ -78,10 +78,10 @@ void mesh_smoother(      AbstractPolygonMesh<M1,V1,E1,P1> & m,
 
     // LABEL MESH VERTICES
     enum { REGULAR, CORNER, FEATURE };
-    for(uint vid=0; vid<m.num_verts(); ++vid)
+    for(unsigned int vid=0; vid<m.num_verts(); ++vid)
     {
-        uint count = 0;
-        for(uint eid : m.adj_v2e(vid))
+        unsigned int count = 0;
+        for(unsigned int eid : m.adj_v2e(vid))
         {
             // marked => flagged as a sharp feature
             if(m.edge_data(eid).flags[MARKED]) ++count;
@@ -97,21 +97,21 @@ void mesh_smoother(      AbstractPolygonMesh<M1,V1,E1,P1> & m,
     std::vector<Entry>  entries; // coeff matrix
     std::vector<double> w;       // weights matrix
     std::vector<double> rhs;     // right hand side
-    uint row = 0;
+    unsigned int row = 0;
 
     // additional data used to parameterize verts along feature lines (one for each such vert)
     // each feature vertex is defined as P_curr + dir*t
-    std::unordered_map<uint,std::pair<vec3d,uint>> feature_data;
+    std::unordered_map<unsigned int,std::pair<vec3d,unsigned int>> feature_data;
 
     // E_laplacian = \sum_{\forall i} \sum_{\forall j \in N(i)} (v_i - v_j)^2
     auto laplacian = [&]()
     {
         auto L = laplacian_matrix_entries(m, opt.laplacian_mode, 3); // TODO: add row and col offsets for laplacian...
         for(auto entry : L) entries.push_back(entry);
-        uint extra_rows = m.num_verts()*3;
+        unsigned int extra_rows = m.num_verts()*3;
         w.reserve(w.size()+extra_rows);
         rhs.reserve(rhs.size()+extra_rows);
-        for(uint i=0; i<extra_rows; ++i)
+        for(unsigned int i=0; i<extra_rows; ++i)
         {
             w.push_back(opt.w_laplace);
             rhs.push_back(0);
@@ -121,11 +121,11 @@ void mesh_smoother(      AbstractPolygonMesh<M1,V1,E1,P1> & m,
 
     // E_regular = \sum_{\forall i \in R} (n*v_i + d)^2,
     // where <n,d> is the plane tangent to the mesh at v_i
-    auto tangent_space = [&](const uint vid)
+    auto tangent_space = [&](const unsigned int vid)
     {
         vec3d  p;
         double dist;
-        uint   pid;
+        unsigned int   pid;
         o_srf.closest_point(m.vert(vid), pid, p, dist);
         vec3d n = target.poly_data(pid).normal;
 
@@ -134,10 +134,10 @@ void mesh_smoother(      AbstractPolygonMesh<M1,V1,E1,P1> & m,
         double w_regular = opt.w_corner;
         if(dist>m.edge_avg_length(vid)*2) w_regular *= 0.01; // TODO: this should be a Gaussian....
 
-        uint  nv    = m.num_verts();
-        uint  col_x = vid;
-        uint  col_y = nv + vid;
-        uint  col_z = nv + nv + vid;
+        unsigned int  nv    = m.num_verts();
+        unsigned int  col_x = vid;
+        unsigned int  col_y = nv + vid;
+        unsigned int  col_z = nv + nv + vid;
 
         entries.push_back(Entry(row, col_x, n.x()));
         entries.push_back(Entry(row, col_y, n.y()));
@@ -150,19 +150,19 @@ void mesh_smoother(      AbstractPolygonMesh<M1,V1,E1,P1> & m,
     // E_feature = \sum_{\forall i \in F} (v_i - (v_i + t*d))^2 + t^2,
     // where <t,d> is the line L::= v_i + t*d tangent to the crease at v_i,
     // parameterized by the extra varaible t
-    auto tangent_line = [&](const uint vid)
+    auto tangent_line = [&](const unsigned int vid)
     {
         vec3d  p;
         double dist;
-        uint   eid;
+        unsigned int   eid;
         o_line.closest_point(m.vert(vid), eid, p, dist);
         vec3d dir = target.edge_vec(eid,true);
 
-        uint  nv    = m.num_verts();
-        uint  col_x = vid;
-        uint  col_y = nv + vid;
-        uint  col_z = nv + nv + vid;
-        uint  col_t = nv + nv + nv + feature_data.size();
+        unsigned int  nv    = m.num_verts();
+        unsigned int  col_x = vid;
+        unsigned int  col_y = nv + vid;
+        unsigned int  col_z = nv + nv + vid;
+        unsigned int  col_t = nv + nv + nv + feature_data.size();
         feature_data[vid] = std::make_pair(dir,col_t);
 
         entries.push_back(Entry(row, col_x, 1.0));
@@ -191,21 +191,21 @@ void mesh_smoother(      AbstractPolygonMesh<M1,V1,E1,P1> & m,
 
     // E_corner = \sum_{\forall i \in C} (v_i - v_i*)^2,
     // where v_i* is the current position of v_i
-    auto corner = [&](const uint vid)
+    auto corner = [&](const unsigned int vid)
     {
         vec3d  p;
         double dist;
-        uint   pid;
+        unsigned int   pid;
         o_corner.closest_point(m.vert(vid), pid, p, dist);
 
         // discards mappings to distant corners because they are likely to be wrong assignments
         // (e.g. if the feature networks of source and target meshes mismatch)
         if(dist>m.edge_avg_length(vid)*2) return;
 
-        uint  nv    = m.num_verts();
-        uint  col_x = vid;
-        uint  col_y = nv + vid;
-        uint  col_z = nv + nv + vid;
+        unsigned int  nv    = m.num_verts();
+        unsigned int  col_x = vid;
+        unsigned int  col_y = nv + vid;
+        unsigned int  col_z = nv + nv + vid;
 
         entries.push_back(Entry(row, col_x, 1.0));
         rhs.push_back(p.x());
@@ -224,10 +224,10 @@ void mesh_smoother(      AbstractPolygonMesh<M1,V1,E1,P1> & m,
     };
 
     // SMOOTHING ITERATIONS
-    for(uint i=0; i<opt.n_iters; ++i)
+    for(unsigned int i=0; i<opt.n_iters; ++i)
     {
         laplacian();
-        for(uint vid=0; vid<m.num_verts(); ++vid)
+        for(unsigned int vid=0; vid<m.num_verts(); ++vid)
         {
             switch(m.vert_data(vid).label)
             {
@@ -245,8 +245,8 @@ void mesh_smoother(      AbstractPolygonMesh<M1,V1,E1,P1> & m,
         Eigen::VectorXd res;
         solve_weighted_least_squares(A, W, RHS, res);
 
-        uint nv = m.num_verts();
-        for(uint vid=0; vid<nv; ++vid)
+        unsigned int nv = m.num_verts();
+        for(unsigned int vid=0; vid<nv; ++vid)
         {
             vec3d p(res[vid], res[nv+vid], res[2*nv+vid]);
 

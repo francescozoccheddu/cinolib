@@ -70,8 +70,8 @@ class DrawableTetmesh : public AbstractDrawablePolyhedralMesh<Tetmesh<M,V,E,F,P>
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
         explicit DrawableTetmesh(const std::vector<vec3d>             & verts,
-                                 const std::vector<std::vector<uint>> & faces,
-                                 const std::vector<std::vector<uint>> & polys,
+                                 const std::vector<std::vector<unsigned int>> & faces,
+                                 const std::vector<std::vector<unsigned int>> & polys,
                                  const std::vector<std::vector<bool>> & polys_face_winding)
         : Tetmesh<M,V,E,F,P>(verts, faces, polys, polys_face_winding)
         {
@@ -81,7 +81,7 @@ class DrawableTetmesh : public AbstractDrawablePolyhedralMesh<Tetmesh<M,V,E,F,P>
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
         explicit DrawableTetmesh(const std::vector<vec3d> & verts,
-                                 const std::vector<uint>  & polys)
+                                 const std::vector<unsigned int>  & polys)
         : Tetmesh<M,V,E,F,P>(verts, polys)
         {
             this->init_drawable_stuff();
@@ -90,7 +90,7 @@ class DrawableTetmesh : public AbstractDrawablePolyhedralMesh<Tetmesh<M,V,E,F,P>
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
         explicit DrawableTetmesh(const std::vector<double> & coords,
-                                 const std::vector<uint>   & polys)
+                                 const std::vector<unsigned int>   & polys)
         : Tetmesh<M,V,E,F,P>(coords, polys)
         {
             this->init_drawable_stuff();

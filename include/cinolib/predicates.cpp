@@ -829,7 +829,7 @@ SimplexIntersection segment_triangle_intersect_3d(const double * s0,
 
         if(point_in_triangle_3d(s0, t0, t1, t2) || point_in_triangle_3d(s1, t0, t1, t2)) return INTERSECT;
 
-        uint simpl_complex = 0;
+        unsigned int simpl_complex = 0;
 
         switch(segment_segment_intersect_3d(s0, s1, t0, t1))
         {
@@ -998,8 +998,8 @@ SimplexIntersection triangle_triangle_intersect_2d(const double * t00,
     if(vec_equals_2d(t02, t12)) { t0_shared[2] = true; t1_shared[2] = true; }
 
     // count number of coincident vertices in t0 and t1
-    uint t0_count = t0_shared.count();
-    uint t1_count = t1_shared.count();
+    unsigned int t0_count = t0_shared.count();
+    unsigned int t1_count = t1_shared.count();
 
     // either t0 and t1 are coincident or one of the two triangles
     // is degenerate and is an edge/vertex of the other
@@ -1010,11 +1010,11 @@ SimplexIntersection triangle_triangle_intersect_2d(const double * t00,
     // Otherwise they are edge-adjacent and form a valid simplicial complex
     if(t0_count == 2 && t1_count == 2)
     {
-        uint e[2];      // indices of the shared vertices (in t0)
-        uint count = 0; // index for e (to fill it)
-        uint opp0  = 0; // index of the vertex opposite to e in t0
-        uint opp1  = 0; // index of the vertex opposite to e in t1
-        for(uint i=0; i<3; ++i)
+        unsigned int e[2];      // indices of the shared vertices (in t0)
+        unsigned int count = 0; // index for e (to fill it)
+        unsigned int opp0  = 0; // index of the vertex opposite to e in t0
+        unsigned int opp1  = 0; // index of the vertex opposite to e in t1
+        for(unsigned int i=0; i<3; ++i)
         {
             if(!t0_shared[i]) opp0 = i; else e[count++] = i;
             if(!t1_shared[i]) opp1 = i;
@@ -1035,9 +1035,9 @@ SimplexIntersection triangle_triangle_intersect_2d(const double * t00,
     // Otherwise they are verte-adjacent and form a valid simplicial complex
     if(t0_count == 1 && t1_count == 1)
     {
-        uint v0; // index of the shared vertex in t0
-        uint v1; // index of the shared vertex in t1
-        for(uint i = 0; i < 3; ++i)
+        unsigned int v0; // index of the shared vertex in t0
+        unsigned int v1; // index of the shared vertex in t1
+        for(unsigned int i = 0; i < 3; ++i)
         {
             if(t0_shared[i]) v0 = i;
             if(t1_shared[i]) v1 = i;
@@ -1140,7 +1140,7 @@ SimplexIntersection triangle_triangle_intersect_3d(const double * t00,
     if(vec_equals_3d(t02, t12)) { t0_shared[2] = true; t1_shared[2] = true; }
 
     // count number of coincident vertices in t0 and t1
-    uint t0_count = t0_shared.count();
+    unsigned int t0_count = t0_shared.count();
 
     // either t0 and t1 are coincident
     if(t0_count == 3) return SIMPLICIAL_COMPLEX;
@@ -1150,11 +1150,11 @@ SimplexIntersection triangle_triangle_intersect_3d(const double * t00,
     // Otherwise they are edge-adjacent and form a valid simplicial complex
     if(t0_count == 2)
     {
-        uint e[2];      // indices of the shared vertices (in t0)
-        uint count = 0; // index for e (to fill it)
-        uint opp0  = 0; // index of the vertex opposite to e in t0
-        uint opp1  = 0; // index of the vertex opposite to e in t1
-        for(uint i = 0; i < 3; ++i)
+        unsigned int e[2];      // indices of the shared vertices (in t0)
+        unsigned int count = 0; // index for e (to fill it)
+        unsigned int opp0  = 0; // index of the vertex opposite to e in t0
+        unsigned int opp1  = 0; // index of the vertex opposite to e in t1
+        for(unsigned int i = 0; i < 3; ++i)
         {
             if(!t0_shared[i]) opp0 = i; else e[count++] = i;
             if(!t1_shared[i]) opp1 = i;
@@ -1198,9 +1198,9 @@ SimplexIntersection triangle_triangle_intersect_3d(const double * t00,
     // Otherwise they are vertex-adjacent and form a valid simplicial complex
     if(t0_count == 1)
     {
-        uint v0; // index of the shared vertex in t0
-        uint v1; // index of the shared vertex in t1
-        for(uint i = 0; i < 3; ++i)
+        unsigned int v0; // index of the shared vertex in t0
+        unsigned int v1; // index of the shared vertex in t1
+        for(unsigned int i = 0; i < 3; ++i)
         {
             if(t0_shared[i]) v0 = i;
             if(t1_shared[i]) v1 = i;

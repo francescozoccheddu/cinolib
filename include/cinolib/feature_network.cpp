@@ -41,17 +41,17 @@ namespace cinolib
 template<class M, class V, class E, class P>
 CINO_INLINE
 void feature_network(const AbstractPolygonMesh<M,V,E,P>   & m,
-                           std::vector<std::vector<uint>> & network,
+                           std::vector<std::vector<unsigned int>> & network,
                      const FeatureNetworkOptions          & opt)
 {
     std::vector<bool> visited(m.num_edges(),false);
 
     // find start points first
-    std::unordered_set<uint> seeds;
-    for(uint vid=0; vid<m.num_verts(); ++vid)
+    std::unordered_set<unsigned int> seeds;
+    for(unsigned int vid=0; vid<m.num_verts(); ++vid)
     {
-        std::vector<uint> incoming_creases;
-        for(uint eid : m.adj_v2e(vid))
+        std::vector<unsigned int> incoming_creases;
+        for(unsigned int eid : m.adj_v2e(vid))
         {
             if(m.edge_data(eid).flags[CREASE]) incoming_creases.push_back(eid);
         }
@@ -62,8 +62,8 @@ void feature_network(const AbstractPolygonMesh<M,V,E,P>   & m,
         }
         else if(opt.split_lines_at_high_curvature_points && incoming_creases.size()==2)
         {
-            uint  e0 = incoming_creases.front();
-            uint  e1 = incoming_creases.back();
+            unsigned int  e0 = incoming_creases.front();
+            unsigned int  e1 = incoming_creases.back();
             vec3d u  = m.vert(vid) - m.vert(m.vert_opposite_to(e0,vid));
             vec3d v  = m.vert(m.vert_opposite_to(e1,vid)) - m.vert(vid);
             if(u.angle_deg(v)>opt.ang_thresh_deg)
@@ -76,25 +76,25 @@ void feature_network(const AbstractPolygonMesh<M,V,E,P>   & m,
     //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
     // utility to flood a feature curve (stops at feature corners/endpoints or when a loop is closed)
-    auto flood_feature = [&](const uint start, const uint eid) -> std::vector<uint>
+    auto flood_feature = [&](const unsigned int start, const unsigned int eid) -> std::vector<unsigned int>
     {
-        std::vector<uint> feat_line;
+        std::vector<unsigned int> feat_line;
         feat_line.push_back(start);
         assert(eid>=0);
         visited.at(eid) = true;
-        std::queue<uint> q;
+        std::queue<unsigned int> q;
         q.push(m.vert_opposite_to(eid,start));
         while(!q.empty())
         {
-            uint vid = q.front();
+            unsigned int vid = q.front();
             feat_line.push_back(vid);
             q.pop();
 
             // stop if you hit a splitpoint along a curve
             if(CONTAINS(seeds,vid)) break;
 
-            std::vector<uint> next_pool;
-            for(uint nbr : m.adj_v2v(vid))
+            std::vector<unsigned int> next_pool;
+            for(unsigned int nbr : m.adj_v2v(vid))
             {
                 int eid = m.edge_id(vid,nbr);
                 assert(eid>=0);
@@ -102,7 +102,7 @@ void feature_network(const AbstractPolygonMesh<M,V,E,P>   & m,
             }
             if(next_pool.size()==2)
             {
-                for(uint eid : next_pool)
+                for(unsigned int eid : next_pool)
                 {
                     if(visited.at(eid)) continue;
                     visited.at(eid) = true;
@@ -115,9 +115,9 @@ void feature_network(const AbstractPolygonMesh<M,V,E,P>   & m,
 
     //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-    for(uint vid : seeds)
+    for(unsigned int vid : seeds)
     {
-        for(uint eid : m.adj_v2e(vid))
+        for(unsigned int eid : m.adj_v2e(vid))
         {
             if(!visited.at(eid) && m.edge_data(eid).flags[CREASE])
             {
@@ -126,7 +126,7 @@ void feature_network(const AbstractPolygonMesh<M,V,E,P>   & m,
         }
     }
     // closed loops are not caught by the previous cycle
-    for(uint eid=0; eid<m.num_edges(); ++eid)
+    for(unsigned int eid=0; eid<m.num_edges(); ++eid)
     {
         if(!visited.at(eid) && m.edge_data(eid).flags[CREASE])
         {

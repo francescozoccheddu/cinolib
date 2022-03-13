@@ -46,9 +46,9 @@ namespace cinolib
 // floodfill (for general graphs - i.e. not meshes)
 //
 CINO_INLINE
-void bfs(const std::vector<std::vector<uint>> & nodes_adjacency,
-         const uint                             source,
-               std::unordered_set<uint>       & visited);
+void bfs(const std::vector<std::vector<unsigned int>> & nodes_adjacency,
+         const unsigned int                             source,
+               std::unordered_set<unsigned int>       & visited);
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -57,8 +57,8 @@ void bfs(const std::vector<std::vector<uint>> & nodes_adjacency,
 template<class M, class V, class E, class P>
 CINO_INLINE
 void bfs(const AbstractMesh<M,V,E,P>    & m,
-         const uint                       source,
-               std::unordered_set<uint> & visited);
+         const unsigned int                       source,
+               std::unordered_set<unsigned int> & visited);
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -67,9 +67,9 @@ void bfs(const AbstractMesh<M,V,E,P>    & m,
 template<class M, class V, class E, class P>
 CINO_INLINE
 void bfs(const AbstractMesh<M,V,E,P>    & m,
-         const uint                       source,
+         const unsigned int                       source,
          const std::vector<bool>        & mask, // if mask[vid] = true, path cannot pass through vertex vid
-               std::unordered_set<uint> & visited);
+               std::unordered_set<unsigned int> & visited);
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -78,9 +78,9 @@ void bfs(const AbstractMesh<M,V,E,P>    & m,
 template<class M, class V, class E, class F, class P>
 CINO_INLINE
 void bfs_srf_only(const AbstractPolyhedralMesh<M,V,E,F,P> & m,
-                  const uint                                source,
+                  const unsigned int                                source,
                   const std::vector<bool>                 & mask, // if mask[vid] = true, path cannot pass through vertex vid
-                  std::unordered_set<uint>                & visited);
+                  std::unordered_set<unsigned int>                & visited);
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -89,9 +89,9 @@ void bfs_srf_only(const AbstractPolyhedralMesh<M,V,E,F,P> & m,
 template<class M, class V, class E, class P>
 CINO_INLINE
 void bfs_on_dual(const AbstractMesh<M,V,E,P>    & m,
-                 const uint                       source,
+                 const unsigned int                       source,
                  const std::vector<bool>        & mask, // if mask[p] = true, bfs cannot visit polygon/polyhedron p
-                       std::unordered_set<uint> & visited);
+                       std::unordered_set<unsigned int> & visited);
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -100,9 +100,9 @@ void bfs_on_dual(const AbstractMesh<M,V,E,P>    & m,
 template<class M, class V, class E, class P>
 CINO_INLINE
 void bfs_on_dual_w_edge_barriers(const AbstractPolygonMesh<M,V,E,P> & m,
-                                 const uint                           source,
+                                 const unsigned int                           source,
                                  const std::vector<bool>            & mask_edges, // if mask[e] = true, bfs cannot expand through edge e
-                                 std::unordered_set<uint>           & visited);
+                                 std::unordered_set<unsigned int>           & visited);
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -111,9 +111,9 @@ void bfs_on_dual_w_edge_barriers(const AbstractPolygonMesh<M,V,E,P> & m,
 template<class M, class V, class E, class F, class P>
 CINO_INLINE
 void bfs_on_dual_w_face_barriers(const AbstractPolyhedralMesh<M,V,E,F,P> & m,
-                                 const uint                                source,
+                                 const unsigned int                                source,
                                  const std::vector<bool>                 & mask_faces, // if mask[f] = true, bfs cannot expand through face f
-                                 std::unordered_set<uint>                & visited);
+                                 std::unordered_set<unsigned int>                & visited);
 }
 
 #ifndef  CINO_STATIC_LIB

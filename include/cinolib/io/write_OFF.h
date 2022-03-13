@@ -47,15 +47,15 @@ namespace cinolib
 CINO_INLINE
 void write_OFF(const char                * filename,
                const std::vector<double> & xyz,
-               const std::vector<uint>   & tri,
-               const std::vector<uint>   & quad);
+               const std::vector<unsigned int>   & tri,
+               const std::vector<unsigned int>   & quad);
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 CINO_INLINE
 void write_OFF(const char                           * filename,
                const std::vector<double>            & xyz,
-               const std::vector<std::vector<uint>> & faces);
+               const std::vector<std::vector<unsigned int>> & faces);
 
 }
 

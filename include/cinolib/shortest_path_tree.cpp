@@ -48,7 +48,7 @@ namespace cinolib
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-void shortest_path_tree(AbstractPolygonMesh<M,V,E,P> & m, const uint root, std::vector<bool> & tree)
+void shortest_path_tree(AbstractPolygonMesh<M,V,E,P> & m, const unsigned int root, std::vector<bool> & tree)
 {
     // if true, the edge is on the tree
     tree = std::vector<bool>(m.num_edges(), false);
@@ -56,7 +56,7 @@ void shortest_path_tree(AbstractPolygonMesh<M,V,E,P> & m, const uint root, std::
     std::vector<double> dist;
     dijkstra_exhaustive(m, root, dist);
 
-    for(uint vid=0; vid<m.num_verts(); ++vid)
+    for(unsigned int vid=0; vid<m.num_verts(); ++vid)
     {
         if(vid==root) continue;
 
@@ -64,8 +64,8 @@ void shortest_path_tree(AbstractPolygonMesh<M,V,E,P> & m, const uint root, std::
         // I store them all, and consistently choose the one with
         // lowest ID. This should avoid the generation of loops
         // (https://en.wikipedia.org/wiki/Shortest-path_tree)
-        std::vector<uint> parent;
-        for(uint nbr : m.adj_v2v(vid))
+        std::vector<unsigned int> parent;
+        for(unsigned int nbr : m.adj_v2v(vid))
         {
             int eid = m.edge_id(vid, nbr); assert(eid>=0);
             if(dist.at(vid) == m.edge_length(eid) + dist.at(nbr))

@@ -34,7 +34,7 @@ int main(int argc, char **argv)
             if(gui.unproject(click, p)) // transform click in a 3d point
             {
                 profiler.push("Vertex pick");
-                uint vid = m.pick_vert(p);
+                unsigned int vid = m.pick_vert(p);
                 profiler.pop();
                 std::cout << "ID " << vid << std::endl;
                 m.vert_data(vid).color = Color::RED();

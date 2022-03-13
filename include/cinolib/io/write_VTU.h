@@ -47,15 +47,15 @@ namespace cinolib
 CINO_INLINE
 void write_VTU(const char                * filename,
                const std::vector<double> & xyz,
-               const std::vector<uint>   & tets,
-               const std::vector<uint>   & hexa);
+               const std::vector<unsigned int>   & tets,
+               const std::vector<unsigned int>   & hexa);
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 CINO_INLINE
 void write_VTU(const char                           * filename,
                const std::vector<vec3d>             & verts,
-               const std::vector<std::vector<uint>> & polys);
+               const std::vector<std::vector<unsigned int>> & polys);
 
 }
 

@@ -51,7 +51,7 @@ void cut_mesh_along_marked_edges(AbstractPolygonMesh<M,V,E,P> & m);
 template<class M, class V, class E, class P>
 CINO_INLINE
 void cut_mesh_along_marked_edges(AbstractPolygonMesh<M,V,E,P>               & m,
-                                 std::unordered_map<uint,std::vector<uint>> & v_map);
+                                 std::unordered_map<unsigned int,std::vector<unsigned int>> & v_map);
 }
 
 #ifndef  CINO_STATIC_LIB

@@ -49,7 +49,7 @@ namespace cinolib
 
 template<class Vec>
 CINO_INLINE
-double p_norm(const Vec & v, const uint size, const float p);
+double p_norm(const Vec & v, const unsigned int size, const float p);
 
 }
 

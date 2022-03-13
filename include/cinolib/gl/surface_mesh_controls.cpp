@@ -234,7 +234,7 @@ void SurfaceMeshControls<Mesh>::header_colors_textures(const bool open)
                 if(!filename.empty())
                 {
                     ScalarField sf(filename.c_str());
-                    if ((uint)sf.size() == m->num_verts()) sf.copy_to_mesh(*m);
+                    if ((unsigned int)sf.size() == m->num_verts()) sf.copy_to_mesh(*m);
                     else std::cerr << "Could not load scalar field " << filename << " - array size mismatch!" << std::endl;
                 }
             }
@@ -476,7 +476,7 @@ void SurfaceMeshControls<Mesh>::header_debug(const bool open)
                 vert_normals.set_cheap_rendering(true);
                 vert_normals.set_color(vert_debug_color);
                 double l = gui->camera.scene_radius/5.0;
-                for(uint vid=0; vid<m->num_verts(); ++vid)
+                for(unsigned int vid=0; vid<m->num_verts(); ++vid)
                 {
                     if(m->vert_is_visible(vid))
                     {
@@ -500,7 +500,7 @@ void SurfaceMeshControls<Mesh>::header_debug(const bool open)
                 poly_normals.set_cheap_rendering(true);
                 poly_normals.set_color(poly_debug_color);
                 double l = gui->camera.scene_radius/5.0;
-                for(uint pid=0; pid<m->num_polys(); ++pid)
+                for(unsigned int pid=0; pid<m->num_polys(); ++pid)
                 {
                     if(!m->poly_data(pid).flags[HIDDEN])
                     {
@@ -527,7 +527,7 @@ void SurfaceMeshControls<Mesh>::header_debug(const bool open)
             gui->pop_all_markers();
             if(show_vert_ids)
             {
-                for(uint vid=0; vid<m->num_verts(); ++vid)
+                for(unsigned int vid=0; vid<m->num_verts(); ++vid)
                 {
                     if(m->vert_is_visible(vid))
                     {
@@ -537,7 +537,7 @@ void SurfaceMeshControls<Mesh>::header_debug(const bool open)
             }
             if(show_poly_ids)
             {
-                for(uint pid=0; pid<m->num_polys(); ++pid)
+                for(unsigned int pid=0; pid<m->num_polys(); ++pid)
                 {
                     if(!m->poly_data(pid).flags[HIDDEN])
                     {

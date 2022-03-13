@@ -45,12 +45,12 @@ CINO_INLINE
 void export_mesh_from_clusters(const AbstractPolygonMesh<M,V,E,P> & m,
                                      Polygonmesh<M,V,E,P>         & m_out)
 {
-    std::map<int,std::unordered_set<uint>> l2e; // maps labels to edges (only edges on border count)
+    std::map<int,std::unordered_set<unsigned int>> l2e; // maps labels to edges (only edges on border count)
 
-    for(uint eid=0; eid<m.num_edges(); ++eid)
+    for(unsigned int eid=0; eid<m.num_edges(); ++eid)
     {
         std::unordered_set<int> labels;
-        for(uint pid : m.adj_e2p(eid)) labels.insert(m.poly_data(pid).label);
+        for(unsigned int pid : m.adj_e2p(eid)) labels.insert(m.poly_data(pid).label);
 
         if(m.edge_valence(eid)==labels.size())
         {
@@ -65,27 +65,27 @@ void export_mesh_from_clusters(const AbstractPolygonMesh<M,V,E,P> & m,
         }
     }
 
-    uint fresh_id = 0;
-    std::map<uint,uint> v_map;
+    unsigned int fresh_id = 0;
+    std::map<unsigned int,unsigned int> v_map;
 
-    std::vector<std::vector<uint>> polys;
+    std::vector<std::vector<unsigned int>> polys;
     std::vector<vec3d>             verts;
 
     for(auto cluster : l2e)
     {
-        std::unordered_set<uint> edges = cluster.second;
-        uint seed = *edges.begin();
+        std::unordered_set<unsigned int> edges = cluster.second;
+        unsigned int seed = *edges.begin();
 
-        std::vector<uint> poly;
+        std::vector<unsigned int> poly;
         poly.push_back(m.edge_vert_id(seed,0));
         poly.push_back(m.edge_vert_id(seed,1));
 
         do
         {
-            uint prev = poly.at(poly.size()-2);
-            uint curr = poly.back();
+            unsigned int prev = poly.at(poly.size()-2);
+            unsigned int curr = poly.back();
 
-            for(uint eid : m.adj_v2e(curr))
+            for(unsigned int eid : m.adj_v2e(curr))
             {
                 if(m.edge_contains_vert(eid,prev)) continue;
                 if(CONTAINS(edges, eid)) poly.push_back(m.vert_opposite_to(eid, curr));
@@ -94,7 +94,7 @@ void export_mesh_from_clusters(const AbstractPolygonMesh<M,V,E,P> & m,
         while(poly.front()!=poly.back());
         poly.pop_back();
 
-        for(uint & vid : poly)
+        for(unsigned int & vid : poly)
         {
             auto query = v_map.find(vid);
             if(query==v_map.end())

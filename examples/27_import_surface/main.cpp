@@ -30,7 +30,7 @@ int main(int argc, char **argv)
         while(getline(f, line, '\n'))
         {
             std::stringstream ss(line);
-            uint srf_vid, vol_vid;
+            unsigned int srf_vid, vol_vid;
             assert(ss >> srf_vid >> vol_vid);
             vol->vert(vol_vid) = srf.vert(srf_vid);
             if(!vol->vert_is_on_srf(vol_vid))

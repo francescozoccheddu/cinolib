@@ -180,8 +180,8 @@ CINO_INLINE
 void GLcanvas::push_marker(const vec2d       & p,
                            const std::string & text,
                            const Color         color,
-                           const uint          disk_radius,
-                           const uint          font_size)
+                           const unsigned int          disk_radius,
+                           const unsigned int          font_size)
 {
     Marker m;
     m.pos_2d      = p;
@@ -198,8 +198,8 @@ CINO_INLINE
 void GLcanvas::push_marker(const vec3d       & p,
                            const std::string & text,
                            const Color         color,
-                           const uint          disk_radius,
-                           const uint          font_size)
+                           const unsigned int          disk_radius,
+                           const unsigned int          font_size)
 {
     Marker m;
     m.pos_3d      = p;
@@ -243,7 +243,7 @@ void GLcanvas::refit_scene()
     // update camera scene parameters
     camera.scene_center = vec3d(0.0);
     camera.scene_radius = 0;
-    uint count = 0;
+    unsigned int count = 0;
     for(auto obj : drawlist)
     {
         if(obj->scene_radius()>0)
@@ -391,8 +391,8 @@ void GLcanvas::draw_markers() const
         }
         // adjust marker size based on zoom
         auto zoom_factor = clamp(camera.zoom_factor, 1e-5, 1e10); // avoids overflow inside ImGui radius calculation
-        uint zoom_radius = 0.5*m.disk_radius/zoom_factor;
-        uint zoom_font_s = 0.5*m.font_size/zoom_factor;
+        unsigned int zoom_radius = 0.5*m.disk_radius/zoom_factor;
+        unsigned int zoom_font_s = 0.5*m.font_size/zoom_factor;
         //
         if(m.disk_radius>0)
         {

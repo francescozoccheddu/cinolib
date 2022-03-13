@@ -42,19 +42,19 @@ template<class M, class V, class E, class F, class P>
 CINO_INLINE
 void padding(AbstractPolyhedralMesh<M,V,E,F,P> & m, const bool inwards)
 {
-    uint nv = m.num_verts();
-    uint ne = m.num_edges();
-    uint nf = m.num_faces();
+    unsigned int nv = m.num_verts();
+    unsigned int ne = m.num_edges();
+    unsigned int nf = m.num_faces();
 
     double l = m.edge_min_length()*0.1;
 
     // add copies of surface vertices
-    std::unordered_map<uint,uint> vmap;
-    for(uint vid=0; vid<nv; ++vid)
+    std::unordered_map<unsigned int,unsigned int> vmap;
+    for(unsigned int vid=0; vid<nv; ++vid)
     {
         if(m.vert_is_on_srf(vid))
         {
-            uint  new_vid = m.vert_add(m.vert(vid));       // update position;
+            unsigned int  new_vid = m.vert_add(m.vert(vid));       // update position;
             vec3d off     = m.vert_data(vid).normal*l*0.5;
             if(inwards) m.vert(  vid  ) -= off;
             else        m.vert(new_vid) += off;
@@ -63,33 +63,33 @@ void padding(AbstractPolyhedralMesh<M,V,E,F,P> & m, const bool inwards)
     }
 
     // add copies of surface faces
-    std::unordered_map<uint,uint> fmap;
-    for(uint fid=0; fid<nf; ++fid)
+    std::unordered_map<unsigned int,unsigned int> fmap;
+    for(unsigned int fid=0; fid<nf; ++fid)
     {
         if(m.face_is_on_srf(fid))
         {
             auto f = m.face_verts_id(fid);
             for(auto & vid : f) vid = vmap.at(vid);
-            uint new_fid = m.face_add(f);
+            unsigned int new_fid = m.face_add(f);
             fmap[fid] = new_fid;
         }
     }
 
     // add inner faces for each surface edge
-    std::unordered_map<uint,uint> emap;
-    for(uint eid=0; eid<ne; ++eid)
+    std::unordered_map<unsigned int,unsigned int> emap;
+    for(unsigned int eid=0; eid<ne; ++eid)
     {
         if(m.edge_is_on_srf(eid))
         {
             auto e = m.edge_vert_ids(eid);
-            std::vector<uint> f =
+            std::vector<unsigned int> f =
             {
                 e.at(0),
                 e.at(1),
                 vmap.at(e.at(1)),
                 vmap.at(e.at(0))
             };
-            uint new_fid = m.face_add(f);
+            unsigned int new_fid = m.face_add(f);
             emap[eid] = new_fid;
         }
     }
@@ -97,10 +97,10 @@ void padding(AbstractPolyhedralMesh<M,V,E,F,P> & m, const bool inwards)
     // eventually add padding cells
     for(auto srf : fmap)
     {
-        uint fid     = srf.first;
-        uint new_fid = srf.second;
+        unsigned int fid     = srf.first;
+        unsigned int new_fid = srf.second;
 
-        std::vector<uint> p; // cell face list
+        std::vector<unsigned int> p; // cell face list
         std::vector<bool> w; // cell face winding
 
         // add srf face and the copy of it
@@ -108,21 +108,21 @@ void padding(AbstractPolyhedralMesh<M,V,E,F,P> & m, const bool inwards)
         p.push_back(new_fid);
         // assign opposite winding to the original srf face
         assert(m.adj_f2p(fid).size()==1);
-        uint pid = m.adj_f2p(fid).front();
+        unsigned int pid = m.adj_f2p(fid).front();
         w.push_back(!m.poly_face_is_CCW(pid,fid));
         w.push_back( m.poly_face_is_CCW(pid,fid));
 
         // add lateral faces
-        for(uint eid : m.adj_f2e(fid))
+        for(unsigned int eid : m.adj_f2e(fid))
         {
-            uint new_fid = emap.at(eid);
+            unsigned int new_fid = emap.at(eid);
             auto e = m.edge_vert_ids(eid);
             p.push_back(new_fid);
             w.push_back(!m.face_verts_are_CCW(fid, e.at(1), e.at(0)));
         }
 
         // create cell and order its vertices if it is a haxahedron
-        uint new_pid = m.poly_add(p,w);
+        unsigned int new_pid = m.poly_add(p,w);
         if(m.poly_is_hexahedron(new_pid))
         {
             m.poly_reorder_p2v(new_pid);

@@ -48,13 +48,13 @@ namespace cinolib
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-void tangential_smoothing(Trimesh<M,V,E,P> & m, const uint vid)
+void tangential_smoothing(Trimesh<M,V,E,P> & m, const unsigned int vid)
 {
     if(m.vert_is_boundary(vid)) return;
 
     vec3d  delta(0,0,0);
     double norm_fact = 0.0;
-    for(uint nbr : m.adj_v2v(vid))
+    for(unsigned int nbr : m.adj_v2v(vid))
     {
         double area = m.vert_area(vid);
         delta += area * m.vert(nbr);
@@ -66,8 +66,8 @@ void tangential_smoothing(Trimesh<M,V,E,P> & m, const uint vid)
     m.vert(vid) += delta;
 
     // update normals
-    for(uint pid : m.adj_v2p(vid)) m.update_p_normal(pid);
-    for(uint nbr : m.adj_v2v(vid)) m.update_v_normal(nbr);
+    for(unsigned int pid : m.adj_v2p(vid)) m.update_p_normal(pid);
+    for(unsigned int nbr : m.adj_v2v(vid)) m.update_v_normal(nbr);
     m.update_v_normal(vid);
 }
 
@@ -77,7 +77,7 @@ template<class M, class V, class E, class P>
 CINO_INLINE
 void tangential_smoothing(Trimesh<M,V,E,P> & m)
 {
-    for(uint vid=0; vid<m.num_verts(); ++vid)
+    for(unsigned int vid=0; vid<m.num_verts(); ++vid)
     {
         tangential_smoothing(m,vid);
     }

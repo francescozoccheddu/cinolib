@@ -67,7 +67,7 @@ namespace cinolib
 template<class M, class V, class E, class P>
 CINO_INLINE
 ScalarField LSCM(const Trimesh<M,V,E,P>     & m,
-                 const std::map<uint,vec2d> & bc = std::map<uint,vec2d>());
+                 const std::map<unsigned int,vec2d> & bc = std::map<unsigned int,vec2d>());
 }
 
 #ifndef  CINO_STATIC_LIB

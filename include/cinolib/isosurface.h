@@ -65,13 +65,13 @@ class Isosurface
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-        std::vector<uint> tessellate(Tetmesh<M,V,E,F,P> & m) const;
+        std::vector<unsigned int> tessellate(Tetmesh<M,V,E,F,P> & m) const;
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
         float              iso_value;
         std::vector<vec3d> verts;
-        std::vector<uint>  tris;
+        std::vector<unsigned int>  tris;
         std::vector<vec3d> norms;
 };
 

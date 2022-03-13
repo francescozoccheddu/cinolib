@@ -53,7 +53,7 @@ namespace cinolib
 
 struct ARAP_2D_map_data
 {
-    uint n_iters = 4;
+    unsigned int n_iters = 4;
     bool init    = true; // initialize just once (useful for multiple calls, e.g. to make more iterations)
 
     std::vector<vec2d>  uv;     // output uv coords

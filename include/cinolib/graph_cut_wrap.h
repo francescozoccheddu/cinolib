@@ -91,7 +91,7 @@ template<class M, class V, class E, class P>
 CINO_INLINE
 std::vector<int> graph_cut_wrap(const AbstractMesh<M,V,E,P>             & m,
                                 const int                                 n_labels,
-                                const std::vector<std::vector<uint>>    & feasible_region,
+                                const std::vector<std::vector<unsigned int>>    & feasible_region,
                                 const std::vector<std::vector<double>>  & data_term,
                                       GCoptimization::SmoothCostFnExtra   smooth_term,
                                       void                              * smooth_data = NULL);

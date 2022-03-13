@@ -72,7 +72,7 @@ namespace cinolib
 template<class Mesh>
 CINO_INLINE
 ScalarField compute_geodesics(      Mesh              & m,
-                              const std::vector<uint> & heat_charges,
+                              const std::vector<unsigned int> & heat_charges,
                               const int                 laplacian_mode = COTANGENT,
                               const float               time_scalar = 1.0,
                               const bool                hard_constrain_charges = false);
@@ -92,7 +92,7 @@ template<class Mesh>
 CINO_INLINE
 ScalarField compute_geodesics_amortized(      Mesh              & m,
                                               GeodesicsCache    & cache,
-                                        const std::vector<uint> & heat_charges,
+                                        const std::vector<unsigned int> & heat_charges,
                                         const int                 laplacian_mode = COTANGENT,
                                         const float               time_scalar = 1.0);
 }

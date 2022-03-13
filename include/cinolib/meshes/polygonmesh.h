@@ -58,10 +58,10 @@ class Polygonmesh : public AbstractPolygonMesh<M,V,E,P>
         explicit Polygonmesh(const std::vector<vec3d> & verts);
 
         explicit Polygonmesh(const std::vector<vec3d>             & verts,
-                             const std::vector<std::vector<uint>> & polys);
+                             const std::vector<std::vector<unsigned int>> & polys);
 
         explicit Polygonmesh(const std::vector<double>            & coords,
-                             const std::vector<std::vector<uint>> & polys);
+                             const std::vector<std::vector<unsigned int>> & polys);
 
         ~Polygonmesh() {}
 

@@ -91,7 +91,7 @@ namespace cinolib
 
 typedef struct
 {
-    uint   n_iters             = 1;       // # of smoothing iterations
+    unsigned int   n_iters             = 1;       // # of smoothing iterations
     double w_regular           = 10.0;    // attraction to tangent space  for regular vertices
     double w_feature           = 100.0;   // attraction to tangent curve  for feature vertices
     double w_corner            = 100.0;   // attraction to closest corner for features corner

@@ -104,7 +104,7 @@ void MeshSlicer::slice(AbstractMesh<M,V,E,P> & m)
     double Y_abs_thresh = m.bbox().min[1] + m.bbox().delta()[1] * (Y_thresh);
     double Z_abs_thresh = m.bbox().min[2] + m.bbox().delta()[2] * (Z_thresh);
 
-    for(uint pid=0; pid<m.num_polys(); ++pid)
+    for(unsigned int pid=0; pid<m.num_polys(); ++pid)
     {
         vec3d c = m.poly_centroid(pid);
         float q = m.poly_data(pid).quality;

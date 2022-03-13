@@ -74,12 +74,12 @@ template<class M, class V, class E, class F, class P>
 CINO_INLINE
 void make_triangle(const Tetmesh<M,V,E,F,P> & m,
                    const double               isovalue,
-                   const uint                 vids[],
+                   const unsigned int                 vids[],
                    const double               func[],
-                   const std::array<uint,3> & e,
-                   std::map<ipair,uint>     & e2v_map,
+                   const std::array<unsigned int,3> & e,
+                   std::map<ipair,unsigned int>     & e2v_map,
                    std::vector<vec3d>       & verts,
-                   std::vector<uint>        & tris,
+                   std::vector<unsigned int>        & tris,
                    std::vector<vec3d>       & norms);
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -89,7 +89,7 @@ CINO_INLINE
 void marching_tets(const Tetmesh<M,V,E,F,P> & m,
                    const double               isovalue,
                    std::vector<vec3d>       & verts,
-                   std::vector<uint>        & tris,
+                   std::vector<unsigned int>        & tris,
                    std::vector<vec3d>       & norms)
 {
     /* FIXME: for all configurations where two verts >= isoval
@@ -106,7 +106,7 @@ void marching_tets(const Tetmesh<M,V,E,F,P> & m,
     std::vector<unsigned char> c(m.num_polys(),0x0);
     std::vector<bool> swapped(m.num_polys(), false);
 
-    for(uint pid=0; pid<m.num_polys(); ++pid)
+    for(unsigned int pid=0; pid<m.num_polys(); ++pid)
     {
         double func[] =
         {
@@ -151,11 +151,11 @@ void marching_tets(const Tetmesh<M,V,E,F,P> & m,
         }
     }
 
-    std::map<ipair,uint> e2v_map;
+    std::map<ipair,unsigned int> e2v_map;
 
-    for(uint pid=0; pid<m.num_polys(); ++pid)
+    for(unsigned int pid=0; pid<m.num_polys(); ++pid)
     {
-        uint vids[] =
+        unsigned int vids[] =
         {
             m.poly_vert_id(pid,0),
             m.poly_vert_id(pid,1),
@@ -179,7 +179,7 @@ void marching_tets(const Tetmesh<M,V,E,F,P> & m,
             func[3] == isovalue
         };
 
-        int adj_tet[] // not uint because it may be -1 if there is no adjacent tet!
+        int adj_tet[] // not unsigned int because it may be -1 if there is no adjacent tet!
         {
             m.poly_adj_through_face(pid, m.poly_face_id(pid,0)),
             m.poly_adj_through_face(pid, m.poly_face_id(pid,1)),
@@ -258,24 +258,24 @@ template<class M, class V, class E, class F, class P>
 CINO_INLINE
 void make_triangle(const Tetmesh<M,V,E,F,P> & m,
                    const double               isovalue,
-                   const uint                 vids[],
+                   const unsigned int                 vids[],
                    const double               func[],
-                   const std::array<uint,3> & e,
-                   std::map<ipair,uint>     & e2v_map,
+                   const std::array<unsigned int,3> & e,
+                   std::map<ipair,unsigned int>     & e2v_map,
                    std::vector<vec3d>       & verts,
-                   std::vector<uint>        & tris,
+                   std::vector<unsigned int>        & tris,
                    std::vector<vec3d>       & norms)
 {
     assert(isovalue >= *std::min_element(func, func+4));
     assert(isovalue <= *std::max_element(func, func+4));
 
     vec3d tri_verts[3];
-    uint  fresh_vid = verts.size();
+    unsigned int  fresh_vid = verts.size();
 
-    for(uint i=0; i<3; ++i)
+    for(unsigned int i=0; i<3; ++i)
     {
-        uint v_a = vids[TET_EDGES[e[i]][0]];
-        uint v_b = vids[TET_EDGES[e[i]][1]];
+        unsigned int v_a = vids[TET_EDGES[e[i]][0]];
+        unsigned int v_b = vids[TET_EDGES[e[i]][1]];
 
         // avoid duplicated vertices. If an edge has already
         // been visited retrieve its id and coordinates
@@ -285,7 +285,7 @@ void make_triangle(const Tetmesh<M,V,E,F,P> & m,
 
         if (query != e2v_map.end())
         {
-            uint vid = query->second;
+            unsigned int vid = query->second;
             tri_verts[i] = vec3d(verts.at(vid));
             tris.push_back(vid);
         }

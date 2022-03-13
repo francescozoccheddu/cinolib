@@ -45,9 +45,9 @@ void arrow(const T            height,
            const T            radius,
            const T            base_rel_height, // percentage of the height (a good value is 0.7)
            const T            base_rel_radius, // percentage of the radius (a good value is 0.2)
-           const uint         n_sides,         // cross section
+           const unsigned int         n_sides,         // cross section
            std::vector<T>    & verts,          // output vertices
-           std::vector<uint> & tris,           // output triangles
+           std::vector<unsigned int> & tris,           // output triangles
            std::vector<T>    & normals)        // output normals (per vertex)
 {
     T b_height = height * base_rel_height;
@@ -68,8 +68,8 @@ void arrow(const T            height,
     mat<2,1,T> b(b_radius,0);
     mat<2,1,T> t(radius,0);
     mat<2,2,T> R = mat<2,2,T>::ROT_2D(2*M_PI/n_sides);
-    uint off = 0;
-    for(uint i=1; i<n_sides; ++i)
+    unsigned int off = 0;
+    for(unsigned int i=1; i<n_sides; ++i)
     {
         // base verts
         b = R*b;

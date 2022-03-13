@@ -56,12 +56,12 @@ template<class M, class V, class E, class P>
 CINO_INLINE
 Isocontour<M,V,E,P>::Isocontour(AbstractPolygonMesh<M,V,E,P> & m, double iso_value) : iso_value(iso_value)
 {
-    for(uint pid=0; pid<m.num_polys(); ++pid)
-    for(uint i=0; i< m.poly_tessellation(pid).size()/3; ++i)
+    for(unsigned int pid=0; pid<m.num_polys(); ++pid)
+    for(unsigned int i=0; i< m.poly_tessellation(pid).size()/3; ++i)
     {
-        uint   vid0 = m.poly_tessellation(pid).at(3*i+0);
-        uint   vid1 = m.poly_tessellation(pid).at(3*i+1);
-        uint   vid2 = m.poly_tessellation(pid).at(3*i+2);
+        unsigned int   vid0 = m.poly_tessellation(pid).at(3*i+0);
+        unsigned int   vid1 = m.poly_tessellation(pid).at(3*i+1);
+        unsigned int   vid2 = m.poly_tessellation(pid).at(3*i+2);
 
         double f0   = m.vert_data(vid0).uvw[0];
         double f1   = m.vert_data(vid1).uvw[0];
@@ -126,12 +126,12 @@ Isocontour<M,V,E,P>::Isocontour(AbstractPolygonMesh<M,V,E,P> & m, double iso_val
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-std::vector<uint> Isocontour<M,V,E,P>::tessellate(Trimesh<M,V,E,P> & m) const
+std::vector<unsigned int> Isocontour<M,V,E,P>::tessellate(Trimesh<M,V,E,P> & m) const
 {
-    typedef std::pair<uint,double> split_data;
+    typedef std::pair<unsigned int,double> split_data;
     std::set<split_data,std::greater<split_data>> edges_to_split; // from highest to lowest id
 
-    for(uint eid=0; eid<m.num_edges(); ++eid)
+    for(unsigned int eid=0; eid<m.num_edges(); ++eid)
     {
         double f0 = m.vert_data(m.edge_vert_id(eid,0)).uvw[0];
         double f1 = m.vert_data(m.edge_vert_id(eid,1)).uvw[0];
@@ -143,10 +143,10 @@ std::vector<uint> Isocontour<M,V,E,P>::tessellate(Trimesh<M,V,E,P> & m) const
         }
     }
 
-    std::vector<uint> new_vids;
+    std::vector<unsigned int> new_vids;
     for(auto e : edges_to_split)
     {
-        uint vid = m.edge_split(e.first, e.second);
+        unsigned int vid = m.edge_split(e.first, e.second);
         m.vert_data(vid).uvw[0] = iso_value;
         new_vids.push_back(vid);
     }

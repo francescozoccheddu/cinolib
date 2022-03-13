@@ -51,13 +51,13 @@ namespace cinolib
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint Dim, class Point>
-void sample_annulus(const double radius, const Point & center, uint & seed, Point & x)
+template<unsigned int Dim, class Point>
+void sample_annulus(const double radius, const Point & center, unsigned int & seed, Point & x)
 {
     Point r;
     for(;;)
     {
-        for(uint i=0; i<Dim; ++i)
+        for(unsigned int i=0; i<Dim; ++i)
         {
             r[i]=4*(random_uint(seed++)/static_cast<double>(max_uint)-0.5);
         }
@@ -69,43 +69,43 @@ void sample_annulus(const double radius, const Point & center, uint & seed, Poin
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint Dim, class Point>
+template<unsigned int Dim, class Point>
 CINO_INLINE
 void Poisson_sampling(const double          radius,
                       const Point           min,
                       const Point           max,
                       std::vector<Point> &  samples,
-                      uint                  seed,
+                      unsigned int                  seed,
                       const int             max_attempts)
 {
     samples.clear();
-    std::vector<uint> active_list;
+    std::vector<unsigned int> active_list;
 
     // acceleration grid
     double step = 0.999*radius/std::sqrt(static_cast<double>(Dim)); // a grid cell this size can have at most one sample in it
-    std::array<uint,Dim> dim_extent;
+    std::array<unsigned int,Dim> dim_extent;
     unsigned long int grid_size = 1;
-    for(uint i=0; i<Dim; ++i)
+    for(unsigned int i=0; i<Dim; ++i)
     {
-        dim_extent[i] = static_cast<uint>(std::ceil((max[i]-min[i])/step));
+        dim_extent[i] = static_cast<unsigned int>(std::ceil((max[i]-min[i])/step));
         grid_size *= dim_extent[i];
     }
     std::vector<int> grid(grid_size, -1); // -1 indicates no sample there; otherwise index of sample point
 
     // first sample
     Point x;
-    for(uint i=0; i<Dim; ++i)
+    for(unsigned int i=0; i<Dim; ++i)
     {
         x[i] = (max[i]-min[i])*(random_uint(seed++)/static_cast<double>(max_uint)) + min[i];
     }
     samples.push_back(x);
     active_list.push_back(0);
-    uint index = serialize_nD_index<Dim,Point>(dim_extent, (x-min)/step);
+    unsigned int index = serialize_nD_index<Dim,Point>(dim_extent, (x-min)/step);
     grid[index] = 0;
 
     while(!active_list.empty())
     {
-        uint r = static_cast<int>(random_float(seed++, 0, active_list.size()-0.0001f));
+        unsigned int r = static_cast<int>(random_float(seed++, 0, active_list.size()-0.0001f));
         int  p = active_list[r];
         bool found_sample = false;
         Point j, jmin, jmax;
@@ -115,26 +115,26 @@ void Poisson_sampling(const double          radius,
             sample_annulus<Dim,Point>(radius, samples[p], seed, x);
 
             // check this sample is within bounds
-            for(uint i=0; i<Dim; ++i)
+            for(unsigned int i=0; i<Dim; ++i)
             {
                 if(x[i]<min[i] || x[i]>max[i]) goto reject_sample;
             }
 
             // test proximity to nearby samples
-            for(uint i=0; i<Dim; ++i)
+            for(unsigned int i=0; i<Dim; ++i)
             {
                 int this_min = static_cast<int>((x[i]-radius-min[i])/step);
 
                 if(this_min<0) this_min=0;
                 else if(this_min>=(int)dim_extent[i]) this_min=dim_extent[i]-1;
 
-                jmin[i]=(uint)this_min;
+                jmin[i]=(unsigned int)this_min;
                 int this_max=(int)((x[i]+radius-min[i])/step);
 
                 if(this_max<0) this_max=0;
                 else if(this_max>=(int)dim_extent[i]) this_max=dim_extent[i]-1;
 
-                jmax[i]=(uint)this_max;
+                jmax[i]=(unsigned int)this_max;
             }
 
             for(j=jmin;;)
@@ -148,7 +148,7 @@ void Poisson_sampling(const double          radius,
                 }
 
                 // move on to next j
-                for(uint i=0; i<Dim; ++i)
+                for(unsigned int i=0; i<Dim; ++i)
                 {
                     ++j[i];
                     if(j[i]<=jmax[i])
@@ -174,7 +174,7 @@ void Poisson_sampling(const double          radius,
 
         if(found_sample)
         {
-            uint id=samples.size(); // the index of the new sample
+            unsigned int id=samples.size(); // the index of the new sample
             samples.push_back(x);
             active_list.push_back(id);
             index=serialize_nD_index<Dim,Point>(dim_extent, (x-min)/step);

@@ -55,14 +55,14 @@ std::vector<int> graph_cut_wrap(const AbstractMesh<M,V,E,P>             & m,
         GCoptimizationGeneralGraph gc = GCoptimizationGeneralGraph(m.num_polys(), n_labels);
 
         // set graph connectivity
-        for(uint pid=0; pid<m.num_polys(); ++pid)
-        for(uint nbr : m.adj_p2p(pid))
+        for(unsigned int pid=0; pid<m.num_polys(); ++pid)
+        for(unsigned int nbr : m.adj_p2p(pid))
         {
             if (pid > nbr) gc.setNeighbors(pid, nbr);
         }
 
         // set data terms
-        for(uint pid=0; pid<m.num_polys(); ++pid)
+        for(unsigned int pid=0; pid<m.num_polys(); ++pid)
         for(int label=0; label<n_labels; ++label)
         {
             gc.setDataCost(pid, label, data_term.at(pid*n_labels + label));
@@ -73,7 +73,7 @@ std::vector<int> graph_cut_wrap(const AbstractMesh<M,V,E,P>             & m,
 
         std::cout << "graph cut energy: " << energy << std::endl;
 
-        for(uint pid=0; pid<m.num_polys(); ++pid)
+        for(unsigned int pid=0; pid<m.num_polys(); ++pid)
         {
             labels.at(pid) = gc.whatLabel(pid);
         }
@@ -93,7 +93,7 @@ template<class M, class V, class E, class P>
 CINO_INLINE
 std::vector<int> graph_cut_wrap(const AbstractMesh<M,V,E,P>             & m,
                                 const int                                 n_labels,
-                                const std::vector<std::vector<uint>>    & feasible_region,
+                                const std::vector<std::vector<unsigned int>>    & feasible_region,
                                 const std::vector<std::vector<double>>  & data_term,
                                       GCoptimization::SmoothCostFnExtra   smooth_term,
                                       void                              * smooth_data)
@@ -105,8 +105,8 @@ std::vector<int> graph_cut_wrap(const AbstractMesh<M,V,E,P>             & m,
         GCoptimizationGeneralGraph gc = GCoptimizationGeneralGraph(m.num_polys(), n_labels);
 
         // set graph connectivity
-        for(uint pid=0; pid<m.num_polys(); ++pid)
-        for(uint nbr : m.adj_p2p(pid))
+        for(unsigned int pid=0; pid<m.num_polys(); ++pid)
+        for(unsigned int nbr : m.adj_p2p(pid))
         {
             if (pid > nbr) gc.setNeighbors(pid, nbr);
         }
@@ -115,10 +115,10 @@ std::vector<int> graph_cut_wrap(const AbstractMesh<M,V,E,P>             & m,
         assert(feasible_region.size() == (size_t)n_labels);
         for(int label=0; label<n_labels; ++label)
         {
-            uint count = 0;
+            unsigned int count = 0;
             GCoptimization::SparseDataCost data[feasible_region.at(label).size()];
 
-            for(uint i=0; i<feasible_region.at(label).size(); ++i)
+            for(unsigned int i=0; i<feasible_region.at(label).size(); ++i)
             {
                 GCoptimization::SparseDataCost record;
                 record.site = feasible_region.at(label).at(i);
@@ -135,7 +135,7 @@ std::vector<int> graph_cut_wrap(const AbstractMesh<M,V,E,P>             & m,
 
         std::cout << "graph cut energy: " << energy << std::endl;
 
-        for(uint pid=0; pid<m.num_polys(); ++pid)
+        for(unsigned int pid=0; pid<m.num_polys(); ++pid)
         {
             labels.at(pid) = gc.whatLabel(pid);
         }
@@ -172,7 +172,7 @@ template<class M, class V, class E, class P>
 CINO_INLINE
 std::vector<int> graph_cut_wrap(const AbstractMesh<M,V,E,P>             &,
                                 const int                                ,
-                                const std::vector<std::vector<uint>>    &,
+                                const std::vector<std::vector<unsigned int>>    &,
                                 const std::vector<std::vector<double>>  &,
                                       GCoptimization::SmoothCostFnExtra  ,
                                       void                              *)

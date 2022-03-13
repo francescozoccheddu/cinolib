@@ -7,9 +7,9 @@ namespace cinolib
 // Taken from libigl
 // File: 'DroidSans.ttf' (190044 bytes)
 
-static const uint droid_sans_size = 134345;
+static const unsigned int droid_sans_size = 134345;
 
-static const uint droid_sans_data[134348/4] =
+static const unsigned int droid_sans_data[134348/4] =
 {
     0x0000bc57, 0x00000000, 0x5ce60200, 0x00000400, 0x00010025, 0x82130000, 0x00042e04, 0x45444730, 0x03260046, 0x3d020087, 0x28158220, 0x4f50471e,
     0xa2bd9453, 0x300f82f0, 0xa8000040, 0x555347fa, 0x74916c42, 0xe602008f, 0x271f823c, 0x53544c20, 0xb99bc948, 0x10312b82, 0x0300001c, 0x2f534f86,

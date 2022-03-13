@@ -61,22 +61,22 @@ void canonical_polygonal_schema(      Trimesh<M,V,E,P>  & m_in,
     // label vertices according to the basis loop they belong to.
     // this serves to identify the edges of the 4g-gon
     m_in.vert_apply_label(-1);
-    for(uint lid=0; lid<basis.loops.size(); ++lid)
+    for(unsigned int lid=0; lid<basis.loops.size(); ++lid)
     {
-        for(uint vid : basis.loops.at(lid))
+        for(unsigned int vid : basis.loops.at(lid))
         {
             m_in.vert_data(vid).label = lid;
         }
     }
-    std::unordered_map<uint,std::vector<uint>> v_map;
+    std::unordered_map<unsigned int,std::vector<unsigned int>> v_map;
     cut_mesh_along_marked_edges(m_in, v_map);
 
     // detect all the 4g copies of the basis' root
-    std::vector<uint> copies_of_root = v_map.at(basis.root);
+    std::vector<unsigned int> copies_of_root = v_map.at(basis.root);
     copies_of_root.push_back(basis.root);
     assert(!copies_of_root.empty());
     m_in.vert_set_flag(MARKED,false);
-    for(uint vid : copies_of_root)
+    for(unsigned int vid : copies_of_root)
     {
         assert(m_in.vert_is_boundary(vid));
         m_in.vert_data(vid).flags[MARKED] = true;
@@ -84,12 +84,12 @@ void canonical_polygonal_schema(      Trimesh<M,V,E,P>  & m_in,
 
     // topological checks: make sure no element has all its vertices on the border,
     // otherwise it will map to a degenerate triangle
-    std::vector<uint> split_list;
-    for(uint eid=0; eid<m_in.num_edges(); ++eid)
+    std::vector<unsigned int> split_list;
+    for(unsigned int eid=0; eid<m_in.num_edges(); ++eid)
     {
         if(m_in.edge_is_boundary(eid)) continue;
-        uint v0 = m_in.edge_vert_id(eid,0);
-        uint v1 = m_in.edge_vert_id(eid,1);
+        unsigned int v0 = m_in.edge_vert_id(eid,0);
+        unsigned int v1 = m_in.edge_vert_id(eid,1);
         if(m_in.vert_is_boundary(v0) && m_in.vert_is_boundary(v1) &&
           (m_in.vert_data(v0).label==m_in.vert_data(v1).label))
         {
@@ -99,20 +99,20 @@ void canonical_polygonal_schema(      Trimesh<M,V,E,P>  & m_in,
     if(!split_list.empty())
     {
         std::cout << "splitting " << split_list.size() << " edges to avoid degenerate elements along the boundary" << std::endl;
-        for(uint eid : split_list) m_in.edge_split(eid);
+        for(unsigned int eid : split_list) m_in.edge_split(eid);
     }
 
-    std::vector<uint> border = m_in.get_ordered_boundary_vertices();
+    std::vector<unsigned int> border = m_in.get_ordered_boundary_vertices();
     // rotate the list so as to have a polygon corner at the beginning of it
     CIRCULAR_SHIFT_VEC(border, copies_of_root.front());
     assert(m_in.vert_data(border.front()).flags[MARKED]);
 
     // split the boundary into 4g edges
-    std::vector<std::vector<uint>> edges;
-    for(uint i=0; i<border.size(); ++i)
+    std::vector<std::vector<unsigned int>> edges;
+    for(unsigned int i=0; i<border.size(); ++i)
     {
-        std::vector<uint> e = { border.at(i) };
-        for(uint j=i+1; j<border.size() && !m_in.vert_data(border.at(j)).flags[MARKED]; ++j,++i)
+        std::vector<unsigned int> e = { border.at(i) };
+        for(unsigned int j=i+1; j<border.size() && !m_in.vert_data(border.at(j)).flags[MARKED]; ++j,++i)
         {
             e.push_back(border.at(j));
         }
@@ -122,11 +122,11 @@ void canonical_polygonal_schema(      Trimesh<M,V,E,P>  & m_in,
 
     std::vector<vec3d> poly = n_sided_polygon(genus*4, CIRCLE);
     for(auto & p : poly) p.rotate(vec3d(0,0,1), M_PI*0.25); // if g=1, align square with uv frame
-    std::map<uint,vec3d> dirichlet_bcs;
-    for(uint i=0; i<poly.size(); ++i)
+    std::map<unsigned int,vec3d> dirichlet_bcs;
+    for(unsigned int i=0; i<poly.size(); ++i)
     {
         std::vector<vec3d> e_bcs = sample_within_interval(poly.at(i), poly.at((i+1)%poly.size()), edges.at(i).size());
-        for(uint j=0; j<e_bcs.size(); ++j) dirichlet_bcs[edges.at(i).at(j)] = e_bcs.at(j);
+        for(unsigned int j=0; j<e_bcs.size(); ++j) dirichlet_bcs[edges.at(i).at(j)] = e_bcs.at(j);
     }
 
     // map the interior vertices

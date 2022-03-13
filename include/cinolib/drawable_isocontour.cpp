@@ -74,7 +74,7 @@ void DrawableIsocontour<M,V,E,P>::draw(const float scene_size) const
 
     for(vec3d p : this->segs) draw_sphere(p, cylind_rad, color);
 
-    for(uint i=0; i<this->segs.size()/2; ++i)
+    for(unsigned int i=0; i<this->segs.size()/2; ++i)
     {
         draw_cylinder(this->segs.at(2*i+0), this->segs.at(2*i+1), cylind_rad, cylind_rad, color);
     }

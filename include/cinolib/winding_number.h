@@ -56,7 +56,7 @@ namespace cinolib
 
 CINO_INLINE
 int winding_number(const std::vector<vec3d> & verts,
-                   const std::vector<uint>  & tris,
+                   const std::vector<unsigned int>  & tris,
                    const vec3d              & p);
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::

@@ -43,7 +43,7 @@ namespace cinolib
 template<class point>
 CINO_INLINE
 bool earcut(const std::vector<point> & poly,
-                  std::vector<uint>  & tris,
+                  std::vector<unsigned int>  & tris,
             const EarSorting           sort) // { SEQUENTIAL, RANDOMIZED, PRIORITIZED }
 {
     tris.clear();
@@ -51,10 +51,10 @@ bool earcut(const std::vector<point> & poly,
     if(sort==EarSorting::RANDOMIZED) srand(1234567);
 
     // doubly linked list for O(1) polygon update
-    uint size = poly.size();
+    unsigned int size = poly.size();
     assert(size>=3);
-    std::vector<uint> prev(size);
-    std::vector<uint> next(size);
+    std::vector<unsigned int> prev(size);
+    std::vector<unsigned int> next(size);
     std::iota(prev.begin(), prev.end(),-1);
     std::iota(next.begin(), next.end(), 1);
     prev.front() = size-1;
@@ -62,8 +62,8 @@ bool earcut(const std::vector<point> & poly,
 
     // list of the ears to be cut
     // (SEQUENTIAL and RANDOMIZED use ears, PRIORITIZED uses ears_prio)
-    std::vector<uint> ears;
-    std::priority_queue<std::pair<double,uint>> ears_prio;
+    std::vector<unsigned int> ears;
+    std::priority_queue<std::pair<double,unsigned int>> ears_prio;
     ears.reserve(size);
 
     // these always have size |poly|, and keep track of ears and concave vertices
@@ -73,10 +73,10 @@ bool earcut(const std::vector<point> & poly,
     std::vector<bool> is_concave(size,false);
 
     // boolean function that performs a local concavity test around vertex v_curr
-    auto concave_test = [&](const uint v_curr)
+    auto concave_test = [&](const unsigned int v_curr)
     {
-        uint v_prev = prev[v_curr];
-        uint v_next = next[v_curr];
+        unsigned int v_prev = prev[v_curr];
+        unsigned int v_next = next[v_curr];
 
         const double *t0 = poly.at(v_prev).ptr();
         const double *t1 = poly.at(v_curr).ptr();
@@ -86,21 +86,21 @@ bool earcut(const std::vector<point> & poly,
     };
 
     // boolean function that performs a local ear test around vertex v_curr
-    auto ear_test = [&](const uint v_curr)
+    auto ear_test = [&](const unsigned int v_curr)
     {
         if(is_concave[v_curr]) return false;
 
-        uint v_prev = prev[v_curr];
-        uint v_next = next[v_curr];
+        unsigned int v_prev = prev[v_curr];
+        unsigned int v_next = next[v_curr];
 
         const double *t0 = poly.at(v_prev).ptr();
         const double *t1 = poly.at(v_curr).ptr();
         const double *t2 = poly.at(v_next).ptr();
 
         // does the ear contain any other front vertex?
-        uint beg  = next[v_curr];
-        uint end  = prev[v_curr];
-        uint test = next[beg];
+        unsigned int beg  = next[v_curr];
+        unsigned int end  = prev[v_curr];
+        unsigned int test = next[beg];
         while(test!=end)
         {
             // check only concave vertices....
@@ -115,13 +115,13 @@ bool earcut(const std::vector<point> & poly,
 
     // inserts an ear into the ear list. uses the vector for SEQUENTIAL and
     // RANDOMIZED mode, and a prio queue for PRIORITIZED mode
-    auto push_ear = [&](const uint v_curr)
+    auto push_ear = [&](const unsigned int v_curr)
     {
         is_ear.at(v_curr) = true;
         if(sort==EarSorting::PRIORITIZED)
         {
-            uint  v_prev = prev[v_curr];
-            uint  v_next = next[v_curr];
+            unsigned int  v_prev = prev[v_curr];
+            unsigned int  v_next = next[v_curr];
             point u      = poly.at(v_prev) - poly.at(v_curr);
             point v      = poly.at(v_next) - poly.at(v_curr);
             double ang   = u.angle_rad(v);
@@ -131,17 +131,17 @@ bool earcut(const std::vector<point> & poly,
     };
 
     // detect all concave vertices and valid ears in O(n)
-    for(uint curr=0; curr<size; ++curr) is_concave[curr] = concave_test(curr);
-    for(uint curr=0; curr<size; ++curr) if(ear_test(curr)) push_ear(curr);
+    for(unsigned int curr=0; curr<size; ++curr) is_concave[curr] = concave_test(curr);
+    for(unsigned int curr=0; curr<size; ++curr) if(ear_test(curr)) push_ear(curr);
 
     // iteratively triangulate the polygon, also updating the list of ears
     // (a simple polygon with n vertices can be meshed with n-2 triangles)
-    for(uint i=0; i<size-2; ++i)
+    for(unsigned int i=0; i<size-2; ++i)
     {
         // something went wrong.... degenerate polygon?
         if(ears.empty() && ears_prio.empty()) return false;
 
-        uint curr;
+        unsigned int curr;
         if(sort==EarSorting::PRIORITIZED)
         {
             curr = ears_prio.top().second;
@@ -151,7 +151,7 @@ bool earcut(const std::vector<point> & poly,
         {
             if(sort==EarSorting::RANDOMIZED)
             {
-                uint off = rand()%ears.size();
+                unsigned int off = rand()%ears.size();
                 std::swap(ears.at(off),ears.back());
             }
             curr = ears.back();

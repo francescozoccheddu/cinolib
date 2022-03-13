@@ -42,7 +42,7 @@ template<class T>
 CINO_INLINE
 std::vector<T> sample_within_interval(const T    min,
                                       const T    max,
-                                      const uint n_samples)
+                                      const unsigned int n_samples)
 {
     assert(n_samples >= 2);
     std::vector<T> samples;

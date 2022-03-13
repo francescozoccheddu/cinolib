@@ -40,12 +40,12 @@ namespace cinolib
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint r, uint c, class T>
+template<unsigned int r, unsigned int c, class T>
 CINO_INLINE
 std::ostream & operator<< (std::ostream & in, const mat<r,c,T> & op)
 {
-    for(uint i=0; i<r; ++i)
-    for(uint j=0; j<c; ++j)
+    for(unsigned int i=0; i<r; ++i)
+    for(unsigned int j=0; j<c; ++j)
     {
         if(i>0 && c>1 && j%c==0) std::cout << "\n";
         std::cout << op(i,j) << " ";
@@ -55,7 +55,7 @@ std::ostream & operator<< (std::ostream & in, const mat<r,c,T> & op)
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint r, uint c, class T>
+template<unsigned int r, unsigned int c, class T>
 CINO_INLINE
 mat<r,c,T>::mat(const std::initializer_list<mat<r,1,T>> & il, const int mode)
 {
@@ -63,7 +63,7 @@ mat<r,c,T>::mat(const std::initializer_list<mat<r,1,T>> & il, const int mode)
     {
         assert(il.size()==c);
         auto it = il.begin();
-        for(uint i=0; i<c; ++i)
+        for(unsigned int i=0; i<c; ++i)
         {
             set_col(i,*it);
             ++it;
@@ -74,7 +74,7 @@ mat<r,c,T>::mat(const std::initializer_list<mat<r,1,T>> & il, const int mode)
         assert(mode==ROWS);
         assert(il.size()==r);
         auto it = il.begin();
-        for(uint i=0; i<r; ++i)
+        for(unsigned int i=0; i<r; ++i)
         {
             set_row(i,*it);
             ++it;
@@ -84,7 +84,7 @@ mat<r,c,T>::mat(const std::initializer_list<mat<r,1,T>> & il, const int mode)
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint r, uint c, class T>
+template<unsigned int r, unsigned int c, class T>
 CINO_INLINE
 mat<r,c,T>::mat(const std::initializer_list<T> & il)
 {
@@ -93,7 +93,7 @@ mat<r,c,T>::mat(const std::initializer_list<T> & il)
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint r, uint c, class T>
+template<unsigned int r, unsigned int c, class T>
 CINO_INLINE
 mat<r,c,T>::mat(const T scalar)
 {
@@ -102,7 +102,7 @@ mat<r,c,T>::mat(const T scalar)
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint r, uint c, class T>
+template<unsigned int r, unsigned int c, class T>
 CINO_INLINE
 mat<r,c,T>::mat(const T * values)
 {
@@ -111,7 +111,7 @@ mat<r,c,T>::mat(const T * values)
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint r, uint c, class T>
+template<unsigned int r, unsigned int c, class T>
 CINO_INLINE
 mat<r,c,T>::mat(const T v0, const T v1)
 {
@@ -122,7 +122,7 @@ mat<r,c,T>::mat(const T v0, const T v1)
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint r, uint c, class T>
+template<unsigned int r, unsigned int c, class T>
 CINO_INLINE
 mat<r,c,T>::mat(const T v0, const T v1, const T v2)
 {
@@ -134,7 +134,7 @@ mat<r,c,T>::mat(const T v0, const T v1, const T v2)
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint r, uint c, class T>
+template<unsigned int r, unsigned int c, class T>
 CINO_INLINE
 mat<r,c,T> mat<r,c,T>::ZERO()
 {
@@ -143,7 +143,7 @@ mat<r,c,T> mat<r,c,T>::ZERO()
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint r, uint c, class T>
+template<unsigned int r, unsigned int c, class T>
 CINO_INLINE
 mat<r,c,T> mat<r,c,T>::ONES()
 {
@@ -152,7 +152,7 @@ mat<r,c,T> mat<r,c,T>::ONES()
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint r, uint c, class T>
+template<unsigned int r, unsigned int c, class T>
 CINO_INLINE
 mat<r,c,T> mat<r,c,T>::DIAG(const T scalar)
 {
@@ -164,7 +164,7 @@ mat<r,c,T> mat<r,c,T>::DIAG(const T scalar)
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint r, uint c, class T>
+template<unsigned int r, unsigned int c, class T>
 CINO_INLINE
 mat<r,c,T> mat<r,c,T>::DIAG(const mat<r,1,T> & diag)
 {
@@ -176,7 +176,7 @@ mat<r,c,T> mat<r,c,T>::DIAG(const mat<r,1,T> & diag)
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint r, uint c, class T>
+template<unsigned int r, unsigned int c, class T>
 CINO_INLINE
 mat<r,c,T> mat<r,c,T>::ROT_2D(const T angle_rad)
 {
@@ -188,7 +188,7 @@ mat<r,c,T> mat<r,c,T>::ROT_2D(const T angle_rad)
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint r, uint c, class T>
+template<unsigned int r, unsigned int c, class T>
 CINO_INLINE
 mat<r,c,T> mat<r,c,T>::ROT_3D(const mat<r,1,T> & axis, const T angle_rad)
 {
@@ -200,7 +200,7 @@ mat<r,c,T> mat<r,c,T>::ROT_3D(const mat<r,1,T> & axis, const T angle_rad)
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint r, uint c, class T>
+template<unsigned int r, unsigned int c, class T>
 CINO_INLINE
 mat<r,c,T> mat<r,c,T>::TRANS(const mat<r-1,1,T> & tx)
 {
@@ -212,9 +212,9 @@ mat<r,c,T> mat<r,c,T>::TRANS(const mat<r-1,1,T> & tx)
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint r, uint c, class T>
+template<unsigned int r, unsigned int c, class T>
 CINO_INLINE
-mat<c,1,T> mat<r,c,T>::row(const uint i) const
+mat<c,1,T> mat<r,c,T>::row(const unsigned int i) const
 {
     mat<c,1,T> row;
     mat_row<r,c,T>(_mat, i, row._vec);
@@ -223,9 +223,9 @@ mat<c,1,T> mat<r,c,T>::row(const uint i) const
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint r, uint c, class T>
+template<unsigned int r, unsigned int c, class T>
 CINO_INLINE
-mat<r,1,T> mat<r,c,T>::col(const uint i) const
+mat<r,1,T> mat<r,c,T>::col(const unsigned int i) const
 {
     mat<r,1,T> col;
     mat_col<r,c,T>(_mat, i, col._vec);
@@ -234,7 +234,7 @@ mat<r,1,T> mat<r,c,T>::col(const uint i) const
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint r, uint c, class T>
+template<unsigned int r, unsigned int c, class T>
 CINO_INLINE
 mat<r,1,T> mat<r,c,T>::diag() const
 {
@@ -246,25 +246,25 @@ mat<r,1,T> mat<r,c,T>::diag() const
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint r, uint c, class T>
+template<unsigned int r, unsigned int c, class T>
 CINO_INLINE
-void mat<r,c,T>::set_row(const uint i, const mat<c,1,T> & row)
+void mat<r,c,T>::set_row(const unsigned int i, const mat<c,1,T> & row)
 {
     mat_set_row<r,c,T>(_mat, i, row._vec);
 }
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint r, uint c, class T>
+template<unsigned int r, unsigned int c, class T>
 CINO_INLINE
-void mat<r,c,T>::set_col(const uint i, const mat<r,1,T> & col )
+void mat<r,c,T>::set_col(const unsigned int i, const mat<r,1,T> & col )
 {
     mat_set_col<r,c,T>(_mat, i, col._vec);
 }
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint r, uint c, class T>
+template<unsigned int r, unsigned int c, class T>
 CINO_INLINE
 void mat<r,c,T>::set_diag(const mat<r,1,T> & diag)
 {
@@ -273,7 +273,7 @@ void mat<r,c,T>::set_diag(const mat<r,1,T> & diag)
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint r, uint c, class T>
+template<unsigned int r, unsigned int c, class T>
 CINO_INLINE
 T mat<r,c,T>::det() const
 {
@@ -283,7 +283,7 @@ T mat<r,c,T>::det() const
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint r, uint c, class T>
+template<unsigned int r, unsigned int c, class T>
 CINO_INLINE
 T mat<r,c,T>::trace() const
 {
@@ -293,7 +293,7 @@ T mat<r,c,T>::trace() const
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint r, uint c, class T>
+template<unsigned int r, unsigned int c, class T>
 CINO_INLINE
 mat<c,r,T> mat<r,c,T>::transpose() const
 {
@@ -304,7 +304,7 @@ mat<c,r,T> mat<r,c,T>::transpose() const
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint r, uint c, class T>
+template<unsigned int r, unsigned int c, class T>
 CINO_INLINE
 mat<r,c,T> mat<r,c,T>::inverse() const
 {
@@ -316,7 +316,7 @@ mat<r,c,T> mat<r,c,T>::inverse() const
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint r, uint c, class T>
+template<unsigned int r, unsigned int c, class T>
 CINO_INLINE
 void mat<r,c,T>::eigenvectors(mat<r,c,T> & evec) const
 {
@@ -325,7 +325,7 @@ void mat<r,c,T>::eigenvectors(mat<r,c,T> & evec) const
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint r, uint c, class T>
+template<unsigned int r, unsigned int c, class T>
 CINO_INLINE
 void mat<r,c,T>::eigenvalues(mat<r,1,T> & eval) const
 {
@@ -334,7 +334,7 @@ void mat<r,c,T>::eigenvalues(mat<r,1,T> & eval) const
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint r, uint c, class T>
+template<unsigned int r, unsigned int c, class T>
 CINO_INLINE
 void mat<r,c,T>::eigendecomp(mat<r,1,T> & eval, mat<r,c,T> & evec) const
 {
@@ -343,7 +343,7 @@ void mat<r,c,T>::eigendecomp(mat<r,1,T> & eval, mat<r,c,T> & evec) const
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint r, uint c, class T>
+template<unsigned int r, unsigned int c, class T>
 CINO_INLINE
 void mat<r,c,T>::SVD(mat<r,c,T> & U, mat<r,1,T> & S, mat<r,c,T> & V) const
 {
@@ -352,7 +352,7 @@ void mat<r,c,T>::SVD(mat<r,c,T> & U, mat<r,1,T> & S, mat<r,c,T> & V) const
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint r, uint c, class T>
+template<unsigned int r, unsigned int c, class T>
 CINO_INLINE
 void mat<r,c,T>::SSVD(mat<r,c,T> & U, mat<r,1,T> & S, mat<r,c,T> & V) const
 {
@@ -361,7 +361,7 @@ void mat<r,c,T>::SSVD(mat<r,c,T> & U, mat<r,1,T> & S, mat<r,c,T> & V) const
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint r, uint c, class T>
+template<unsigned int r, unsigned int c, class T>
 CINO_INLINE
 mat<r,1,T> mat<r,c,T>::solve(const mat<c,1,T> & b)
 {
@@ -372,43 +372,43 @@ mat<r,1,T> mat<r,c,T>::solve(const mat<c,1,T> & b)
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint r, uint c, class T>
+template<unsigned int r, unsigned int c, class T>
 CINO_INLINE
-const T & mat<r,c,T>::operator[](const uint i) const
+const T & mat<r,c,T>::operator[](const unsigned int i) const
 {
     return _vec[i];
 }
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint r, uint c, class T>
+template<unsigned int r, unsigned int c, class T>
 CINO_INLINE
-T & mat<r,c,T>::operator[](const uint i)
+T & mat<r,c,T>::operator[](const unsigned int i)
 {
     return _vec[i];
 }
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint r, uint c, class T>
+template<unsigned int r, unsigned int c, class T>
 CINO_INLINE
-const T & mat<r,c,T>::operator()(const uint i, const uint j) const
+const T & mat<r,c,T>::operator()(const unsigned int i, const unsigned int j) const
 {
     return _mat[i][j];
 }
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint r, uint c, class T>
+template<unsigned int r, unsigned int c, class T>
 CINO_INLINE
-T & mat<r,c,T>::operator()(const uint i, const uint j)
+T & mat<r,c,T>::operator()(const unsigned int i, const unsigned int j)
 {
     return _mat[i][j];
 }
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint r, uint c, class T>
+template<unsigned int r, unsigned int c, class T>
 CINO_INLINE
 mat<r,c,T>mat<r,c,T>::operator-() const
 {
@@ -419,7 +419,7 @@ mat<r,c,T>mat<r,c,T>::operator-() const
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint r, uint c, class T>
+template<unsigned int r, unsigned int c, class T>
 CINO_INLINE
 mat<r,c,T>mat<r,c,T>::operator-(const mat<r,c,T> & op) const
 {
@@ -430,7 +430,7 @@ mat<r,c,T>mat<r,c,T>::operator-(const mat<r,c,T> & op) const
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint r, uint c, class T>
+template<unsigned int r, unsigned int c, class T>
 CINO_INLINE
 mat<r,c,T> mat<r,c,T>::operator+(const mat<r,c,T> & op) const
 {
@@ -441,7 +441,7 @@ mat<r,c,T> mat<r,c,T>::operator+(const mat<r,c,T> & op) const
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint r, uint c, class T>
+template<unsigned int r, unsigned int c, class T>
 CINO_INLINE
 mat<r,c,T> & mat<r,c,T>::operator+=(const mat<r,c,T> & op)
 {
@@ -451,7 +451,7 @@ mat<r,c,T> & mat<r,c,T>::operator+=(const mat<r,c,T> & op)
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint r, uint c, class T>
+template<unsigned int r, unsigned int c, class T>
 CINO_INLINE
 mat<r,c,T> & mat<r,c,T>::operator-=(const mat<r,c,T> & op)
 {
@@ -461,7 +461,7 @@ mat<r,c,T> & mat<r,c,T>::operator-=(const mat<r,c,T> & op)
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint r, uint c, class T>
+template<unsigned int r, unsigned int c, class T>
 CINO_INLINE
 mat<r,c,T> mat<r,c,T>::operator*(const T & scalar) const
 {
@@ -472,8 +472,8 @@ mat<r,c,T> mat<r,c,T>::operator*(const T & scalar) const
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint r, uint c, class T>
-template<uint c2>
+template<unsigned int r, unsigned int c, class T>
+template<unsigned int c2>
 CINO_INLINE
 mat<r,c2,T> mat<r,c,T>::operator*(const mat<c,c2,T> & op) const
 {
@@ -484,7 +484,7 @@ mat<r,c2,T> mat<r,c,T>::operator*(const mat<c,c2,T> & op) const
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint r, uint c, class T>
+template<unsigned int r, unsigned int c, class T>
 CINO_INLINE
 mat<r,c,T> mat<r,c,T>::operator/(const T & scalar) const
 {
@@ -495,7 +495,7 @@ mat<r,c,T> mat<r,c,T>::operator/(const T & scalar) const
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint r, uint c, class T>
+template<unsigned int r, unsigned int c, class T>
 CINO_INLINE
 mat<r,c,T> & mat<r,c,T>::operator*=(const T & scalar)
 {
@@ -505,7 +505,7 @@ mat<r,c,T> & mat<r,c,T>::operator*=(const T & scalar)
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint r, uint c, class T>
+template<unsigned int r, unsigned int c, class T>
 CINO_INLINE
 mat<r,c,T> & mat<r,c,T>::operator/=(const T & scalar)
 {
@@ -515,7 +515,7 @@ mat<r,c,T> & mat<r,c,T>::operator/=(const T & scalar)
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint r, uint c, class T>
+template<unsigned int r, unsigned int c, class T>
 CINO_INLINE
 bool mat<r,c,T>::operator==(const mat<r,c,T> & op) const
 {
@@ -524,7 +524,7 @@ bool mat<r,c,T>::operator==(const mat<r,c,T> & op) const
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint r, uint c, class T>
+template<unsigned int r, unsigned int c, class T>
 CINO_INLINE
 bool mat<r,c,T>::operator<(const mat<r,c,T> & op) const
 {
@@ -533,7 +533,7 @@ bool mat<r,c,T>::operator<(const mat<r,c,T> & op) const
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint r, uint c, class T>
+template<unsigned int r, unsigned int c, class T>
 CINO_INLINE
 double mat<r,c,T>::norm() const
 {
@@ -542,7 +542,7 @@ double mat<r,c,T>::norm() const
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint r, uint c, class T>
+template<unsigned int r, unsigned int c, class T>
 CINO_INLINE
 T mat<r,c,T>::norm_sqrd() const
 {
@@ -551,7 +551,7 @@ T mat<r,c,T>::norm_sqrd() const
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint r, uint c, class T>
+template<unsigned int r, unsigned int c, class T>
 CINO_INLINE
 double mat<r,c,T>::norm_p(const float p) const
 {
@@ -560,7 +560,7 @@ double mat<r,c,T>::norm_p(const float p) const
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint r, uint c, class T>
+template<unsigned int r, unsigned int c, class T>
 CINO_INLINE
 double mat<r,c,T>::dist(const mat<r,c,T> & v) const
 {
@@ -569,7 +569,7 @@ double mat<r,c,T>::dist(const mat<r,c,T> & v) const
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint r, uint c, class T>
+template<unsigned int r, unsigned int c, class T>
 CINO_INLINE
 T mat<r,c,T>::dist_sqrd(const mat<r,c,T> & v) const
 {
@@ -578,7 +578,7 @@ T mat<r,c,T>::dist_sqrd(const mat<r,c,T> & v) const
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint r, uint c, class T>
+template<unsigned int r, unsigned int c, class T>
 CINO_INLINE
 mat<r,c,T> & mat<r,c,T>::rotate(const mat<3,1,T> & axis, const T angle_rad)
 {
@@ -589,7 +589,7 @@ mat<r,c,T> & mat<r,c,T>::rotate(const mat<3,1,T> & axis, const T angle_rad)
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint r, uint c, class T>
+template<unsigned int r, unsigned int c, class T>
 CINO_INLINE
 double mat<r,c,T>::normalize()
 {
@@ -598,7 +598,7 @@ double mat<r,c,T>::normalize()
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint r, uint c, class T>
+template<unsigned int r, unsigned int c, class T>
 CINO_INLINE
 T mat<r,c,T>::min_entry() const
 {
@@ -607,7 +607,7 @@ T mat<r,c,T>::min_entry() const
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint r, uint c, class T>
+template<unsigned int r, unsigned int c, class T>
 CINO_INLINE
 T mat<r,c,T>::max_entry() const
 {
@@ -616,7 +616,7 @@ T mat<r,c,T>::max_entry() const
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint r, uint c, class T>
+template<unsigned int r, unsigned int c, class T>
 CINO_INLINE
 mat<r,c,T> mat<r,c,T>::min(const mat<r,c,T> & v) const
 {
@@ -627,7 +627,7 @@ mat<r,c,T> mat<r,c,T>::min(const mat<r,c,T> & v) const
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint r, uint c, class T>
+template<unsigned int r, unsigned int c, class T>
 CINO_INLINE
 mat<r,c,T> mat<r,c,T>::max(const mat<r,c,T> & v) const
 {
@@ -638,7 +638,7 @@ mat<r,c,T> mat<r,c,T>::max(const mat<r,c,T> & v) const
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint r, uint c, class T>
+template<unsigned int r, unsigned int c, class T>
 CINO_INLINE
 void mat<r,c,T>::clamp(const T min, const T max)
 {
@@ -647,9 +647,9 @@ void mat<r,c,T>::clamp(const T min, const T max)
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint r, uint c, class T>
+template<unsigned int r, unsigned int c, class T>
 CINO_INLINE
-void mat<r,c,T>::swap(const uint i, const uint j, const uint k, const uint l)
+void mat<r,c,T>::swap(const unsigned int i, const unsigned int j, const unsigned int k, const unsigned int l)
 {
     mat_swap<r,c,T>(_mat, i, j, k, l);
 }
@@ -657,7 +657,7 @@ void mat<r,c,T>::swap(const uint i, const uint j, const uint k, const uint l)
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 // e.g. from cartesian to homogeneous coords
-template<uint r, uint c, class T>
+template<unsigned int r, unsigned int c, class T>
 CINO_INLINE
 mat<r+1,c,T> mat<r,c,T>::add_coord(const T & val) const
 {
@@ -671,7 +671,7 @@ mat<r+1,c,T> mat<r,c,T>::add_coord(const T & val) const
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 // e.g. from homogeneous to cartesian coords
-template<uint r, uint c, class T>
+template<unsigned int r, unsigned int c, class T>
 CINO_INLINE
 mat<r-1,c,T> mat<r,c,T>::rem_coord() const
 {
@@ -684,7 +684,7 @@ mat<r-1,c,T> mat<r,c,T>::rem_coord() const
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint r, uint c, class T>
+template<unsigned int r, unsigned int c, class T>
 CINO_INLINE
 bool mat<r,c,T>::is_null() const
 {
@@ -693,7 +693,7 @@ bool mat<r,c,T>::is_null() const
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint r, uint c, class T>
+template<unsigned int r, unsigned int c, class T>
 CINO_INLINE
 bool mat<r,c,T>::is_nan() const
 {
@@ -702,7 +702,7 @@ bool mat<r,c,T>::is_nan() const
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint r, uint c, class T>
+template<unsigned int r, unsigned int c, class T>
 CINO_INLINE
 bool mat<r,c,T>::is_inf() const
 {
@@ -711,7 +711,7 @@ bool mat<r,c,T>::is_inf() const
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint r, uint c, class T>
+template<unsigned int r, unsigned int c, class T>
 CINO_INLINE
 bool mat<r,c,T>::is_deg() const // either null, nan or inf
 {
@@ -720,7 +720,7 @@ bool mat<r,c,T>::is_deg() const // either null, nan or inf
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint r, uint c, class T>
+template<unsigned int r, unsigned int c, class T>
 CINO_INLINE
 mat<3,1,T> mat<r,c,T>::cross(const mat<3,1,T> & v) const
 {
@@ -732,7 +732,7 @@ mat<3,1,T> mat<r,c,T>::cross(const mat<3,1,T> & v) const
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint r, uint c, class T>
+template<unsigned int r, unsigned int c, class T>
 CINO_INLINE
 T mat<r,c,T>::dot(const mat<r,c,T> & v) const
 {
@@ -742,7 +742,7 @@ T mat<r,c,T>::dot(const mat<r,c,T> & v) const
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint r, uint c, class T>
+template<unsigned int r, unsigned int c, class T>
 CINO_INLINE
 T mat<r,c,T>::angle_deg(const mat<r,c,T> & v, const bool normalize) const
 {
@@ -752,7 +752,7 @@ T mat<r,c,T>::angle_deg(const mat<r,c,T> & v, const bool normalize) const
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint r, uint c, class T>
+template<unsigned int r, unsigned int c, class T>
 CINO_INLINE
 T mat<r,c,T>::angle_rad(const mat<r,c,T> & v, const bool normalize) const
 {

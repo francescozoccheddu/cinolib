@@ -61,9 +61,9 @@ void AbstractPolygonMesh<M,V,E,P>::load(const char * filename)
     std::vector<vec3d>             pos;      // vertex xyz positions
     std::vector<vec3d>             tex;      // vertex uv(w) texture coordinates
     std::vector<vec3d>             nor;      // vertex normals
-    std::vector<std::vector<uint>> poly_pos; // polygons with references to pos
-    std::vector<std::vector<uint>> poly_tex; // polygons with references to tex
-    std::vector<std::vector<uint>> poly_nor; // polygons with references to nor
+    std::vector<std::vector<unsigned int>> poly_pos; // polygons with references to pos
+    std::vector<std::vector<unsigned int>> poly_tex; // polygons with references to tex
+    std::vector<std::vector<unsigned int>> poly_nor; // polygons with references to nor
     std::vector<Color>             poly_col; // per polygon colors
     std::vector<int>               poly_lab; // per polygon labels
 
@@ -84,7 +84,7 @@ void AbstractPolygonMesh<M,V,E,P>::load(const char * filename)
     else if (filetype.compare(".stl") == 0 ||
              filetype.compare(".STL") == 0)
     {
-        std::vector<uint> tris;
+        std::vector<unsigned int> tris;
         read_STL(filename, pos, tris);
         poly_pos = polys_from_serialized_vids(tris, 3);
     }
@@ -126,7 +126,7 @@ void AbstractPolygonMesh<M,V,E,P>::save(const char * filename) const
     {
         std::vector<double> normals;
         normals.reserve(3*this->num_polys());
-        for (uint pid=0; pid<this->num_polys(); ++pid)
+        for (unsigned int pid=0; pid<this->num_polys(); ++pid)
         {
             normals.push_back(this->poly_data(pid).normal.x());
             normals.push_back(this->poly_data(pid).normal.y());
@@ -156,14 +156,14 @@ void AbstractPolygonMesh<M,V,E,P>::clear()
 template<class M, class V, class E, class P>
 CINO_INLINE
 void AbstractPolygonMesh<M,V,E,P>::init(const std::vector<vec3d>             & verts,
-                                        const std::vector<std::vector<uint>> & polys)
+                                        const std::vector<std::vector<unsigned int>> & polys)
 {
     std::chrono::high_resolution_clock::time_point t0 = std::chrono::high_resolution_clock::now();
 
     // pre-allocate memory
-    uint nv = verts.size();
-    uint np = polys.size();
-    uint ne = 1.5*np;
+    unsigned int nv = verts.size();
+    unsigned int np = polys.size();
+    unsigned int ne = 1.5*np;
     this->verts.reserve(nv);
     this->edges.reserve(ne*2);
     this->polys.reserve(np);
@@ -186,7 +186,7 @@ void AbstractPolygonMesh<M,V,E,P>::init(const std::vector<vec3d>             & v
 
     this->copy_xyz_to_uvw(UVW_param);
 
-    for(uint eid=0; eid<this->num_edges(); ++eid)
+    for(unsigned int eid=0; eid<this->num_edges(); ++eid)
     {
         this->edge_data(eid).flags[MARKED] = (this->edge_is_boundary(eid) || !this->edge_is_manifold(eid));
     }
@@ -207,9 +207,9 @@ CINO_INLINE
 void AbstractPolygonMesh<M,V,E,P>::init(      std::vector<vec3d>             & pos,       // vertex xyz positions
                                               std::vector<vec3d>             & tex,       // vertex uv(w) texture coordinates
                                               std::vector<vec3d>             & nor,       // vertex normals
-                                              std::vector<std::vector<uint>> & poly_pos,  // polygons with references to pos
-                                        const std::vector<std::vector<uint>> & poly_tex,  // polygons with references to tex
-                                        const std::vector<std::vector<uint>> & poly_nor,  // polygons with references to nor
+                                              std::vector<std::vector<unsigned int>> & poly_pos,  // polygons with references to pos
+                                        const std::vector<std::vector<unsigned int>> & poly_tex,  // polygons with references to tex
+                                        const std::vector<std::vector<unsigned int>> & poly_nor,  // polygons with references to nor
                                         const std::vector<Color>             & poly_col,  // per polygon colors
                                         const std::vector<int>               & poly_lab)  // per polygon labels
 {
@@ -221,7 +221,7 @@ void AbstractPolygonMesh<M,V,E,P>::init(      std::vector<vec3d>             & p
         poly_pos.size() == poly_nor.size())
     {
         std::vector<vec3d> tmp_xyz, tmp_uvw, tmp_nor;
-        std::vector<std::vector<uint>> tmp_poly;
+        std::vector<std::vector<unsigned int>> tmp_poly;
         to_openGL_unified_verts(pos, tex, nor, poly_pos, poly_tex, poly_nor, tmp_xyz, tmp_uvw, tmp_nor, tmp_poly);
         pos      = tmp_xyz;
         tex      = tmp_uvw;
@@ -231,7 +231,7 @@ void AbstractPolygonMesh<M,V,E,P>::init(      std::vector<vec3d>             & p
     else if (poly_pos.size() == poly_tex.size())
     {
         std::vector<vec3d> tmp_xyz, tmp_uvw;
-        std::vector<std::vector<uint>> tmp_poly;
+        std::vector<std::vector<unsigned int>> tmp_poly;
         to_openGL_unified_verts(pos, tex, poly_pos, poly_tex, tmp_xyz, tmp_uvw, tmp_poly);
         pos      = tmp_xyz;
         tex      = tmp_uvw;
@@ -240,7 +240,7 @@ void AbstractPolygonMesh<M,V,E,P>::init(      std::vector<vec3d>             & p
     else if (poly_pos.size() == poly_nor.size())
     {
         std::vector<vec3d> tmp_xyz, tmp_nor;
-        std::vector<std::vector<uint>> tmp_poly;
+        std::vector<std::vector<unsigned int>> tmp_poly;
         to_openGL_unified_verts(pos, nor, poly_pos, poly_nor, tmp_xyz, tmp_nor, tmp_poly);
         pos      = tmp_xyz;
         nor      = tmp_nor;
@@ -253,7 +253,7 @@ void AbstractPolygonMesh<M,V,E,P>::init(      std::vector<vec3d>             & p
     if(pos.size()==tex.size())
     {
         std::cout << "load textures" << std::endl;
-        for(uint vid=0; vid<this->num_verts(); ++vid)
+        for(unsigned int vid=0; vid<this->num_verts(); ++vid)
         {
             this->vert_data(vid).uvw = tex.at(vid);
         }
@@ -264,7 +264,7 @@ void AbstractPolygonMesh<M,V,E,P>::init(      std::vector<vec3d>             & p
     if(pos.size()==nor.size())
     {
         std::cout << "load normals" << std::endl;
-        for(uint vid=0; vid<this->num_verts(); ++vid)
+        for(unsigned int vid=0; vid<this->num_verts(); ++vid)
         {
             this->vert_data(vid).normal = nor.at(vid);
         }
@@ -274,7 +274,7 @@ void AbstractPolygonMesh<M,V,E,P>::init(      std::vector<vec3d>             & p
     if(poly_col.size()==this->num_polys())
     {
         std::cout << "load per polygon colors" << std::endl;
-        for(uint pid=0; pid<this->num_polys(); ++pid)
+        for(unsigned int pid=0; pid<this->num_polys(); ++pid)
         {
             this->poly_data(pid).color = poly_col.at(pid);
         }
@@ -290,18 +290,18 @@ void AbstractPolygonMesh<M,V,E,P>::init(      std::vector<vec3d>             & p
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-void AbstractPolygonMesh<M,V,E,P>::update_p_tessellation(const uint pid)
+void AbstractPolygonMesh<M,V,E,P>::update_p_tessellation(const unsigned int pid)
 {
     // Assume convexity and try trivial tessellation first. If something flips
     // apply earcut algorithm to get a valid triangulation
 
     poly_triangles.at(pid).clear();
     std::vector<vec3d> n;
-    for(uint i=2; i<this->verts_per_poly(pid); ++i)
+    for(unsigned int i=2; i<this->verts_per_poly(pid); ++i)
     {
-        uint vid0 = this->polys.at(pid).at( 0 );
-        uint vid1 = this->polys.at(pid).at(i-1);
-        uint vid2 = this->polys.at(pid).at( i );
+        unsigned int vid0 = this->polys.at(pid).at( 0 );
+        unsigned int vid1 = this->polys.at(pid).at(i-1);
+        unsigned int vid2 = this->polys.at(pid).at( i );
 
         poly_triangles.at(pid).push_back(vid0);
         poly_triangles.at(pid).push_back(vid1);
@@ -311,7 +311,7 @@ void AbstractPolygonMesh<M,V,E,P>::update_p_tessellation(const uint pid)
     }
 
     bool bad_tessellation = false;
-    for(uint i=0; i<n.size()-1; ++i) if (n.at(i).dot(n.at(i+1))<0) bad_tessellation = true;
+    for(unsigned int i=0; i<n.size()-1; ++i) if (n.at(i).dot(n.at(i+1))<0) bad_tessellation = true;
 
     if(bad_tessellation)
     {
@@ -320,16 +320,16 @@ void AbstractPolygonMesh<M,V,E,P>::update_p_tessellation(const uint pid)
         // can still happen for highly non-planar polygons...
 
         std::vector<vec3d> vlist(this->verts_per_poly(pid));
-        for (uint i=0; i<this->verts_per_poly(pid); ++i)
+        for (unsigned int i=0; i<this->verts_per_poly(pid); ++i)
         {
             vlist.at(i) = this->poly_vert(pid,i);
         }
         //
-        std::vector<uint> tris;
+        std::vector<unsigned int> tris;
         poly_triangles.at(pid).clear();
         if(polygon_triangulate(vlist, tris))
         {
-            for(uint off : tris) poly_triangles.at(pid).push_back(this->poly_vert_id(pid,off));
+            for(unsigned int off : tris) poly_triangles.at(pid).push_back(this->poly_vert_id(pid,off));
         }
         else
         {
@@ -342,10 +342,10 @@ void AbstractPolygonMesh<M,V,E,P>::update_p_tessellation(const uint pid)
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-void AbstractPolygonMesh<M,V,E,P>::update_v_normal(const uint vid)
+void AbstractPolygonMesh<M,V,E,P>::update_v_normal(const unsigned int vid)
 {
     vec3d n(0,0,0);
-    for(uint pid : this->adj_v2p(vid))
+    for(unsigned int pid : this->adj_v2p(vid))
     {
         n += this->poly_data(pid).normal;
     }
@@ -357,11 +357,11 @@ void AbstractPolygonMesh<M,V,E,P>::update_v_normal(const uint vid)
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-void AbstractPolygonMesh<M,V,E,P>::update_p_normal(const uint pid)
+void AbstractPolygonMesh<M,V,E,P>::update_p_normal(const unsigned int pid)
 {
     // compute the best fitting plane
     std::vector<vec3d> points;
-    for(uint off=0; off<this->verts_per_poly(pid); ++off) points.push_back(this->poly_vert(pid,off));
+    for(unsigned int off=0; off<this->verts_per_poly(pid); ++off) points.push_back(this->poly_vert(pid,off));
     this->poly_data(pid).normal = polygon_normal(points);
 }
 
@@ -371,7 +371,7 @@ template<class M, class V, class E, class P>
 CINO_INLINE
 void AbstractPolygonMesh<M,V,E,P>::update_p_normals()
 {
-    for(uint pid=0; pid<this->num_polys(); ++pid)
+    for(unsigned int pid=0; pid<this->num_polys(); ++pid)
     {
         update_p_normal(pid);
     }
@@ -383,7 +383,7 @@ template<class M, class V, class E, class P>
 CINO_INLINE
 void AbstractPolygonMesh<M,V,E,P>::update_p_tessellations()
 {
-    for(uint pid=0; pid<this->num_polys(); ++pid)
+    for(unsigned int pid=0; pid<this->num_polys(); ++pid)
     {
         update_p_tessellation(pid);
     }
@@ -395,7 +395,7 @@ template<class M, class V, class E, class P>
 CINO_INLINE
 void AbstractPolygonMesh<M,V,E,P>::update_v_normals()
 {
-    for(uint vid=0; vid<this->num_verts(); ++vid)
+    for(unsigned int vid=0; vid<this->num_verts(); ++vid)
     {
         update_v_normal(vid);
     }
@@ -417,9 +417,9 @@ template<class M, class V, class E, class P>
 CINO_INLINE
 int AbstractPolygonMesh<M,V,E,P>::Euler_characteristic() const
 {
-    uint nv = this->num_verts();
-    uint ne = this->num_edges();
-    uint np = this->num_polys();
+    unsigned int nv = this->num_verts();
+    unsigned int ne = this->num_edges();
+    unsigned int np = this->num_polys();
     return nv - ne + np;
 }
 
@@ -439,7 +439,7 @@ CINO_INLINE
 double AbstractPolygonMesh<M,V,E,P>::mesh_area() const
 {
     double area = 0;
-    for(uint pid=0; pid<this->num_polys(); ++pid)
+    for(unsigned int pid=0; pid<this->num_polys(); ++pid)
     {
         area += this->poly_area(pid);
     }
@@ -469,9 +469,9 @@ double AbstractPolygonMesh<M,V,E,P>::mesh_volume() const
 
     double vol = 0.0;
     vec3d O(0,0,0);
-    for(uint pid=0; pid<this->num_polys(); ++pid)
+    for(unsigned int pid=0; pid<this->num_polys(); ++pid)
     {
-        for(uint i=0; i<this->poly_tessellation(pid).size()/3; ++i)
+        for(unsigned int i=0; i<this->poly_tessellation(pid).size()/3; ++i)
         {
             vec3d A    = this->vert(this->poly_tessellation(pid).at(3*i+0));
             vec3d B    = this->vert(this->poly_tessellation(pid).at(3*i+1));
@@ -492,10 +492,10 @@ double AbstractPolygonMesh<M,V,E,P>::mesh_volume() const
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-bool AbstractPolygonMesh<M,V,E,P>::vert_is_saddle(const uint vid, const int tex_coord) const
+bool AbstractPolygonMesh<M,V,E,P>::vert_is_saddle(const unsigned int vid, const int tex_coord) const
 {
     std::vector<bool> signs;
-    for(uint nbr : vert_ordered_verts_link(vid))
+    for(unsigned int nbr : vert_ordered_verts_link(vid))
     {
         // Discard == signs. For references, see:
         // Decomposing Polygon Meshes by Means of Critical Points
@@ -510,8 +510,8 @@ bool AbstractPolygonMesh<M,V,E,P>::vert_is_saddle(const uint vid, const int tex_
         }
     }
 
-    uint sign_switch = 0;
-    for(uint i=0; i<signs.size(); ++i)
+    unsigned int sign_switch = 0;
+    for(unsigned int i=0; i<signs.size(); ++i)
     {
         if (signs.at(i) != signs.at((i+1)%signs.size())) ++sign_switch;
     }
@@ -524,7 +524,7 @@ bool AbstractPolygonMesh<M,V,E,P>::vert_is_saddle(const uint vid, const int tex_
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-bool AbstractPolygonMesh<M,V,E,P>::vert_is_critical_p(const uint vid, const int tex_coord) const
+bool AbstractPolygonMesh<M,V,E,P>::vert_is_critical_p(const unsigned int vid, const int tex_coord) const
 {
     return (this->vert_is_local_max(vid,tex_coord) ||
             this->vert_is_local_min(vid,tex_coord) ||
@@ -535,10 +535,10 @@ bool AbstractPolygonMesh<M,V,E,P>::vert_is_critical_p(const uint vid, const int 
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-bool AbstractPolygonMesh<M,V,E,P>::poly_verts_are_CCW(const uint pid, const uint curr, const uint prev) const
+bool AbstractPolygonMesh<M,V,E,P>::poly_verts_are_CCW(const unsigned int pid, const unsigned int curr, const unsigned int prev) const
 {
-    uint prev_offset = this->poly_vert_offset(pid, prev);
-    uint curr_offset = this->poly_vert_offset(pid, curr);
+    unsigned int prev_offset = this->poly_vert_offset(pid, prev);
+    unsigned int curr_offset = this->poly_vert_offset(pid, curr);
     if(curr_offset == (prev_offset+1)%this->verts_per_poly(pid)) return true;
     return false;
 }
@@ -547,10 +547,10 @@ bool AbstractPolygonMesh<M,V,E,P>::poly_verts_are_CCW(const uint pid, const uint
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-bool AbstractPolygonMesh<M,V,E,P>::edge_is_CCW(const uint eid, const uint pid) const
+bool AbstractPolygonMesh<M,V,E,P>::edge_is_CCW(const unsigned int eid, const unsigned int pid) const
 {
-    uint vid0 = this->edge_vert_id(eid,0);
-    uint vid1 = this->edge_vert_id(eid,1);
+    unsigned int vid0 = this->edge_vert_id(eid,0);
+    unsigned int vid1 = this->edge_vert_id(eid,1);
     return this->poly_verts_are_CCW(pid, vid1, vid0);
 }
 
@@ -558,11 +558,11 @@ bool AbstractPolygonMesh<M,V,E,P>::edge_is_CCW(const uint eid, const uint pid) c
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-void AbstractPolygonMesh<M,V,E,P>::vert_ordered_one_ring(const uint vid,
-                                                         std::vector<uint> & v_link,       // sorted list of adjacent vertices
-                                                         std::vector<uint> & f_star,       // sorted list of adjacent triangles
-                                                         std::vector<uint> & e_star,       // sorted list of edges incident to vid
-                                                         std::vector<uint> & e_link) const // sorted list of edges opposite to vid
+void AbstractPolygonMesh<M,V,E,P>::vert_ordered_one_ring(const unsigned int vid,
+                                                         std::vector<unsigned int> & v_link,       // sorted list of adjacent vertices
+                                                         std::vector<unsigned int> & f_star,       // sorted list of adjacent triangles
+                                                         std::vector<unsigned int> & e_star,       // sorted list of edges incident to vid
+                                                         std::vector<unsigned int> & e_link) const // sorted list of edges opposite to vid
 {
     // see https://en.wikipedia.org/wiki/Simplicial_complex#Closure,_star,_and_link for adefinition of link and star
 
@@ -572,22 +572,22 @@ void AbstractPolygonMesh<M,V,E,P>::vert_ordered_one_ring(const uint vid,
     e_link.clear();
 
     if (this->adj_v2e(vid).empty()) return;
-    uint curr_e  = this->adj_v2e(vid).front(); assert(edge_is_manifold(curr_e));
-    uint curr_v  = this->vert_opposite_to(curr_e, vid);
-    uint curr_p  = this->adj_e2p(curr_e).front();
+    unsigned int curr_e  = this->adj_v2e(vid).front(); assert(edge_is_manifold(curr_e));
+    unsigned int curr_v  = this->vert_opposite_to(curr_e, vid);
+    unsigned int curr_p  = this->adj_e2p(curr_e).front();
     // impose CCW winding...
     if (!this->poly_verts_are_CCW(curr_p, curr_v, vid)) curr_p = this->adj_e2p(curr_e).back();
 
     // If there are boundary edges it is important to start from the right triangle (i.e. right-most),
     // otherwise it will be impossible to cover the entire umbrella
-    std::vector<uint> b_edges = vert_boundary_edges(vid);
+    std::vector<unsigned int> b_edges = vert_boundary_edges(vid);
     if (b_edges.size()  > 0)
     {
         assert(b_edges.size() == 2); // otherwise there is no way to cover the whole umbrella walking through adjacent triangles!!!
 
-        uint e = b_edges.front();
-        uint p = this->adj_e2p(e).front();
-        uint v = this->vert_opposite_to(e, vid);
+        unsigned int e = b_edges.front();
+        unsigned int p = this->adj_e2p(e).front();
+        unsigned int v = this->vert_opposite_to(e, vid);
 
         if (!this->poly_verts_are_CCW(p, v, vid))
         {
@@ -607,8 +607,8 @@ void AbstractPolygonMesh<M,V,E,P>::vert_ordered_one_ring(const uint vid,
         e_star.push_back(curr_e);
         f_star.push_back(curr_p);
 
-        uint off = this->poly_vert_offset(curr_p, curr_v);
-        for(uint i=0; i<this->verts_per_poly(curr_p)-1; ++i)
+        unsigned int off = this->poly_vert_offset(curr_p, curr_v);
+        for(unsigned int i=0; i<this->verts_per_poly(curr_p)-1; ++i)
         {
             curr_v = this->poly_vert_id(curr_p,(off+i)%this->verts_per_poly(curr_p));
             if (i>0) e_link.push_back( this->poly_edge_id(curr_p, curr_v, v_link.back()) );
@@ -628,7 +628,7 @@ void AbstractPolygonMesh<M,V,E,P>::vert_ordered_one_ring(const uint vid,
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-std::vector<uint> AbstractPolygonMesh<M,V,E,P>::vert_verts_link(const uint vid) const
+std::vector<unsigned int> AbstractPolygonMesh<M,V,E,P>::vert_verts_link(const unsigned int vid) const
 {
     return this->adj_v2v(vid);
 }
@@ -637,27 +637,27 @@ std::vector<uint> AbstractPolygonMesh<M,V,E,P>::vert_verts_link(const uint vid) 
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-std::vector<uint> AbstractPolygonMesh<M,V,E,P>::vert_edges_link(const uint vid) const
+std::vector<unsigned int> AbstractPolygonMesh<M,V,E,P>::vert_edges_link(const unsigned int vid) const
 {
-    std::unordered_set<uint> e_link;
-    for(uint pid : this->adj_v2p(vid))
-    for(uint eid : this->adj_p2e(pid))
+    std::unordered_set<unsigned int> e_link;
+    for(unsigned int pid : this->adj_v2p(vid))
+    for(unsigned int eid : this->adj_p2e(pid))
     {
         if(!this->edge_contains_vert(eid,vid)) e_link.insert(eid);
     }
-    return std::vector<uint>(e_link.begin(),e_link.end());
+    return std::vector<unsigned int>(e_link.begin(),e_link.end());
 }
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-std::vector<uint> AbstractPolygonMesh<M,V,E,P>::vert_ordered_verts_link(const uint vid) const
+std::vector<unsigned int> AbstractPolygonMesh<M,V,E,P>::vert_ordered_verts_link(const unsigned int vid) const
 {
-    std::vector<uint> v_ring; // sorted list of adjacent vertices
-    std::vector<uint> f_ring; // sorted list of adjacent triangles
-    std::vector<uint> e_ring; // sorted list of edges incident to vid
-    std::vector<uint> e_link; // sorted list of edges opposite to vid
+    std::vector<unsigned int> v_ring; // sorted list of adjacent vertices
+    std::vector<unsigned int> f_ring; // sorted list of adjacent triangles
+    std::vector<unsigned int> e_ring; // sorted list of edges incident to vid
+    std::vector<unsigned int> e_link; // sorted list of edges opposite to vid
     vert_ordered_one_ring(vid, v_ring, f_ring, e_ring, e_link);
     return v_ring;
 }
@@ -666,12 +666,12 @@ std::vector<uint> AbstractPolygonMesh<M,V,E,P>::vert_ordered_verts_link(const ui
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-std::vector<uint> AbstractPolygonMesh<M,V,E,P>::vert_ordered_polys_star(const uint vid) const
+std::vector<unsigned int> AbstractPolygonMesh<M,V,E,P>::vert_ordered_polys_star(const unsigned int vid) const
 {
-    std::vector<uint> v_ring; // sorted list of adjacent vertices
-    std::vector<uint> f_ring; // sorted list of adjacent triangles
-    std::vector<uint> e_ring; // sorted list of edges incident to vid
-    std::vector<uint> e_link; // sorted list of edges opposite to vid
+    std::vector<unsigned int> v_ring; // sorted list of adjacent vertices
+    std::vector<unsigned int> f_ring; // sorted list of adjacent triangles
+    std::vector<unsigned int> e_ring; // sorted list of edges incident to vid
+    std::vector<unsigned int> e_link; // sorted list of edges opposite to vid
     vert_ordered_one_ring(vid, v_ring, f_ring, e_ring, e_link);
     return f_ring;
 }
@@ -680,12 +680,12 @@ std::vector<uint> AbstractPolygonMesh<M,V,E,P>::vert_ordered_polys_star(const ui
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-std::vector<uint> AbstractPolygonMesh<M,V,E,P>::vert_ordered_edges_star(const uint vid) const
+std::vector<unsigned int> AbstractPolygonMesh<M,V,E,P>::vert_ordered_edges_star(const unsigned int vid) const
 {
-    std::vector<uint> v_ring; // sorted list of adjacent vertices
-    std::vector<uint> f_ring; // sorted list of adjacent triangles
-    std::vector<uint> e_ring; // sorted list of edges incident to vid
-    std::vector<uint> e_link; // sorted list of edges opposite to vid
+    std::vector<unsigned int> v_ring; // sorted list of adjacent vertices
+    std::vector<unsigned int> f_ring; // sorted list of adjacent triangles
+    std::vector<unsigned int> e_ring; // sorted list of edges incident to vid
+    std::vector<unsigned int> e_link; // sorted list of edges opposite to vid
     vert_ordered_one_ring(vid, v_ring, f_ring, e_ring, e_link);
     return e_ring;
 }
@@ -694,12 +694,12 @@ std::vector<uint> AbstractPolygonMesh<M,V,E,P>::vert_ordered_edges_star(const ui
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-std::vector<uint> AbstractPolygonMesh<M,V,E,P>::vert_ordered_edges_link(const uint vid) const
+std::vector<unsigned int> AbstractPolygonMesh<M,V,E,P>::vert_ordered_edges_link(const unsigned int vid) const
 {
-    std::vector<uint> v_ring; // sorted list of adjacent vertices
-    std::vector<uint> f_ring; // sorted list of adjacent triangles
-    std::vector<uint> e_ring; // sorted list of edges incident to vid
-    std::vector<uint> e_link; // sorted list of edges opposite to vid
+    std::vector<unsigned int> v_ring; // sorted list of adjacent vertices
+    std::vector<unsigned int> f_ring; // sorted list of adjacent triangles
+    std::vector<unsigned int> e_ring; // sorted list of edges incident to vid
+    std::vector<unsigned int> e_link; // sorted list of edges opposite to vid
     vert_ordered_one_ring(vid, v_ring, f_ring, e_ring, e_link);
     return e_link;
 }
@@ -708,10 +708,10 @@ std::vector<uint> AbstractPolygonMesh<M,V,E,P>::vert_ordered_edges_link(const ui
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-double AbstractPolygonMesh<M,V,E,P>::vert_area(const uint vid) const
+double AbstractPolygonMesh<M,V,E,P>::vert_area(const unsigned int vid) const
 {
     double area = 0.0;
-    for(uint pid : this->adj_v2p(vid)) area += poly_area(pid)/static_cast<double>(this->verts_per_poly(pid));
+    for(unsigned int pid : this->adj_v2p(vid)) area += poly_area(pid)/static_cast<double>(this->verts_per_poly(pid));
     return area;
 }
 
@@ -719,7 +719,7 @@ double AbstractPolygonMesh<M,V,E,P>::vert_area(const uint vid) const
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-double AbstractPolygonMesh<M,V,E,P>::vert_mass(const uint vid) const
+double AbstractPolygonMesh<M,V,E,P>::vert_mass(const unsigned int vid) const
 {
     return vert_area(vid);
 }
@@ -728,9 +728,9 @@ double AbstractPolygonMesh<M,V,E,P>::vert_mass(const uint vid) const
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-bool AbstractPolygonMesh<M,V,E,P>::vert_is_boundary(const uint vid) const
+bool AbstractPolygonMesh<M,V,E,P>::vert_is_boundary(const unsigned int vid) const
 {
-    for(uint eid : this->adj_v2e(vid)) if (edge_is_boundary(eid)) return true;
+    for(unsigned int eid : this->adj_v2e(vid)) if (edge_is_boundary(eid)) return true;
     return false;
 }
 
@@ -738,30 +738,30 @@ bool AbstractPolygonMesh<M,V,E,P>::vert_is_boundary(const uint vid) const
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-bool AbstractPolygonMesh<M,V,E,P>::vert_is_manifold(const uint vid) const
+bool AbstractPolygonMesh<M,V,E,P>::vert_is_manifold(const unsigned int vid) const
 {
-    for(uint eid : this->adj_v2e(vid))
+    for(unsigned int eid : this->adj_v2e(vid))
     {
         if(!this->edge_is_manifold(eid)) return false;
     }
 
-    std::vector<uint> e_link = this->vert_edges_link(vid);
-    std::unordered_set<uint> edge_set(e_link.begin(), e_link.end());
+    std::vector<unsigned int> e_link = this->vert_edges_link(vid);
+    std::unordered_set<unsigned int> edge_set(e_link.begin(), e_link.end());
 
-    std::queue<uint> q;
+    std::queue<unsigned int> q;
     q.push(e_link.front());
 
-    std::unordered_set<uint> visited;
+    std::unordered_set<unsigned int> visited;
     visited.insert(e_link.front());
 
     while(!q.empty())
     {
-        uint curr = q.front();
+        unsigned int curr = q.front();
         q.pop();
 
         assert(CONTAINS(visited, curr));
 
-        for(uint nbr : this->adj_e2e(curr))
+        for(unsigned int nbr : this->adj_e2e(curr))
         {
             // still in the link of vid, but not visited yet
             if(CONTAINS(edge_set, nbr) && !CONTAINS(visited, nbr))
@@ -779,10 +779,10 @@ bool AbstractPolygonMesh<M,V,E,P>::vert_is_manifold(const uint vid) const
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-std::vector<uint> AbstractPolygonMesh<M,V,E,P>::vert_boundary_edges(const uint vid) const
+std::vector<unsigned int> AbstractPolygonMesh<M,V,E,P>::vert_boundary_edges(const unsigned int vid) const
 {
-    std::vector<uint> b_edges;
-    for(uint eid : this->adj_v2e(vid)) if (edge_is_boundary(eid)) b_edges.push_back(eid);
+    std::vector<unsigned int> b_edges;
+    for(unsigned int eid : this->adj_v2e(vid)) if (edge_is_boundary(eid)) b_edges.push_back(eid);
     return b_edges;
 }
 
@@ -790,9 +790,9 @@ std::vector<uint> AbstractPolygonMesh<M,V,E,P>::vert_boundary_edges(const uint v
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-bool AbstractPolygonMesh<M,V,E,P>::vert_is_visible(const uint vid) const
+bool AbstractPolygonMesh<M,V,E,P>::vert_is_visible(const unsigned int vid) const
 {
-    for(uint pid : this->adj_v2p(vid))
+    for(unsigned int pid : this->adj_v2p(vid))
     {
         if(!this->poly_data(pid).flags[HIDDEN]) return true;
     }
@@ -803,38 +803,38 @@ bool AbstractPolygonMesh<M,V,E,P>::vert_is_visible(const uint vid) const
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-void AbstractPolygonMesh<M,V,E,P>::vert_cluster_one_ring(const uint                       vid,
-                                                         std::vector<std::vector<uint>> & clusters,
+void AbstractPolygonMesh<M,V,E,P>::vert_cluster_one_ring(const unsigned int                       vid,
+                                                         std::vector<std::vector<unsigned int>> & clusters,
                                                          const bool                       marked_edges_are_borders)
 {
     /* separate the polys incident to vid in clusters. Clusters are naturally separated
      * by boundary edges, but also marked edges can be optionally considered as barriers
      */
     clusters.clear();
-    std::unordered_set<uint> visited;
+    std::unordered_set<unsigned int> visited;
 
-    for(uint pid : this->adj_v2p(vid))
+    for(unsigned int pid : this->adj_v2p(vid))
     {
         if(CONTAINS(visited, pid)) continue;
         visited.insert(pid);
 
-        std::vector<uint> c;
+        std::vector<unsigned int> c;
         c.push_back(pid);
 
-        std::queue<uint> q;
+        std::queue<unsigned int> q;
         q.push(pid);
 
         while(!q.empty())
         {
-            uint pid = q.front();
+            unsigned int pid = q.front();
             q.pop();
 
-            for(uint nbr : this->adj_p2p(pid))
+            for(unsigned int nbr : this->adj_p2p(pid))
             {
                 if(!this->poly_contains_vert(nbr,vid)) continue; // not in the umbrella
                 if(CONTAINS(visited,nbr)) continue; // already visited
 
-                uint eid   = this->edge_shared(pid,nbr);
+                unsigned int eid   = this->edge_shared(pid,nbr);
                 bool flood = true;
                 if(marked_edges_are_borders && this->edge_data(eid).flags[MARKED]) flood = false;
 
@@ -854,10 +854,10 @@ void AbstractPolygonMesh<M,V,E,P>::vert_cluster_one_ring(const uint             
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-std::vector<uint> AbstractPolygonMesh<M,V,E,P>::vert_adj_visible_polys(const uint vid, const vec3d dir, const double ang_thresh)
+std::vector<unsigned int> AbstractPolygonMesh<M,V,E,P>::vert_adj_visible_polys(const unsigned int vid, const vec3d dir, const double ang_thresh)
 {
-    std::vector<uint> nbrs;
-    for(uint pid : this->adj_v2p(vid))
+    std::vector<unsigned int> nbrs;
+    for(unsigned int pid : this->adj_v2p(vid))
     {
         if(!this->poly_data(pid).flags[HIDDEN])
         {
@@ -872,18 +872,18 @@ std::vector<uint> AbstractPolygonMesh<M,V,E,P>::vert_adj_visible_polys(const uin
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-uint AbstractPolygonMesh<M,V,E,P>::vert_add(const vec3d & pos)
+unsigned int AbstractPolygonMesh<M,V,E,P>::vert_add(const vec3d & pos)
 {
-    uint vid = this->num_verts();
+    unsigned int vid = this->num_verts();
     //
     this->verts.push_back(pos);
     //
     V data;
     this->v_data.push_back(data);
     //
-    this->v2v.push_back(std::vector<uint>());
-    this->v2e.push_back(std::vector<uint>());
-    this->v2p.push_back(std::vector<uint>());
+    this->v2v.push_back(std::vector<unsigned int>());
+    this->v2e.push_back(std::vector<unsigned int>());
+    this->v2p.push_back(std::vector<unsigned int>());
     //
     if(this->mesh_data().update_bbox)
     {
@@ -898,16 +898,16 @@ uint AbstractPolygonMesh<M,V,E,P>::vert_add(const vec3d & pos)
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-bool AbstractPolygonMesh<M,V,E,P>::vert_merge(const uint vid0, const uint vid1)
+bool AbstractPolygonMesh<M,V,E,P>::vert_merge(const unsigned int vid0, const unsigned int vid1)
 {
-    std::vector<uint> old_polys = this->adj_v2p(vid1);
-    std::vector<std::vector<uint>> new_polys;
-    for(uint pid : old_polys)
+    std::vector<unsigned int> old_polys = this->adj_v2p(vid1);
+    std::vector<std::vector<unsigned int>> new_polys;
+    for(unsigned int pid : old_polys)
     {
         // if there is a polygon containing both vid0 and vid1 abort the operation
         if(this->poly_contains_vert(pid,vid0)) return false;
 
-        std::vector<uint> p = this->poly_verts_id(pid);
+        std::vector<unsigned int> p = this->poly_verts_id(pid);
         std::replace(p.begin(), p.end(), vid1, vid0);
         new_polys.push_back(p);
     }
@@ -922,7 +922,7 @@ bool AbstractPolygonMesh<M,V,E,P>::vert_merge(const uint vid0, const uint vid1)
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-void AbstractPolygonMesh<M,V,E,P>::vert_switch_id(const uint vid0, const uint vid1)
+void AbstractPolygonMesh<M,V,E,P>::vert_switch_id(const unsigned int vid0, const unsigned int vid1)
 {
     // [28 Aug 2017] Tested on 10K random id switches : PASSED
 
@@ -934,45 +934,45 @@ void AbstractPolygonMesh<M,V,E,P>::vert_switch_id(const uint vid0, const uint vi
     std::swap(this->v2e.at(vid0),    this->v2e.at(vid1));
     std::swap(this->v2p.at(vid0),    this->v2p.at(vid1));
 
-    std::unordered_set<uint> verts_to_update;
+    std::unordered_set<unsigned int> verts_to_update;
     verts_to_update.insert(this->adj_v2v(vid0).begin(), this->adj_v2v(vid0).end());
     verts_to_update.insert(this->adj_v2v(vid1).begin(), this->adj_v2v(vid1).end());
 
-    std::unordered_set<uint> edges_to_update;
+    std::unordered_set<unsigned int> edges_to_update;
     edges_to_update.insert(this->adj_v2e(vid0).begin(), this->adj_v2e(vid0).end());
     edges_to_update.insert(this->adj_v2e(vid1).begin(), this->adj_v2e(vid1).end());
 
-    std::unordered_set<uint> polys_to_update;
+    std::unordered_set<unsigned int> polys_to_update;
     polys_to_update.insert(this->adj_v2p(vid0).begin(), this->adj_v2p(vid0).end());
     polys_to_update.insert(this->adj_v2p(vid1).begin(), this->adj_v2p(vid1).end());
 
-    for(uint nbr : verts_to_update)
+    for(unsigned int nbr : verts_to_update)
     {
-        for(uint & vid : this->v2v.at(nbr))
+        for(unsigned int & vid : this->v2v.at(nbr))
         {
             if (vid == vid0) vid = vid1; else
             if (vid == vid1) vid = vid0;
         }
     }
 
-    for(uint eid : edges_to_update)
+    for(unsigned int eid : edges_to_update)
     {
-        for(uint i=0; i<2; ++i)
+        for(unsigned int i=0; i<2; ++i)
         {
-            uint & vid = this->edges.at(2*eid+i);
+            unsigned int & vid = this->edges.at(2*eid+i);
             if (vid == vid0) vid = vid1; else
             if (vid == vid1) vid = vid0;
         }
     }
 
-    for(uint pid : polys_to_update)
+    for(unsigned int pid : polys_to_update)
     {
-        for(uint & vid : this->polys.at(pid))
+        for(unsigned int & vid : this->polys.at(pid))
         {
             if (vid == vid0) vid = vid1; else
             if (vid == vid1) vid = vid0;
         }
-        for(uint & vid : this->poly_triangles.at(pid))
+        for(unsigned int & vid : this->poly_triangles.at(pid))
         {
             if (vid == vid0) vid = vid1; else
             if (vid == vid1) vid = vid0;
@@ -984,7 +984,7 @@ void AbstractPolygonMesh<M,V,E,P>::vert_switch_id(const uint vid0, const uint vi
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-void AbstractPolygonMesh<M,V,E,P>::vert_remove(const uint vid)
+void AbstractPolygonMesh<M,V,E,P>::vert_remove(const unsigned int vid)
 {
     polys_remove(this->adj_v2p(vid));
 }
@@ -993,7 +993,7 @@ void AbstractPolygonMesh<M,V,E,P>::vert_remove(const uint vid)
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-void AbstractPolygonMesh<M,V,E,P>::vert_remove_unreferenced(const uint vid)
+void AbstractPolygonMesh<M,V,E,P>::vert_remove_unreferenced(const unsigned int vid)
 {
     this->v2v.at(vid).clear();
     this->v2e.at(vid).clear();
@@ -1010,9 +1010,9 @@ void AbstractPolygonMesh<M,V,E,P>::vert_remove_unreferenced(const uint vid)
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-bool AbstractPolygonMesh<M,V,E,P>::edge_is_manifold(const uint eid) const
+bool AbstractPolygonMesh<M,V,E,P>::edge_is_manifold(const unsigned int eid) const
 {
-    uint val = this->edge_valence(eid);
+    unsigned int val = this->edge_valence(eid);
     return (val>0 && val<3);
 }
 
@@ -1020,13 +1020,13 @@ bool AbstractPolygonMesh<M,V,E,P>::edge_is_manifold(const uint eid) const
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-double AbstractPolygonMesh<M,V,E,P>::edge_dihedral_angle(const uint eid) const
+double AbstractPolygonMesh<M,V,E,P>::edge_dihedral_angle(const unsigned int eid) const
 {
     if(!this->edge_is_manifold(eid)) return 0;
     if( this->edge_is_boundary(eid)) return 0;
 
-    uint   pid0 = this->adj_e2p(eid).front();
-    uint   pid1 = this->adj_e2p(eid).back();
+    unsigned int   pid0 = this->adj_e2p(eid).front();
+    unsigned int   pid1 = this->adj_e2p(eid).back();
     vec3d  n0   = this->poly_data(pid0).normal;
     vec3d  n1   = this->poly_data(pid1).normal;
 
@@ -1037,7 +1037,7 @@ double AbstractPolygonMesh<M,V,E,P>::edge_dihedral_angle(const uint eid) const
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-bool AbstractPolygonMesh<M,V,E,P>::edge_is_boundary(const uint eid) const
+bool AbstractPolygonMesh<M,V,E,P>::edge_is_boundary(const unsigned int eid) const
 {
     return (this->edge_valence(eid) == 1);
 }
@@ -1046,9 +1046,9 @@ bool AbstractPolygonMesh<M,V,E,P>::edge_is_boundary(const uint eid) const
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-bool AbstractPolygonMesh<M,V,E,P>::edge_is_incident_to_boundary(const uint eid) const
+bool AbstractPolygonMesh<M,V,E,P>::edge_is_incident_to_boundary(const unsigned int eid) const
 {
-    for(uint vid : this->adj_e2v(eid)) if(this->vert_is_boundary(vid)) return true;
+    for(unsigned int vid : this->adj_e2v(eid)) if(this->vert_is_boundary(vid)) return true;
     return false;
 }
 
@@ -1056,10 +1056,10 @@ bool AbstractPolygonMesh<M,V,E,P>::edge_is_incident_to_boundary(const uint eid) 
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-bool AbstractPolygonMesh<M,V,E,P>::edges_share_poly(const uint eid1, const uint eid2) const
+bool AbstractPolygonMesh<M,V,E,P>::edges_share_poly(const unsigned int eid1, const unsigned int eid2) const
 {
-    for(uint pid1 : this->adj_e2p(eid1))
-    for(uint pid2 : this->adj_e2p(eid2))
+    for(unsigned int pid1 : this->adj_e2p(eid1))
+    for(unsigned int pid2 : this->adj_e2p(eid2))
     {
         if (pid1 == pid2) return true;
     }
@@ -1070,10 +1070,10 @@ bool AbstractPolygonMesh<M,V,E,P>::edges_share_poly(const uint eid1, const uint 
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-uint AbstractPolygonMesh<M,V,E,P>::edge_shared(const uint pid0, const uint pid1) const
+unsigned int AbstractPolygonMesh<M,V,E,P>::edge_shared(const unsigned int pid0, const unsigned int pid1) const
 {
-    std::vector<uint> shared_edges;
-    for(uint eid : this->adj_p2e(pid0))
+    std::vector<unsigned int> shared_edges;
+    for(unsigned int eid : this->adj_p2e(pid0))
     {
         if (this->poly_contains_edge(pid1,eid))
         {
@@ -1089,7 +1089,7 @@ uint AbstractPolygonMesh<M,V,E,P>::edge_shared(const uint pid0, const uint pid1)
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-uint AbstractPolygonMesh<M,V,E,P>::edge_add(const uint vid0, const uint vid1)
+unsigned int AbstractPolygonMesh<M,V,E,P>::edge_add(const unsigned int vid0, const unsigned int vid1)
 {
     assert(this->edge_id(vid0, vid1)==-1); // make sure it doesn't exist already
     assert(vid0 < this->num_verts());
@@ -1098,12 +1098,12 @@ uint AbstractPolygonMesh<M,V,E,P>::edge_add(const uint vid0, const uint vid1)
     assert(DOES_NOT_CONTAIN_VEC(this->v2v.at(vid0), vid1));
     assert(DOES_NOT_CONTAIN_VEC(this->v2v.at(vid1), vid0));
     //
-    uint eid = this->num_edges();
+    unsigned int eid = this->num_edges();
     //
     this->edges.push_back(vid0);
     this->edges.push_back(vid1);
     //
-    this->e2p.push_back(std::vector<uint>());
+    this->e2p.push_back(std::vector<unsigned int>());
     //
     E data;
     this->e_data.push_back(data);
@@ -1121,39 +1121,39 @@ uint AbstractPolygonMesh<M,V,E,P>::edge_add(const uint vid0, const uint vid1)
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-void AbstractPolygonMesh<M,V,E,P>::edge_switch_id(const uint eid0, const uint eid1)
+void AbstractPolygonMesh<M,V,E,P>::edge_switch_id(const unsigned int eid0, const unsigned int eid1)
 {
     // [28 Aug 2017] Tested on 10K random id switches : PASSED
 
     if (eid0 == eid1) return;
 
-    for(uint off=0; off<2; ++off) std::swap(this->edges.at(2*eid0+off), this->edges.at(2*eid1+off));
+    for(unsigned int off=0; off<2; ++off) std::swap(this->edges.at(2*eid0+off), this->edges.at(2*eid1+off));
 
     std::swap(this->e2p.at(eid0),    this->e2p.at(eid1));
     std::swap(this->e_data.at(eid0), this->e_data.at(eid1));
 
-    std::unordered_set<uint> verts_to_update;
+    std::unordered_set<unsigned int> verts_to_update;
     verts_to_update.insert(this->edge_vert_id(eid0,0));
     verts_to_update.insert(this->edge_vert_id(eid0,1));
     verts_to_update.insert(this->edge_vert_id(eid1,0));
     verts_to_update.insert(this->edge_vert_id(eid1,1));
 
-    std::unordered_set<uint> polys_to_update;
+    std::unordered_set<unsigned int> polys_to_update;
     polys_to_update.insert(this->adj_e2p(eid0).begin(), this->adj_e2p(eid0).end());
     polys_to_update.insert(this->adj_e2p(eid1).begin(), this->adj_e2p(eid1).end());
 
-    for(uint vid : verts_to_update)
+    for(unsigned int vid : verts_to_update)
     {
-        for(uint & eid : this->v2e.at(vid))
+        for(unsigned int & eid : this->v2e.at(vid))
         {
             if (eid == eid0) eid = eid1; else
             if (eid == eid1) eid = eid0;
         }
     }
 
-    for(uint pid : polys_to_update)
+    for(unsigned int pid : polys_to_update)
     {
-        for(uint & eid : this->p2e.at(pid))
+        for(unsigned int & eid : this->p2e.at(pid))
         {
             if (eid == eid0) eid = eid1; else
             if (eid == eid1) eid = eid0;
@@ -1165,7 +1165,7 @@ void AbstractPolygonMesh<M,V,E,P>::edge_switch_id(const uint eid0, const uint ei
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-void AbstractPolygonMesh<M,V,E,P>::edge_remove(const uint eid)
+void AbstractPolygonMesh<M,V,E,P>::edge_remove(const unsigned int eid)
 {
     polys_remove(this->adj_e2p(eid));
 }
@@ -1174,7 +1174,7 @@ void AbstractPolygonMesh<M,V,E,P>::edge_remove(const uint eid)
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-void AbstractPolygonMesh<M,V,E,P>::edge_remove_unreferenced(const uint eid)
+void AbstractPolygonMesh<M,V,E,P>::edge_remove_unreferenced(const unsigned int eid)
 {
     this->e2p.at(eid).clear();
     edge_switch_id(eid, this->num_edges()-1);
@@ -1189,10 +1189,10 @@ template<class M, class V, class E, class P>
 CINO_INLINE
 void AbstractPolygonMesh<M,V,E,P>::edge_mark_labeling_boundaries()
 {
-    for(uint eid=0; eid<this->num_edges(); ++eid)
+    for(unsigned int eid=0; eid<this->num_edges(); ++eid)
     {
         std::unordered_set<int> unique_labels;
-        for(uint pid : this->adj_e2p(eid)) unique_labels.insert(this->poly_data(pid).label);
+        for(unsigned int pid : this->adj_e2p(eid)) unique_labels.insert(this->poly_data(pid).label);
         this->edge_data(eid).flags[MARKED] = (unique_labels.size()>=2);
     }
 }
@@ -1203,10 +1203,10 @@ template<class M, class V, class E, class P>
 CINO_INLINE
 void AbstractPolygonMesh<M,V,E,P>::edge_mark_color_discontinuities()
 {
-    for(uint eid=0; eid<this->num_edges(); ++eid)
+    for(unsigned int eid=0; eid<this->num_edges(); ++eid)
     {
         std::set<Color> unique_colors;
-        for(uint pid : this->adj_e2p(eid)) unique_colors.insert(this->poly_data(pid).color);
+        for(unsigned int pid : this->adj_e2p(eid)) unique_colors.insert(this->poly_data(pid).color);
 
         this->edge_data(eid).flags[MARKED] = (unique_colors.size()>=2);
     }
@@ -1218,7 +1218,7 @@ template<class M, class V, class E, class P>
 CINO_INLINE
 void AbstractPolygonMesh<M,V,E,P>::edge_mark_boundaries()
 {
-    for(uint eid=0; eid<this->num_edges(); ++eid)
+    for(unsigned int eid=0; eid<this->num_edges(); ++eid)
     {
         this->edge_data(eid).flags[MARKED] = edge_is_boundary(eid);
     }
@@ -1228,9 +1228,9 @@ void AbstractPolygonMesh<M,V,E,P>::edge_mark_boundaries()
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-uint AbstractPolygonMesh<M,V,E,P>::poly_vert_offset(const uint pid, const uint vid) const
+unsigned int AbstractPolygonMesh<M,V,E,P>::poly_vert_offset(const unsigned int pid, const unsigned int vid) const
 {
-    for(uint offset=0; offset<verts_per_poly(pid); ++offset)
+    for(unsigned int offset=0; offset<verts_per_poly(pid); ++offset)
     {
         if (this->poly_vert_id(pid,offset) == vid) return offset;
     }
@@ -1242,14 +1242,14 @@ uint AbstractPolygonMesh<M,V,E,P>::poly_vert_offset(const uint pid, const uint v
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-double AbstractPolygonMesh<M,V,E,P>::poly_angle_at_vert(const uint pid, const uint vid, const int unit) const
+double AbstractPolygonMesh<M,V,E,P>::poly_angle_at_vert(const unsigned int pid, const unsigned int vid, const int unit) const
 {
     assert(this->poly_contains_vert(pid,vid));
 
-    uint   curr   = this->poly_vert_offset(pid, vid);
-    uint   nv     = this->verts_per_poly(pid);
-    uint   next   = (curr+1   )%nv;
-    uint   prev   = (curr-1+nv)%nv;
+    unsigned int   curr   = this->poly_vert_offset(pid, vid);
+    unsigned int   nv     = this->verts_per_poly(pid);
+    unsigned int   next   = (curr+1   )%nv;
+    unsigned int   prev   = (curr-1+nv)%nv;
     vec3d  p      = this->poly_vert(pid, curr);
     vec3d  u      = this->poly_vert(pid, prev) - p;
     vec3d  v      = this->poly_vert(pid, next) - p;
@@ -1272,10 +1272,10 @@ double AbstractPolygonMesh<M,V,E,P>::poly_angle_at_vert(const uint pid, const ui
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-int AbstractPolygonMesh<M,V,E,P>::poly_shared(const uint eid0, const uint eid1) const
+int AbstractPolygonMesh<M,V,E,P>::poly_shared(const unsigned int eid0, const unsigned int eid1) const
 {
-    for(uint pid0 : this->adj_e2p(eid0))
-    for(uint pid1 : this->adj_e2p(eid1))
+    for(unsigned int pid0 : this->adj_e2p(eid0))
+    for(unsigned int pid1 : this->adj_e2p(eid1))
     {
         if (pid0 == pid1) return pid0;
     }
@@ -1286,13 +1286,13 @@ int AbstractPolygonMesh<M,V,E,P>::poly_shared(const uint eid0, const uint eid1) 
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-int AbstractPolygonMesh<M,V,E,P>::poly_id(const std::vector<uint> & vlist) const
+int AbstractPolygonMesh<M,V,E,P>::poly_id(const std::vector<unsigned int> & vlist) const
 {
     assert(!vlist.empty());
-    std::vector<uint> query = SORT_VEC(vlist);
+    std::vector<unsigned int> query = SORT_VEC(vlist);
 
-    uint vid = vlist.front();
-    for(uint pid : this->adj_v2p(vid))
+    unsigned int vid = vlist.front();
+    for(unsigned int pid : this->adj_v2p(vid))
     {
         if(this->poly_verts_id(pid,true)==query) return pid;
     }
@@ -1303,10 +1303,10 @@ int AbstractPolygonMesh<M,V,E,P>::poly_id(const std::vector<uint> & vlist) const
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-std::vector<uint> AbstractPolygonMesh<M,V,E,P>::polys_adjacent_along(const uint pid, const uint eid) const
+std::vector<unsigned int> AbstractPolygonMesh<M,V,E,P>::polys_adjacent_along(const unsigned int pid, const unsigned int eid) const
 {
-    std::vector<uint> polys;
-    for(uint nbr : this->adj_p2p(pid))
+    std::vector<unsigned int> polys;
+    for(unsigned int nbr : this->adj_p2p(pid))
     {
         if (this->poly_contains_edge(nbr,eid)) polys.push_back(nbr);
     }
@@ -1317,10 +1317,10 @@ std::vector<uint> AbstractPolygonMesh<M,V,E,P>::polys_adjacent_along(const uint 
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-std::vector<vec3d> AbstractPolygonMesh<M,V,E,P>::poly_vlist(const uint pid) const
+std::vector<vec3d> AbstractPolygonMesh<M,V,E,P>::poly_vlist(const unsigned int pid) const
 {
     std::vector<vec3d> vlist(this->verts_per_poly(pid));
-    for (uint i=0; i<this->verts_per_poly(pid); ++i)
+    for (unsigned int i=0; i<this->verts_per_poly(pid); ++i)
     {
         vlist.at(i) = this->poly_vert(pid,i);
     }
@@ -1331,7 +1331,7 @@ std::vector<vec3d> AbstractPolygonMesh<M,V,E,P>::poly_vlist(const uint pid) cons
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-const std::vector<uint> & AbstractPolygonMesh<M,V,E,P>::poly_tessellation(const uint pid) const
+const std::vector<unsigned int> & AbstractPolygonMesh<M,V,E,P>::poly_tessellation(const unsigned int pid) const
 {
     return poly_triangles.at(pid);
 }
@@ -1340,9 +1340,9 @@ const std::vector<uint> & AbstractPolygonMesh<M,V,E,P>::poly_tessellation(const 
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-std::vector<uint> AbstractPolygonMesh<M,V,E,P>::polys_adjacent_along(const uint pid, const uint vid0, const uint vid1) const
+std::vector<unsigned int> AbstractPolygonMesh<M,V,E,P>::polys_adjacent_along(const unsigned int pid, const unsigned int vid0, const unsigned int vid1) const
 {
-    uint eid = this->poly_edge_id(pid, vid0, vid1);
+    unsigned int eid = this->poly_edge_id(pid, vid0, vid1);
     return polys_adjacent_along(pid, eid);
 }
 
@@ -1350,7 +1350,7 @@ std::vector<uint> AbstractPolygonMesh<M,V,E,P>::polys_adjacent_along(const uint 
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-int AbstractPolygonMesh<M,V,E,P>::poly_opposite_to(const uint eid, const uint pid) const
+int AbstractPolygonMesh<M,V,E,P>::poly_opposite_to(const unsigned int eid, const unsigned int pid) const
 {
     assert(this->poly_contains_edge(pid,eid));
     assert(this->edge_is_manifold(eid));
@@ -1365,10 +1365,10 @@ int AbstractPolygonMesh<M,V,E,P>::poly_opposite_to(const uint eid, const uint pi
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-bool AbstractPolygonMesh<M,V,E,P>::polys_are_adjacent(const uint pid0, const uint pid1) const
+bool AbstractPolygonMesh<M,V,E,P>::polys_are_adjacent(const unsigned int pid0, const unsigned int pid1) const
 {
-    for(uint eid : this->adj_p2e(pid0))
-    for(uint pid : this->polys_adjacent_along(pid0, eid))
+    for(unsigned int eid : this->adj_p2e(pid0))
+    for(unsigned int pid : this->polys_adjacent_along(pid0, eid))
     {
         if (pid == pid1) return true;
     }
@@ -1379,7 +1379,7 @@ bool AbstractPolygonMesh<M,V,E,P>::polys_are_adjacent(const uint pid0, const uin
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-bool AbstractPolygonMesh<M,V,E,P>::poly_is_boundary(const uint pid) const
+bool AbstractPolygonMesh<M,V,E,P>::poly_is_boundary(const unsigned int pid) const
 {
     return (this->adj_p2p(pid).size() < 3);
 }
@@ -1388,7 +1388,7 @@ bool AbstractPolygonMesh<M,V,E,P>::poly_is_boundary(const uint pid) const
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-void AbstractPolygonMesh<M,V,E,P>::poly_switch_id(const uint pid0, const uint pid1)
+void AbstractPolygonMesh<M,V,E,P>::poly_switch_id(const unsigned int pid0, const unsigned int pid1)
 {
     // [28 Aug 2017] Tested on 10K random id switches : PASSED
 
@@ -1400,39 +1400,39 @@ void AbstractPolygonMesh<M,V,E,P>::poly_switch_id(const uint pid0, const uint pi
     std::swap(this->p2p.at(pid0),            this->p2p.at(pid1));
     std::swap(this->poly_triangles.at(pid0), this->poly_triangles.at(pid1));
 
-    std::unordered_set<uint> verts_to_update;
+    std::unordered_set<unsigned int> verts_to_update;
     verts_to_update.insert(this->adj_p2v(pid0).begin(), this->adj_p2v(pid0).end());
     verts_to_update.insert(this->adj_p2v(pid1).begin(), this->adj_p2v(pid1).end());
 
-    std::unordered_set<uint> edges_to_update;
+    std::unordered_set<unsigned int> edges_to_update;
     edges_to_update.insert(this->adj_p2e(pid0).begin(), this->adj_p2e(pid0).end());
     edges_to_update.insert(this->adj_p2e(pid1).begin(), this->adj_p2e(pid1).end());
 
-    std::unordered_set<uint> polys_to_update;
+    std::unordered_set<unsigned int> polys_to_update;
     polys_to_update.insert(this->adj_p2p(pid0).begin(), this->adj_p2p(pid0).end());
     polys_to_update.insert(this->adj_p2p(pid1).begin(), this->adj_p2p(pid1).end());
 
-    for(uint vid : verts_to_update)
+    for(unsigned int vid : verts_to_update)
     {
-        for(uint & pid : this->v2p.at(vid))
+        for(unsigned int & pid : this->v2p.at(vid))
         {
             if (pid == pid0) pid = pid1; else
             if (pid == pid1) pid = pid0;
         }
     }
 
-    for(uint eid : edges_to_update)
+    for(unsigned int eid : edges_to_update)
     {
-        for(uint & pid : this->e2p.at(eid))
+        for(unsigned int & pid : this->e2p.at(eid))
         {
             if (pid == pid0) pid = pid1; else
             if (pid == pid1) pid = pid0;
         }
     }
 
-    for(uint nbr : polys_to_update)
+    for(unsigned int nbr : polys_to_update)
     {
-        for(uint & pid : this->p2p.at(nbr))
+        for(unsigned int & pid : this->p2p.at(nbr))
         {
             if (pid == pid0) pid = pid1; else
             if (pid == pid1) pid = pid0;
@@ -1444,7 +1444,7 @@ void AbstractPolygonMesh<M,V,E,P>::poly_switch_id(const uint pid0, const uint pi
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-uint AbstractPolygonMesh<M,V,E,P>::poly_add(const std::vector<uint> & vlist)
+unsigned int AbstractPolygonMesh<M,V,E,P>::poly_add(const std::vector<unsigned int> & vlist)
 {
     if(poly_id(vlist)!=-1)
     {
@@ -1452,42 +1452,42 @@ uint AbstractPolygonMesh<M,V,E,P>::poly_add(const std::vector<uint> & vlist)
         return poly_id(vlist);
     }
 #ifndef NDEBUG
-    for(uint vid : vlist) assert(vid < this->num_verts());
+    for(unsigned int vid : vlist) assert(vid < this->num_verts());
 #endif
 
-    uint pid = this->num_polys();
+    unsigned int pid = this->num_polys();
     this->polys.push_back(vlist);
 
     P data;
     this->p_data.push_back(data);
 
-    this->p2e.push_back(std::vector<uint>());
-    this->p2p.push_back(std::vector<uint>());
+    this->p2e.push_back(std::vector<unsigned int>());
+    this->p2p.push_back(std::vector<unsigned int>());
 
     // add missing edges
-    for(uint i=0; i<vlist.size(); ++i)
+    for(unsigned int i=0; i<vlist.size(); ++i)
     {
-        uint vid0 = vlist.at(i);
-        uint vid1 = vlist.at((i+1)%vlist.size());
+        unsigned int vid0 = vlist.at(i);
+        unsigned int vid1 = vlist.at((i+1)%vlist.size());
         int  eid = this->edge_id(vid0, vid1);
 
         if (eid == -1) eid = this->edge_add(vid0, vid1);
     }
 
     // update connectivity
-    for(uint vid : vlist)
+    for(unsigned int vid : vlist)
     {
         this->v2p.at(vid).push_back(pid);
     }
     //
-    for(uint i=0; i<vlist.size(); ++i)
+    for(unsigned int i=0; i<vlist.size(); ++i)
     {
-        uint vid0 = vlist.at(i);
-        uint vid1 = vlist.at((i+1)%vlist.size());
+        unsigned int vid0 = vlist.at(i);
+        unsigned int vid1 = vlist.at((i+1)%vlist.size());
         int  eid = this->edge_id(vid0, vid1);
         assert(eid >= 0);
 
-        for(uint nbr : this->e2p.at(eid))
+        for(unsigned int nbr : this->e2p.at(eid))
         {
             assert(nbr!=pid);
             if (this->polys_are_adjacent(pid,nbr)) continue;
@@ -1500,7 +1500,7 @@ uint AbstractPolygonMesh<M,V,E,P>::poly_add(const std::vector<uint> & vlist)
     }
 
     if(this->mesh_data().update_normals) this->update_p_normal(pid);
-    this->poly_triangles.push_back(std::vector<uint>());
+    this->poly_triangles.push_back(std::vector<unsigned int>());
     update_p_tessellation(pid);
 
     return pid;
@@ -1510,50 +1510,50 @@ uint AbstractPolygonMesh<M,V,E,P>::poly_add(const std::vector<uint> & vlist)
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-void AbstractPolygonMesh<M,V,E,P>::polys_remove(const std::vector<uint> & pids)
+void AbstractPolygonMesh<M,V,E,P>::polys_remove(const std::vector<unsigned int> & pids)
 {
     // in order to avoid id conflicts remove all the
     // polys starting from the one with highest id
     //
-    std::vector<uint> tmp = pids;
+    std::vector<unsigned int> tmp = pids;
     std::sort(tmp.begin(), tmp.end());
     std::reverse(tmp.begin(), tmp.end());
-    for(uint pid : tmp) poly_remove(pid);
+    for(unsigned int pid : tmp) poly_remove(pid);
 }
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-void AbstractPolygonMesh<M,V,E,P>::poly_remove(const uint pid)
+void AbstractPolygonMesh<M,V,E,P>::poly_remove(const unsigned int pid)
 {
     // [28 Aug 2017] Tested on progressive random removal until almost no polys are left: PASSED
 
-    std::set<uint,std::greater<uint>> dangling_verts; // higher ids first
-    std::set<uint,std::greater<uint>> dangling_edges; // higher ids first
+    std::set<unsigned int,std::greater<unsigned int>> dangling_verts; // higher ids first
+    std::set<unsigned int,std::greater<unsigned int>> dangling_edges; // higher ids first
 
     // disconnect from vertices
-    for(uint vid : this->adj_p2v(pid))
+    for(unsigned int vid : this->adj_p2v(pid))
     {
         REMOVE_FROM_VEC(this->v2p.at(vid), pid);
         if (this->v2p.at(vid).empty()) dangling_verts.insert(vid);
     }
 
     // disconnect from edges
-    for(uint eid : this->adj_p2e(pid))
+    for(unsigned int eid : this->adj_p2e(pid))
     {
         REMOVE_FROM_VEC(this->e2p.at(eid), pid);
         if (this->e2p.at(eid).empty()) dangling_edges.insert(eid);
     }
 
     // disconnect from other polygons
-    for(uint nbr : this->adj_p2p(pid)) REMOVE_FROM_VEC(this->p2p.at(nbr), pid);
+    for(unsigned int nbr : this->adj_p2p(pid)) REMOVE_FROM_VEC(this->p2p.at(nbr), pid);
 
     // delete dangling edges
-    for(uint eid : dangling_edges)
+    for(unsigned int eid : dangling_edges)
     {
-        uint vid0 = this->edge_vert_id(eid,0);
-        uint vid1 = this->edge_vert_id(eid,1);
+        unsigned int vid0 = this->edge_vert_id(eid,0);
+        unsigned int vid1 = this->edge_vert_id(eid,1);
         if (vid1 > vid0) std::swap(vid0,vid1); // make sure the highest id is processed first
         REMOVE_FROM_VEC(this->v2e.at(vid0), eid);
         REMOVE_FROM_VEC(this->v2e.at(vid1), eid);
@@ -1563,10 +1563,10 @@ void AbstractPolygonMesh<M,V,E,P>::poly_remove(const uint pid)
     }
 
     // delete dangling vertices
-    for(uint vid : dangling_verts)
+    for(unsigned int vid : dangling_verts)
     {
         assert(this->adj_v2e(vid).empty());
-        for(uint nbr : this->adj_v2v(vid)) REMOVE_FROM_VEC(this->v2v.at(nbr), vid);
+        for(unsigned int nbr : this->adj_v2v(vid)) REMOVE_FROM_VEC(this->v2v.at(nbr), vid);
         vert_remove_unreferenced(vid);
     }
 
@@ -1577,7 +1577,7 @@ void AbstractPolygonMesh<M,V,E,P>::poly_remove(const uint pid)
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-void AbstractPolygonMesh<M,V,E,P>::poly_remove_unreferenced(const uint pid)
+void AbstractPolygonMesh<M,V,E,P>::poly_remove_unreferenced(const unsigned int pid)
 {
     this->polys.at(pid).clear();
     this->p2e.at(pid).clear();
@@ -1597,7 +1597,7 @@ CINO_INLINE
 std::vector<ipair> AbstractPolygonMesh<M,V,E,P>::get_boundary_edges() const
 {
     std::vector<ipair> res;
-    for(uint eid=0; eid<this->num_edges(); ++eid)
+    for(unsigned int eid=0; eid<this->num_edges(); ++eid)
     {
         if (this->edge_is_boundary(eid))
         {
@@ -1614,10 +1614,10 @@ std::vector<ipair> AbstractPolygonMesh<M,V,E,P>::get_boundary_edges() const
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-std::vector<uint> AbstractPolygonMesh<M,V,E,P>::get_boundary_vertices() const
+std::vector<unsigned int> AbstractPolygonMesh<M,V,E,P>::get_boundary_vertices() const
 {
-    std::vector<uint> res;
-    for(uint vid=0; vid<this->num_verts(); ++vid) if (this->vert_is_boundary(vid)) res.push_back(vid);
+    std::vector<unsigned int> res;
+    for(unsigned int vid=0; vid<this->num_verts(); ++vid) if (this->vert_is_boundary(vid)) res.push_back(vid);
     return res;
 }
 
@@ -1625,7 +1625,7 @@ std::vector<uint> AbstractPolygonMesh<M,V,E,P>::get_boundary_vertices() const
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-double AbstractPolygonMesh<M,V,E,P>::poly_mass(const uint pid) const
+double AbstractPolygonMesh<M,V,E,P>::poly_mass(const unsigned int pid) const
 {
     return this->poly_area(pid);
 }
@@ -1634,11 +1634,11 @@ double AbstractPolygonMesh<M,V,E,P>::poly_mass(const uint pid) const
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-double AbstractPolygonMesh<M,V,E,P>::poly_area(const uint pid) const
+double AbstractPolygonMesh<M,V,E,P>::poly_area(const unsigned int pid) const
 {
     double area = 0.0;
-    std::vector<uint> tris = poly_tessellation(pid);
-    for(uint i=0; i<tris.size()/3; ++i)
+    std::vector<unsigned int> tris = poly_tessellation(pid);
+    for(unsigned int i=0; i<tris.size()/3; ++i)
     {
         area += triangle_area(this->vert(tris.at(3*i+0)),
                               this->vert(tris.at(3*i+1)),
@@ -1651,10 +1651,10 @@ double AbstractPolygonMesh<M,V,E,P>::poly_area(const uint pid) const
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-double AbstractPolygonMesh<M,V,E,P>::poly_perimeter(const uint pid) const
+double AbstractPolygonMesh<M,V,E,P>::poly_perimeter(const unsigned int pid) const
 {
     double perimeter = 0.0;
-    for(uint eid : this->adj_p2e(pid)) perimeter += this->edge_length(eid);
+    for(unsigned int eid : this->adj_p2e(pid)) perimeter += this->edge_length(eid);
     return perimeter;
 }
 
@@ -1662,14 +1662,14 @@ double AbstractPolygonMesh<M,V,E,P>::poly_perimeter(const uint pid) const
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-void AbstractPolygonMesh<M,V,E,P>::poly_flip_winding_order(const uint pid)
+void AbstractPolygonMesh<M,V,E,P>::poly_flip_winding_order(const unsigned int pid)
 {
     std::reverse(this->polys.at(pid).begin(), this->polys.at(pid).end());
 
     if(this->mesh_data().update_normals)
     {
         update_p_normal(pid);
-        for(uint off=0; off<this->verts_per_poly(pid); ++off) update_v_normal(this->poly_vert_id(pid,off));
+        for(unsigned int off=0; off<this->verts_per_poly(pid); ++off) update_v_normal(this->poly_vert_id(pid,off));
     }
 }
 
@@ -1679,32 +1679,32 @@ template<class M, class V, class E, class P>
 CINO_INLINE
 void AbstractPolygonMesh<M,V,E,P>::operator+=(const AbstractPolygonMesh<M,V,E,P> & m)
 {
-    uint nv = this->num_verts();
-    uint ne = this->num_edges();
-    uint np = this->num_polys();
+    unsigned int nv = this->num_verts();
+    unsigned int ne = this->num_edges();
+    unsigned int np = this->num_polys();
 
-    std::vector<uint> tmp;
-    for(uint pid=0; pid<m.num_polys(); ++pid)
+    std::vector<unsigned int> tmp;
+    for(unsigned int pid=0; pid<m.num_polys(); ++pid)
     {
-        std::vector<uint> p;
-        for(uint vid : m.adj_p2v(pid)) p.push_back(nv + vid);
+        std::vector<unsigned int> p;
+        for(unsigned int vid : m.adj_p2v(pid)) p.push_back(nv + vid);
         this->polys.push_back(p);
 
         this->p_data.push_back(m.poly_data(pid));
 
         tmp.clear();
-        for(uint eid : m.p2e.at(pid)) tmp.push_back(ne + eid);
+        for(unsigned int eid : m.p2e.at(pid)) tmp.push_back(ne + eid);
         this->p2e.push_back(tmp);
 
         tmp.clear();
-        for(uint nbr : m.p2p.at(pid)) tmp.push_back(np + nbr);
+        for(unsigned int nbr : m.p2p.at(pid)) tmp.push_back(np + nbr);
         this->p2p.push_back(tmp);
 
         tmp.clear();
-        for(uint vid : m.poly_tessellation(pid)) tmp.push_back(nv + vid);
+        for(unsigned int vid : m.poly_tessellation(pid)) tmp.push_back(nv + vid);
         this->poly_triangles.push_back(tmp);
     }
-    for(uint eid=0; eid<m.num_edges(); ++eid)
+    for(unsigned int eid=0; eid<m.num_edges(); ++eid)
     {
         this->edges.push_back(nv + m.edge_vert_id(eid,0));
         this->edges.push_back(nv + m.edge_vert_id(eid,1));
@@ -1712,24 +1712,24 @@ void AbstractPolygonMesh<M,V,E,P>::operator+=(const AbstractPolygonMesh<M,V,E,P>
         this->e_data.push_back(m.edge_data(eid));
 
         tmp.clear();
-        for(uint tid : m.e2p.at(eid)) tmp.push_back(np + tid);
+        for(unsigned int tid : m.e2p.at(eid)) tmp.push_back(np + tid);
         this->e2p.push_back(tmp);
     }
-    for(uint vid=0; vid<m.num_verts(); ++vid)
+    for(unsigned int vid=0; vid<m.num_verts(); ++vid)
     {
         this->verts.push_back(m.vert(vid));
         this->v_data.push_back(m.vert_data(vid));
 
         tmp.clear();
-        for(uint eid : m.v2e.at(vid)) tmp.push_back(ne + eid);
+        for(unsigned int eid : m.v2e.at(vid)) tmp.push_back(ne + eid);
         this->v2e.push_back(tmp);
 
         tmp.clear();
-        for(uint tid : m.v2p.at(vid)) tmp.push_back(np + tid);
+        for(unsigned int tid : m.v2p.at(vid)) tmp.push_back(np + tid);
         this->v2p.push_back(tmp);
 
         tmp.clear();
-        for(uint nbr : m.v2v.at(vid)) tmp.push_back(nv + nbr);
+        for(unsigned int nbr : m.v2v.at(vid)) tmp.push_back(nv + nbr);
         this->v2v.push_back(tmp);
     }
 
@@ -1745,29 +1745,29 @@ void AbstractPolygonMesh<M,V,E,P>::operator+=(const AbstractPolygonMesh<M,V,E,P>
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-std::vector<uint> AbstractPolygonMesh<M,V,E,P>::get_ordered_boundary_vertices() const
+std::vector<unsigned int> AbstractPolygonMesh<M,V,E,P>::get_ordered_boundary_vertices() const
 {
     // WARNING: assumes the mesh contains exactly ONE simply connected boundary!
 
-    std::vector<uint> b_verts;
+    std::vector<unsigned int> b_verts;
 
-    uint seed = 0;
+    unsigned int seed = 0;
     while(seed<this->num_edges() && !this->edge_is_boundary(seed)) ++seed;
     if(seed >= this->num_edges()) return b_verts;
 
     b_verts.push_back(this->edge_vert_id(seed,0));
     b_verts.push_back(this->edge_vert_id(seed,1));
 
-    uint prev = b_verts.front();
-    uint curr = b_verts.back();
+    unsigned int prev = b_verts.front();
+    unsigned int curr = b_verts.back();
 
     do
     {
         bool found_next = false;
-        for(uint eid : this->adj_v2e(curr))
+        for(unsigned int eid : this->adj_v2e(curr))
         {
             if(!this->edge_is_boundary(eid)) continue;
-            uint vid = this->vert_opposite_to(eid, curr);
+            unsigned int vid = this->vert_opposite_to(eid, curr);
             if(vid!=prev && this->vert_is_boundary(vid))
             {
                 b_verts.push_back(vid);
@@ -1789,11 +1789,11 @@ std::vector<uint> AbstractPolygonMesh<M,V,E,P>::get_ordered_boundary_vertices() 
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-void AbstractPolygonMesh<M,V,E,P>::poly_export_element(const uint pid, std::vector<vec3d> & verts, std::vector<std::vector<uint>> & faces) const
+void AbstractPolygonMesh<M,V,E,P>::poly_export_element(const unsigned int pid, std::vector<vec3d> & verts, std::vector<std::vector<unsigned int>> & faces) const
 {
-    std::vector<uint> f(this->verts_per_poly(pid));
-    std::iota(f.begin(), f.end(), static_cast<uint>(verts.size()));
-    for(uint vid : adj_p2v(pid)) verts.push_back(this->vert(vid));
+    std::vector<unsigned int> f(this->verts_per_poly(pid));
+    std::iota(f.begin(), f.end(), static_cast<unsigned int>(verts.size()));
+    for(unsigned int vid : adj_p2v(pid)) verts.push_back(this->vert(vid));
     faces.push_back(f);
 }
 

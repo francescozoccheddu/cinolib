@@ -44,12 +44,12 @@
 namespace cinolib
 {
 
-typedef std::pair<uint,uint> ipair;
+typedef std::pair<unsigned int,unsigned int> ipair;
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 CINO_INLINE
-ipair unique_pair(uint v0, uint v1);
+ipair unique_pair(unsigned int v0, unsigned int v1);
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 

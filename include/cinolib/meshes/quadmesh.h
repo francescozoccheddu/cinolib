@@ -57,16 +57,16 @@ class Quadmesh : public AbstractPolygonMesh<M,V,E,P>
         explicit Quadmesh(const char * filename);
 
         explicit Quadmesh(const std::vector<vec3d> & verts,
-                          const std::vector<uint>  & polys);
+                          const std::vector<unsigned int>  & polys);
 
         explicit Quadmesh(const std::vector<double> & coords,
-                          const std::vector<uint>   & polys);
+                          const std::vector<unsigned int>   & polys);
 
         explicit Quadmesh(const std::vector<vec3d>             & verts,
-                          const std::vector<std::vector<uint>> & polys);
+                          const std::vector<std::vector<unsigned int>> & polys);
 
         explicit Quadmesh(const std::vector<double>            & coords,
-                          const std::vector<std::vector<uint>> & polys);
+                          const std::vector<std::vector<unsigned int>> & polys);
 
         ~Quadmesh(){}
 
@@ -76,30 +76,30 @@ class Quadmesh : public AbstractPolygonMesh<M,V,E,P>
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-        uint verts_per_poly(const uint) const override { return 4; }
-        uint verts_per_poly()           const          { return 4; }
-        uint edges_per_poly(const uint) const override { return 4; }
-        uint edges_per_poly()           const          { return 4; }
+        unsigned int verts_per_poly(const unsigned int) const override { return 4; }
+        unsigned int verts_per_poly()           const          { return 4; }
+        unsigned int edges_per_poly(const unsigned int) const override { return 4; }
+        unsigned int edges_per_poly()           const          { return 4; }
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-        bool              vert_is_singular     (const uint vid) const;
-        bool              vert_is_regular      (const uint vid) const;
-        int               vert_next_along_chain(const uint curr, const uint prev) const;
-        std::vector<uint> vert_chain           (const uint start, const uint next) const;
+        bool              vert_is_singular     (const unsigned int vid) const;
+        bool              vert_is_regular      (const unsigned int vid) const;
+        int               vert_next_along_chain(const unsigned int curr, const unsigned int prev) const;
+        std::vector<unsigned int> vert_chain           (const unsigned int start, const unsigned int next) const;
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-        int                            edge_next_along_chain(const uint eid, const uint vid) const;
-        uint                           edge_opposite_to(const uint pid, const uint eid) const;
-        std::vector<uint>              edges_opposite_to(const uint eid) const;
-        std::vector<uint>              edge_chain(const uint eid, const uint vid) const; // chain of ADJACENT edges
-        std::vector<uint>              edge_parallel_chain(const uint eid) const;        // chain of PARALLEL edges
-        std::vector<std::vector<uint>> edge_parallel_chains() const;                     // chain of PARALLEL edges
+        int                            edge_next_along_chain(const unsigned int eid, const unsigned int vid) const;
+        unsigned int                           edge_opposite_to(const unsigned int pid, const unsigned int eid) const;
+        std::vector<unsigned int>              edges_opposite_to(const unsigned int eid) const;
+        std::vector<unsigned int>              edge_chain(const unsigned int eid, const unsigned int vid) const; // chain of ADJACENT edges
+        std::vector<unsigned int>              edge_parallel_chain(const unsigned int eid) const;        // chain of PARALLEL edges
+        std::vector<std::vector<unsigned int>> edge_parallel_chains() const;                     // chain of PARALLEL edges
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-        uint poly_vert_opposite_to(const uint pid, const uint vid) const;
+        unsigned int poly_vert_opposite_to(const unsigned int pid, const unsigned int vid) const;
 };
 
 }

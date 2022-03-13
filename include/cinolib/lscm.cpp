@@ -44,9 +44,9 @@ namespace cinolib
 template<class M, class V, class E, class P>
 CINO_INLINE
 ScalarField LSCM(const Trimesh<M,V,E,P>     & m,
-                 const std::map<uint,vec2d> & bc)
+                 const std::map<unsigned int,vec2d> & bc)
 {
-    std::map<uint,double> bc_uv;
+    std::map<unsigned int,double> bc_uv;
     if(!bc.empty())
     {
         for(auto obj : bc)
@@ -58,9 +58,9 @@ ScalarField LSCM(const Trimesh<M,V,E,P>     & m,
     else // fix two distant points on the boundary
     {
         auto b_verts = m.get_ordered_boundary_vertices();
-        uint v0 = b_verts.front();
-        uint v1 = b_verts.at(b_verts.size()*0.5);
-        uint nv = m.num_verts();
+        unsigned int v0 = b_verts.front();
+        unsigned int v1 = b_verts.at(b_verts.size()*0.5);
+        unsigned int nv = m.num_verts();
         bc_uv[v0   ] = 0;
         bc_uv[v0+nv] = 0;
         bc_uv[v1   ] = 1;

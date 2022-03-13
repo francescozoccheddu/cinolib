@@ -54,8 +54,8 @@ template<class M, class V, class E, class P>
 CINO_INLINE
 void smooth_taubin(AbstractMesh<M,V,E,P> & m,
                    const int               mode,
-                   const std::set<uint>    do_not_smooth,
-                   const uint              n_iters,
+                   const std::set<unsigned int>    do_not_smooth,
+                   const unsigned int              n_iters,
                    const double            lambda,
                    const double            mu)
 {
@@ -63,15 +63,15 @@ void smooth_taubin(AbstractMesh<M,V,E,P> & m,
     assert(lambda <  1 );
     assert(lambda < -mu);
 
-    for(uint iter=0; iter<n_iters; ++iter)
+    for(unsigned int iter=0; iter<n_iters; ++iter)
     {
         // shrink
         //
-        for(uint vid=0; vid<m.num_verts(); ++vid)
+        for(unsigned int vid=0; vid<m.num_verts(); ++vid)
         {
             if (CONTAINS(do_not_smooth, vid)) continue;
 
-            std::vector<std::pair<uint,double>> wgts;
+            std::vector<std::pair<unsigned int,double>> wgts;
             m.vert_weights(vid, mode, wgts);
 
             // normalize weights...
@@ -86,11 +86,11 @@ void smooth_taubin(AbstractMesh<M,V,E,P> & m,
 
         // inflate
         //
-        for(uint vid=0; vid<m.num_verts(); ++vid)
+        for(unsigned int vid=0; vid<m.num_verts(); ++vid)
         {
             if (CONTAINS(do_not_smooth, vid)) continue;
 
-            std::vector<std::pair<uint,double>> wgts;
+            std::vector<std::pair<unsigned int,double>> wgts;
             m.vert_weights(vid, mode, wgts);
 
             // normalize weights...

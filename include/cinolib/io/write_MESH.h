@@ -48,7 +48,7 @@ namespace cinolib
 CINO_INLINE
 void write_MESH(const char                           * filename,
                 const std::vector<vec3d>             & verts,
-                const std::vector<std::vector<uint>> & polys,
+                const std::vector<std::vector<unsigned int>> & polys,
                 const std::vector<int>               & vert_labels,
                 const std::vector<int>               & poly_labels);
 
@@ -57,7 +57,7 @@ void write_MESH(const char                           * filename,
 CINO_INLINE
 void write_MESH(const char                           * filename,
                 const std::vector<vec3d>             & verts,
-                const std::vector<std::vector<uint>> & polys);
+                const std::vector<std::vector<unsigned int>> & polys);
 
 }
 

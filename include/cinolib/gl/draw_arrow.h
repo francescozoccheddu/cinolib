@@ -57,7 +57,7 @@ CINO_INLINE
 void draw_arrow(const mat<3,1,T>         & base,    // base
                 const mat<3,1,T>         & dir,     // axis orientation
                 const std::vector<float> & verts,   // tessellation verts
-                const std::vector<uint>  & tris,    // tessellation triangles
+                const std::vector<unsigned int>  & tris,    // tessellation triangles
                 const std::vector<float> & normals, // tessellation normals (per vertex)
                 const Color              & color)   // color
 {
@@ -101,11 +101,11 @@ void draw_arrow(const mat<3,1,T> & bot,
                 const Color      & color,
                 const T            base_rel_height = 0.7, // percentage of the height
                 const T            base_rel_radius = 0.5, // percentage of the radius
-                const uint         n_sides         = 6)   // cross section
+                const unsigned int         n_sides         = 6)   // cross section
 {
     // tessellation
     std::vector<float> verts, normals;
-    std::vector<uint>  tris;
+    std::vector<unsigned int>  tris;
     arrow((float)bot.dist(top),
           (float)radius,
           (float)base_rel_height,

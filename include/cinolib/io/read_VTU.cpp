@@ -51,7 +51,7 @@ namespace cinolib
 CINO_INLINE
 void read_VTU(const char                      * filename,
                std::vector<vec3d>             & verts,
-               std::vector<std::vector<uint>> & poly)
+               std::vector<std::vector<unsigned int>> & poly)
 {
     setlocale(LC_NUMERIC, "en_US.UTF-8"); // makes sure "." is the decimal separator
 
@@ -60,7 +60,7 @@ void read_VTU(const char                      * filename,
     reader->Update();
     vtkSmartPointer<vtkUnstructuredGrid> grid(reader->GetOutput());
 
-    for(uint i=0; i<grid->GetNumberOfPoints(); ++i)
+    for(unsigned int i=0; i<grid->GetNumberOfPoints(); ++i)
     {
         double pnt[3];
         grid->GetPoint(i, pnt);
@@ -68,15 +68,15 @@ void read_VTU(const char                      * filename,
         verts.push_back(vec3d(pnt[0],pnt[1],pnt[2]));
     }
 
-    for(uint i=0; i<grid->GetNumberOfCells(); ++i)
+    for(unsigned int i=0; i<grid->GetNumberOfCells(); ++i)
     {
         vtkCell *c = grid->GetCell(i);
 
-        std::vector<uint> polyhedron;
+        std::vector<unsigned int> polyhedron;
         switch (c->GetCellType())
         {
-            case VTK_TETRA:      for(uint j=0; j<4; ++j) polyhedron.push_back(c->GetPointId(j)); break;
-            case VTK_HEXAHEDRON: for(uint j=0; j<8; ++j) polyhedron.push_back(c->GetPointId(j)); break;
+            case VTK_TETRA:      for(unsigned int j=0; j<4; ++j) polyhedron.push_back(c->GetPointId(j)); break;
+            case VTK_HEXAHEDRON: for(unsigned int j=0; j<8; ++j) polyhedron.push_back(c->GetPointId(j)); break;
         }
 
         if(!polyhedron.empty()) poly.push_back(polyhedron);
@@ -88,7 +88,7 @@ void read_VTU(const char                      * filename,
 CINO_INLINE
 void read_VTU(const char                      * filename,
                std::vector<double>            & xyz,
-               std::vector<std::vector<uint>> & poly)
+               std::vector<std::vector<unsigned int>> & poly)
 {
     setlocale(LC_NUMERIC, "en_US.UTF-8"); // makes sure "." is the decimal separator
 
@@ -97,7 +97,7 @@ void read_VTU(const char                      * filename,
     reader->Update();
     vtkSmartPointer<vtkUnstructuredGrid> grid(reader->GetOutput());
 
-    for(uint i=0; i<grid->GetNumberOfPoints(); ++i)
+    for(unsigned int i=0; i<grid->GetNumberOfPoints(); ++i)
     {
         double pnt[3];
         grid->GetPoint(i, pnt);
@@ -107,15 +107,15 @@ void read_VTU(const char                      * filename,
         xyz.push_back(pnt[2]);
     }
 
-    for(uint i=0; i<grid->GetNumberOfCells(); ++i)
+    for(unsigned int i=0; i<grid->GetNumberOfCells(); ++i)
     {
         vtkCell *c = grid->GetCell(i);
 
-        std::vector<uint> polyhedron;
+        std::vector<unsigned int> polyhedron;
         switch (c->GetCellType())
         {
-            case VTK_TETRA:      for(uint j=0; j<4; ++j) polyhedron.push_back(c->GetPointId(j)); break;
-            case VTK_HEXAHEDRON: for(uint j=0; j<8; ++j) polyhedron.push_back(c->GetPointId(j)); break;
+            case VTK_TETRA:      for(unsigned int j=0; j<4; ++j) polyhedron.push_back(c->GetPointId(j)); break;
+            case VTK_HEXAHEDRON: for(unsigned int j=0; j<8; ++j) polyhedron.push_back(c->GetPointId(j)); break;
         }
 
         if(!polyhedron.empty()) poly.push_back(polyhedron);
@@ -127,8 +127,8 @@ void read_VTU(const char                      * filename,
 CINO_INLINE
 void read_VTU(const char           * filename,
                std::vector<double> & xyz,
-               std::vector<uint>   & tets,
-               std::vector<uint>   & hexa)
+               std::vector<unsigned int>   & tets,
+               std::vector<unsigned int>   & hexa)
 {
 
     setlocale(LC_NUMERIC, "en_US.UTF-8"); // makes sure "." is the decimal separator
@@ -138,7 +138,7 @@ void read_VTU(const char           * filename,
     reader->Update();
     vtkSmartPointer<vtkUnstructuredGrid> grid(reader->GetOutput());
 
-    for(uint i=0; i<grid->GetNumberOfPoints(); ++i)
+    for(unsigned int i=0; i<grid->GetNumberOfPoints(); ++i)
     {
         double pnt[3];
         grid->GetPoint(i, pnt);
@@ -148,14 +148,14 @@ void read_VTU(const char           * filename,
         xyz.push_back(pnt[2]);
     }
 
-    for(uint i=0; i<grid->GetNumberOfCells(); ++i)
+    for(unsigned int i=0; i<grid->GetNumberOfCells(); ++i)
     {
         vtkCell *c = grid->GetCell(i);
 
         switch (c->GetCellType())
         {
-            case VTK_TETRA:      for(uint j=0; j<4; ++j) tets.push_back(c->GetPointId(j)); break;
-            case VTK_HEXAHEDRON: for(uint j=0; j<8; ++j) hexa.push_back(c->GetPointId(j)); break;
+            case VTK_TETRA:      for(unsigned int j=0; j<4; ++j) tets.push_back(c->GetPointId(j)); break;
+            case VTK_HEXAHEDRON: for(unsigned int j=0; j<8; ++j) hexa.push_back(c->GetPointId(j)); break;
         }
     }
 }
@@ -165,8 +165,8 @@ void read_VTU(const char           * filename,
 CINO_INLINE
 void read_VTU(const char          *,
                std::vector<double> &,
-               std::vector<uint>   &,
-               std::vector<uint>   &)
+               std::vector<unsigned int>   &,
+               std::vector<unsigned int>   &)
 {
     std::cerr << "ERROR : VTK missing. Install VTK and recompile defining symbol CINOLIB_USES_VTK" << std::endl;
     exit(-1);
@@ -175,7 +175,7 @@ void read_VTU(const char          *,
 CINO_INLINE
 void read_VTU(const char                      *,
                std::vector<double>            &,
-               std::vector<std::vector<uint>> &)
+               std::vector<std::vector<unsigned int>> &)
 {
     std::cerr << "ERROR : VTK missing. Install VTK and recompile defining symbol CINOLIB_USES_VTK" << std::endl;
     exit(-1);
@@ -184,7 +184,7 @@ void read_VTU(const char                      *,
 CINO_INLINE
 void read_VTU(const char                      *,
                std::vector<vec3d>             &,
-               std::vector<std::vector<uint>> &)
+               std::vector<std::vector<unsigned int>> &)
 {
     std::cerr << "ERROR : VTK missing. Install VTK and recompile defining symbol CINOLIB_USES_VTK" << std::endl;
     exit(-1);

@@ -55,7 +55,7 @@ namespace cinolib
 template<class M, class V, class E, class F, class P>
 CINO_INLINE
 Hexmesh<M,V,E,F,P>::Hexmesh(const std::vector<vec3d> & verts,
-                            const std::vector<uint>  & polys)
+                            const std::vector<unsigned int>  & polys)
 {
     this->init(verts, polys_from_serialized_vids(polys,8));
 }
@@ -65,7 +65,7 @@ Hexmesh<M,V,E,F,P>::Hexmesh(const std::vector<vec3d> & verts,
 template<class M, class V, class E, class F, class P>
 CINO_INLINE
 Hexmesh<M,V,E,F,P>::Hexmesh(const std::vector<double> & coords,
-                            const std::vector<uint>   & polys)
+                            const std::vector<unsigned int>   & polys)
 {
     this->init(vec3d_from_serialized_xyz(coords), polys_from_serialized_vids(polys,8));
 }
@@ -75,7 +75,7 @@ Hexmesh<M,V,E,F,P>::Hexmesh(const std::vector<double> & coords,
 template<class M, class V, class E, class F, class P>
 CINO_INLINE
 Hexmesh<M,V,E,F,P>::Hexmesh(const std::vector<vec3d>             & verts,
-                            const std::vector<std::vector<uint>> & polys)
+                            const std::vector<std::vector<unsigned int>> & polys)
 {
     this->init(verts, polys);
 }
@@ -99,7 +99,7 @@ void Hexmesh<M,V,E,F,P>::load(const char * filename)
     this->mesh_data().filename = std::string(filename);
 
     std::vector<vec3d>             tmp_verts;
-    std::vector<std::vector<uint>> tmp_polys;
+    std::vector<std::vector<unsigned int>> tmp_polys;
     std::vector<int>               vert_labels;
     std::vector<int>               poly_labels;
 
@@ -172,7 +172,7 @@ void Hexmesh<M,V,E,F,P>::save(const char * filename) const
 
 template<class M, class V, class E, class F, class P>
 CINO_INLINE
-void Hexmesh<M,V,E,F,P>::update_f_normal(const uint fid)
+void Hexmesh<M,V,E,F,P>::update_f_normal(const unsigned int fid)
 {
     // STEAL BETTER NORMAL ESTIMATION FROM QUADMESH!
     vec3d v0 = this->face_vert(fid,0);
@@ -196,9 +196,9 @@ void Hexmesh<M,V,E,F,P>::print_quality(const bool list_folded_elements)
 
     double asj = 0.0;
     double msj = inf_double;
-    uint   inv = 0;
+    unsigned int   inv = 0;
 
-    for(uint pid=0; pid<this->num_polys(); ++pid)
+    for(unsigned int pid=0; pid<this->num_polys(); ++pid)
     {
         double q = this->poly_data(pid).quality;
 
@@ -226,10 +226,10 @@ void Hexmesh<M,V,E,F,P>::print_quality(const bool list_folded_elements)
 
 template<class M, class V, class E, class F, class P>
 CINO_INLINE
-bool Hexmesh<M,V,E,F,P>::vert_is_singular(const uint vid) const
+bool Hexmesh<M,V,E,F,P>::vert_is_singular(const unsigned int vid) const
 {
-    uint count = 0;
-    for(uint eid : this->adj_v2e(vid))
+    unsigned int count = 0;
+    for(unsigned int eid : this->adj_v2e(vid))
     {
         if(this->edge_is_singular(eid)) ++count;
     }
@@ -241,7 +241,7 @@ bool Hexmesh<M,V,E,F,P>::vert_is_singular(const uint vid) const
 
 template<class M, class V, class E, class F, class P>
 CINO_INLINE
-bool Hexmesh<M,V,E,F,P>::vert_is_regular(const uint vid) const
+bool Hexmesh<M,V,E,F,P>::vert_is_regular(const unsigned int vid) const
 {
     return !this->vert_is_singular(vid);
 }
@@ -250,7 +250,7 @@ bool Hexmesh<M,V,E,F,P>::vert_is_regular(const uint vid) const
 
 template<class M, class V, class E, class F, class P>
 CINO_INLINE
-bool Hexmesh<M,V,E,F,P>::edge_is_singular(const uint eid) const
+bool Hexmesh<M,V,E,F,P>::edge_is_singular(const unsigned int eid) const
 {
     if (this->edge_is_on_srf(eid))
     {
@@ -265,7 +265,7 @@ bool Hexmesh<M,V,E,F,P>::edge_is_singular(const uint eid) const
 
 template<class M, class V, class E, class F, class P>
 CINO_INLINE
-bool Hexmesh<M,V,E,F,P>::edge_is_regular(const uint eid) const
+bool Hexmesh<M,V,E,F,P>::edge_is_regular(const unsigned int eid) const
 {
     return !this->edge_is_singular(eid);
 }
@@ -274,28 +274,28 @@ bool Hexmesh<M,V,E,F,P>::edge_is_regular(const uint eid) const
 
 template<class M, class V, class E, class F, class P>
 CINO_INLINE
-std::vector<uint> Hexmesh<M,V,E,F,P>::face_sheet(const uint fid) const
+std::vector<unsigned int> Hexmesh<M,V,E,F,P>::face_sheet(const unsigned int fid) const
 {
-    std::vector<uint> sheet;
+    std::vector<unsigned int> sheet;
 
-    std::queue<uint>  q;
+    std::queue<unsigned int>  q;
     q.push(fid);
 
-    std::unordered_set<uint> visited;
+    std::unordered_set<unsigned int> visited;
     visited.insert(fid);
 
     while(!q.empty())
     {
-        uint fid = q.front();
+        unsigned int fid = q.front();
         q.pop();
 
         sheet.push_back(fid);
 
-        for(uint eid : this->adj_f2e(fid))
+        for(unsigned int eid : this->adj_f2e(fid))
         {
             if (this->edge_is_singular(eid)) continue;
 
-            for(uint nbr : this->adj_e2f(eid))
+            for(unsigned int nbr : this->adj_e2f(eid))
             {
                 if(!this->faces_share_poly(fid,nbr) && DOES_NOT_CONTAIN(visited,nbr))
                 {
@@ -312,10 +312,10 @@ std::vector<uint> Hexmesh<M,V,E,F,P>::face_sheet(const uint fid) const
 
 template<class M, class V, class E, class F, class P>
 CINO_INLINE
-vec3d Hexmesh<M,V,E,F,P>::verts_average(const std::vector<uint> & vids) const
+vec3d Hexmesh<M,V,E,F,P>::verts_average(const std::vector<unsigned int> & vids) const
 {
     vec3d res(0,0,0);
-    for(uint vid: vids) res += this->vert(vid);
+    for(unsigned int vid: vids) res += this->vert(vid);
     res /= static_cast<double>(vids.size());
     return res;
 }
@@ -324,9 +324,9 @@ vec3d Hexmesh<M,V,E,F,P>::verts_average(const std::vector<uint> & vids) const
 
 template<class M, class V, class E, class F, class P>
 CINO_INLINE
-uint Hexmesh<M,V,E,F,P>::poly_vert_opposite_to(const uint pid, const uint fid, const uint vid) const
+unsigned int Hexmesh<M,V,E,F,P>::poly_vert_opposite_to(const unsigned int pid, const unsigned int fid, const unsigned int vid) const
 {
-    for(uint nbr : this->poly_v2v(pid,vid))
+    for(unsigned int nbr : this->poly_v2v(pid,vid))
     {
         if(!this->face_contains_vert(fid,nbr)) return nbr;
     }
@@ -338,10 +338,10 @@ uint Hexmesh<M,V,E,F,P>::poly_vert_opposite_to(const uint pid, const uint fid, c
 
 template<class M, class V, class E, class F, class P>
 CINO_INLINE
-uint Hexmesh<M,V,E,F,P>::poly_face_opposite_to(const uint pid, const uint fid) const
+unsigned int Hexmesh<M,V,E,F,P>::poly_face_opposite_to(const unsigned int pid, const unsigned int fid) const
 {
     assert(this->poly_contains_face(pid, fid));
-    for(uint f : this->adj_p2f(pid))
+    for(unsigned int f : this->adj_p2f(pid))
     {
         if(this->faces_are_disjoint(fid,f)) return f;
     }
@@ -353,21 +353,21 @@ uint Hexmesh<M,V,E,F,P>::poly_face_opposite_to(const uint pid, const uint fid) c
 
 template<class M, class V, class E, class F, class P>
 CINO_INLINE
-void Hexmesh<M,V,E,F,P>::poly_subdivide(const std::vector<std::vector<std::vector<uint>>> & poly_split_scheme)
+void Hexmesh<M,V,E,F,P>::poly_subdivide(const std::vector<std::vector<std::vector<unsigned int>>> & poly_split_scheme)
 {
     std::vector<vec3d> new_verts;
-    std::vector<uint>  new_polys;
-    std::map<std::vector<uint>,uint> v_map;
+    std::vector<unsigned int>  new_polys;
+    std::map<std::vector<unsigned int>,unsigned int> v_map;
 
-    for(uint pid=0; pid<this->num_polys(); ++pid)
+    for(unsigned int pid=0; pid<this->num_polys(); ++pid)
     {
         for(const auto & sub_poly: poly_split_scheme)
         {
             assert(sub_poly.size() == 8);
-            for(uint off=0; off<8; ++off)
+            for(unsigned int off=0; off<8; ++off)
             {
-                std::vector<uint> vids;
-                for(uint i : sub_poly.at(off)) vids.push_back(this->poly_vert_id(pid,i));
+                std::vector<unsigned int> vids;
+                for(unsigned int i : sub_poly.at(off)) vids.push_back(this->poly_vert_id(pid,i));
                 sort(vids.begin(), vids.end());
 
                 auto query = v_map.find(vids);
@@ -377,7 +377,7 @@ void Hexmesh<M,V,E,F,P>::poly_subdivide(const std::vector<std::vector<std::vecto
                 }
                 else
                 {
-                    uint fresh_id = new_verts.size();
+                    unsigned int fresh_id = new_verts.size();
                     new_verts.push_back(verts_average(vids));
                     v_map[vids] = fresh_id;
                     new_polys.push_back(fresh_id);
@@ -392,7 +392,7 @@ void Hexmesh<M,V,E,F,P>::poly_subdivide(const std::vector<std::vector<std::vecto
 
 template<class M, class V, class E, class F, class P>
 CINO_INLINE
-double Hexmesh<M,V,E,F,P>::poly_volume(const uint pid) const
+double Hexmesh<M,V,E,F,P>::poly_volume(const unsigned int pid) const
 {
     return hex_unsigned_volume(this->poly_vert(pid,0),
                                this->poly_vert(pid,1),
@@ -412,8 +412,8 @@ bool Hexmesh<M,V,E,F,P>::poly_fix_orientation()
 {
     if(AbstractPolyhedralMesh<M,V,E,F,P>::poly_fix_orientation())
     {
-        uint bad = 0;
-        for(uint pid=0; pid<this->num_polys(); ++pid)
+        unsigned int bad = 0;
+        for(unsigned int pid=0; pid<this->num_polys(); ++pid)
         {
             this->poly_reorder_p2v(pid);
             this->update_p_quality(pid);
@@ -421,7 +421,7 @@ bool Hexmesh<M,V,E,F,P>::poly_fix_orientation()
         }
         if(bad > 0.5*this->num_polys())
         {
-            for(uint pid=0; pid<this->num_polys(); ++pid)
+            for(unsigned int pid=0; pid<this->num_polys(); ++pid)
             {
                 this->poly_flip_winding(pid);
                 this->poly_reorder_p2v(pid);
@@ -437,7 +437,7 @@ bool Hexmesh<M,V,E,F,P>::poly_fix_orientation()
 
 template<class M, class V, class E, class F, class P>
 CINO_INLINE
-void Hexmesh<M,V,E,F,P>::poly_local_frame(const uint    pid,
+void Hexmesh<M,V,E,F,P>::poly_local_frame(const unsigned int    pid,
                                                 mat3d & xyz)
 {
     auto verts = this->poly_verts(pid);
@@ -455,7 +455,7 @@ void Hexmesh<M,V,E,F,P>::poly_local_frame(const uint    pid,
 
 template<class M, class V, class E, class F, class P>
 CINO_INLINE
-void Hexmesh<M,V,E,F,P>::poly_local_frame(const uint    pid,
+void Hexmesh<M,V,E,F,P>::poly_local_frame(const unsigned int    pid,
                                                 vec3d & x,
                                                 vec3d & y,
                                                 vec3d & z)

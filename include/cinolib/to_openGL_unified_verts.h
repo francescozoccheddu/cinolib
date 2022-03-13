@@ -55,11 +55,11 @@ namespace cinolib
 CINO_INLINE
 void to_openGL_unified_verts(const std::vector<vec3d>             & v_attr_0,          // xyz or uvw or nor
                              const std::vector<vec3d>             & v_attr_1,          // xyz or uvw or nor
-                             const std::vector<std::vector<uint>> & v2v_v_attr_0,      // connectivity attr #0
-                             const std::vector<std::vector<uint>> & v2v_v_attr_1,      // connectivity attr #1
+                             const std::vector<std::vector<unsigned int>> & v2v_v_attr_0,      // connectivity attr #0
+                             const std::vector<std::vector<unsigned int>> & v2v_v_attr_1,      // connectivity attr #1
                                    std::vector<vec3d>             & unified_v_attr_0,
                                    std::vector<vec3d>             & unified_v_attr_1,
-                                   std::vector<std::vector<uint>> & unified_v2v);
+                                   std::vector<std::vector<unsigned int>> & unified_v2v);
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -67,13 +67,13 @@ CINO_INLINE
 void to_openGL_unified_verts(const std::vector<vec3d>             & v_attr_0,
                              const std::vector<vec3d>             & v_attr_1,
                              const std::vector<vec3d>             & v_attr_2,
-                             const std::vector<std::vector<uint>> & v2v_attr_0,
-                             const std::vector<std::vector<uint>> & v2v_attr_1,
-                             const std::vector<std::vector<uint>> & v2v_attr_2,
+                             const std::vector<std::vector<unsigned int>> & v2v_attr_0,
+                             const std::vector<std::vector<unsigned int>> & v2v_attr_1,
+                             const std::vector<std::vector<unsigned int>> & v2v_attr_2,
                                    std::vector<vec3d>             & unified_v_attr_0,
                                    std::vector<vec3d>             & unified_v_attr_1,
                                    std::vector<vec3d>             & unified_v_attr_2,
-                                   std::vector<std::vector<uint>> & unified_v2v);
+                                   std::vector<std::vector<unsigned int>> & unified_v2v);
 }
 
 #ifndef  CINO_STATIC_LIB

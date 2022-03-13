@@ -73,7 +73,7 @@ void DrawableCurve::draw(const float scene_size) const
 {
     double cylind_rad = scene_size * 0.001 * thickness;
 
-    for(uint i=1; i<samples().size(); ++i)
+    for(unsigned int i=1; i<samples().size(); ++i)
     {
         // FIXME (francescozoccheddu)
         //cylinder<vec3d>(samples()[i-1].pos, samples()[i].pos, cylind_rad, cylind_rad, color.rgba); 

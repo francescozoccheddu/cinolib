@@ -58,7 +58,7 @@ Trimesh<M,V,E,P>::Trimesh(const char * filename)
 template<class M, class V, class E, class P>
 CINO_INLINE
 Trimesh<M,V,E,P>::Trimesh(const std::vector<vec3d>              & verts,
-                          const std::vector<std::vector<uint>>  & polys)
+                          const std::vector<std::vector<unsigned int>>  & polys)
 
 {
     this->init(verts, polys);
@@ -69,7 +69,7 @@ Trimesh<M,V,E,P>::Trimesh(const std::vector<vec3d>              & verts,
 template<class M, class V, class E, class P>
 CINO_INLINE
 Trimesh<M,V,E,P>::Trimesh(const std::vector<double>             & coords,
-                          const std::vector<std::vector<uint>>  & polys)
+                          const std::vector<std::vector<unsigned int>>  & polys)
 {
     this->init(vec3d_from_serialized_xyz(coords), polys);
 }
@@ -79,7 +79,7 @@ Trimesh<M,V,E,P>::Trimesh(const std::vector<double>             & coords,
 template<class M, class V, class E, class P>
 CINO_INLINE
 Trimesh<M,V,E,P>::Trimesh(const std::vector<vec3d> & verts,
-                          const std::vector<uint>  & polys)
+                          const std::vector<unsigned int>  & polys)
 {
     this->init(verts, polys_from_serialized_vids(polys,3));
 }
@@ -89,7 +89,7 @@ Trimesh<M,V,E,P>::Trimesh(const std::vector<vec3d> & verts,
 template<class M, class V, class E, class P>
 CINO_INLINE
 Trimesh<M,V,E,P>::Trimesh(const std::vector<double> & coords,
-                          const std::vector<uint>   & polys)
+                          const std::vector<unsigned int>   & polys)
 {
     this->init(vec3d_from_serialized_xyz(coords), polys_from_serialized_vids(polys,3));
 }
@@ -98,7 +98,7 @@ Trimesh<M,V,E,P>::Trimesh(const std::vector<double> & coords,
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-void Trimesh<M,V,E,P>::update_p_normal(const uint pid)
+void Trimesh<M,V,E,P>::update_p_normal(const unsigned int pid)
 {
     this->poly_data(pid).normal = triangle_normal(this->poly_vert(pid,0),
                                                   this->poly_vert(pid,1),
@@ -109,10 +109,10 @@ void Trimesh<M,V,E,P>::update_p_normal(const uint pid)
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-uint Trimesh<M,V,E,P>::edge_opposite_to(const uint pid, const uint vid) const
+unsigned int Trimesh<M,V,E,P>::edge_opposite_to(const unsigned int pid, const unsigned int vid) const
 {
     assert(this->poly_contains_vert(pid, vid));
-    for(uint eid : this->adj_p2e(pid))
+    for(unsigned int eid : this->adj_p2e(pid))
     {
         if(!this->edge_contains_vert(eid,vid)) return eid;
     }
@@ -124,7 +124,7 @@ uint Trimesh<M,V,E,P>::edge_opposite_to(const uint pid, const uint vid) const
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-bool Trimesh<M,V,E,P>::edge_is_collapsible(const uint eid, const double lambda) const
+bool Trimesh<M,V,E,P>::edge_is_collapsible(const unsigned int eid, const double lambda) const
 {
     if(!edge_is_topologically_collapsible(eid)) return false;
     if(!edge_is_geometrically_collapsible(eid, lambda)) return false;
@@ -135,20 +135,20 @@ bool Trimesh<M,V,E,P>::edge_is_collapsible(const uint eid, const double lambda) 
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-bool Trimesh<M,V,E,P>::edge_is_topologically_collapsible(const uint eid) const
+bool Trimesh<M,V,E,P>::edge_is_topologically_collapsible(const unsigned int eid) const
 {
     // implements the "Link Condition" for 2-complexes described in:
     // Topology preserving edge contraction
     // Tamal K. Dey, Herbert Edelsbrunner, Sumanta Guha and Dmitry V. Nekhayev
     // 1999
 
-    uint v0 = this->edge_vert_id(eid,0);
-    uint v1 = this->edge_vert_id(eid,1);
+    unsigned int v0 = this->edge_vert_id(eid,0);
+    unsigned int v1 = this->edge_vert_id(eid,1);
 
     auto v0_e_link = this->vert_edges_link(v0);
     auto v1_e_link = this->vert_edges_link(v1);
 
-    std::vector<uint> inters;
+    std::vector<unsigned int> inters;
     SET_INTERSECTION(v0_e_link, v1_e_link, inters, true);
     if(!inters.empty()) return false;
 
@@ -158,7 +158,7 @@ bool Trimesh<M,V,E,P>::edge_is_topologically_collapsible(const uint eid) const
     SORT_VEC(e_v_link, false);
 
     // to avoid topological changes at the border, boundary edges are assumed to form a triangle with an infinite vertex, which thus enters in the various vert links
-    uint inf_vert = this->num_verts();
+    unsigned int inf_vert = this->num_verts();
     if(this->vert_is_boundary(v0))  v0_v_link.push_back(inf_vert);
     if(this->vert_is_boundary(v1))  v1_v_link.push_back(inf_vert);
     if(this->edge_is_boundary(eid)) e_v_link.push_back(inf_vert); // (last position in the vector is ok, as inf_vert is the biggest id!)
@@ -173,18 +173,18 @@ bool Trimesh<M,V,E,P>::edge_is_topologically_collapsible(const uint eid) const
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-bool Trimesh<M,V,E,P>::edge_is_geometrically_collapsible(const uint eid, const double lambda) const
+bool Trimesh<M,V,E,P>::edge_is_geometrically_collapsible(const unsigned int eid, const double lambda) const
 {
     // no triangle should flip or collapse
     vec3d new_vert = this->edge_sample_at(eid, lambda);
-    uint  vid0     = this->edge_vert_id(eid,0);
-    uint  vid1     = this->edge_vert_id(eid,1);
+    unsigned int  vid0     = this->edge_vert_id(eid,0);
+    unsigned int  vid1     = this->edge_vert_id(eid,1);
 
-    std::unordered_set<uint> polys_to_test;
-    for(uint pid : this->adj_v2p(vid0)) if(!this->poly_contains_edge(pid, eid)) polys_to_test.insert(pid);
-    for(uint pid : this->adj_v2p(vid1)) if(!this->poly_contains_edge(pid, eid)) polys_to_test.insert(pid);
+    std::unordered_set<unsigned int> polys_to_test;
+    for(unsigned int pid : this->adj_v2p(vid0)) if(!this->poly_contains_edge(pid, eid)) polys_to_test.insert(pid);
+    for(unsigned int pid : this->adj_v2p(vid1)) if(!this->poly_contains_edge(pid, eid)) polys_to_test.insert(pid);
 
-    for(uint pid : polys_to_test)
+    for(unsigned int pid : polys_to_test)
     {
         vec3d v[3];
         for(int i=0; i<3; ++i)
@@ -206,25 +206,25 @@ bool Trimesh<M,V,E,P>::edge_is_geometrically_collapsible(const uint eid, const d
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-uint Trimesh<M,V,E,P>::vert_split(const uint eid0, const uint eid1)
+unsigned int Trimesh<M,V,E,P>::vert_split(const unsigned int eid0, const unsigned int eid1)
 {    
-    uint v0 = this->vert_shared(eid0, eid1);
-    uint v1 = this->vert_add(vec3d(0,0,0));
+    unsigned int v0 = this->vert_shared(eid0, eid1);
+    unsigned int v1 = this->vert_add(vec3d(0,0,0));
 
     // bi-partition the umbrella around the two split edges
-    std::vector<uint> p_ring = this->vert_ordered_polys_star(v0);
-    std::vector<uint> pids0, pids1;
+    std::vector<unsigned int> p_ring = this->vert_ordered_polys_star(v0);
+    std::vector<unsigned int> pids0, pids1;
     bool push0 = true;
-    for(uint i=0; i<p_ring.size(); ++i)
+    for(unsigned int i=0; i<p_ring.size(); ++i)
     {
-        uint curr = p_ring.at(i);
+        unsigned int curr = p_ring.at(i);
         if(push0) pids0.push_back(curr);
         else      pids1.push_back(curr);
         if(i<p_ring.size()-1)
         {
-            uint next = p_ring.at(i+1);
+            unsigned int next = p_ring.at(i+1);
              int eid  = this->edge_shared(curr,next); assert(eid>=0);
-            if((uint)eid==eid0 || (uint)eid==eid1) push0 = !push0;
+            if((unsigned int)eid==eid0 || (unsigned int)eid==eid1) push0 = !push0;
         }
     }
     assert(pids0.size() + pids1.size() == p_ring.size());
@@ -234,8 +234,8 @@ uint Trimesh<M,V,E,P>::vert_split(const uint eid0, const uint eid1)
     // WARNING: not ideal for highly non planar umbrellas. should rather project on the actual surface
     vec3d xyz0(0,0,0);
     vec3d xyz1(0,0,0);
-    for(uint pid : pids0) xyz0 += this->poly_centroid(pid);
-    for(uint pid : pids1) xyz1 += this->poly_centroid(pid);
+    for(unsigned int pid : pids0) xyz0 += this->poly_centroid(pid);
+    for(unsigned int pid : pids1) xyz1 += this->poly_centroid(pid);
     if(!pids0.empty()) xyz0 /= static_cast<double>(pids0.size()); else xyz0 = this->vert(v0);
     if(!pids1.empty()) xyz1 /= static_cast<double>(pids1.size()); else xyz1 = this->vert(v0);
     this->vert(v0) = xyz0;
@@ -243,13 +243,13 @@ uint Trimesh<M,V,E,P>::vert_split(const uint eid0, const uint eid1)
 
     if(this->mesh_data().update_normals)
     {
-        for(uint pid : pids0) this->update_p_normal(pid);
+        for(unsigned int pid : pids0) this->update_p_normal(pid);
     }
-    for(uint pid : pids1)
+    for(unsigned int pid : pids1)
     {
         auto v_list = this->poly_verts_id(pid);
-        for(uint & v : v_list) if(v==v0) v = v1;
-        uint new_pid = this->poly_add(v_list);
+        for(unsigned int & v : v_list) if(v==v0) v = v1;
+        unsigned int new_pid = this->poly_add(v_list);
         this->poly_data(new_pid) = this->poly_data(pid);
         if(this->mesh_data().update_normals) this->update_p_normal(new_pid);
     }
@@ -258,11 +258,11 @@ uint Trimesh<M,V,E,P>::vert_split(const uint eid0, const uint eid1)
     this->polys_remove(pids1);
 
     // tessellate the quad-like hole
-    uint v2 = this->vert_opposite_to(eid0, v0);
-    uint v3 = this->vert_opposite_to(eid1, v0);
+    unsigned int v2 = this->vert_opposite_to(eid0, v0);
+    unsigned int v3 = this->vert_opposite_to(eid1, v0);
     assert(this->adj_e2p(eid0).size()==1);
-    uint vid_new = v1;
-    uint ref_pid = this->adj_e2p(eid0).front();
+    unsigned int vid_new = v1;
+    unsigned int ref_pid = this->adj_e2p(eid0).front();
     if(this->poly_verts_are_CCW(ref_pid, v0, v2)) std::swap(v0,v1);
     this->poly_add({v2, v0, v1});
     this->poly_add({v3, v1, v0});
@@ -275,7 +275,7 @@ uint Trimesh<M,V,E,P>::vert_split(const uint eid0, const uint eid1)
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-int Trimesh<M,V,E,P>::edge_collapse(const uint eid, const double lambda, const bool topologic_check, const bool geometric_check)
+int Trimesh<M,V,E,P>::edge_collapse(const unsigned int eid, const double lambda, const bool topologic_check, const bool geometric_check)
 {
     if(topologic_check && !edge_is_topologically_collapsible(eid))         return -1;
     if(geometric_check && !edge_is_geometrically_collapsible(eid, lambda)) return -1;
@@ -284,20 +284,20 @@ int Trimesh<M,V,E,P>::edge_collapse(const uint eid, const double lambda, const b
     int euler_before = this->Euler_characteristic();
 #endif
 
-    uint vert_to_keep   = this->edge_vert_id(eid,0);
-    uint vert_to_remove = this->edge_vert_id(eid,1);
+    unsigned int vert_to_keep   = this->edge_vert_id(eid,0);
+    unsigned int vert_to_remove = this->edge_vert_id(eid,1);
     if (vert_to_remove < vert_to_keep) std::swap(vert_to_keep, vert_to_remove); // remove vert with highest ID
 
     this->vert(vert_to_keep) = this->edge_sample_at(eid, lambda); // reposition vertex
 
-    for(uint pid : this->adj_v2p(vert_to_remove))
+    for(unsigned int pid : this->adj_v2p(vert_to_remove))
     {
         if (this->poly_contains_edge(pid, eid)) continue; // no need to update. will collapse
 
-        uint off   = this->poly_vert_offset(pid, vert_to_remove);
+        unsigned int off   = this->poly_vert_offset(pid, vert_to_remove);
         auto vlist = this->poly_verts_id(pid);
         vlist.at(off) = vert_to_keep;
-        uint new_pid = this->poly_add(vlist);
+        unsigned int new_pid = this->poly_add(vlist);
 
         this->poly_data(new_pid) = this->poly_data(pid);
         if(this->mesh_data().update_normals) this->update_p_normal(new_pid);
@@ -320,7 +320,7 @@ int Trimesh<M,V,E,P>::edge_collapse(const uint eid, const double lambda, const b
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-uint Trimesh<M,V,E,P>::edge_split(const uint eid, const double lambda)
+unsigned int Trimesh<M,V,E,P>::edge_split(const unsigned int eid, const double lambda)
 {
     return edge_split(eid, this->edge_sample_at(eid,lambda));
 }
@@ -329,18 +329,18 @@ uint Trimesh<M,V,E,P>::edge_split(const uint eid, const double lambda)
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-uint Trimesh<M,V,E,P>::edge_split(const uint eid, const vec3d & p)
+unsigned int Trimesh<M,V,E,P>::edge_split(const unsigned int eid, const vec3d & p)
 {
-    uint new_vid = this->vert_add(p);
-    uint vid0    = this->edge_vert_id(eid,0);
-    uint vid1    = this->edge_vert_id(eid,1);
+    unsigned int new_vid = this->vert_add(p);
+    unsigned int vid0    = this->edge_vert_id(eid,0);
+    unsigned int vid1    = this->edge_vert_id(eid,1);
 
-    for(uint pid : this->adj_e2p(eid))
+    for(unsigned int pid : this->adj_e2p(eid))
     {
-        uint v_opp = this->vert_opposite_to(pid, vid0, vid1);
+        unsigned int v_opp = this->vert_opposite_to(pid, vid0, vid1);
         if (this->poly_verts_are_CCW(pid, vid0, vid1)) std::swap(vid0, vid1);
-        uint new_pid1 = this->poly_add(v_opp, vid0, new_vid);
-        uint new_pid2 = this->poly_add(v_opp, new_vid, vid1);
+        unsigned int new_pid1 = this->poly_add(v_opp, vid0, new_vid);
+        unsigned int new_pid2 = this->poly_add(v_opp, new_vid, vid1);
         this->poly_data(new_pid1) = this->poly_data(pid);
         this->poly_data(new_pid2) = this->poly_data(pid);
         if(this->mesh_data().update_normals) this->update_p_normal(new_pid1);
@@ -362,19 +362,19 @@ uint Trimesh<M,V,E,P>::edge_split(const uint eid, const vec3d & p)
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-bool Trimesh<M,V,E,P>::edge_is_flippable(const uint eid)
+bool Trimesh<M,V,E,P>::edge_is_flippable(const unsigned int eid)
 {
     if( this->edge_is_boundary(eid)) return false;
     if(!this->edge_is_manifold(eid)) return false;
 
     // geometric check (if the projected outline is a concave quad, discard the move)
     assert(this->adj_e2p(eid).size()==2);
-    uint  pid0 = this->adj_e2p(eid).front();
-    uint  pid1 = this->adj_e2p(eid).back();
-    uint  vid0 = this->edge_vert_id(eid,0);
-    uint  vid1 = this->edge_vert_id(eid,1);
-    uint  opp0 = this->vert_opposite_to(pid0,vid0,vid1);
-    uint  opp1 = this->vert_opposite_to(pid1,vid0,vid1);
+    unsigned int  pid0 = this->adj_e2p(eid).front();
+    unsigned int  pid1 = this->adj_e2p(eid).back();
+    unsigned int  vid0 = this->edge_vert_id(eid,0);
+    unsigned int  vid1 = this->edge_vert_id(eid,1);
+    unsigned int  opp0 = this->vert_opposite_to(pid0,vid0,vid1);
+    unsigned int  opp1 = this->vert_opposite_to(pid1,vid0,vid1);
     if(!this->poly_verts_are_CCW(pid0, vid1, vid0)) std::swap(vid0,vid1);
     vec3d n0   = this->poly_data(pid0).normal;
     vec3d n1   = this->poly_data(pid1).normal;
@@ -395,16 +395,16 @@ bool Trimesh<M,V,E,P>::edge_is_flippable(const uint eid)
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-double Trimesh<M,V,E,P>::edge_cotangent_weight(const uint eid) const
+double Trimesh<M,V,E,P>::edge_cotangent_weight(const unsigned int eid) const
 {
     assert(this->edge_is_manifold(eid));
-    uint   vid0  = this->edge_vert_id(eid,0);
-    uint   vid1  = this->edge_vert_id(eid,1);
+    unsigned int   vid0  = this->edge_vert_id(eid,0);
+    unsigned int   vid1  = this->edge_vert_id(eid,1);
     double count = 0.0;
     double sum   = 0.0;
-    for(uint pid : this->adj_e2p(eid))
+    for(unsigned int pid : this->adj_e2p(eid))
     {
-        uint   v_opp = this->vert_opposite_to(pid, vid0, vid1);
+        unsigned int   v_opp = this->vert_opposite_to(pid, vid0, vid1);
         double alpha = this->poly_angle_at_vert(pid, v_opp);
         double c     = cot(alpha);
         if (!std::isnan(c))
@@ -421,20 +421,20 @@ double Trimesh<M,V,E,P>::edge_cotangent_weight(const uint eid) const
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-int Trimesh<M,V,E,P>::edge_flip(const uint eid, const bool geometric_check)
+int Trimesh<M,V,E,P>::edge_flip(const unsigned int eid, const bool geometric_check)
 {
     if(geometric_check && !edge_is_flippable(eid)) return -1;
 
     assert(this->adj_e2p(eid).size()==2);
-    uint pid0 = this->adj_e2p(eid).front();
-    uint pid1 = this->adj_e2p(eid).back();
-    uint vid0 = this->edge_vert_id(eid,0);
-    uint vid1 = this->edge_vert_id(eid,1);
-    uint opp0 = this->vert_opposite_to(pid0,vid0,vid1);
-    uint opp1 = this->vert_opposite_to(pid1,vid0,vid1);
+    unsigned int pid0 = this->adj_e2p(eid).front();
+    unsigned int pid1 = this->adj_e2p(eid).back();
+    unsigned int vid0 = this->edge_vert_id(eid,0);
+    unsigned int vid1 = this->edge_vert_id(eid,1);
+    unsigned int opp0 = this->vert_opposite_to(pid0,vid0,vid1);
+    unsigned int opp1 = this->vert_opposite_to(pid1,vid0,vid1);
     if(!this->poly_verts_are_CCW(pid0, vid1, vid0)) std::swap(vid0,vid1);
-    std::vector<uint> p0 = { opp0, vid0, opp1 };
-    std::vector<uint> p1 = { opp1, vid1, opp0 };
+    std::vector<unsigned int> p0 = { opp0, vid0, opp1 };
+    std::vector<unsigned int> p1 = { opp1, vid1, opp0 };
     this->poly_add(p0);
     this->poly_add(p1);
 
@@ -451,7 +451,7 @@ int Trimesh<M,V,E,P>::edge_flip(const uint eid, const bool geometric_check)
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-void Trimesh<M,V,E,P>::poly_bary_coords(const uint pid, const vec3d & p, double bc[]) const
+void Trimesh<M,V,E,P>::poly_bary_coords(const unsigned int pid, const vec3d & p, double bc[]) const
 {
     triangle_barycentric_coords(this->poly_vert(pid,0),
                                 this->poly_vert(pid,1),
@@ -463,12 +463,12 @@ void Trimesh<M,V,E,P>::poly_bary_coords(const uint pid, const vec3d & p, double 
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-uint Trimesh<M,V,E,P>::poly_edge_id(const uint pid, const uint offset) const
+unsigned int Trimesh<M,V,E,P>::poly_edge_id(const unsigned int pid, const unsigned int offset) const
 {
-    uint vid0 = this->poly_vert_id(pid, TRI_EDGES[offset][0]);
-    uint vid1 = this->poly_vert_id(pid, TRI_EDGES[offset][1]);
+    unsigned int vid0 = this->poly_vert_id(pid, TRI_EDGES[offset][0]);
+    unsigned int vid1 = this->poly_vert_id(pid, TRI_EDGES[offset][1]);
 
-    for(uint eid : this->adj_p2e(pid))
+    for(unsigned int eid : this->adj_p2e(pid))
     {
         if (this->edge_contains_vert(eid,vid0) &&
             this->edge_contains_vert(eid,vid1))
@@ -483,7 +483,7 @@ uint Trimesh<M,V,E,P>::poly_edge_id(const uint pid, const uint offset) const
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-uint Trimesh<M,V,E,P>::poly_split(const uint pid)
+unsigned int Trimesh<M,V,E,P>::poly_split(const unsigned int pid)
 {
     // uses centroid as default split point
     return this->poly_split(pid, this->poly_centroid(pid));
@@ -493,16 +493,16 @@ uint Trimesh<M,V,E,P>::poly_split(const uint pid)
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-uint Trimesh<M,V,E,P>::poly_split(const uint pid, const vec3d & p)
+unsigned int Trimesh<M,V,E,P>::poly_split(const unsigned int pid, const vec3d & p)
 {
-    uint vids[4] =
+    unsigned int vids[4] =
     {
         this->poly_vert_id(pid, 0),
         this->poly_vert_id(pid, 1),
         this->poly_vert_id(pid, 2),
         this->vert_add(p)
     };
-    uint new_pid;
+    unsigned int new_pid;
     new_pid = poly_add(vids[0], vids[1], vids[3]); this->poly_data(new_pid) = this->poly_data(pid);
     new_pid = poly_add(vids[1], vids[2], vids[3]); this->poly_data(new_pid) = this->poly_data(pid);
     new_pid = poly_add(vids[2], vids[0], vids[3]); this->poly_data(new_pid) = this->poly_data(pid);
@@ -519,11 +519,11 @@ uint Trimesh<M,V,E,P>::poly_split(const uint pid, const vec3d & p)
 //
 template<class M, class V, class E, class P>
 CINO_INLINE
-bool Trimesh<M,V,E,P>::poly_is_cap(const uint pid, const double angle_thresh_deg) const
+bool Trimesh<M,V,E,P>::poly_is_cap(const unsigned int pid, const double angle_thresh_deg) const
 {
-    for(uint offset=0; offset<this->verts_per_poly(pid); ++offset)
+    for(unsigned int offset=0; offset<this->verts_per_poly(pid); ++offset)
     {
-        uint vid = this->poly_vert_id(pid,offset);
+        unsigned int vid = this->poly_vert_id(pid,offset);
         if (this->poly_angle_at_vert(pid,vid,DEG) > angle_thresh_deg)
         {
             return true;
@@ -541,11 +541,11 @@ bool Trimesh<M,V,E,P>::poly_is_cap(const uint pid, const double angle_thresh_deg
 //
 template<class M, class V, class E, class P>
 CINO_INLINE
-bool Trimesh<M,V,E,P>::poly_is_needle(const uint pid, const double angle_thresh_deg) const
+bool Trimesh<M,V,E,P>::poly_is_needle(const unsigned int pid, const double angle_thresh_deg) const
 {
-    for(uint offset=0; offset<this->verts_per_poly(pid); ++offset)
+    for(unsigned int offset=0; offset<this->verts_per_poly(pid); ++offset)
     {
-        uint vid = this->poly_vert_id(pid,offset);
+        unsigned int vid = this->poly_vert_id(pid,offset);
         if (this->poly_angle_at_vert(pid,vid,DEG) < angle_thresh_deg)
         {
             return true;
@@ -558,9 +558,9 @@ bool Trimesh<M,V,E,P>::poly_is_needle(const uint pid, const double angle_thresh_
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-uint Trimesh<M,V,E,P>::poly_add(const uint vid0, const uint vid1, const uint vid2)
+unsigned int Trimesh<M,V,E,P>::poly_add(const unsigned int vid0, const unsigned int vid1, const unsigned int vid2)
 {
-    std::vector<uint> p = { vid0, vid1, vid2 };
+    std::vector<unsigned int> p = { vid0, vid1, vid2 };
     return this->poly_add(p);
 }
 
@@ -568,9 +568,9 @@ uint Trimesh<M,V,E,P>::poly_add(const uint vid0, const uint vid1, const uint vid
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-int Trimesh<M,V,E,P>::poly_id(const uint eid0, const uint eid1) const
+int Trimesh<M,V,E,P>::poly_id(const unsigned int eid0, const unsigned int eid1) const
 {
-    for(uint pid : this->adj_e2p(eid0))
+    for(unsigned int pid : this->adj_e2p(eid0))
     {
         if(this->poly_contains_edge(pid, eid1)) return pid;
     }
@@ -581,7 +581,7 @@ int Trimesh<M,V,E,P>::poly_id(const uint eid0, const uint eid1) const
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-double Trimesh<M,V,E,P>::poly_area(const uint pid) const
+double Trimesh<M,V,E,P>::poly_area(const unsigned int pid) const
 {
     vec3d p = this->poly_vert(pid,0);
     vec3d u = this->poly_vert(pid,1) - p;
@@ -594,14 +594,14 @@ double Trimesh<M,V,E,P>::poly_area(const uint pid) const
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-uint Trimesh<M,V,E,P>::vert_opposite_to(const uint pid, const uint vid0, const uint vid1) const
+unsigned int Trimesh<M,V,E,P>::vert_opposite_to(const unsigned int pid, const unsigned int vid0, const unsigned int vid1) const
 {
     assert(vid0!=vid1);
     assert(this->poly_contains_vert(pid, vid0));
     assert(this->poly_contains_vert(pid, vid1));
-    for(uint off=0; off<this->verts_per_poly(pid); ++off)
+    for(unsigned int off=0; off<this->verts_per_poly(pid); ++off)
     {
-        uint vid = this->poly_vert_id(pid,off);
+        unsigned int vid = this->poly_vert_id(pid,off);
         if (vid != vid0 && vid != vid1) return vid;
     }
     assert(false);
@@ -612,10 +612,10 @@ uint Trimesh<M,V,E,P>::vert_opposite_to(const uint pid, const uint vid0, const u
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-std::vector<uint> Trimesh<M,V,E,P>::vert_link_edges(const uint vid) const
+std::vector<unsigned int> Trimesh<M,V,E,P>::vert_link_edges(const unsigned int vid) const
 {
-    std::vector<uint> e_link;
-    for(uint pid : this->adj_v2p(vid))
+    std::vector<unsigned int> e_link;
+    for(unsigned int pid : this->adj_v2p(vid))
     {
         e_link.push_back(this->edge_opposite_to(pid,vid));
     }
@@ -626,10 +626,10 @@ std::vector<uint> Trimesh<M,V,E,P>::vert_link_edges(const uint vid) const
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-std::vector<uint> Trimesh<M,V,E,P>::verts_opposite_to(const uint eid) const
+std::vector<unsigned int> Trimesh<M,V,E,P>::verts_opposite_to(const unsigned int eid) const
 {
-    std::vector<uint> vlist;
-    for(uint pid : this->adj_e2p(eid))
+    std::vector<unsigned int> vlist;
+    for(unsigned int pid : this->adj_e2p(eid))
     {
         vlist.push_back(this->vert_opposite_to(pid, this->edge_vert_id(eid,0), this->edge_vert_id(eid,1)));
     }
@@ -640,7 +640,7 @@ std::vector<uint> Trimesh<M,V,E,P>::verts_opposite_to(const uint eid) const
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-std::vector<uint> Trimesh<M,V,E,P>::edge_verts_link(const uint eid) const
+std::vector<unsigned int> Trimesh<M,V,E,P>::edge_verts_link(const unsigned int eid) const
 {
     return verts_opposite_to(eid);
 }
@@ -649,7 +649,7 @@ std::vector<uint> Trimesh<M,V,E,P>::edge_verts_link(const uint eid) const
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-void Trimesh<M,V,E,P>::vert_weights(const uint vid, const int type, std::vector<std::pair<uint,double>> & wgts) const
+void Trimesh<M,V,E,P>::vert_weights(const unsigned int vid, const int type, std::vector<std::pair<unsigned int,double>> & wgts) const
 {
     switch (type)
     {
@@ -663,12 +663,12 @@ void Trimesh<M,V,E,P>::vert_weights(const uint vid, const int type, std::vector<
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-void Trimesh<M,V,E,P>::vert_weights_cotangent(const uint vid, std::vector<std::pair<uint,double>> & wgts) const
+void Trimesh<M,V,E,P>::vert_weights_cotangent(const unsigned int vid, std::vector<std::pair<unsigned int,double>> & wgts) const
 {
     wgts.clear();
-    for(uint eid : this->adj_v2e(vid))
+    for(unsigned int eid : this->adj_v2e(vid))
     {
-        uint   nbr = this->vert_opposite_to(eid, vid);
+        unsigned int   nbr = this->vert_opposite_to(eid, vid);
         double wgt = this->edge_cotangent_weight(eid);
         wgts.push_back(std::make_pair(nbr,wgt));
     }

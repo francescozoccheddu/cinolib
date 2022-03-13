@@ -14,14 +14,14 @@ int main(int argc, char **argv)
     DrawableTrimesh<> m_xyz(s.c_str());
 
     // ordered list of boundary vertices
-    std::vector<uint> boundary = m_xyz.get_ordered_boundary_vertices();
+    std::vector<unsigned int> boundary = m_xyz.get_ordered_boundary_vertices();
 
     // create parametric space (discrete unit circle with as many point as the boundary vertices)
-    std::vector<vec3d> uv_boundary = n_sided_polygon((uint)boundary.size(), CIRCLE);
+    std::vector<vec3d> uv_boundary = n_sided_polygon((unsigned int)boundary.size(), CIRCLE);
 
     // set potitional constraints for boundary vertices (map mesh boundary to the unit circle)
-    std::map<uint,vec3d> dirichlet_bcs;
-    for(uint i=0; i<boundary.size(); ++i) dirichlet_bcs[boundary.at(i)] = uv_boundary.at(i);
+    std::map<unsigned int,vec3d> dirichlet_bcs;
+    for(unsigned int i=0; i<boundary.size(); ++i) dirichlet_bcs[boundary.at(i)] = uv_boundary.at(i);
 
     // solve for the interior vertices via harmonic map
     Profiler profiler;
@@ -33,7 +33,7 @@ int main(int argc, char **argv)
     DrawableTrimesh<> m_uvw(uv_map, m_xyz.vector_polys());
 
     // copy uv coordinates to m (for texture visualization)
-    for(uint vid=0; vid<m_xyz.num_verts(); ++vid) m_xyz.vert_data(vid).uvw = m_uvw.vert(vid);
+    for(unsigned int vid=0; vid<m_xyz.num_verts(); ++vid) m_xyz.vert_data(vid).uvw = m_uvw.vert(vid);
 
     GLcanvas gui_xyz, gui_uvw;
     m_xyz.show_wireframe(true);

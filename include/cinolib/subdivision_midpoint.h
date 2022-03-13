@@ -60,9 +60,9 @@ template<class M, class V, class E, class F, class P>
 CINO_INLINE
 void subdivision_midpoint(const AbstractPolyhedralMesh<M,V,E,F,P> & m_in,
                                 AbstractPolyhedralMesh<M,V,E,F,P> & m_out,
-                                std::map<uint,uint>               & edge_verts,
-                                std::map<uint,uint>               & face_verts,
-                                std::map<uint,uint>               & poly_verts);
+                                std::map<unsigned int,unsigned int>               & edge_verts,
+                                std::map<unsigned int,unsigned int>               & face_verts,
+                                std::map<unsigned int,unsigned int>               & poly_verts);
 }
 
 #ifndef  CINO_STATIC_LIB

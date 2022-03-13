@@ -41,7 +41,7 @@ namespace cinolib
 template<class M, class V, class E, class P>
 CINO_INLINE
 float supports_contact_area(const Trimesh<M,V,E,P>                  & m,
-                            const std::vector<std::pair<uint,uint>> & overhangs)
+                            const std::vector<std::pair<unsigned int,unsigned int>> & overhangs)
 {
     float area = 0;
     for(const auto & o : overhangs)

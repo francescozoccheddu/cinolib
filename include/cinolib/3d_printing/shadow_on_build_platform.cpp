@@ -44,7 +44,7 @@ template<class M, class V, class E, class P>
 CINO_INLINE
 float shadow_on_build_platform(const DrawableTrimesh<M,V,E,P> & m,         //
                                const vec3d                    & build_dir, //
-                               const uint                       img_size,  // frame buffer will be img_size x img_size
+                               const unsigned int                       img_size,  // frame buffer will be img_size x img_size
                                      uint8_t                  * data)
 {
     GLFWwindow* GL_context = create_offline_GL_context(img_size,img_size);
@@ -64,13 +64,13 @@ template<class M, class V, class E, class P>
 CINO_INLINE
 float shadow_on_build_platform(const DrawableTrimesh<M,V,E,P> & m,          //
                                const vec3d                    & build_dir,  //
-                               const uint                       img_size,   // frame buffer will be img_size x img_size
+                               const unsigned int                       img_size,   // frame buffer will be img_size x img_size
                                      uint8_t                  * data,       //
                                      GLFWwindow               * GL_context) // cached for amortized computation
 {
     cast_shadow(m, build_dir, img_size, img_size, data, GL_context);
-    uint shadow_pixels = 0;
-    for(uint i=0; i<img_size*img_size; ++i)
+    unsigned int shadow_pixels = 0;
+    for(unsigned int i=0; i<img_size*img_size; ++i)
     {
         if(data[i]==0xFF) ++shadow_pixels;
     }

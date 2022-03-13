@@ -73,7 +73,7 @@ Curve::Curve(const std::vector<vec3d> & samples)
 }
 
 CINO_INLINE
-Curve::Curve(const Skel & skel, const uint bone)
+Curve::Curve(const Skel & skel, const unsigned int bone)
 {
     std::vector<vec3d> samples;
     for(int vid : skel.vertex_bone(bone))
@@ -108,7 +108,7 @@ CINO_INLINE
 std::vector<double> Curve::vector_coords() const
 {
     std::vector<double> coords;
-    for(uint i=0; i<sample_list.size(); ++i)
+    for(unsigned int i=0; i<sample_list.size(); ++i)
     {
         coords.push_back(sample_list.at(i).pos.x());
         coords.push_back(sample_list.at(i).pos.y());
@@ -123,7 +123,7 @@ CINO_INLINE
 std::vector<int> Curve::vector_segments() const
 {
     std::vector<int> segs;
-    for(uint i=1; i<sample_list.size(); ++i)
+    for(unsigned int i=1; i<sample_list.size(); ++i)
     {
         segs.push_back(i-1);
         segs.push_back( i );
@@ -167,7 +167,7 @@ std::vector<Curve::Sample> & Curve::samples()
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 CINO_INLINE
-uint Curve::size() const
+unsigned int Curve::size() const
 {
     return sample_list.size();
 }
@@ -178,7 +178,7 @@ CINO_INLINE
 double Curve::length() const
 {
     double l = 0.0;
-    for(uint i=1; i<sample_list.size(); ++i)
+    for(unsigned int i=1; i<sample_list.size(); ++i)
     {
         l += sample_list.at(i).pos.dist(sample_list.at(i-1).pos);
     }
@@ -237,7 +237,7 @@ void Curve::update_arc_length_param() // recomputes parameter t for each sample
     double curr_l     = 0.0;
     double curr_t     = 0.0;
 
-    for(uint i=1; i<sample_list.size()-1; ++i)
+    for(unsigned int i=1; i<sample_list.size()-1; ++i)
     {
         double seg_l   = sample_list.at(i-1).pos.dist(sample_list.at(i).pos);
         double delta_t = seg_l / tot_length;
@@ -255,7 +255,7 @@ void Curve::update_arc_length_param() // recomputes parameter t for each sample
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 CINO_INLINE
-uint Curve::last_sample_lower_equal_than(const float t) const
+unsigned int Curve::last_sample_lower_equal_than(const float t) const
 {
     assert(t>=0);
     assert(t<=1);
@@ -271,15 +271,15 @@ uint Curve::last_sample_lower_equal_than(const float t) const
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 CINO_INLINE
-uint Curve::sample_closest_to(const float t) const
+unsigned int Curve::sample_closest_to(const float t) const
 {
     assert(t>=0);
     assert(t<=1);
 
     float best_err = inf_float;
-    uint  best_sam = 0;
+    unsigned int  best_sam = 0;
 
-    for(uint pos=0; pos<sample_list.size()-1; ++pos)
+    for(unsigned int pos=0; pos<sample_list.size()-1; ++pos)
     {
         float err = fabs(sample_list.at(pos).t - t);
         if (err < best_err)
@@ -313,7 +313,7 @@ vec3d Curve::sample_curve_at(const float t, const double tot_length) const
 
     double curr_l = 0.0;
     double curr_t = 0.0;
-    for(uint i=1; i<sample_list.size(); ++i)
+    for(unsigned int i=1; i<sample_list.size(); ++i)
     {
         double seg_l   = sample_list.at(i-1).pos.dist(sample_list.at(i).pos);
         double delta_t = seg_l / tot_length;
@@ -337,7 +337,7 @@ vec3d Curve::sample_curve_at(const float t, const double tot_length) const
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 CINO_INLINE
-void Curve::resample_curve(const uint n_samples)
+void Curve::resample_curve(const unsigned int n_samples)
 {
     assert(n_samples >= 2);
 
@@ -349,7 +349,7 @@ void Curve::resample_curve(const uint n_samples)
     if (length()<=0) return;
 
     std::vector<Sample> new_samples;
-    for(uint i=0; i<n_samples; ++i)
+    for(unsigned int i=0; i<n_samples; ++i)
     {
         Sample s;
         s.pos = sample_curve_at(t,tot_length);
@@ -364,18 +364,18 @@ void Curve::resample_curve(const uint n_samples)
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 CINO_INLINE
-std::vector<uint> Curve::select_n_samples(const uint n_samples) const
+std::vector<unsigned int> Curve::select_n_samples(const unsigned int n_samples) const
 {
     assert(size() >= n_samples);
 
     float i    = 0;
     float step = float(size()-1) / float(n_samples-1);
 
-    std::vector<uint> list;
+    std::vector<unsigned int> list;
 
     do
     {
-        uint new_pos = std::ceil(i);
+        unsigned int new_pos = std::ceil(i);
         if (new_pos == samples().size()) --new_pos; // this may happen due to roundoff errors...
         list.push_back(new_pos);
         i += step;

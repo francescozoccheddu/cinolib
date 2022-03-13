@@ -19,7 +19,7 @@ int main(int argc, char **argv)
     // prescribe boundary conditions
     // SHIFT + CLICK on a vertex to insert a maximum
     // CMD   + CLICK on a vertex to insert a minimum
-    std::map<uint,double> dirichlet_bcs;
+    std::map<unsigned int,double> dirichlet_bcs;
     bool has_at_least_one_min = false;
     bool has_at_least_one_max = false;
     gui.callback_mouse_left_click = [&](int modifiers)
@@ -28,7 +28,7 @@ int main(int argc, char **argv)
         vec2d click = gui.cursor_pos();
         if(gui.unproject(click, p))
         {
-            uint vid = m.pick_vert(p);
+            unsigned int vid = m.pick_vert(p);
             if(modifiers & GLFW_MOD_SHIFT)
             {
                 dirichlet_bcs[vid] = 1.0;
@@ -57,7 +57,7 @@ int main(int argc, char **argv)
             if(dirichlet_bcs.size()>=2 && has_at_least_one_max && has_at_least_one_min)
             {
                 profiler.push("harmonic_map");
-                harmonic_map(m, dirichlet_bcs, (uint)n_harmonic, COTANGENT).copy_to_mesh(m);
+                harmonic_map(m, dirichlet_bcs, (unsigned int)n_harmonic, COTANGENT).copy_to_mesh(m);
                 profiler.pop();
                 m.show_texture1D(TEXTURE_1D_PARULA_W_ISOLINES);
             }

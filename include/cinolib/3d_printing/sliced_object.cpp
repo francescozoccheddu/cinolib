@@ -79,7 +79,7 @@ SlicedObj<M,V,E,P>::SlicedObj(const std::vector<std::vector<std::vector<vec3d>>>
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-BoostMultiPolygon SlicedObj<M,V,E,P>::slice_as_boost_poly(const uint sid) const
+BoostMultiPolygon SlicedObj<M,V,E,P>::slice_as_boost_poly(const unsigned int sid) const
 {
     return slices.at(sid);
 }
@@ -92,13 +92,13 @@ void SlicedObj<M,V,E,P>::init(const std::vector<std::vector<std::vector<vec3d>>>
                               const std::vector<std::vector<std::vector<vec3d>>> & slice_holes,
                               const std::vector<std::vector<std::vector<vec3d>>> & supports)
 {
-    uint num_slices = slice_polys.size();
+    unsigned int num_slices = slice_polys.size();
 
-    for(uint sid=0; sid<num_slices; ++sid)
+    for(unsigned int sid=0; sid<num_slices; ++sid)
     {
-        uint np = slice_holes.at(sid).size();
-        uint nh = slice_polys.at(sid).size();
-        uint ns = (thick_radius>0) ? supports.at(sid).size() : 0;
+        unsigned int np = slice_holes.at(sid).size();
+        unsigned int nh = slice_polys.at(sid).size();
+        unsigned int ns = (thick_radius>0) ? supports.at(sid).size() : 0;
 
         std::cout << "processing slice " << sid << " out of " << num_slices << "\t(" << np << " polys / " << nh << " holes / "  << ns << " supports)" << std::endl;
 
@@ -133,30 +133,30 @@ template<class M, class V, class E, class P>
 CINO_INLINE
 void SlicedObj<M,V,E,P>::triangulate_slices()
 {
-    for(uint sid=0; sid<slices.size(); ++sid)
+    for(unsigned int sid=0; sid<slices.size(); ++sid)
     {
         const BoostMultiPolygon & mp = slices.at(sid);
 
         std::vector<vec3d> verts;
-        std::vector<uint>  tris;
+        std::vector<unsigned int>  tris;
         triangulate_polygon(mp, "Q", z.at(sid), verts, tris);
 
-        uint base_addr = this->num_verts();
-        uint n_tris = tris.size()/3;
+        unsigned int base_addr = this->num_verts();
+        unsigned int n_tris = tris.size()/3;
 
         for(auto p : verts)
         {
-            uint vid = this->vert_add(p);
+            unsigned int vid = this->vert_add(p);
             this->vert_data(vid).uvw[0] = static_cast<double>(sid)/static_cast<double>(num_slices());
             this->vert_data(vid).label  = sid;
         }
-        for(uint i=0; i<n_tris; ++i)
+        for(unsigned int i=0; i<n_tris; ++i)
         {
-            uint pid = this->poly_add(base_addr + tris.at(3*i+0),
+            unsigned int pid = this->poly_add(base_addr + tris.at(3*i+0),
                                       base_addr + tris.at(3*i+1),
                                       base_addr + tris.at(3*i+2));
             this->poly_data(pid).label = sid;
-            for(uint eid : this->adj_p2e(pid)) this->edge_data(eid).label = sid;
+            for(unsigned int eid : this->adj_p2e(pid)) this->edge_data(eid).label = sid;
         }
     }
     std::cout << "new sliced object (" << num_slices() << " slices)" << std::endl;
@@ -167,24 +167,24 @@ void SlicedObj<M,V,E,P>::triangulate_slices()
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-void SlicedObj<M,V,E,P>::slice_segments(const uint           sid,
+void SlicedObj<M,V,E,P>::slice_segments(const unsigned int           sid,
                                         std::vector<vec3d> & verts,
-                                        std::vector<uint>  & segs) const
+                                        std::vector<unsigned int>  & segs) const
 {
     // eventually substitute the whole thing with:
     //polygon_get_edges(slices.at(sid), z.at(sid), verts, segs);
 
     verts.clear();
     segs.clear();
-    std::map<uint,uint> v_map;
-    uint fresh_id = 0;
-    for(uint eid=0; eid<this->num_edges(); ++eid)
+    std::map<unsigned int,unsigned int> v_map;
+    unsigned int fresh_id = 0;
+    for(unsigned int eid=0; eid<this->num_edges(); ++eid)
     {
         if(this->edge_is_boundary(eid) && this->edge_data(eid).label == (int)sid)
         {
-            for(uint off=0; off<2; ++off)
+            for(unsigned int off=0; off<2; ++off)
             {
-                uint vid   = this->edge_vert_id(eid,off);
+                unsigned int vid   = this->edge_vert_id(eid,off);
                 auto query = v_map.find(vid);
                 if(query == v_map.end())
                 {
@@ -203,7 +203,7 @@ void SlicedObj<M,V,E,P>::slice_segments(const uint           sid,
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-float SlicedObj<M,V,E,P>::slice_z(const uint sid) const
+float SlicedObj<M,V,E,P>::slice_z(const unsigned int sid) const
 {
     return z.at(sid);
 }
@@ -212,7 +212,7 @@ float SlicedObj<M,V,E,P>::slice_z(const uint sid) const
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-float SlicedObj<M,V,E,P>::slice_thickness(const uint sid) const
+float SlicedObj<M,V,E,P>::slice_thickness(const unsigned int sid) const
 {
     return z.at(sid+1) - z.at(sid);
 }
@@ -224,7 +224,7 @@ CINO_INLINE
 float SlicedObj<M,V,E,P>::slice_avg_thickness() const
 {
     float avg=0;
-    for(uint sid=0; sid<z.size()-1; ++sid) avg += slice_thickness(sid);
+    for(unsigned int sid=0; sid<z.size()-1; ++sid) avg += slice_thickness(sid);
     avg /= static_cast<float>(z.size()-1);
     return avg;
 }
@@ -233,7 +233,7 @@ float SlicedObj<M,V,E,P>::slice_avg_thickness() const
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-bool SlicedObj<M,V,E,P>::slice_contains(const uint sid, const vec2d & p) const
+bool SlicedObj<M,V,E,P>::slice_contains(const unsigned int sid, const vec2d & p) const
 {
     return polygon_contains(slices.at(sid), p, true);
 }

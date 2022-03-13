@@ -46,7 +46,7 @@ class Segment : public SpatialDataStructureItem
 {
     public:
 
-        Segment(const uint id, const vec3d & v0, const vec3d & v1)
+        Segment(const unsigned int id, const vec3d & v0, const vec3d & v1)
         {
             this->v[0] = v0;
             this->v[1] = v1;
@@ -56,7 +56,7 @@ class Segment : public SpatialDataStructureItem
             aabb.push(v1);
         }
 
-        Segment(const uint id, const vec3d v[2])
+        Segment(const unsigned int id, const vec3d v[2])
         {
             this->v[0] = v[0];
             this->v[1] = v[1];

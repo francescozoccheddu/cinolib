@@ -50,7 +50,7 @@ void map_to_tetrahedron(const Trimesh<M,V,E,P> & m,
     m_out = m;
     std::vector<vec3d> verts;
     map_to_tetrahedron(m, verts);
-    for(uint vid=0; vid<m_out.num_verts(); ++vid) m_out.vert(vid) = verts.at(vid);
+    for(unsigned int vid=0; vid<m_out.num_verts(); ++vid) m_out.vert(vid) = verts.at(vid);
     m_out.update_bbox();
     m_out.update_normals();
 }
@@ -64,16 +64,16 @@ void map_to_tetrahedron(const Trimesh<M,V,E,P>   & m,
 {
     assert(m.genus()==0);
     // try all triangles until you find a suitable one....
-    for(uint pid=0; pid<m.num_polys(); ++pid)
+    for(unsigned int pid=0; pid<m.num_polys(); ++pid)
     {
         // try all tri edges until you find a suitable one....
-        for(uint eid : m.adj_p2e(pid))
+        for(unsigned int eid : m.adj_p2e(pid))
         {
-            uint vid0 = m.edge_vert_id(eid,0);
-            uint vid1 = m.edge_vert_id(eid,1);
+            unsigned int vid0 = m.edge_vert_id(eid,0);
+            unsigned int vid1 = m.edge_vert_id(eid,1);
              int topp = m.poly_opposite_to(eid,pid);
-            uint opp0 = m.vert_opposite_to(pid,vid0,vid1);
-            uint opp1 = m.vert_opposite_to(topp,vid0,vid1);
+            unsigned int opp0 = m.vert_opposite_to(pid,vid0,vid1);
+            unsigned int opp1 = m.vert_opposite_to(topp,vid0,vid1);
 
             // if they form a tet with negative volume, use them to initialize the map
             // (note: the sign of orient3d is opposite to the volume and the jacobian)
@@ -83,7 +83,7 @@ void map_to_tetrahedron(const Trimesh<M,V,E,P>   & m,
                         m.vert(opp1))<0)
             {
                 // find the path connecting opp0 and opp1 not passing through vid0 and vid1
-                std::vector<uint> path;
+                std::vector<unsigned int> path;
                 std::vector<bool> mask(m.num_verts(),false);
                 mask.at(vid0) = true;
                 mask.at(vid1) = true;
@@ -91,7 +91,7 @@ void map_to_tetrahedron(const Trimesh<M,V,E,P>   & m,
 
                 // assign canonical tet corners
                 // v2 and v1 are flipped because in this case I want to map with a tet with negative volume!
-                std::map<uint,vec3d> bcs;
+                std::map<unsigned int,vec3d> bcs;
                 bcs[m.poly_vert_id(pid,0)] = REFERENCE_TET_VERTS[0];
                 bcs[m.poly_vert_id(pid,1)] = REFERENCE_TET_VERTS[2];
                 bcs[m.poly_vert_id(pid,2)] = REFERENCE_TET_VERTS[1];
@@ -104,7 +104,7 @@ void map_to_tetrahedron(const Trimesh<M,V,E,P>   & m,
                     double step = dir.norm()/(path.size()-1.0);
                     dir.normalize();
                     dir *= step;
-                    for(uint i=1; i<path.size()-1; ++i)
+                    for(unsigned int i=1; i<path.size()-1; ++i)
                     {
                         bcs[path.at(i)] = bcs.at(opp0) + i*dir;
                     }

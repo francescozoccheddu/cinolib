@@ -45,7 +45,7 @@ class Triangle : public SpatialDataStructureItem
 {
     public:
 
-        Triangle(const uint id, const vec3d v[3])
+        Triangle(const unsigned int id, const vec3d v[3])
         {
             this->v[0] = v[0];
             this->v[1] = v[1];

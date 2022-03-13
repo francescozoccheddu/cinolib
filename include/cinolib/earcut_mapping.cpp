@@ -57,15 +57,15 @@ void earcut_mapping(EarcutMapping_data & data)
         // STEP1: apply topological offsetting, creating a convex inner polygon inside poly_B,
         // then apply the earcut mapping to the inner boundary of the offsetted polygons
 
-        uint size = data.poly_A.size();
+        unsigned int size = data.poly_A.size();
 
         // define offset points and tessellation in domain A
-        std::vector<uint> vmap;
+        std::vector<unsigned int> vmap;
         polygon_topological_offsetting(data.poly_A, data.tris, vmap);
 
         // start by making a circle of inner vertices in the kernel of poly_B
         std::vector<vec3d> inner_chain;
-        for(uint i=0; i<size; ++i)
+        for(unsigned int i=0; i<size; ++i)
         {
             vec3d v = data.poly_B.at(i) - data.disk_center;
             v.normalize();
@@ -74,7 +74,7 @@ void earcut_mapping(EarcutMapping_data & data)
 
         // then add extra vertices for those outer points having more than
         // one inner vertex in the chain
-        for(uint i=0; i<size; ++i)
+        for(unsigned int i=0; i<size; ++i)
         {
             data.poly_B.push_back(inner_chain.at(i));
 
@@ -92,7 +92,7 @@ void earcut_mapping(EarcutMapping_data & data)
                 // FIXME (francescozoccheddu)
                 // bake_rotation_matrix(axis, step, M);
                 abort(); // remove when fixed
-                for(uint j=1;j<vmap.at(i); ++j)
+                for(unsigned int j=1;j<vmap.at(i); ++j)
                 {
                     vec3d p = data.poly_B.back();
                     // FIXME (francescozoccheddu)
@@ -105,10 +105,10 @@ void earcut_mapping(EarcutMapping_data & data)
 
         // eventually, mesh the inner polygon with earcut and append
         // the so generated triangles in the output triangle list
-        std::vector<uint>  tmp_tris;
+        std::vector<unsigned int>  tmp_tris;
         std::vector<vec3d> tmp_poly(data.poly_A.begin()+size, data.poly_A.end());
         earcut(tmp_poly, tmp_tris, EarSorting::PRIORITIZED);
-        for(uint vid : tmp_tris) data.tris.push_back(size+vid);
+        for(unsigned int vid : tmp_tris) data.tris.push_back(size+vid);
     }
 }
 

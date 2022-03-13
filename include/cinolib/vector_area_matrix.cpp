@@ -45,13 +45,13 @@ Eigen::SparseMatrix<double> vector_area_matrix(const AbstractPolygonMesh<M,V,E,P
     typedef Eigen::Triplet<double> Entry;
     std::vector<Entry> entries;
 
-    uint vn      = m.num_verts();
+    unsigned int vn      = m.num_verts();
     auto b_edges = m.get_boundary_edges();
 
     for(auto e : b_edges)
     {
-        uint v0 = e.first;
-        uint v1 = e.second;
+        unsigned int v0 = e.first;
+        unsigned int v1 = e.second;
         entries.push_back(Entry(v0+vn, v1,    -0.25));
         entries.push_back(Entry(v1,    v0+vn, -0.25));
         entries.push_back(Entry(v0,    v1+vn,  0.25));

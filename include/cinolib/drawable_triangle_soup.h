@@ -12,7 +12,7 @@ class DrawableTriangleSoup : public DrawableObject
     public:
 
         DrawableTriangleSoup(const std::vector<double> & coords,
-                             const std::vector<uint>   & tris,
+                             const std::vector<unsigned int>   & tris,
                              const Color               & poly_color = Color::WHITE(),
                              const Color               & edge_color = Color::BLACK());
 

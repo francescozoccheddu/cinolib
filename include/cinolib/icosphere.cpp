@@ -42,9 +42,9 @@ namespace cinolib
 template<class T>
 CINO_INLINE
 void icosphere(const T             radius, // sphere radius
-               const uint          n_subd, // number of subdivisions of the icosahedron
+               const unsigned int          n_subd, // number of subdivisions of the icosahedron
                std::vector<T>    & verts,  // output vertices
-               std::vector<uint> & tris)   // output triangles
+               std::vector<unsigned int> & tris)   // output triangles
 {
     T A = 0.5257310271 * radius;
     T B = 0.8506510258 * radius;
@@ -90,14 +90,14 @@ void icosphere(const T             radius, // sphere radius
          1,  7,  9
     };
 
-    for(uint i=0; i<n_subd; ++i)
+    for(unsigned int i=0; i<n_subd; ++i)
     {
-        std::vector<uint> tmp_triangles;
+        std::vector<unsigned int> tmp_triangles;
         for(auto it=tris.begin(); it!=tris.end(); ++it)
         {
-            uint vid0 = *it; ++it;
-            uint vid1 = *it; ++it;
-            uint vid2 = *it;
+            unsigned int vid0 = *it; ++it;
+            unsigned int vid1 = *it; ++it;
+            unsigned int vid2 = *it;
 
             mat<3,1,T> v0(&(verts[vid0*3]));
             mat<3,1,T> v1(&(verts[vid1*3]));
@@ -112,9 +112,9 @@ void icosphere(const T             radius, // sphere radius
             v20 *= radius / v20.norm();
 
             // add three new vertices to the list
-            uint vid01 = verts.size()/3.0;
-            uint vid12 = vid01 + 1;
-            uint vid20 = vid01 + 2;
+            unsigned int vid01 = verts.size()/3.0;
+            unsigned int vid12 = vid01 + 1;
+            unsigned int vid20 = vid01 + 2;
             verts.push_back(v01.x()); // v01
             verts.push_back(v01.y());
             verts.push_back(v01.z());

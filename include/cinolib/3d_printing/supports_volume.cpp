@@ -43,7 +43,7 @@ CINO_INLINE
 float supports_volume(const Trimesh<M,V,E,P>                  & m,
                       const vec3d                             & build_dir,
                       const float                               floor,
-                      const std::vector<std::pair<uint,uint>> & overhangs)
+                      const std::vector<std::pair<unsigned int,unsigned int>> & overhangs)
 {
     vec3d c   = m.centroid();
     float vol = 0;

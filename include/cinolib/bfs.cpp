@@ -44,23 +44,23 @@ namespace cinolib
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 CINO_INLINE
-void bfs(const std::vector<std::vector<uint>> & nodes_adjacency,
-         const uint                             source,
-               std::unordered_set<uint>       & visited)
+void bfs(const std::vector<std::vector<unsigned int>> & nodes_adjacency,
+         const unsigned int                             source,
+               std::unordered_set<unsigned int>       & visited)
 {
     visited.clear();
 
-    std::queue<uint> q;
+    std::queue<unsigned int> q;
     q.push(source);
 
     while(!q.empty())
     {
-        uint vid = q.front();
+        unsigned int vid = q.front();
         q.pop();
 
         visited.insert(vid);
 
-        for(uint nbr : nodes_adjacency.at(vid))
+        for(unsigned int nbr : nodes_adjacency.at(vid))
         {
             if (DOES_NOT_CONTAIN(visited,nbr))
             {
@@ -75,21 +75,21 @@ void bfs(const std::vector<std::vector<uint>> & nodes_adjacency,
 template<class M, class V, class E, class P>
 CINO_INLINE
 void bfs(const AbstractMesh<M,V,E,P>    & m,
-         const uint                       source,
-               std::unordered_set<uint> & visited)
+         const unsigned int                       source,
+               std::unordered_set<unsigned int> & visited)
 {
     visited.clear();
     visited.insert(source);
 
-    std::queue<uint> q;
+    std::queue<unsigned int> q;
     q.push(source);
 
     while(!q.empty())
     {
-        uint vid = q.front();
+        unsigned int vid = q.front();
         q.pop();
 
-        for(uint nbr : m.adj_v2v(vid))
+        for(unsigned int nbr : m.adj_v2v(vid))
         {
             if (DOES_NOT_CONTAIN(visited,nbr))
             {
@@ -105,22 +105,22 @@ void bfs(const AbstractMesh<M,V,E,P>    & m,
 template<class M, class V, class E, class P>
 CINO_INLINE
 void bfs(const AbstractMesh<M,V,E,P>    & m,
-         const uint                       source,
+         const unsigned int                       source,
          const std::vector<bool>        & mask, // if mask[vid] = true, path cannot pass through vertex vid
-               std::unordered_set<uint> & visited)
+               std::unordered_set<unsigned int> & visited)
 {
     visited.clear();
     visited.insert(source);
 
-    std::queue<uint> q;
+    std::queue<unsigned int> q;
     q.push(source);
 
     while(!q.empty())
     {
-        uint vid = q.front();
+        unsigned int vid = q.front();
         q.pop();
 
-        for(uint nbr : m.adj_v2v(vid))
+        for(unsigned int nbr : m.adj_v2v(vid))
         {
             if (!mask.at(nbr) && DOES_NOT_CONTAIN(visited,nbr))
             {
@@ -136,26 +136,26 @@ void bfs(const AbstractMesh<M,V,E,P>    & m,
 template<class M, class V, class E, class F, class P>
 CINO_INLINE
 void bfs_srf_only(const AbstractPolyhedralMesh<M,V,E,F,P> & m,
-                  const uint                                source,
+                  const unsigned int                                source,
                   const std::vector<bool>                 & mask, // if mask[vid] = true, path cannot pass through vertex vid
-                  std::unordered_set<uint>                & visited)
+                  std::unordered_set<unsigned int>                & visited)
 {
     visited.clear();
     visited.insert(source);
 
-    std::queue<uint> q;
+    std::queue<unsigned int> q;
     q.push(source);
 
     while(!q.empty())
     {
-        uint vid = q.front();
+        unsigned int vid = q.front();
         q.pop();
 
-        for(uint eid : m.adj_v2e(vid))
+        for(unsigned int eid : m.adj_v2e(vid))
         {
             if(m.edge_is_on_srf(eid))
             {
-                uint nbr = m.vert_opposite_to(eid,vid);
+                unsigned int nbr = m.vert_opposite_to(eid,vid);
                 if (!mask.at(nbr) && DOES_NOT_CONTAIN(visited,nbr))
                 {
                     visited.insert(nbr);
@@ -171,22 +171,22 @@ void bfs_srf_only(const AbstractPolyhedralMesh<M,V,E,F,P> & m,
 template<class M, class V, class E, class P>
 CINO_INLINE
 void bfs_on_dual(const AbstractMesh<M,V,E,P>    & m,
-                 const uint                       source,
+                 const unsigned int                       source,
                  const std::vector<bool>        & mask, // if mask[p] = true, path cannot pass through it
-                       std::unordered_set<uint> & visited)
+                       std::unordered_set<unsigned int> & visited)
 {
     visited.clear();
     visited.insert(source);
 
-    std::queue<uint> q;
+    std::queue<unsigned int> q;
     q.push(source);
 
     while(!q.empty())
     {
-        uint pid = q.front();
+        unsigned int pid = q.front();
         q.pop();
 
-        for(uint nbr : m.adj_p2p(pid))
+        for(unsigned int nbr : m.adj_p2p(pid))
         {
             if (!mask.at(nbr) && DOES_NOT_CONTAIN(visited,nbr))
             {
@@ -204,24 +204,24 @@ void bfs_on_dual(const AbstractMesh<M,V,E,P>    & m,
 template<class M, class V, class E, class P>
 CINO_INLINE
 void bfs_on_dual_w_edge_barriers(const AbstractPolygonMesh<M,V,E,P> & m,
-                                 const uint                           source,
+                                 const unsigned int                           source,
                                  const std::vector<bool>            & mask_edges, // if mask[e] = true, bfs cannot expand through edge e
-                                 std::unordered_set<uint>           & visited)
+                                 std::unordered_set<unsigned int>           & visited)
 {
     visited.clear();
     visited.insert(source);
 
-    std::queue<uint> q;
+    std::queue<unsigned int> q;
     q.push(source);
 
     while(!q.empty())
     {
-        uint pid = q.front();
+        unsigned int pid = q.front();
         q.pop();
 
-        for(uint nbr : m.adj_p2p(pid))
+        for(unsigned int nbr : m.adj_p2p(pid))
         {
-            uint eid = m.edge_shared(pid,nbr);
+            unsigned int eid = m.edge_shared(pid,nbr);
             if (!mask_edges.at(eid) && DOES_NOT_CONTAIN(visited,nbr))
             {
                 visited.insert(nbr);
@@ -238,22 +238,22 @@ void bfs_on_dual_w_edge_barriers(const AbstractPolygonMesh<M,V,E,P> & m,
 template<class M, class V, class E, class F, class P>
 CINO_INLINE
 void bfs_on_dual_w_face_barriers(const AbstractPolyhedralMesh<M,V,E,F,P> & m,
-                                 const uint                                source,
+                                 const unsigned int                                source,
                                  const std::vector<bool>                 & mask_faces, // if mask[f] = true, bfs cannot expand through face f
-                                 std::unordered_set<uint>                & visited)
+                                 std::unordered_set<unsigned int>                & visited)
 {
     visited.clear();
     visited.insert(source);
 
-    std::queue<uint> q;
+    std::queue<unsigned int> q;
     q.push(source);
 
     while(!q.empty())
     {
-        uint pid = q.front();
+        unsigned int pid = q.front();
         q.pop();
 
-        for(uint fid : m.adj_p2f(pid))
+        for(unsigned int fid : m.adj_p2f(pid))
         {
             int nbr = (m.poly_adj_through_face(pid,fid));
             if (nbr>=0 && !mask_faces.at(fid) && DOES_NOT_CONTAIN(visited,nbr))

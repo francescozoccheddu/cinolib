@@ -42,22 +42,22 @@ namespace cinolib
 
 CINO_INLINE
 DrawableTriangleSoup::DrawableTriangleSoup(const std::vector<double> & coords,
-                                           const std::vector<uint>   & tris,
+                                           const std::vector<unsigned int>   & tris,
                                            const Color               & poly_color,
                                            const Color               & edge_color)
 {
     drawlist.draw_mode  = DRAW_TRIS | DRAW_TRI_FLAT | DRAW_TRI_FACECOLOR | DRAW_SEGS;    
 
-    for(uint i=0; i<tris.size(); i+=3)
+    for(unsigned int i=0; i<tris.size(); i+=3)
     {
         drawlist.tris.push_back(i  );
         drawlist.tris.push_back(i+1);
         drawlist.tris.push_back(i+2);
 
         // coords
-        uint  v0_ptr  = 3*tris.at( i );
-        uint  v1_ptr  = 3*tris.at(i+1);
-        uint  v2_ptr  = 3*tris.at(i+2);
+        unsigned int  v0_ptr  = 3*tris.at( i );
+        unsigned int  v1_ptr  = 3*tris.at(i+1);
+        unsigned int  v2_ptr  = 3*tris.at(i+2);
         vec3d v0(coords.at(v0_ptr), coords.at(v0_ptr+1), coords.at(v0_ptr+2));
         vec3d v1(coords.at(v1_ptr), coords.at(v1_ptr+1), coords.at(v1_ptr+2));
         vec3d v2(coords.at(v2_ptr), coords.at(v2_ptr+1), coords.at(v2_ptr+2));

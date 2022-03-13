@@ -66,21 +66,21 @@ namespace cinolib
 template<class M, class V, class E, class P>
 CINO_INLINE
 void dijkstra_exhaustive(const AbstractMesh<M,V,E,P> & m,
-                         const uint                    source,
+                         const unsigned int                    source,
                                std::vector<double>   & dist)
 {
     dist = std::vector<double>(m.num_verts(), inf_double);
     dist.at(source) = 0.0;
 
-    std::set<std::pair<double,uint>> q;
+    std::set<std::pair<double,unsigned int>> q;
     q.insert(std::make_pair(0.0,source));
 
     while(!q.empty())
     {
-        uint vid = q.begin()->second;
+        unsigned int vid = q.begin()->second;
         q.erase(q.begin());
 
-        for(uint nbr : m.adj_v2v(vid))
+        for(unsigned int nbr : m.adj_v2v(vid))
         {
             double new_dist = dist.at(vid) + m.vert(vid).dist(m.vert(nbr));
 
@@ -104,21 +104,21 @@ void dijkstra_exhaustive(const AbstractMesh<M,V,E,P> & m,
 template<class M, class V, class E, class P>
 CINO_INLINE
 void dijkstra_exhaustive(const AbstractMesh<M,V,E,P> & m,
-                         const std::vector<uint>     & sources,
+                         const std::vector<unsigned int>     & sources,
                                std::vector<double>   & dist)
 {
     dist = std::vector<double>(m.num_verts(), inf_double);
-    for(uint vid : sources) dist.at(vid) = 0.0;
+    for(unsigned int vid : sources) dist.at(vid) = 0.0;
 
-    std::set<std::pair<double,uint>> q;
-    for(uint vid : sources) q.insert(std::make_pair(0.0,vid));
+    std::set<std::pair<double,unsigned int>> q;
+    for(unsigned int vid : sources) q.insert(std::make_pair(0.0,vid));
 
     while(!q.empty())
     {
-        uint vid = q.begin()->second;
+        unsigned int vid = q.begin()->second;
         q.erase(q.begin());
 
-        for(uint nbr : m.adj_v2v(vid))
+        for(unsigned int nbr : m.adj_v2v(vid))
         {
             double new_dist = dist.at(vid) + m.vert(vid).dist(m.vert(nbr));
 
@@ -142,25 +142,25 @@ void dijkstra_exhaustive(const AbstractMesh<M,V,E,P> & m,
 template<class M, class V, class E, class F, class P>
 CINO_INLINE
 void dijkstra_exhaustive_srf_only(const AbstractPolyhedralMesh<M,V,E,F,P> & m,
-                                  const std::vector<uint>                 & sources,
+                                  const std::vector<unsigned int>                 & sources,
                                         std::vector<double>               & dist)
 {
     dist = std::vector<double>(m.num_verts(), inf_double);
-    for(uint vid : sources) dist.at(vid) = 0.0;
+    for(unsigned int vid : sources) dist.at(vid) = 0.0;
 
-    std::set<std::pair<double,uint>> q;
-    for(uint vid : sources) q.insert(std::make_pair(0.0,vid));
+    std::set<std::pair<double,unsigned int>> q;
+    for(unsigned int vid : sources) q.insert(std::make_pair(0.0,vid));
 
     while(!q.empty())
     {
-        uint vid = q.begin()->second;
+        unsigned int vid = q.begin()->second;
         q.erase(q.begin());
 
-        for(uint eid : m.adj_v2e(vid))
+        for(unsigned int eid : m.adj_v2e(vid))
         {
             if(m.edge_is_on_srf(eid))
             {
-                uint   nbr      = m.vert_opposite_to(eid,vid);
+                unsigned int   nbr      = m.vert_opposite_to(eid,vid);
                 double new_dist = dist.at(vid) + m.vert(vid).dist(m.vert(nbr));
 
                 if(dist.at(nbr) > new_dist)
@@ -184,27 +184,27 @@ void dijkstra_exhaustive_srf_only(const AbstractPolyhedralMesh<M,V,E,F,P> & m,
 template<class M, class V, class E, class P>
 CINO_INLINE
 void dijkstra_exhaustive_mask_on_edges(const AbstractMesh<M,V,E,P> & m,
-                                       const std::vector<uint>     & sources,
+                                       const std::vector<unsigned int>     & sources,
                                        const std::vector<double>   & weights, // per vert weights (used as metric instead of edge lengths)
                                        const std::vector<bool>     & mask,    // if mask[e] = true, path cannot pass through edge e
                                              std::vector<double>   & dist)
 {
     dist = std::vector<double>(m.num_verts(), inf_double);
-    for(uint vid : sources) dist.at(vid) = 0.0;
+    for(unsigned int vid : sources) dist.at(vid) = 0.0;
 
-    std::set<std::pair<double,uint>> q;
-    for(uint vid : sources) q.insert(std::make_pair(0.0,vid));
+    std::set<std::pair<double,unsigned int>> q;
+    for(unsigned int vid : sources) q.insert(std::make_pair(0.0,vid));
 
     while(!q.empty())
     {
-        uint vid = q.begin()->second;
+        unsigned int vid = q.begin()->second;
         q.erase(q.begin());
 
-        for(uint eid : m.adj_v2e(vid))
+        for(unsigned int eid : m.adj_v2e(vid))
         {
             if(mask.at(eid)) continue;
 
-            uint   nbr      = m.vert_opposite_to(eid,vid);
+            unsigned int   nbr      = m.vert_opposite_to(eid,vid);
             double new_dist = dist.at(vid) + weights.at(nbr);
 
             if(dist.at(nbr) > new_dist)
@@ -227,9 +227,9 @@ void dijkstra_exhaustive_mask_on_edges(const AbstractMesh<M,V,E,P> & m,
 template<class M, class V, class E, class P>
 CINO_INLINE
 double dijkstra(const AbstractMesh<M,V,E,P> & m,
-                const uint                    source,
-                const uint                    dest,
-                      std::vector<uint>     & path)
+                const unsigned int                    source,
+                const unsigned int                    dest,
+                      std::vector<unsigned int>     & path)
 {
     path.clear();
 
@@ -238,12 +238,12 @@ double dijkstra(const AbstractMesh<M,V,E,P> & m,
     std::vector<double> dist(m.num_verts(), inf_double);
     dist.at(source) = 0.0;
 
-    std::set<std::pair<double,uint>> q;
+    std::set<std::pair<double,unsigned int>> q;
     q.insert(std::make_pair(0.0,source));
 
     while(!q.empty())
     {
-        uint vid = q.begin()->second;
+        unsigned int vid = q.begin()->second;
         q.erase(q.begin());
 
         if(vid==dest)
@@ -254,7 +254,7 @@ double dijkstra(const AbstractMesh<M,V,E,P> & m,
             return dist.at(dest);
         }
 
-        for(uint nbr : m.adj_v2v(vid))
+        for(unsigned int nbr : m.adj_v2v(vid))
         {
             double new_dist = dist.at(vid) + m.vert(vid).dist(m.vert(nbr));
 
@@ -281,10 +281,10 @@ double dijkstra(const AbstractMesh<M,V,E,P> & m,
 template<class M, class V, class E, class P>
 CINO_INLINE
 double dijkstra(const AbstractMesh<M,V,E,P> & m,
-                const uint                    source,
-                const uint                    dest,
+                const unsigned int                    source,
+                const unsigned int                    dest,
                 const std::vector<double>   & weights,
-                      std::vector<uint>     & path)
+                      std::vector<unsigned int>     & path)
 {
     path.clear();
 
@@ -293,12 +293,12 @@ double dijkstra(const AbstractMesh<M,V,E,P> & m,
     std::vector<double> dist(m.num_verts(), inf_double);
     dist.at(source) = 0.0;
 
-    std::set<std::pair<double,uint>> q;
+    std::set<std::pair<double,unsigned int>> q;
     q.insert(std::make_pair(0.0,source));
 
     while(!q.empty())
     {
-        uint vid = q.begin()->second;
+        unsigned int vid = q.begin()->second;
         q.erase(q.begin());
 
         if(vid==dest)
@@ -309,7 +309,7 @@ double dijkstra(const AbstractMesh<M,V,E,P> & m,
             return dist.at(dest);
         }
 
-        for(uint nbr : m.adj_v2v(vid))
+        for(unsigned int nbr : m.adj_v2v(vid))
         {
             double new_dist = dist.at(vid) + weights.at(nbr);
 
@@ -336,11 +336,11 @@ double dijkstra(const AbstractMesh<M,V,E,P> & m,
 template<class M, class V, class E, class P>
 CINO_INLINE
 double dijkstra(const AbstractMesh<M,V,E,P> & m,
-                const uint                    source,
-                const uint                    dest,
+                const unsigned int                    source,
+                const unsigned int                    dest,
                 const std::vector<double>   & weights, // per vert weights (used as metric instead of edge lengths)
                 const std::vector<bool>     & mask, // if mask[v] = true, path cannot pass through it
-                      std::vector<uint>     & path)
+                      std::vector<unsigned int>     & path)
 {
     path.clear();
 
@@ -349,12 +349,12 @@ double dijkstra(const AbstractMesh<M,V,E,P> & m,
     std::vector<double> dist(m.num_verts(), inf_double);
     dist.at(source) = 0.0;
 
-    std::set<std::pair<double,uint>> q;
+    std::set<std::pair<double,unsigned int>> q;
     q.insert(std::make_pair(0.0,source));
 
     while(!q.empty())
     {
-        uint vid = q.begin()->second;
+        unsigned int vid = q.begin()->second;
         q.erase(q.begin());
 
         if(vid==dest)
@@ -365,7 +365,7 @@ double dijkstra(const AbstractMesh<M,V,E,P> & m,
             return dist.at(dest);
         }
 
-        for(uint nbr : m.adj_v2v(vid))
+        for(unsigned int nbr : m.adj_v2v(vid))
         {
             if(mask.at(nbr)) continue;
 
@@ -396,11 +396,11 @@ double dijkstra(const AbstractMesh<M,V,E,P> & m,
 template<class M, class V, class E, class P>
 CINO_INLINE
 double dijkstra_mask_on_edges(const AbstractMesh<M,V,E,P> & m,
-                              const uint                    source,
-                              const uint                    dest,
+                              const unsigned int                    source,
+                              const unsigned int                    dest,
                               const std::vector<double>   & weights, // per vert weights (used as metric instead of edge lengths)
                               const std::vector<bool>     & mask,    // if mask[e] = true, path cannot pass through edge e
-                                    std::vector<uint>     & path)
+                                    std::vector<unsigned int>     & path)
 {
     path.clear();
 
@@ -409,12 +409,12 @@ double dijkstra_mask_on_edges(const AbstractMesh<M,V,E,P> & m,
     std::vector<double> dist(m.num_verts(), inf_double);
     dist.at(source) = 0.0;
 
-    std::set<std::pair<double,uint>> q;
+    std::set<std::pair<double,unsigned int>> q;
     q.insert(std::make_pair(0.0,source));
 
     while(!q.empty())
     {
-        uint vid = q.begin()->second;
+        unsigned int vid = q.begin()->second;
         q.erase(q.begin());
 
         if(vid==dest)
@@ -425,7 +425,7 @@ double dijkstra_mask_on_edges(const AbstractMesh<M,V,E,P> & m,
             return dist.at(dest);
         }
 
-        for(uint nbr : m.adj_v2v(vid))
+        for(unsigned int nbr : m.adj_v2v(vid))
         {
             int eid = m.edge_id(vid,nbr);
             assert(eid>=0);
@@ -462,10 +462,10 @@ double dijkstra_mask_on_edges(const AbstractMesh<M,V,E,P> & m,
 template<class M, class V, class E, class P>
 CINO_INLINE
 double dijkstra(const AbstractMesh<M,V,E,P> & m,
-                const uint                    source,
-                const uint                    dest,
+                const unsigned int                    source,
+                const unsigned int                    dest,
                 const std::vector<bool>     & mask,
-                      std::vector<uint>     & path)
+                      std::vector<unsigned int>     & path)
 {
     path.clear();
     assert(mask.size() == m.num_verts());
@@ -475,12 +475,12 @@ double dijkstra(const AbstractMesh<M,V,E,P> & m,
     std::vector<double> dist(m.num_verts(), inf_double);
     dist.at(source) = 0.0;
 
-    std::set<std::pair<double,uint>> q;
+    std::set<std::pair<double,unsigned int>> q;
     q.insert(std::make_pair(0.0,source));
 
     while(!q.empty())
     {
-        uint vid = q.begin()->second;
+        unsigned int vid = q.begin()->second;
         q.erase(q.begin());
 
         if(vid==dest)
@@ -491,7 +491,7 @@ double dijkstra(const AbstractMesh<M,V,E,P> & m,
             return dist.at(dest);
         }
 
-        for(uint nbr : m.adj_v2v(vid))
+        for(unsigned int nbr : m.adj_v2v(vid))
         {
             if(mask.at(nbr)) continue;
 
@@ -525,10 +525,10 @@ double dijkstra(const AbstractMesh<M,V,E,P> & m,
 template<class M, class V, class E, class P>
 CINO_INLINE
 double dijkstra_mask_on_edges(const AbstractMesh<M,V,E,P> & m,
-                              const uint                    source,
-                              const uint                    dest,
+                              const unsigned int                    source,
+                              const unsigned int                    dest,
                               const std::vector<bool>     & mask, // if mask[e] = true, path cannot pass through edge e
-                                    std::vector<uint>     & path)
+                                    std::vector<unsigned int>     & path)
 {
     path.clear();
     assert(mask.size() == m.num_edges());
@@ -538,12 +538,12 @@ double dijkstra_mask_on_edges(const AbstractMesh<M,V,E,P> & m,
     std::vector<double> dist(m.num_verts(), inf_double);
     dist.at(source) = 0.0;
 
-    std::set<std::pair<double,uint>> q;
+    std::set<std::pair<double,unsigned int>> q;
     q.insert(std::make_pair(0.0,source));
 
     while(!q.empty())
     {
-        uint vid = q.begin()->second;
+        unsigned int vid = q.begin()->second;
         q.erase(q.begin());
 
         if(vid==dest)
@@ -554,7 +554,7 @@ double dijkstra_mask_on_edges(const AbstractMesh<M,V,E,P> & m,
             return dist.at(dest);
         }
 
-        for(uint nbr : m.adj_v2v(vid))
+        for(unsigned int nbr : m.adj_v2v(vid))
         {
             int eid = m.edge_id(vid,nbr);
             assert(eid>=0);
@@ -592,10 +592,10 @@ double dijkstra_mask_on_edges(const AbstractMesh<M,V,E,P> & m,
 template<class M, class V, class E, class P>
 CINO_INLINE
 double dijkstra(const AbstractMesh<M,V,E,P> & m,
-                const uint                    source,
-                const std::set<uint>        & dest,
+                const unsigned int                    source,
+                const std::set<unsigned int>        & dest,
                 const std::vector<bool>     & mask,
-                      std::vector<uint>     & path)
+                      std::vector<unsigned int>     & path)
 {
     path.clear();
     assert(mask.size() == m.num_verts());
@@ -605,12 +605,12 @@ double dijkstra(const AbstractMesh<M,V,E,P> & m,
     std::vector<double> dist(m.num_verts(), inf_double);
     dist.at(source) = 0.0;
 
-    std::set<std::pair<double,uint>> q;
+    std::set<std::pair<double,unsigned int>> q;
     q.insert(std::make_pair(0.0,source));
 
     while(!q.empty())
     {
-        uint vid = q.begin()->second;
+        unsigned int vid = q.begin()->second;
         q.erase(q.begin());
 
         if(CONTAINS(dest,vid))
@@ -621,7 +621,7 @@ double dijkstra(const AbstractMesh<M,V,E,P> & m,
             return dist.at(vid);
         }
 
-        for(uint nbr : m.adj_v2v(vid))
+        for(unsigned int nbr : m.adj_v2v(vid))
         {
             if(mask.at(nbr)) continue;
 
@@ -652,21 +652,21 @@ double dijkstra(const AbstractMesh<M,V,E,P> & m,
 template<class M, class V, class E, class P>
 CINO_INLINE
 void dijkstra_exhaustive_on_dual(const AbstractMesh<M,V,E,P> & m,
-                                 const uint                    source,
+                                 const unsigned int                    source,
                                        std::vector<double>   & dist)
 {
     dist = std::vector<double>(m.num_polys(), inf_double);
     dist.at(source) = 0.0;
 
-    std::set<std::pair<double,uint>> q;
+    std::set<std::pair<double,unsigned int>> q;
     q.insert(std::make_pair(0.0,source));
 
     while(!q.empty())
     {
-        uint vid = q.begin()->second;
+        unsigned int vid = q.begin()->second;
         q.erase(q.begin());
 
-        for(uint nbr : m.adj_p2p(vid))
+        for(unsigned int nbr : m.adj_p2p(vid))
         {
             double new_dist = dist.at(vid) + m.poly_centroid(vid).dist(m.poly_centroid(nbr));
 
@@ -690,14 +690,14 @@ void dijkstra_exhaustive_on_dual(const AbstractMesh<M,V,E,P> & m,
 template<class M, class V, class E, class P>
 CINO_INLINE
 void dijkstra_exhaustive_on_dual(const AbstractMesh<M,V,E,P> & m,
-                                 const std::vector<uint>     & sources,
+                                 const std::vector<unsigned int>     & sources,
                                        std::vector<double>   & dist)
 {
     dist = std::vector<double>(m.num_polys(), inf_double);
 
-    std::set<std::pair<double,uint>> q;
+    std::set<std::pair<double,unsigned int>> q;
 
-    for(uint s : sources)
+    for(unsigned int s : sources)
     {
         dist.at(s) = 0.0;
         q.insert(std::make_pair(0.0,s));
@@ -705,10 +705,10 @@ void dijkstra_exhaustive_on_dual(const AbstractMesh<M,V,E,P> & m,
 
     while(!q.empty())
     {
-        uint vid = q.begin()->second;
+        unsigned int vid = q.begin()->second;
         q.erase(q.begin());
 
-        for(uint nbr : m.adj_p2p(vid))
+        for(unsigned int nbr : m.adj_p2p(vid))
         {
             double new_dist = dist.at(vid) + m.poly_centroid(vid).dist(m.poly_centroid(nbr));
 
@@ -732,9 +732,9 @@ void dijkstra_exhaustive_on_dual(const AbstractMesh<M,V,E,P> & m,
 template<class M, class V, class E, class P>
 CINO_INLINE
 double dijkstra_on_dual(const AbstractMesh<M,V,E,P> & m,
-                        const uint                    source,
-                        const uint                    dest,
-                              std::vector<uint>     & path)
+                        const unsigned int                    source,
+                        const unsigned int                    dest,
+                              std::vector<unsigned int>     & path)
 {
     path.clear();
 
@@ -743,12 +743,12 @@ double dijkstra_on_dual(const AbstractMesh<M,V,E,P> & m,
     std::vector<double> dist(m.num_polys(), inf_double);
     dist.at(source) = 0.0;
 
-    std::set<std::pair<double,uint>> q;
+    std::set<std::pair<double,unsigned int>> q;
     q.insert(std::make_pair(0.0,source));
 
     while(!q.empty())
     {
-        uint vid = q.begin()->second;
+        unsigned int vid = q.begin()->second;
         q.erase(q.begin());
 
         if(vid==dest)
@@ -759,7 +759,7 @@ double dijkstra_on_dual(const AbstractMesh<M,V,E,P> & m,
             return dist.at(dest);
         }
 
-        for(uint nbr : m.adj_p2p(vid))
+        for(unsigned int nbr : m.adj_p2p(vid))
         {
             double new_dist = dist.at(vid) + m.poly_centroid(vid).dist(m.poly_centroid(nbr));
 
@@ -786,10 +786,10 @@ double dijkstra_on_dual(const AbstractMesh<M,V,E,P> & m,
 template<class M, class V, class E, class P>
 CINO_INLINE
 double dijkstra_on_dual(const AbstractMesh<M,V,E,P> & m,
-                        const uint                    source,
-                        const uint                    dest,
+                        const unsigned int                    source,
+                        const unsigned int                    dest,
                         const std::vector<bool>     & mask,
-                              std::vector<uint>     & path)
+                              std::vector<unsigned int>     & path)
 {
     path.clear();
 
@@ -798,12 +798,12 @@ double dijkstra_on_dual(const AbstractMesh<M,V,E,P> & m,
     std::vector<double> dist(m.num_polys(), inf_double);
     dist.at(source) = 0.0;
 
-    std::set<std::pair<double,uint>> q;
+    std::set<std::pair<double,unsigned int>> q;
     q.insert(std::make_pair(0.0,source));
 
     while(!q.empty())
     {
-        uint vid = q.begin()->second;
+        unsigned int vid = q.begin()->second;
         q.erase(q.begin());
 
         if(vid==dest)
@@ -814,7 +814,7 @@ double dijkstra_on_dual(const AbstractMesh<M,V,E,P> & m,
             return dist.at(dest);
         }
 
-        for(uint nbr : m.adj_p2p(vid))
+        for(unsigned int nbr : m.adj_p2p(vid))
         {
             if(mask.at(nbr)) continue;
 
@@ -845,10 +845,10 @@ double dijkstra_on_dual(const AbstractMesh<M,V,E,P> & m,
 template<class M, class V, class E, class P>
 CINO_INLINE
 double dijkstra_on_dual(const AbstractMesh<M,V,E,P> & m,
-                        const uint                    source,
-                        const std::set<uint>        & dest,
+                        const unsigned int                    source,
+                        const std::set<unsigned int>        & dest,
                         const std::vector<bool>     & mask,
-                              std::vector<uint>     & path)
+                              std::vector<unsigned int>     & path)
 {
     path.clear();
 
@@ -857,12 +857,12 @@ double dijkstra_on_dual(const AbstractMesh<M,V,E,P> & m,
     std::vector<double> dist(m.num_polys(), inf_double);
     dist.at(source) = 0.0;
 
-    std::set<std::pair<double,uint>> q;
+    std::set<std::pair<double,unsigned int>> q;
     q.insert(std::make_pair(0.0,source));
 
     while(!q.empty())
     {
-        uint vid = q.begin()->second;
+        unsigned int vid = q.begin()->second;
         q.erase(q.begin());
 
         if(CONTAINS(dest,vid))
@@ -873,7 +873,7 @@ double dijkstra_on_dual(const AbstractMesh<M,V,E,P> & m,
             return dist.at(vid);
         }
 
-        for(uint nbr : m.adj_p2p(vid))
+        for(unsigned int nbr : m.adj_p2p(vid))
         {
             if(mask.at(nbr)) continue;
 
@@ -904,9 +904,9 @@ double dijkstra_on_dual(const AbstractMesh<M,V,E,P> & m,
 template<class M, class V, class E, class P>
 CINO_INLINE
 double dijkstra_on_dual(const AbstractMesh<M,V,E,P> & m,
-                        const uint                    source,
-                        const std::set<uint>        & dest,
-                              std::vector<uint>     & path)
+                        const unsigned int                    source,
+                        const std::set<unsigned int>        & dest,
+                              std::vector<unsigned int>     & path)
 {
     path.clear();
 
@@ -915,12 +915,12 @@ double dijkstra_on_dual(const AbstractMesh<M,V,E,P> & m,
     std::vector<double> dist(m.num_polys(), inf_double);
     dist.at(source) = 0.0;
 
-    std::set<std::pair<double,uint>> q;
+    std::set<std::pair<double,unsigned int>> q;
     q.insert(std::make_pair(0.0,source));
 
     while(!q.empty())
     {
-        uint vid = q.begin()->second;
+        unsigned int vid = q.begin()->second;
         q.erase(q.begin());
 
         if(CONTAINS(dest,vid))
@@ -931,7 +931,7 @@ double dijkstra_on_dual(const AbstractMesh<M,V,E,P> & m,
             return dist.at(vid);
         }
 
-        for(uint nbr : m.adj_p2p(vid))
+        for(unsigned int nbr : m.adj_p2p(vid))
         {
             double new_dist = dist.at(vid) + m.poly_centroid(vid).dist(m.poly_centroid(nbr));
 

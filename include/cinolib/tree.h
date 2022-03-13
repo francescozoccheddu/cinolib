@@ -54,9 +54,9 @@ template<class T>
 struct TreeNode
 {
     T    item;
-    uint depth  = 0;
-    uint father = 0;
-    std::vector<uint> children;
+    unsigned int depth  = 0;
+    unsigned int father = 0;
+    std::vector<unsigned int> children;
 };
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -70,16 +70,16 @@ class Tree
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-        uint add_children(T item, uint father = 0);
+        unsigned int add_children(T item, unsigned int father = 0);
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-        const TreeNode<T> & node(const uint id) const { return tree.at(id); }
-              TreeNode<T> & node(const uint id)       { return tree.at(id); }
+        const TreeNode<T> & node(const unsigned int id) const { return tree.at(id); }
+              TreeNode<T> & node(const unsigned int id)       { return tree.at(id); }
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-        void depth_first_traverse(std::vector<T> & items, const uint id = 0) const;
+        void depth_first_traverse(std::vector<T> & items, const unsigned int id = 0) const;
 
     protected:
 

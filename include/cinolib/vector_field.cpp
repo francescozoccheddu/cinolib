@@ -45,7 +45,7 @@ VectorField::VectorField() {}
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 CINO_INLINE
-VectorField::VectorField(const uint size)
+VectorField::VectorField(const unsigned int size)
 {
     setZero(3 * size);
 }
@@ -56,7 +56,7 @@ CINO_INLINE
 VectorField::VectorField(const std::vector<vec3d> & data)
 {
     setZero(3 * data.size());
-    for(uint i=0; i<data.size(); ++i) set(i,data.at(i));
+    for(unsigned int i=0; i<data.size(); ++i) set(i,data.at(i));
 }
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -131,11 +131,11 @@ void VectorField::deserialize(const char *filename)
     f.precision(std::numeric_limits<double>::digits10+1);
     f.open(filename);
     assert(f.is_open());
-    uint size;
+    unsigned int size;
     std::string dummy;
     f >> dummy >> size;
     resize(size*3);
-    for(uint i=0; i<3*size; ++i) f >> (*this)[i];
+    for(unsigned int i=0; i<3*size; ++i) f >> (*this)[i];
     f.close();
 }
 

@@ -53,7 +53,7 @@ class OctreeNode
         const OctreeNode *father;
         OctreeNode       *children[8] = { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr };
         AABB              bbox;
-        std::vector<uint> item_indices; // index Octree::items, avoiding to store a copy of the same object multiple times in each node it appears
+        std::vector<unsigned int> item_indices; // index Octree::items, avoiding to store a copy of the same object multiple times in each node it appears
         bool              is_inner = false;
 };
 // TODO: due to the bool flag this struct requires 7 bytes padding. Also the
@@ -75,18 +75,18 @@ class Octree
 {
     public:
 
-        explicit Octree(const uint max_depth      = 7,
-                        const uint items_per_leaf = 50);
+        explicit Octree(const unsigned int max_depth      = 7,
+                        const unsigned int items_per_leaf = 50);
 
         virtual ~Octree();
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-        void push_point      (const uint id, const vec3d & v);
-        void push_sphere     (const uint id, const vec3d & c, const double r);
-        void push_segment    (const uint id, const std::vector<vec3d> & v);
-        void push_triangle   (const uint id, const std::vector<vec3d> & v);
-        void push_tetrahedron(const uint id, const std::vector<vec3d> & v);
+        void push_point      (const unsigned int id, const vec3d & v);
+        void push_sphere     (const unsigned int id, const vec3d & c, const double r);
+        void push_segment    (const unsigned int id, const std::vector<vec3d> & v);
+        void push_triangle   (const unsigned int id, const std::vector<vec3d> & v);
+        void push_tetrahedron(const unsigned int id, const std::vector<vec3d> & v);
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -103,9 +103,9 @@ class Octree
         {
             assert(items.empty());
             items.reserve(m.num_polys());
-            for(uint pid=0; pid<m.num_polys(); ++pid)
+            for(unsigned int pid=0; pid<m.num_polys(); ++pid)
             {
-                for(uint i=0; i<m.poly_tessellation(pid).size()/3; ++i)
+                for(unsigned int i=0; i<m.poly_tessellation(pid).size()/3; ++i)
                 {
                     vec3d v0 = m.vert(m.poly_tessellation(pid).at(3*i+0));
                     vec3d v1 = m.vert(m.poly_tessellation(pid).at(3*i+1));
@@ -123,7 +123,7 @@ class Octree
         {
             assert(items.empty());
             items.reserve(m.num_polys());
-            for(uint pid=0; pid<m.num_polys(); ++pid)
+            for(unsigned int pid=0; pid<m.num_polys(); ++pid)
             {
                 switch(m.mesh_type())
                 {
@@ -137,11 +137,11 @@ class Octree
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
         void build_from_vectors(const std::vector<vec3d> & verts,
-                                const std::vector<uint>  & tris)
+                                const std::vector<unsigned int>  & tris)
         {
             assert(items.empty());
             items.reserve(tris.size()/3);
-            for(uint i=0; i<tris.size(); i+=3)
+            for(unsigned int i=0; i<tris.size(); i+=3)
             {
                 push_triangle(i/3, { verts.at(tris.at(i  )),
                                     verts.at(tris.at(i+1)),
@@ -157,7 +157,7 @@ class Octree
         {
             assert(items.empty());
             items.reserve(m.num_edges());
-            for(uint eid=0; eid<m.num_edges(); ++eid)
+            for(unsigned int eid=0; eid<m.num_edges(); ++eid)
             {
                 push_segment(eid, m.edge_verts(eid));
             }
@@ -171,7 +171,7 @@ class Octree
         {
             assert(items.empty());
             items.reserve(m.num_verts());
-            for(uint vid=0; vid<m.num_verts(); ++vid)
+            for(unsigned int vid=0; vid<m.num_verts(); ++vid)
             {
                 push_point(vid, m.vert(vid));
             }
@@ -180,7 +180,7 @@ class Octree
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-        uint max_items_per_leaf() const;
+        unsigned int max_items_per_leaf() const;
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -189,28 +189,28 @@ class Octree
         // QUERIES :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
         // returns pos, id and distance of the item that is closest to query point p
-        void  closest_point(const vec3d & p, uint & id, vec3d & pos, double & dist) const;
+        void  closest_point(const vec3d & p, unsigned int & id, vec3d & pos, double & dist) const;
         vec3d closest_point(const vec3d & p) const;
 
         // returns respectively the first item and the full list of items containing query point p
         // note: this query becomes exact if CINOLIB_USES_EXACT_PREDICATES is defined
-        bool contains(const vec3d & p, const bool strict, uint & id) const;
-        bool contains(const vec3d & p, const bool strict, std::unordered_set<uint> & ids) const;
+        bool contains(const vec3d & p, const bool strict, unsigned int & id) const;
+        bool contains(const vec3d & p, const bool strict, std::unordered_set<unsigned int> & ids) const;
 
         // returns respectively the first and the full list of intersections
         // between items in the octree and a ray R(t) := p + t * dir
-        bool intersects_ray(const vec3d & p, const vec3d & dir, double & min_t, uint & id) const; // first hit
-        bool intersects_ray(const vec3d & p, const vec3d & dir, std::set<std::pair<double,uint>> & all_hits) const;
+        bool intersects_ray(const vec3d & p, const vec3d & dir, double & min_t, unsigned int & id) const; // first hit
+        bool intersects_ray(const vec3d & p, const vec3d & dir, std::set<std::pair<double,unsigned int>> & all_hits) const;
 
         // note: these queries become exact if CINOLIB_USES_EXACT_PREDICATES is defined
-        bool intersects_segment (const vec3d s[], const bool ignore_if_valid_complex, std::unordered_set<uint> & ids) const;
-        bool intersects_triangle(const vec3d t[], const bool ignore_if_valid_complex, std::unordered_set<uint> & ids) const;
+        bool intersects_segment (const vec3d s[], const bool ignore_if_valid_complex, std::unordered_set<unsigned int> & ids) const;
+        bool intersects_triangle(const vec3d t[], const bool ignore_if_valid_complex, std::unordered_set<unsigned int> & ids) const;
 
         // WARNING: this function may return false positives because it only checks intersection between
         // the box b and the AABB of the items in the tree. This is a partial result that it is useful for
         // some of the queries above, where a more expensive test between the geometric entity approximated
         // by box b and the actual items will be performed
-        bool intersects_box(const AABB & b, std::unordered_set<uint> & ids) const;
+        bool intersects_box(const AABB & b, std::unordered_set<unsigned int> & ids) const;
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -223,9 +223,9 @@ class Octree
 
         protected:
 
-        uint max_depth;      // maximum allowed depth of the tree
-        uint items_per_leaf; // prescribed number of items per leaf (can't go deeper than max_depth anyways)
-        uint tree_depth = 0; // actual depth of the tree
+        unsigned int max_depth;      // maximum allowed depth of the tree
+        unsigned int items_per_leaf; // prescribed number of items per leaf (can't go deeper than max_depth anyways)
+        unsigned int tree_depth = 0; // actual depth of the tree
         bool print_debug_info = false;
 
         // SUPPORT STRUCTURES ::::::::::::::::::::::::::::::::::::::::::::::::::::

@@ -46,11 +46,11 @@ namespace cinolib
 CINO_INLINE
 void to_openGL_unified_verts(const std::vector<vec3d>             & v_attr_0,          // xyz or uvw or nor
                              const std::vector<vec3d>             & v_attr_1,          // xyz or uvw or nor
-                             const std::vector<std::vector<uint>> & v2v_v_attr_0,      // connectivity attr #0
-                             const std::vector<std::vector<uint>> & v2v_v_attr_1,      // connectivity attr #1
+                             const std::vector<std::vector<unsigned int>> & v2v_v_attr_0,      // connectivity attr #0
+                             const std::vector<std::vector<unsigned int>> & v2v_v_attr_1,      // connectivity attr #1
                                    std::vector<vec3d>             & unified_v_attr_0,
                                    std::vector<vec3d>             & unified_v_attr_1,
-                                   std::vector<std::vector<uint>> & unified_v2v)
+                                   std::vector<std::vector<unsigned int>> & unified_v2v)
 {
     assert(v2v_v_attr_0.size() == v2v_v_attr_1.size());
 
@@ -59,23 +59,23 @@ void to_openGL_unified_verts(const std::vector<vec3d>             & v_attr_0,   
     unified_v2v.clear();
     unified_v2v.reserve(v2v_v_attr_0.size());
 
-    typedef std::pair<uint,uint> v_vt_pair;
-    std::map<v_vt_pair,uint> v_map;
+    typedef std::pair<unsigned int,unsigned int> v_vt_pair;
+    std::map<v_vt_pair,unsigned int> v_map;
 
-    for(uint pid=0; pid<v2v_v_attr_0.size(); ++pid)
+    for(unsigned int pid=0; pid<v2v_v_attr_0.size(); ++pid)
     {
         assert(v2v_v_attr_0.at(pid).size() == v2v_v_attr_1.at(pid).size());
-        std::vector<uint> poly;
-        for(uint off=0; off<v2v_v_attr_0.at(pid).size(); ++off)
+        std::vector<unsigned int> poly;
+        for(unsigned int off=0; off<v2v_v_attr_0.at(pid).size(); ++off)
         {
-            uint v  = v2v_v_attr_0.at(pid).at(off);
-            uint vt = v2v_v_attr_1.at(pid).at(off);
+            unsigned int v  = v2v_v_attr_0.at(pid).at(off);
+            unsigned int vt = v2v_v_attr_1.at(pid).at(off);
             v_vt_pair key = std::make_pair(v,vt);
 
             auto query = v_map.find(key);
             if (query == v_map.end())
             {
-                uint fresh_id = (uint)unified_v_attr_0.size();
+                unsigned int fresh_id = (unsigned int)unified_v_attr_0.size();
                 v_map[key] = fresh_id;
                 unified_v_attr_0.push_back(v_attr_0.at(v));
                 unified_v_attr_1.push_back(v_attr_1.at(vt));
@@ -96,13 +96,13 @@ CINO_INLINE
 void to_openGL_unified_verts(const std::vector<vec3d>             & v_attr_0,
                              const std::vector<vec3d>             & v_attr_1,
                              const std::vector<vec3d>             & v_attr_2,
-                             const std::vector<std::vector<uint>> & v2v_attr_0,
-                             const std::vector<std::vector<uint>> & v2v_attr_1,
-                             const std::vector<std::vector<uint>> & v2v_attr_2,
+                             const std::vector<std::vector<unsigned int>> & v2v_attr_0,
+                             const std::vector<std::vector<unsigned int>> & v2v_attr_1,
+                             const std::vector<std::vector<unsigned int>> & v2v_attr_2,
                                    std::vector<vec3d>             & unified_v_attr_0,
                                    std::vector<vec3d>             & unified_v_attr_1,
                                    std::vector<vec3d>             & unified_v_attr_2,
-                                   std::vector<std::vector<uint>> & unified_v2v)
+                                   std::vector<std::vector<unsigned int>> & unified_v2v)
 {
     assert(v2v_attr_0.size() == v2v_attr_1.size());
 
@@ -111,26 +111,26 @@ void to_openGL_unified_verts(const std::vector<vec3d>             & v_attr_0,
     unified_v2v.clear();
     unified_v2v.reserve(v2v_attr_0.size());
 
-    typedef std::tuple<uint,uint,uint> v_vt_vn;
-    std::map<v_vt_vn,uint> v_map;
+    typedef std::tuple<unsigned int,unsigned int,unsigned int> v_vt_vn;
+    std::map<v_vt_vn,unsigned int> v_map;
 
-    for(uint pid=0; pid<v2v_attr_0.size(); ++pid)
+    for(unsigned int pid=0; pid<v2v_attr_0.size(); ++pid)
     {
         assert(v2v_attr_0.at(pid).size() == v2v_attr_1.at(pid).size());
         assert(v2v_attr_0.at(pid).size() == v2v_attr_2.at(pid).size());
 
-        std::vector<uint> poly;
-        for(uint off=0; off<v2v_attr_0.at(pid).size(); ++off)
+        std::vector<unsigned int> poly;
+        for(unsigned int off=0; off<v2v_attr_0.at(pid).size(); ++off)
         {
-            uint v  = v2v_attr_0.at(pid).at(off);
-            uint vt = v2v_attr_1.at(pid).at(off);
-            uint vn = v2v_attr_2.at(pid).at(off);
+            unsigned int v  = v2v_attr_0.at(pid).at(off);
+            unsigned int vt = v2v_attr_1.at(pid).at(off);
+            unsigned int vn = v2v_attr_2.at(pid).at(off);
             v_vt_vn key = std::make_tuple(v,vt,vn);
 
             auto query = v_map.find(key);
             if (query == v_map.end())
             {
-                uint fresh_id = (uint)unified_v_attr_0.size();
+                unsigned int fresh_id = (unsigned int)unified_v_attr_0.size();
                 v_map[key] = fresh_id;
                 unified_v_attr_0.push_back(v_attr_0.at(v));
                 unified_v_attr_1.push_back(v_attr_1.at(vt));

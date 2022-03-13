@@ -46,19 +46,19 @@ template<class M, class V, class E, class F, class P>
 CINO_INLINE
 void subdivision_barycentric(Tetmesh<M,V,E,F,P> & m)
 {
-    std::unordered_map<uint,uint> e_map; // edge midpoints
-    std::unordered_map<uint,uint> f_map; // face centroids
-    std::unordered_map<uint,uint> p_map; // poly centroids
+    std::unordered_map<unsigned int,unsigned int> e_map; // edge midpoints
+    std::unordered_map<unsigned int,unsigned int> f_map; // face centroids
+    std::unordered_map<unsigned int,unsigned int> p_map; // poly centroids
 
-    for(uint eid=0; eid<m.num_edges(); ++eid) e_map[eid] = m.vert_add(m.edge_sample_at(eid,0.5));
-    for(uint fid=0; fid<m.num_faces(); ++fid) f_map[fid] = m.vert_add(m.face_centroid(fid));
-    for(uint pid=0; pid<m.num_polys(); ++pid) p_map[pid] = m.vert_add(m.poly_centroid(pid));
+    for(unsigned int eid=0; eid<m.num_edges(); ++eid) e_map[eid] = m.vert_add(m.edge_sample_at(eid,0.5));
+    for(unsigned int fid=0; fid<m.num_faces(); ++fid) f_map[fid] = m.vert_add(m.face_centroid(fid));
+    for(unsigned int pid=0; pid<m.num_polys(); ++pid) p_map[pid] = m.vert_add(m.poly_centroid(pid));
 
-    uint np = m.num_polys();
-    for(uint pid=0; pid<np; ++pid)
+    unsigned int np = m.num_polys();
+    for(unsigned int pid=0; pid<np; ++pid)
     {
         // tet verts
-        uint v[4] =
+        unsigned int v[4] =
         {
             m.poly_vert_id(pid,0),
             m.poly_vert_id(pid,1),
@@ -67,7 +67,7 @@ void subdivision_barycentric(Tetmesh<M,V,E,F,P> & m)
         };
 
         // tet faces
-        uint f[4][3] =
+        unsigned int f[4][3] =
         {
             { v[TET_FACES[0][0]], v[TET_FACES[0][1]], v[TET_FACES[0][2]] },
             { v[TET_FACES[1][0]], v[TET_FACES[1][1]], v[TET_FACES[1][2]] },
@@ -76,7 +76,7 @@ void subdivision_barycentric(Tetmesh<M,V,E,F,P> & m)
         };
 
         // tet edges (sorted per face)
-        uint e[4][3] =
+        unsigned int e[4][3] =
         {
             { e_map.at(m.edge_id(f[0][0], f[0][1])),
               e_map.at(m.edge_id(f[0][1], f[0][2])),
@@ -96,7 +96,7 @@ void subdivision_barycentric(Tetmesh<M,V,E,F,P> & m)
         };
 
         // face centroids
-        uint fc[4] =
+        unsigned int fc[4] =
         {
             f_map.at(m.face_id({f[0][0], f[0][1], f[0][2]})),
             f_map.at(m.face_id({f[1][0], f[1][1], f[1][2]})),
@@ -105,9 +105,9 @@ void subdivision_barycentric(Tetmesh<M,V,E,F,P> & m)
         };
 
         // tet centroid
-        uint c = p_map.at(pid);
+        unsigned int c = p_map.at(pid);
 
-        for(uint i=0; i<4; ++i)
+        for(unsigned int i=0; i<4; ++i)
         {
             // split i^th face
             m.poly_add({c, f[i][0], e[i][0], fc[i]});

@@ -44,9 +44,9 @@ CINO_INLINE
 void cylinder(const T             height,
               const T             bot_radius,
               const T             top_radius,
-              const uint          n_sides,    // cross section
+              const unsigned int          n_sides,    // cross section
               std::vector<T>    & verts,      // output vertices
-              std::vector<uint> & tris,       // output triangles
+              std::vector<unsigned int> & tris,       // output triangles
               std::vector<T>    & normals)    // output normals (per vertex)
 {
     // add first two points
@@ -60,8 +60,8 @@ void cylinder(const T             height,
     mat<2,1,T> b(bot_radius,0);
     mat<2,1,T> t(top_radius,0);
     mat<2,2,T> R = mat<2,2,T>::ROT_2D(2*M_PI/n_sides);
-    uint off = 0;
-    for(uint i=1; i<n_sides; ++i)
+    unsigned int off = 0;
+    for(unsigned int i=1; i<n_sides; ++i)
     {
         b = R*b;
         verts.push_back(b.x());

@@ -45,7 +45,7 @@ class Tetrahedron : public SpatialDataStructureItem
 {
     public:
 
-        Tetrahedron(const uint id, const vec3d v[4])
+        Tetrahedron(const unsigned int id, const vec3d v[4])
         {
             this->v[0] = v[0];
             this->v[1] = v[1];
