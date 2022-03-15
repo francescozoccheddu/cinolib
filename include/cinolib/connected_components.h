@@ -58,8 +58,6 @@ unsigned int connected_components(const AbstractMesh<M,V,E,P> & m,
 
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "connected_components.cpp"
-#endif
+#include "connected_components.tpp"
 
 #endif // CINO_CONNECTED_COMPONENTS_H

@@ -314,8 +314,6 @@ class AbstractPolyhedralMesh : public AbstractMesh<M,V,E,P>
 
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "abstract_polyhedralmesh.cpp"
-#endif
+#include "abstract_polyhedralmesh.tpp"
 
 #endif // CINO_ABSTRACT_POLYHEDRAL_MESH_H

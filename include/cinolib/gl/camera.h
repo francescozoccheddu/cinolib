@@ -161,8 +161,6 @@ class Camera
 
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "camera.cpp"
-#endif
+#include "camera.tpp"
 
 #endif // CAMERA_H

@@ -57,8 +57,6 @@ void export_visible(const AbstractPolyhedralMesh<M,V,E,F,P> & m_in,
 
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "export_visible.cpp"
-#endif
+#include "export_visible.tpp"
 
 #endif // CINO_EXPORT_VISIBLE_H

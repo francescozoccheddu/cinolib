@@ -66,8 +66,6 @@ float supports_contact_area(const Trimesh<M,V,E,P>                  & m,
 
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "supports_contact_area.cpp"
-#endif
+#include "supports_contact_area.tpp"
 
 #endif // CINO_SUPPORTS_CONTACT_AREA_H

@@ -62,8 +62,6 @@ void tangential_smoothing(Trimesh<M,V,E,P> & m);
 
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "tangential_smoothing.cpp"
-#endif
+#include "tangential_smoothing.tpp"
 
 #endif // CINO_TANGENTIAL_SMOOTHING_H

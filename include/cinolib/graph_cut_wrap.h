@@ -99,8 +99,6 @@ std::vector<int> graph_cut_wrap(const AbstractMesh<M,V,E,P>             & m,
 */
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "graph_cut_wrap.cpp"
-#endif
+#include "graph_cut_wrap.tpp"
 
 #endif // CINO_GRAPH_CUT_WRAP_H

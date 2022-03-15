@@ -116,8 +116,6 @@ void bfs_on_dual_w_face_barriers(const AbstractPolyhedralMesh<M,V,E,F,P> & m,
                                  std::unordered_set<unsigned int>                & visited);
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "bfs.cpp"
-#endif
+#include "bfs.tpp"
 
 #endif // CINO_BFS_H

@@ -129,8 +129,6 @@ class Trimesh : public AbstractPolygonMesh<M,V,E,P>
 
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "trimesh.cpp"
-#endif
+#include "trimesh.tpp"
 
 #endif // CINO_TRIMESH_H

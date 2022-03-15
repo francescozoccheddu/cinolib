@@ -62,8 +62,6 @@ void Poisson_sampling(const double         radius,
 
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "Poisson_sampling.cpp"
-#endif
+#include "Poisson_sampling.tpp"
 
 #endif // CINO_POISSON_SAMPLING

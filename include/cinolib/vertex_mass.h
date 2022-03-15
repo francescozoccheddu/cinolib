@@ -54,8 +54,6 @@ Eigen::SparseMatrix<double> mass_matrix(const AbstractMesh<M,V,E,P> & m,
 
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "vertex_mass.cpp"
-#endif
+#include "vertex_mass.tpp"
 
 #endif // CINO_VERTEX_MASS_H

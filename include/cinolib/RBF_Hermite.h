@@ -86,8 +86,6 @@ class Hermite_RBF
 
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "RBF_Hermite.cpp"
-#endif
+#include "RBF_Hermite.tpp"
 
 #endif // CINO_RBF_HERMITE_H

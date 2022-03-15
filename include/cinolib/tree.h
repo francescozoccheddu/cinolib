@@ -88,8 +88,6 @@ class Tree
 
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "tree.cpp"
-#endif
+#include "tree.tpp"
 
 #endif // CINO_TREE_H

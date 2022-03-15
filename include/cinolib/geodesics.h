@@ -97,8 +97,6 @@ ScalarField compute_geodesics_amortized(      Mesh              & m,
                                         const float               time_scalar = 1.0);
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "geodesics.cpp"
-#endif
+#include "geodesics.tpp"
 
 #endif // CINO_GEODESICS_H

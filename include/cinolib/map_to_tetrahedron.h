@@ -60,8 +60,6 @@ void map_to_tetrahedron(const Trimesh<M,V,E,P> & m,
 }
 
 
-#ifndef  CINO_STATIC_LIB
-#include "map_to_tetrahedron.cpp"
-#endif
+#include "map_to_tetrahedron.tpp"
 
 #endif // CINO_MAP_TO_TETRAHEDRON_H

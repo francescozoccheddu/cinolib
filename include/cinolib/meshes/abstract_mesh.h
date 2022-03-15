@@ -297,8 +297,6 @@ class AbstractMesh
 
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "abstract_mesh.cpp"
-#endif
+#include "abstract_mesh.tpp"
 
 #endif //CINO_ABSTRACT_MESH_H

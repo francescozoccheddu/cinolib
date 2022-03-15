@@ -56,8 +56,6 @@ void remesh_Botsch_Kobbelt_2004(DrawableTrimesh<M,V,E,P> & m,
                                 const bool                 preserve_marked_features = true);
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "remesh_BotschKobbelt2004.cpp"
-#endif
+#include "remesh_BotschKobbelt2004.tpp"
 
 #endif // CINO_REMESH_BOTSCH_KOBBELT_2004_H

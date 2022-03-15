@@ -83,8 +83,6 @@ bool earcut(const std::vector<point> & poly,
             const EarSorting           sort = EarSorting::SEQUENTIAL);
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "earcut.cpp"
-#endif
+#include "earcut.tpp"
 
 #endif // CINO_EARCUT_H

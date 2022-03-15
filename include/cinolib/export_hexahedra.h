@@ -57,8 +57,6 @@ void export_hexahedra(const Polyhedralmesh<M,V,E,F,P> & m_in,
 
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "export_hexahedra.cpp"
-#endif
+#include "export_hexahedra.tpp"
 
 #endif // CINO_EXPORT_HEXAHEDRA_H

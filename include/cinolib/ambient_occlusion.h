@@ -65,9 +65,7 @@ void ambient_occlusion_vol_meshes(      Mesh & m,
                                   const unsigned int   sample_dirs = 256);
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "ambient_occlusion.cpp"
-#endif
+#include "ambient_occlusion.tpp"
 
 #endif // CINOLIB_USES_OPENGL_GLFW_IMGUI
 #endif // CINO_AMBIENT_OCCLUSION_H

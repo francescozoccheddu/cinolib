@@ -107,8 +107,6 @@ class IntegralCurve : public DrawableCurve
 
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "integral_curve.cpp"
-#endif
+#include "integral_curve.tpp"
 
 #endif // CINO_INTEGRAL_CURVE_H

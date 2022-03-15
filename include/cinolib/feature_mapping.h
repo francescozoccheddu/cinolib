@@ -75,8 +75,6 @@ bool feature_mapping(const AbstractPolygonMesh<M1,V1,E1,P1> & m_source,
                            AbstractPolygonMesh<M2,V2,E2,P2> & m_target);
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "feature_mapping.cpp"
-#endif
+#include "feature_mapping.tpp"
 
 #endif // CINO_FEATURE_MAPPING_H

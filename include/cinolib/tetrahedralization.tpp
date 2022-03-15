@@ -1,6 +1,6 @@
 /********************************************************************************
 *  This file is part of CinoLib                                                 *
-*  Copyright(C) 2022: Marco Livesu                                              *
+*  Copyright(C) 2016: Marco Livesu                                              *
 *                                                                               *
 *  The MIT License                                                              *
 *                                                                               *
@@ -33,87 +33,65 @@
 *     16149 Genoa,                                                              *
 *     Italy                                                                     *
 *********************************************************************************/
-#include <cinolib/arrow.h>
-#include <cinolib/geometry/vec_mat.h>
+#include <cinolib/tetrahedralization.h>
+#include <cinolib/ipair.h>
+#include <cinolib/standard_elements_tables.h>
+#include <set>
+#include <cassert>
+#include <algorithm>
+#include <cinolib/stl_container_utilities.h>
 
 namespace cinolib
 {
 
-template<class T>
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+// Transforms a hexahedral mesh into a conforming tetrahedral
+// mesh, splitting all hexahedra into five or six tetrahedra
+template<class M, class V, class E, class F, class P>
 CINO_INLINE
-void arrow(const T            height,
-           const T            radius,
-           const T            base_rel_height, // percentage of the height (a good value is 0.7)
-           const T            base_rel_radius, // percentage of the radius (a good value is 0.2)
-           const unsigned int         n_sides,         // cross section
-           std::vector<T>    & verts,          // output vertices
-           std::vector<unsigned int> & tris,           // output triangles
-           std::vector<T>    & normals)        // output normals (per vertex)
+void hex_to_tets(const Hexmesh<M,V,E,F,P> & hm,
+                       Tetmesh<M,V,E,F,P> & tm)
 {
-    T b_height = height * base_rel_height;
-    T b_radius = radius * base_rel_radius;
-
-    // add first three points
-    verts   = {        0, 0,   height,
-                b_radius, 0,        0,
-                b_radius, 0, b_height,
-                  radius, 0, b_height};
-    normals = { 0, 0, 1,
-                1, 0, 0,
-                1, 0, 0,
-                1, 0, 0 };
-    tris    = {};
-
-    // tessellate the base
-    mat<2,1,T> b(b_radius,0);
-    mat<2,1,T> t(radius,0);
-    mat<2,2,T> R = mat<2,2,T>::ROT_2D(2*M_PI/n_sides);
-    unsigned int off = 0;
-    for(unsigned int i=1; i<n_sides; ++i)
+    for(unsigned int vid=0; vid<hm.num_verts(); ++vid)
     {
-        // base verts
-        b = R*b;
-        t = R*t;
-        verts.push_back(b.x());
-        verts.push_back(b.y());
-        verts.push_back(0);
-        verts.push_back(b.x());
-        verts.push_back(b.y());
-        verts.push_back(b_height);
-        verts.push_back(t.x());
-        verts.push_back(t.y());
-        verts.push_back(b_height);
-
-        tris.push_back(off+1);
-        tris.push_back(off+4);
-        tris.push_back(off+2);
-        tris.push_back(off+2);
-        tris.push_back(off+4);
-        tris.push_back(off+5);
-        tris.push_back(off+3);
-        tris.push_back(off+6);
-        tris.push_back(0);
-        off+=3;
-
-        normals.push_back(b.x());
-        normals.push_back(b.y());
-        normals.push_back(0);
-        normals.push_back(b.x());
-        normals.push_back(b.y());
-        normals.push_back(0);
-        normals.push_back(t.x());
-        normals.push_back(t.y());
-        normals.push_back(0);
+        tm.vert_add(hm.vert(vid));
     }
-    tris.push_back(off+1);
-    tris.push_back(1);
-    tris.push_back(off+2);
-    tris.push_back(off+2);
-    tris.push_back(1);
-    tris.push_back(2);
-    tris.push_back(off+3);
-    tris.push_back(3);
-    tris.push_back(0);
+
+    for(unsigned int pid=0; pid<hm.num_polys(); ++pid)
+    {
+        std::vector<unsigned int> tets;
+        hex_to_tets(hm.poly_verts_id(pid),tets);
+
+        auto t = polys_from_serialized_vids(tets,4);
+        for(auto tet : t)
+        {
+            unsigned int id = tm.poly_add(tet);
+            tm.poly_data(id).label = pid;
+        }
+    }
+}
+
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+template<class M, class V, class E, class F, class P>
+CINO_INLINE
+void hex_to_corner_tets(const Hexmesh<M,V,E,F,P> & hm,
+                              Tetmesh<M,V,E,F,P> & tm)
+{
+    for(unsigned int vid=0; vid<hm.num_verts(); ++vid)
+    {
+        tm.vert_add(hm.vert(vid));
+    }
+
+    for(unsigned int pid=0; pid<hm.num_polys(); ++pid)
+    {
+        std::vector<unsigned int> tets;
+        hex_to_corner_tets(hm.poly_verts_id(pid),tets);
+
+        auto t = polys_from_serialized_vids(tets,4);
+        for(auto tet : t) tm.poly_add(tet);
+    }
 }
 
 }

@@ -121,6 +121,7 @@ void triangle_wrap(const std::vector<vec3d> & verts_in,
                          Trimesh<M,V,E,P>   & m);
 }
 
+#include "triangle_wrap.tpp"
 #ifndef  CINO_STATIC_LIB
 #include "triangle_wrap.cpp"
 #endif

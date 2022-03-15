@@ -58,6 +58,7 @@ unsigned long int serialize_nD_index(const std::array<unsigned int,N> & dim_exte
 
 }
 
+#include "serialize_index.tpp"
 #ifndef  CINO_STATIC_LIB
 #include "serialize_index.cpp"
 #endif

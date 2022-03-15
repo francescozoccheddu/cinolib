@@ -59,8 +59,6 @@ void vertex_clustering(const std::vector<Vertex>             & points,
 
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "vertex_clustering.cpp"
-#endif
+#include "vertex_clustering.tpp"
 
 #endif // CINO_VERTEX_CLUSTERING_H

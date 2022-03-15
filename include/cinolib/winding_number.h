@@ -67,6 +67,7 @@ int winding_number(const AbstractPolygonMesh<M,V,E,P> & m,
                    const vec3d                        & p);
 }
 
+#include "winding_number.tpp"
 #ifndef  CINO_STATIC_LIB
 #include "winding_number.cpp"
 #endif

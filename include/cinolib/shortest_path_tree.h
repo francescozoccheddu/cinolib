@@ -54,8 +54,6 @@ void shortest_path_tree(AbstractPolygonMesh<M,V,E,P> & m, const unsigned int roo
 
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "shortest_path_tree.cpp"
-#endif
+#include "shortest_path_tree.tpp"
 
 #endif // CINO_SHORTEST_PATH_TREE_H

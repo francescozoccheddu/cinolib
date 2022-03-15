@@ -56,8 +56,6 @@ void polygon_maximum_inscribed_circle(const std::vector<vec3d> & poly,   // will
                                             double             & radius);
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "polygon_maximum_inscribed_circle.cpp"
-#endif
+#include "polygon_maximum_inscribed_circle.tpp"
 
 #endif // CINO_POLYGON_MAXIMUM_INSCRIBED_CIRCLE_H

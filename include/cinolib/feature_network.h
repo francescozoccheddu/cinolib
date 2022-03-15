@@ -66,8 +66,6 @@ void feature_network(const AbstractPolygonMesh<M,V,E,P>   & m,
                      const FeatureNetworkOptions          & opt = FeatureNetworkOptions());
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "feature_network.cpp"
-#endif
+#include "feature_network.tpp"
 
 #endif // CINO_FEATURE_NETWORK_H

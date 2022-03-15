@@ -248,8 +248,6 @@ typedef mat<4,1,int>    vec4i;
 
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "vec_mat.cpp"
-#endif
+#include "vec_mat.tpp"
 
 #endif // CINO_VEC_MAT_H

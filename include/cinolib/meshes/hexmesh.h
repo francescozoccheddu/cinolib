@@ -123,8 +123,6 @@ class Hexmesh : public AbstractPolyhedralMesh<M,V,E,F,P>
 
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "hexmesh.cpp"
-#endif
+#include "hexmesh.tpp"
 
 #endif // CINO_HEXMESH_H

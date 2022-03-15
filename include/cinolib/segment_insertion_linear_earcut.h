@@ -64,8 +64,6 @@ void segment_insertion_linear_earcut(const std::vector<vec>  & poly,
                                            std::vector<unsigned int> & tris);
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "segment_insertion_linear_earcut.cpp"
-#endif
+#include "segment_insertion_linear_earcut.tpp"
 
 #endif // CINO_SEGMENT_INSERTION_LINEAR_EARCUT

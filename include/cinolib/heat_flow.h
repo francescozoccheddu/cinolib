@@ -59,8 +59,6 @@ ScalarField heat_flow(const AbstractMesh<M,V,E,P> & m,
                       const bool                    hard_contraint_bcs = false);
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "heat_flow.cpp"
-#endif
+#include "heat_flow.tpp"
 
 #endif // CINO_HEAT_FLOW_H

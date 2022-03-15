@@ -228,60 +228,6 @@ void triangle_wrap(const std::vector<vec2d>  & verts_in,  // serialized input xy
     verts_out = vec3d_from_serialized_xy(tmp, z_coord);
 }
 
-//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
-template<class M, class V, class E, class P>
-CINO_INLINE
-void triangle_wrap(const std::vector<double> & coords_in, // serialized input xy coordinates
-                   const std::vector<unsigned int>   & segs_in,   // serialized segments
-                   const std::vector<double> & holes_in,  // serialized xy holes
-                   const double                z_coord,   // lift triangulation to z_coord
-                   const std::string         & flags,     // https://www.cs.cmu.edu/~quake/triangle.switch.html
-                         Trimesh<M,V,E,P>    & m)
-
-{
-    std::vector<double> v;
-    std::vector<unsigned int>   t;
-    triangle_wrap(coords_in, segs_in, holes_in, flags, v, t);
-    m = Trimesh<M,V,E,P>(vec3d_from_serialized_xy(v,z_coord), t);
-}
-
-//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
-template<class M, class V, class E, class P>
-CINO_INLINE
-void triangle_wrap(const std::vector<vec2d> & verts_in,
-                   const std::vector<unsigned int>  & segs_in,   // serialized segments
-                   const std::vector<vec2d> & holes_in,
-                   const double               z_coord,   // lift triangulation to z_coord
-                   const std::string        & flags,     // https://www.cs.cmu.edu/~quake/triangle.switch.html
-                         Trimesh<M,V,E,P>   & m)
-{
-    std::vector<double> v;
-    std::vector<unsigned int>   t;
-    triangle_wrap(serialized_xy_from_vec2d(verts_in), segs_in,
-                  serialized_xy_from_vec2d(holes_in), flags, v, t);
-    m = Trimesh<M,V,E,P>(vec3d_from_serialized_xy(v,z_coord), t);
-}
-
-//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
-template<class M, class V, class E, class P>
-CINO_INLINE
-void triangle_wrap(const std::vector<vec3d> & verts_in,
-                   const std::vector<unsigned int>  & segs_in,   // serialized segments
-                   const std::vector<vec3d> & holes_in,
-                   const double               z_coord,   // lift triangulation to z_coord
-                   const std::string        & flags,     // https://www.cs.cmu.edu/~quake/triangle.switch.html
-                         Trimesh<M,V,E,P>   & m)
-{
-    std::vector<double> v;
-    std::vector<unsigned int>   t;
-    triangle_wrap(serialized_xy_from_vec3d(verts_in), segs_in,
-                  serialized_xy_from_vec3d(holes_in), flags, v, t);
-    m = Trimesh<M,V,E,P>(vec3d_from_serialized_xy(v,z_coord), t);
-}
-
 }
 
 #ifdef CINOLIB_USES_TRIANGLE

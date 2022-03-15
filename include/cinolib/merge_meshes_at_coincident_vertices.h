@@ -49,8 +49,6 @@ void merge_meshes_at_coincident_vertices(const AbstractPolyhedralMesh<M,V,E,F,P>
                                          const double proximity_thresh);
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "merge_meshes_at_coincident_vertices.cpp"
-#endif
+#include "merge_meshes_at_coincident_vertices.tpp"
 
 #endif // CINO_MERGE_MESHES_AT_COINCIDENT_VERTICES_H

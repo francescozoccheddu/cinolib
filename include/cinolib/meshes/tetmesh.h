@@ -145,8 +145,6 @@ class Tetmesh : public AbstractPolyhedralMesh<M,V,E,F,P>
 
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "tetmesh.cpp"
-#endif
+#include "tetmesh.tpp"
 
 #endif // CINO_TETMESH_H

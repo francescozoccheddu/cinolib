@@ -138,8 +138,6 @@ class SurfaceMeshControls : public SideBarItem
 
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "surface_mesh_controls.cpp"
-#endif
+#include "surface_mesh_controls.tpp"
 
 #endif // CINO_SURFACE_MESH_CONTROLS_H

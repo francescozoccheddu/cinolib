@@ -122,8 +122,6 @@ void export_cluster(const AbstractPolyhedralMesh<M,V,E,F,P>  & m,
                           std::unordered_map<unsigned int,unsigned int>      & subm2m_vmap);
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "export_cluster.cpp"
-#endif
+#include "export_cluster.tpp"
 
 #endif // CINO_EXPORT_CLUSTER_H

@@ -64,8 +64,6 @@ void quad_barycentric_coords(const mat<3,1,T> & q0,
                                    mat<4,1,T> & wgt);
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "quad_utils.cpp"
-#endif
+#include "quad_utils.tpp"
 
 #endif // CINO_QUAD_UTILS_H

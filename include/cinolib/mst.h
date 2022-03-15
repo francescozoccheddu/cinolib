@@ -49,8 +49,6 @@ void MST_on_dual_mask_on_edges(const AbstractPolygonMesh<M,V,E,P> & m,
                                      std::vector<bool>            & tree);
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "mst.cpp"
-#endif
+#include "mst.tpp"
 
 #endif // CINO_MST_H

@@ -234,8 +234,6 @@ bool find_position_within_fan(const Trimesh<M,V,E,P>  & m,
                                     vec3d             & pos);
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "homotopy_basis.cpp"
-#endif
+#include "homotopy_basis.tpp"
 
 #endif // CINO_HOMOTOPY_BASIS_H

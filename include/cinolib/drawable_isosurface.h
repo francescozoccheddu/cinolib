@@ -70,8 +70,6 @@ class DrawableIsosurface : public Isosurface<M,V,E,F,P>, public DrawableObject
 
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "drawable_isosurface.cpp"
-#endif
+#include "drawable_isosurface.tpp"
 
 #endif // CINO_DRAWABLE_ISOSURFACE_H

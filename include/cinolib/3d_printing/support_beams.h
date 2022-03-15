@@ -55,8 +55,6 @@ void support_beams(const Trimesh<M,V,E,P>                  & m,
                          std::vector<vec3d>                & beams);
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "support_beams.cpp"
-#endif
+#include "support_beams.tpp"
 
 #endif // CINO_SUPPORT_BEAMS_H

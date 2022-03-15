@@ -51,8 +51,6 @@ void gl_project(const mat<3,1,T>   & p_in,       // 3d point in object space
                       T            & depth);     // z-buffer
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "glproject.cpp"
-#endif
+#include "glproject.tpp"
 
 #endif // CINO_GLPROJECT_H

@@ -68,8 +68,6 @@ class Isocontour
 
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "isocontour.cpp"
-#endif
+#include "isocontour.tpp"
 
 #endif // CINO_ISOCONTOUR_H

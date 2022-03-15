@@ -47,8 +47,6 @@ bool is_into_interval(const T & v, const T & bound_0, const T & bound_1, const b
 
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "interval.cpp"
-#endif
+#include "interval.tpp"
 
 #endif // CINO_INTERVAL

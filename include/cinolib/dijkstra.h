@@ -221,8 +221,6 @@ double dijkstra_on_dual(const AbstractMesh<M,V,E,P> & m,
 
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "dijkstra.cpp"
-#endif
+#include "dijkstra.tpp"
 
 #endif // CINO_DIJKSTRA_H

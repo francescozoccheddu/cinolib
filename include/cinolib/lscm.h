@@ -70,8 +70,6 @@ ScalarField LSCM(const Trimesh<M,V,E,P>     & m,
                  const std::map<unsigned int,vec2d> & bc = std::map<unsigned int,vec2d>());
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "lscm.cpp"
-#endif
+#include "lscm.tpp"
 
 #endif // CINO_LSCM_H

@@ -95,6 +95,7 @@ class ScalarField : public Eigen::VectorXd, public Serializable
 
 }
 
+#include "scalar_field.tpp"
 #ifndef  CINO_STATIC_LIB
 #include "scalar_field.cpp"
 #endif

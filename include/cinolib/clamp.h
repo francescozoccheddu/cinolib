@@ -61,8 +61,6 @@ void clamp(std::vector<T> & vec, const float below_perc_thresh, const float abov
 
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "clamp.cpp"
-#endif
+#include "clamp.tpp"
 
 #endif // CINO_CLAMP

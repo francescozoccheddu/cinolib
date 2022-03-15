@@ -80,8 +80,6 @@ std::vector<vec3d> harmonic_map_3d(const AbstractMesh<M,V,E,P> & m,
                                    const int                     solver = SIMPLICIAL_LLT);
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "harmonic_map.cpp"
-#endif
+#include "harmonic_map.tpp"
 
 #endif // CINO_HARMONIC_MAP_H

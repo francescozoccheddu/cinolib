@@ -104,8 +104,6 @@ class Quadmesh : public AbstractPolygonMesh<M,V,E,P>
 
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "quadmesh.cpp"
-#endif
+#include "quadmesh.tpp"
 
 #endif // CINO_QUADMESH_H

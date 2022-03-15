@@ -139,26 +139,5 @@ void VectorField::deserialize(const char *filename)
     f.close();
 }
 
-//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
-// for more info, see:
-// http://eigen.tuxfamily.org/dox/TopicCustomizingEigen.html
-//
-// This method allows you to assign Eigen expressions to VectorField
-//
-template<typename OtherDerived>
-CINO_INLINE
-VectorField & VectorField::operator= (const Eigen::MatrixBase<OtherDerived>& other)
-{
-    this->Eigen::VectorXd::operator=(other);
-    return *this;
-}
-//
-// This constructor allows you to construct VectorField from Eigen expressions
-//
-template<typename OtherDerived>
-CINO_INLINE
-VectorField::VectorField(const Eigen::MatrixBase<OtherDerived>& other) : Eigen::VectorXd(other) {}
-
 }
 

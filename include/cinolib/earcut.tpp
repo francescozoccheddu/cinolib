@@ -36,6 +36,7 @@
 #include <cinolib/earcut.h>
 #include <cinolib/predicates.h>
 #include <queue>
+#include <numeric>
 
 namespace cinolib
 {

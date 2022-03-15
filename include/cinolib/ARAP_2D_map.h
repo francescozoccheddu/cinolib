@@ -72,8 +72,6 @@ void ARAP_2D_mapping(const Trimesh<M,V,E,P> & m, ARAP_2D_map_data & data);
 
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "ARAP_2D_map.cpp"
-#endif
+#include "ARAP_2D_map.tpp"
 
 #endif // CINO_ARAP_2D_MAP_H

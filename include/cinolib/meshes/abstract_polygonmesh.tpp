@@ -45,6 +45,7 @@
 #include <unordered_set>
 #include <cinolib/ANSI_color_codes.h>
 #include <queue>
+#include <cinolib/pi.h>
 
 namespace cinolib
 {

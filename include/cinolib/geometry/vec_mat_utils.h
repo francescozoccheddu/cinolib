@@ -132,8 +132,6 @@ void mat_times(const T m0[][c0], const T m1[][c1], T m2[][c1]);
 
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "vec_mat_utils.cpp"
-#endif
+#include "vec_mat_utils.tpp"
 
 #endif // CINO_VEC_MAT_UTILS_H

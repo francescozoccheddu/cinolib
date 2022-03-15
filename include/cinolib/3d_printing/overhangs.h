@@ -89,8 +89,6 @@ void overhangs(const Trimesh<M,V,E,P>                  & m,
                const Octree                            & octree); // cached
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "overhangs.cpp"
-#endif
+#include "overhangs.tpp"
 
 #endif // CINO_OVERHANGS_H

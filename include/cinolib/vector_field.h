@@ -82,6 +82,7 @@ class VectorField : public Eigen::VectorXd, public Serializable
 
 }
 
+#include "vector_field.tpp"
 #ifndef  CINO_STATIC_LIB
 #include "vector_field.cpp"
 #endif

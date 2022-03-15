@@ -50,8 +50,6 @@ void polycube(Trimesh<M,V,E,P> & pc, const unsigned int genus);
 
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "polycube.cpp"
-#endif
+#include "polycube.tpp"
 
 #endif // CINO_POLCUBE_H
