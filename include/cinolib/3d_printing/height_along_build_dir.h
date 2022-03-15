@@ -59,8 +59,6 @@ float height_along_build_dir(const Trimesh<M,V,E,P> & m,
 
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "height_along_build_dir.cpp"
-#endif
+#include "height_along_build_dir.tpp"
 
 #endif // CINO_HEIGHT_ALONG_BUILD_DIR_H

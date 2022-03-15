@@ -41,7 +41,7 @@
 #include <cinolib/standard_elements_tables.h>
 #include <cinolib/vector_serialization.h>
 #include <cinolib/io/io_utilities.h>
-
+#include <cinolib/string_utilities.h>
 #include <queue>
 #include <float.h>
 #include <map>

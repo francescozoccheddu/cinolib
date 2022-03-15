@@ -84,8 +84,6 @@ class Polyhedralmesh : public AbstractPolyhedralMesh<M,V,E,F,P>
 
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "polyhedralmesh.cpp"
-#endif
+#include "polyhedralmesh.tpp"
 
 #endif // CINO_POLYHEDRALMESH_H

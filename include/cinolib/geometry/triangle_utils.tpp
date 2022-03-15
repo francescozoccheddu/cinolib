@@ -1,6 +1,6 @@
 /********************************************************************************
 *  This file is part of CinoLib                                                 *
-*  Copyright(C) 2022: Marco Livesu                                              *
+*  Copyright(C) 2016: Marco Livesu                                              *
 *                                                                               *
 *  The MIT License                                                              *
 *                                                                               *
@@ -33,66 +33,66 @@
 *     16149 Genoa,                                                              *
 *     Italy                                                                     *
 *********************************************************************************/
-#include <cinolib/cylinder.h>
-#include <cinolib/geometry/vec_mat.h>
+#include <cinolib/geometry/triangle_utils.h>
+#include <cinolib/standard_elements_tables.h>
+#include <cinolib/min_max_inf.h>
+#include <set>
 
 namespace cinolib
 {
 
-template<class T>
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+template <class vec>
 CINO_INLINE
-void cylinder(const T             height,
-              const T             bot_radius,
-              const T             top_radius,
-              const unsigned int          n_sides,    // cross section
-              std::vector<T>    & verts,      // output vertices
-              std::vector<unsigned int> & tris,       // output triangles
-              std::vector<T>    & normals)    // output normals (per vertex)
+double triangle_area(const vec & A, const vec & B, const vec & C)
 {
-    // add first two points
-    verts   = { bot_radius, 0,      0,
-                top_radius, 0, height };
-    normals = { 1, 0, 0,
-                1, 0, 0 };
-    tris    = {};
+    return (0.5 * (B-A).cross(C-A).norm());
+}
 
-    // add remaining points and triangles
-    mat<2,1,T> b(bot_radius,0);
-    mat<2,1,T> t(top_radius,0);
-    mat<2,2,T> R = mat<2,2,T>::ROT_2D(2*M_PI/n_sides);
-    unsigned int off = 0;
-    for(unsigned int i=1; i<n_sides; ++i)
+// http://gamedev.stackexchange.com/questions/23743/whats-the-most-efficient-way-to-find-barycentric-coordinates
+//
+// NOTE: the current implementation requires 21 multiplications and 2 divisions.
+// A good alternative could be the method proposed in:
+//
+//   Computing the Barycentric Coordinates of a Projected Point
+//   Wolfgang Heidrich
+//   Journal of Graphics, GPU, and Game Tools, 2011
+//
+// which takes 27 multiplications (3 cross, 3 dot products), and
+// combines together projection of the point in the triangle's plane
+// and computation of barycentric coordinates
+//
+template <class vec>
+CINO_INLINE
+void triangle_barycentric_coords(const vec & A,
+                                 const vec & B,
+                                 const vec & C,
+                                 const vec & P,
+                                 double wgts[])
+{
+    vec    u    = B - A;
+    vec    v    = C - A;
+    vec    w    = P - A;
+    double d00  = u.dot(u);
+    double d01  = u.dot(v);
+    double d11  = v.dot(v);
+    double d20  = w.dot(u);
+    double d21  = w.dot(v);
+    double den  = d00 * d11 - d01 * d01;
+
+    if(den==0) // degenerate
     {
-        b = R*b;
-        verts.push_back(b.x());
-        verts.push_back(b.y());
-        verts.push_back(0);
-        t = R*t;
-        verts.push_back(t.x());
-        verts.push_back(t.y());
-        verts.push_back(height);
-
-        tris.push_back(off);
-        tris.push_back(off+2);
-        tris.push_back(off+1);
-        tris.push_back(off+1);
-        tris.push_back(off+2);
-        tris.push_back(off+3);
-        off+=2;
-
-        normals.push_back(b.x());
-        normals.push_back(b.y());
-        normals.push_back(0);
-        normals.push_back(t.x());
-        normals.push_back(t.y());
-        normals.push_back(0);
+        wgts[0] = inf_double;
+        wgts[1] = inf_double;
+        wgts[2] = inf_double;
+        return;
     }
-    tris.push_back(off);
-    tris.push_back(0);
-    tris.push_back(off+1);
-    tris.push_back(off+1);
-    tris.push_back(0);
-    tris.push_back(1);
+
+    wgts[2] = (d00 * d21 - d01 * d20) / den; assert(!std::isnan(wgts[2]));
+    wgts[1] = (d11 * d20 - d01 * d21) / den; assert(!std::isnan(wgts[1]));
+    wgts[0] = 1.0f - wgts[1] - wgts[2];      assert(!std::isnan(wgts[0]));
 }
 
 }
+

@@ -54,8 +54,6 @@ void cut_mesh_along_marked_edges(AbstractPolygonMesh<M,V,E,P>               & m,
                                  std::unordered_map<unsigned int,std::vector<unsigned int>> & v_map);
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "cut_mesh.cpp"
-#endif
+#include "cut_mesh.tpp"
 
 #endif // CINO_CUT_MESH_H

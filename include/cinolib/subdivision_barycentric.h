@@ -51,8 +51,6 @@ void subdivision_barycentric(Tetmesh<M,V,E,F,P> & m);
 
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "subdivision_barycentric.cpp"
-#endif
+#include "subdivision_barycentric.tpp"
 
 #endif // CINO_SUBDIVISION_BARYCENTRIC_H

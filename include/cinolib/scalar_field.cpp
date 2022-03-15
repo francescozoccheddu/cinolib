@@ -95,60 +95,6 @@ void ScalarField::clamp(const float thresh_from_below, const float thresh_from_a
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<class Mesh>
-CINO_INLINE
-void ScalarField::copy_to_mesh(Mesh & m, const int tex_coord) const
-{
-    unsigned int nv = m.num_verts();
-
-    if((unsigned int)rows() == nv)
-    {
-        for(unsigned int vid=0; vid<nv; ++vid)
-        {
-            switch (tex_coord)
-            {
-                case U_param : m.vert_data(vid).uvw[0] = (*this)[vid]; break;
-                case V_param : m.vert_data(vid).uvw[1] = (*this)[vid]; break;
-                case W_param : m.vert_data(vid).uvw[2] = (*this)[vid]; break;
-                default: assert(false);
-            }
-        }
-    }
-    else if((unsigned int)rows() == nv+nv)
-    {        
-        for(unsigned int vid=0; vid<nv; ++vid)
-        {
-            switch (tex_coord)
-            {
-                case UV_param : m.vert_data(vid).uvw[0] = (*this)[vid];
-                                m.vert_data(vid).uvw[1] = (*this)[vid + nv];
-                                break;
-                case UW_param : m.vert_data(vid).uvw[0] = (*this)[vid];
-                                m.vert_data(vid).uvw[2] = (*this)[vid + nv];
-                                break;
-                case VW_param : m.vert_data(vid).uvw[1] = (*this)[vid];
-                                m.vert_data(vid).uvw[2] = (*this)[vid + nv];
-                                break;
-                default: assert(false);
-            }
-        }
-    }
-    else if((unsigned int)rows() == nv+nv+nv)
-    {
-        assert(tex_coord == UVW_param);
-        unsigned int nv2 = nv*2;
-        for(unsigned int vid=0; vid<nv; ++vid)
-        {
-            m.vert_data(vid).uvw[0] = (*this)[vid];
-            m.vert_data(vid).uvw[1] = (*this)[vid + nv];
-            m.vert_data(vid).uvw[2] = (*this)[vid + nv2];
-        }
-    }
-    else assert(false);
-}
-
-//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
 CINO_INLINE
 void ScalarField::normalize_in_01()
 {
@@ -228,25 +174,5 @@ void ScalarField::deserialize(const char *filename)
     f.close();
 }
 
-//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
-// for more info, see:
-// http://eigen.tuxfamily.org/dox/TopicCustomizingEigen.html
-//
-// This method allows you to assign Eigen expressions to ScalarField
-//
-template<typename OtherDerived>
-CINO_INLINE
-ScalarField & ScalarField::operator= (const Eigen::MatrixBase<OtherDerived>& other)
-{
-    this->Eigen::VectorXd::operator=(other);
-    return *this;
-}
-//
-// This constructor allows you to construct ScalarField from Eigen expressions
-//
-template<typename OtherDerived>
-CINO_INLINE
-ScalarField::ScalarField(const Eigen::MatrixBase<OtherDerived>& other) : Eigen::VectorXd(other) {}
 
 }

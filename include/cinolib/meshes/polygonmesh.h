@@ -72,8 +72,6 @@ class Polygonmesh : public AbstractPolygonMesh<M,V,E,P>
 
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "polygonmesh.cpp"
-#endif
+#include "polygonmesh.tpp"
 
 #endif // CINO_POLYGONMESH_H

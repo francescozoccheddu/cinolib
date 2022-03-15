@@ -63,8 +63,6 @@ double grid_projector(      Hexmesh<M1,V1,E1,F1,P1> & m,
 
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "grid_projector.cpp"
-#endif
+#include "grid_projector.tpp"
 
 #endif // CINO_GRID_PROJECTOR_H

@@ -66,8 +66,6 @@ void smooth_taubin(AbstractMesh<M,V,E,P> & m,
 
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "smoothing.cpp"
-#endif
+#include "smoothing.tpp"
 
 #endif // CINO_SMOOTHING_H

@@ -53,8 +53,6 @@ void grid_mesh(const unsigned int                quads_per_row,
 
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "grid_mesh.cpp"
-#endif
+#include "grid_mesh.tpp"
 
 #endif // CINO_GRID_MESH_H

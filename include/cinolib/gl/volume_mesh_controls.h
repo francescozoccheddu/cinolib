@@ -150,8 +150,6 @@ class VolumeMeshControls : public SideBarItem
 
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "volume_mesh_controls.cpp"
-#endif
+#include "volume_mesh_controls.tpp"
 
 #endif // CINO_VOLUME_MESH_CONTROLS_H

@@ -74,8 +74,6 @@ float shadow_on_build_platform(const DrawableTrimesh<M,V,E,P> & m,           //
 
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "shadow_on_build_platform.cpp"
-#endif
+#include "shadow_on_build_platform.tpp"
 
 #endif // CINO_SHADOW_ON_BUILD_PLATFORM_H

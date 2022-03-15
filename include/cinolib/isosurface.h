@@ -78,8 +78,6 @@ class Isosurface
 
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "isosurface.cpp"
-#endif
+#include "isosurface.tpp"
 
 #endif // CINO_ISOSURFACE_H

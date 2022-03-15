@@ -71,6 +71,7 @@ void find_intersections(const std::vector<vec3d> & verts,
 
 }
 
+#include "find_intersections.tpp"
 #ifndef  CINO_STATIC_LIB
 #include "find_intersections.cpp"
 #endif

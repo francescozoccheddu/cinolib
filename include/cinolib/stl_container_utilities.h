@@ -172,8 +172,6 @@ void VEC_INSERT_AFTER(std::vector<T> & vec, const T & ref_item, const T & new_it
 
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "stl_container_utilities.cpp"
-#endif
+#include "stl_container_utilities.tpp"
 
 #endif // CINO_STL_CONTAINER_UTILITIES

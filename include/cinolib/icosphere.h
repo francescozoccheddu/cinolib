@@ -56,8 +56,6 @@ void icosphere(const T             radius, // sphere radius
                std::vector<unsigned int> & tris);  // output triangles
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "icosphere.cpp"
-#endif
+#include "icosphere.tpp"
 
 #endif // CINO_ICOSPHERE

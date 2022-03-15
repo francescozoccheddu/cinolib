@@ -60,8 +60,6 @@ void MCF(AbstractPolygonMesh<M,V,E,P> & m,
 
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "mean_curv_flow.cpp"
-#endif
+#include "mean_curv_flow.tpp"
 
 #endif // CINO_MEAN_CURV_FLOW_H

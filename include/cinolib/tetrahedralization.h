@@ -102,6 +102,7 @@ void prism_to_tets(const std::vector<unsigned int> & prism,
                          std::vector<unsigned int> & tets);
 }
 
+#include "tetrahedralization.tpp"
 #ifndef  CINO_STATIC_LIB
 #include "tetrahedralization.cpp"
 #endif

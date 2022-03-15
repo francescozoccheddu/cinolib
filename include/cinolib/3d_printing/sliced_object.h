@@ -106,9 +106,7 @@ class SlicedObj : public Trimesh<M,V,E,P>
 
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "sliced_object.cpp"
-#endif
+#include "sliced_object.tpp"
 
 #endif
 

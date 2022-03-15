@@ -55,8 +55,6 @@ void marching_tets(const Tetmesh<M,V,E,F,P> & m,
                    std::vector<vec3d>       & norms);
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "marching_tets.cpp"
-#endif
+#include "marching_tets.tpp"
 
 #endif // CINO_MARCHING_TETS_H

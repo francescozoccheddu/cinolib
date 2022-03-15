@@ -62,8 +62,6 @@ void cast_shadow(const Mesh       & m,           // mesh to be rendered
                        GLFWwindow * GL_context); // cached GL context (for amortized calls)
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "cast_shadow.cpp"
-#endif
+#include "cast_shadow.tpp"
 
 #endif // CINO_CAST_SHADOW_H

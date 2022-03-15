@@ -49,8 +49,6 @@ namespace cinolib
                                           const unsigned int n_samples);
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "sampling.cpp"
-#endif
+#include "sampling.tpp"
 
 #endif // CINO_SAMPLING_H

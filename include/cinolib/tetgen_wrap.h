@@ -113,6 +113,7 @@ void tetgen_wrap(const AbstractPolygonMesh<M,V,E,F> & m_srf,
                        Tetmesh<M,V,E,F,P>           & m);
 }
 
+#include "tetgen_wrap.tpp"
 #ifndef  CINO_STATIC_LIB
 #include "tetgen_wrap.cpp"
 #endif

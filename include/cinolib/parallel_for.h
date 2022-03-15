@@ -86,67 +86,7 @@ inline void PARALLEL_FOR(      unsigned int   beg,
                          const Func & func);
 }
 
-#include <thread>
-#include <vector>
-#include <cmath>
 
-namespace cinolib
-{
-
-    template<typename Func>
-    inline void PARALLEL_FOR(unsigned int   beg,
-        unsigned int   end,
-        const unsigned int   serial_if_less_than,
-        const Func& func)
-    {
-#ifndef SERIALIZE_PARALLEL_FOR
-
-        unsigned int n = end - beg + 1;
-
-        if (n < serial_if_less_than)
-        {
-            for (unsigned int i = beg; i < end; ++i) func(i);
-        }
-        else
-        {
-            // estimate number of threads in the pool
-            const static unsigned n_threads_hint = std::thread::hardware_concurrency();
-            const static unsigned n_threads = (n_threads_hint == 0u) ? 8u : n_threads_hint;
-
-            // split the full range into sub ranges of equal size
-            unsigned int slice = (unsigned int)std::round(n / static_cast<double>(n_threads));
-            slice = std::max(slice, unsigned int(1));
-
-            // helper function that handles a sub range
-            auto subrange_helper = [&func](unsigned int k1, unsigned int k2)
-            {
-                for (unsigned int k = k1; k < k2; ++k) func(k);
-            };
-
-            // create pool and launch jobs
-            std::vector<std::thread> pool;
-            pool.reserve(n_threads);
-            unsigned int i1 = beg;
-            unsigned int i2 = std::min(beg + slice, end);
-            for (unsigned int i = 0; i + 1 < n_threads && i1 < end; ++i)
-            {
-                pool.emplace_back(subrange_helper, i1, i2);
-                i1 = i2;
-                i2 = std::min(i2 + slice, end);
-            }
-            if (i1 < end) pool.emplace_back(subrange_helper, i1, end);
-
-            // Wait for jobs to finish
-            for (std::thread& t : pool)
-            {
-                if (t.joinable()) t.join();
-            }
-        }
-#else
-        for (unsigned int i = beg; i < end; ++i) func(i);
-#endif
-    }
-
-}
+#include "parallel_for.tpp"
 
 #endif // CINO_PARALLEL_FOR_H

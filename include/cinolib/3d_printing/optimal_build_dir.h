@@ -105,8 +105,6 @@ vec3d optimal_build_dir(const DrawableTrimesh<M,V,E,P> & m,
                         const OptimalBuildDirOptions   & opt);
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "optimal_build_dir.cpp"
-#endif
+#include "optimal_build_dir.tpp"
 
 #endif // CINO_OPTIMAL_BUILD_DIR_H

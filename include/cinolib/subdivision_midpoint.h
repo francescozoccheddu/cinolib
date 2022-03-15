@@ -65,8 +65,6 @@ void subdivision_midpoint(const AbstractPolyhedralMesh<M,V,E,F,P> & m_in,
                                 std::map<unsigned int,unsigned int>               & poly_verts);
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "subdivision_midpoint.cpp"
-#endif
+#include "subdivision_midpoint.tpp"
 
 #endif // CINO_SUBDIVISION_MIDPOINT_H

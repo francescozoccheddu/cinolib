@@ -198,6 +198,7 @@ namespace cinolib
                                    std::vector<unsigned int>       & tris);
 }
 
+#include "boost_polygon_wrap.tpp"
 #ifndef  CINO_STATIC_LIB
 #include "boost_polygon_wrap.cpp"
 #endif

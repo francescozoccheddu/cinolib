@@ -38,7 +38,7 @@
 #include <cinolib/symbols.h>
 #include <cinolib/cot.h>
 #include <cinolib/vector_serialization.h>
-
+#include <cinolib/geometry/triangle_utils.h>
 #include <unordered_set>
 
 namespace cinolib

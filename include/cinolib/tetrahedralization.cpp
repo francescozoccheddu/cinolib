@@ -44,36 +44,6 @@
 namespace cinolib
 {
 
-//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
-// Transforms a hexahedral mesh into a conforming tetrahedral
-// mesh, splitting all hexahedra into five or six tetrahedra
-template<class M, class V, class E, class F, class P>
-CINO_INLINE
-void hex_to_tets(const Hexmesh<M,V,E,F,P> & hm,
-                       Tetmesh<M,V,E,F,P> & tm)
-{
-    for(unsigned int vid=0; vid<hm.num_verts(); ++vid)
-    {
-        tm.vert_add(hm.vert(vid));
-    }
-
-    for(unsigned int pid=0; pid<hm.num_polys(); ++pid)
-    {
-        std::vector<unsigned int> tets;
-        hex_to_tets(hm.poly_verts_id(pid),tets);
-
-        auto t = polys_from_serialized_vids(tets,4);
-        for(auto tet : t)
-        {
-            unsigned int id = tm.poly_add(tet);
-            tm.poly_data(id).label = pid;
-        }
-    }
-}
-
-//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
 // Subdivides a hexahedron either into 5 tets or into 6 tets
 // (according to four poossible schemes). Split schemes are
 // chosen in order to grant a global conforming tetrahedral
@@ -468,28 +438,6 @@ void hex_to_corner_tets(const std::vector<unsigned int> & hex,
         tets.push_back(hex.at(HEXA_CORNER_TETS[i][1]));
         tets.push_back(hex.at(HEXA_CORNER_TETS[i][2]));
         tets.push_back(hex.at(HEXA_CORNER_TETS[i][3]));
-    }
-}
-
-//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
-template<class M, class V, class E, class F, class P>
-CINO_INLINE
-void hex_to_corner_tets(const Hexmesh<M,V,E,F,P> & hm,
-                              Tetmesh<M,V,E,F,P> & tm)
-{
-    for(unsigned int vid=0; vid<hm.num_verts(); ++vid)
-    {
-        tm.vert_add(hm.vert(vid));
-    }
-
-    for(unsigned int pid=0; pid<hm.num_polys(); ++pid)
-    {
-        std::vector<unsigned int> tets;
-        hex_to_corner_tets(hm.poly_verts_id(pid),tets);
-
-        auto t = polys_from_serialized_vids(tets,4);
-        for(auto tet : t) tm.poly_add(tet);
     }
 }
 

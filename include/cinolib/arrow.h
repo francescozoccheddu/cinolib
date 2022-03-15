@@ -59,8 +59,6 @@ void arrow(const T            height,
            std::vector<T>    & normals);       // output normals (per vertex)
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "arrow.cpp"
-#endif
+#include "arrow.tpp"
 
 #endif // CINO_ARROW_H

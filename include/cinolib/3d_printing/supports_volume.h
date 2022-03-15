@@ -82,8 +82,6 @@ float supports_volume(const Trimesh<M,V,E,P>                  & m,
 
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "supports_volume.cpp"
-#endif
+#include "supports_volume.tpp"
 
 #endif // CINO_SUPPORTS_VOLUME_H

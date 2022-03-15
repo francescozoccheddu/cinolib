@@ -69,8 +69,6 @@ void compute_coarse_hex_layout(Hexmesh<M,V,E,P> & m);
 
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "coarse_layout.cpp"
-#endif
+#include "coarse_layout.tpp"
 
 #endif // CINO_COARSE_LAYOUT_H

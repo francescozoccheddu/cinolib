@@ -59,8 +59,6 @@ void cylinder(const T            height,
               std::vector<T>    & normals);  // output normals (per vertex)
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "cylinder.cpp"
-#endif
+#include "cylinder.tpp"
 
 #endif // CINO_CYLINDER_H

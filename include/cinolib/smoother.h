@@ -112,8 +112,6 @@ void mesh_smoother(      AbstractPolygonMesh<M1,V1,E1,P1> & m,
                    const SmootherOptions                  & opt = SmootherOptions());
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "smoother.cpp"
-#endif
+#include "smoother.tpp"
 
 #endif // CINO_SMOOTHER_H

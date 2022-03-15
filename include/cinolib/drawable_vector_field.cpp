@@ -74,35 +74,6 @@ DrawableVectorField::DrawableVectorField(const std::vector<vec3d> & data,
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<class M, class V, class E, class P>
-CINO_INLINE
-DrawableVectorField::DrawableVectorField(const AbstractMesh<M,V,E,P> &m, const bool field_on_poly)
-{
-    if(field_on_poly)
-    {
-        setZero(3*m.num_polys());
-        pos.resize(m.num_polys());
-        for(unsigned int pid=0; pid<m.num_polys(); ++pid)
-        {
-            pos.at(pid) = m.poly_centroid(pid);
-        }
-    }
-    else
-    {
-        setZero(3*m.num_verts());
-        pos.resize(m.num_verts());
-        for(unsigned int vid=0; vid<m.num_verts(); ++vid)
-        {
-            pos.at(vid) = m.vert(vid);
-        }
-    }
-    arrow_color = Color::RED();
-    arrow_size  = 0.5 * m.edge_avg_length();
-    update_arrow_tessellation();
-}
-
-//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
 CINO_INLINE
 void DrawableVectorField::draw(const float) const
 {

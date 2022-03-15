@@ -90,8 +90,6 @@ void dual_mesh(const AbstractPolygonMesh<M,V,E,P> & primal,
 
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "dual_mesh.cpp"
-#endif
+#include "dual_mesh.tpp"
 
 #endif // CINO_DUAL_MESH

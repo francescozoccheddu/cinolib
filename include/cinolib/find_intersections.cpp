@@ -42,17 +42,6 @@
 namespace cinolib
 {
 
-template<class M, class V, class E, class P>
-CINO_INLINE
-void find_intersections(const Trimesh<M,V,E,P> & m,
-                              std::set<ipair>  & intersections)
-{
-    auto tris = serialized_vids_from_polys(m.vector_polys());
-    find_intersections(m.vector_verts(), tris, intersections);
-}
-
-//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
 CINO_INLINE
 void find_intersections(const std::vector<vec3d> & verts,
                         const std::vector<unsigned int>  & tris,

@@ -59,8 +59,6 @@ void sample_mesh(AbstractPolygonMesh<M,V,E,P> & m, const unsigned int n_samples,
 
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "sample_mesh.cpp"
-#endif
+#include "sample_mesh.tpp"
 
 #endif // CINO_SAMPLE_MESH
