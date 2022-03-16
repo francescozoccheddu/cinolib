@@ -44,6 +44,7 @@
 #include <cinolib/distortion_energies.h>
 #include <cinolib/linear_map.h>
 #include <cassert>
+#include <cstdlib>
 
 namespace cinolib
 {
@@ -69,6 +70,7 @@ double distortion(const double       s_max,
         case DistEnergy::STRETCH_SORKINE     : return std::max(s_max, 1.0/s_min);
         default: assert(false && "unknonw energy");
     }
+    abort();
 }
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::

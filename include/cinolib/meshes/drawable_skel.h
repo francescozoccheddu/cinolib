@@ -146,8 +146,8 @@ class DrawableSkel : public Skel, public DrawableObject
 
     private:
 
-        inline float BONE_SCALAR() const { return 0.004; }
-        inline float BALL_SCALAR() const { return 0.008; }
+        inline float BONE_SCALAR() const { return 0.004f; }
+        inline float BALL_SCALAR() const { return 0.008f; }
 
         int   draw_mode;
         float bone_thickness_modifier; // useful for rendering

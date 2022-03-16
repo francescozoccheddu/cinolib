@@ -88,8 +88,8 @@ void earcut_mapping(EarcutMapping_data & data)
                 axis.normalize();
                 double alpha = u.angle_rad(v) * 0.5; // take opnly half of the available cone to avoid flips
                 double step = alpha/static_cast<double>(vmap.at(i));
-                double M[3][3];
                 // FIXME (francescozoccheddu)
+                // double M[3][3];
                 // bake_rotation_matrix(axis, step, M);
                 abort(); // remove when fixed
                 for(unsigned int j=1;j<vmap.at(i); ++j)

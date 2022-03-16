@@ -237,7 +237,7 @@ void VolumeMeshControls<Mesh>::header_colors_textures_in(const bool open)
             }
             ImGui::EndTable();
             //
-            if(ImGui::SliderFloat("Tex scaling", &m->drawlist_in.texture.scaling_factor, 0.01, 100))
+            if(ImGui::SliderFloat("Tex scaling", &m->drawlist_in.texture.scaling_factor, 0.01f, 100))
             {
                 if(m->drawlist_in.texture.type!=TEXTURE_2D_BITMAP)
                 {
@@ -326,7 +326,7 @@ void VolumeMeshControls<Mesh>::header_colors_textures_out(const bool open)
             }
             ImGui::EndTable();
             //
-            if(ImGui::SliderFloat("Tex scaling", &m->drawlist_out.texture.scaling_factor, 0.01, 100))
+            if(ImGui::SliderFloat("Tex scaling", &m->drawlist_out.texture.scaling_factor, 0.01f, 100))
             {
                 if(m->drawlist_out.texture.type!=TEXTURE_2D_BITMAP)
                 {
@@ -453,7 +453,7 @@ void VolumeMeshControls<Mesh>::header_vector_field(const bool open)
             std::string filename = file_dialog_save();
             if(!filename.empty()) vec_field.serialize(filename.c_str());
         }
-        if(ImGui::SliderFloat("Size", &vecfield_size, 0.1, 5))
+        if(ImGui::SliderFloat("Size", &vecfield_size, 0.1f, 5))
         {
             vec_field.set_arrow_size(m->edge_avg_length()*vecfield_size);
         }
