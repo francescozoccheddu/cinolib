@@ -65,7 +65,7 @@ namespace cinolib
 
             // split the full range into sub ranges of equal size
             unsigned int slice = (unsigned int)std::round(n / static_cast<double>(n_threads));
-            slice = std::max(slice, unsigned int(1));
+            slice = std::max<unsigned int>(slice, 1);
 
             // helper function that handles a sub range
             auto subrange_helper = [&func](unsigned int k1, unsigned int k2)
