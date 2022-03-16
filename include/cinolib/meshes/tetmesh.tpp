@@ -42,6 +42,7 @@
 #include <cinolib/cot.h>
 #include <cinolib/symbols.h>
 #include <cinolib/io/io_utilities.h>
+#include <cinolib/string_utilities.h>
 
 namespace cinolib
 {
