@@ -35,6 +35,7 @@
 *********************************************************************************/
 #include <cinolib/curve.h>
 #include <cinolib/min_max_inf.h>
+#include <cstdlib>
 
 namespace cinolib
 {
@@ -331,7 +332,7 @@ vec3d Curve::sample_curve_at(const float t, const double tot_length) const
             curr_l += seg_l;
         }
     }
-    assert(false);
+    abort();
 }
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::

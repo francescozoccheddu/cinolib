@@ -79,8 +79,8 @@ void write_HEDRA(const char                           * filename,
 
         for(unsigned int off=0; off<polys.at(pid).size(); ++off)
         {
-            if (polys_winding.at(pid).at(off)) fprintf(fp, "%d ",   polys.at(pid).at(off)+1);
-            else                               fprintf(fp, "%d ", -(polys.at(pid).at(off)+1));
+            if (polys_winding.at(pid).at(off)) fprintf(fp, "%d ",     polys.at(pid).at(off)+1);
+            else                               fprintf(fp, "%d ", 0u-(polys.at(pid).at(off)+1));
         }
         fprintf(fp, "\n");
     }

@@ -20,6 +20,11 @@ else()
 	target_compile_definitions(cinolib ${CINOLIB_ACCESS} CINO_STATIC_LIB)
 endif()
 
+# suppress MSVC unsafe function warnings
+if (MSVC)
+    target_compile_definitions (cinolib ${CINOLIB_ACCESS} _CRT_SECURE_NO_WARNINGS)
+endif()
+
 target_include_directories(cinolib ${CINOLIB_ACCESS} "${cinolib_DIR}/include" "${cinolib_DIR}/external/eigen")
 
 # https://cliutils.gitlab.io/modern-cmake/chapters/features/cpp11.html
