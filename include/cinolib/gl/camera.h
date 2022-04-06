@@ -90,6 +90,8 @@ class Camera
 
         void reset();
         void reset_matrices();
+        void reset_model();
+        void reset_view();
         void reset_modelview();
         void reset_projection();
         void reset_projection_persp();

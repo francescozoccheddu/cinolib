@@ -73,12 +73,30 @@ void Camera<T>::reset_matrices()
 
 template<class T>
 CINO_INLINE
+void Camera<T>::reset_model()
+{
+    model = mat<4, 4, T>::TRANS(-scene_center);
+}
+
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+template<class T>
+CINO_INLINE
+void Camera<T>::reset_view()
+{
+    view = mat<4, 4, T>::TRANS(-mat<3, 1, T>(0, 0, 4 * scene_radius));
+}
+
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+template<class T>
+CINO_INLINE
 void Camera<T>::reset_modelview()
 {
     // set the scene center at the WORLD origin
     // set the camera outside of the scene radius along WORLD's -Z
-    model = mat<4,4,T>::TRANS(-scene_center);
-    view  = mat<4,4,T>::TRANS(-mat<3,1,T>(0,0,4*scene_radius));
+    reset_model();
+    reset_view();
 }
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::

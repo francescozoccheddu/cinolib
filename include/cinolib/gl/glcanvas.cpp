@@ -238,7 +238,7 @@ void GLcanvas::pop_all_markers()
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 CINO_INLINE
-void GLcanvas::refit_scene()
+void GLcanvas::refit_scene(bool keep_model)
 {
     // update camera scene parameters
     camera.scene_center = vec3d(0.0);
@@ -257,7 +257,15 @@ void GLcanvas::refit_scene()
     camera.scene_radius /= static_cast<double>(count);
 
     // update camera matrices and pass them to the GL system
-    camera.reset_matrices();
+    if (keep_model)
+    {
+        camera.reset_view();
+        camera.reset_projection();
+    }
+    else
+    {
+        camera.reset_matrices();
+    }
     update_GL_matrices();
 }
 
