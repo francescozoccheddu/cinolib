@@ -80,6 +80,7 @@ class GLcanvas
     private:
 
         void notify_camera_change() const;
+        double get_camera_speed_modifier() const;
 
     public:
 
