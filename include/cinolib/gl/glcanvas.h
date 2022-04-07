@@ -75,6 +75,11 @@ struct Trackball
 
 class GLcanvas
 {
+
+    private:
+
+        void notify_camera_change() const;
+
     public:
 
         GLFWwindow                        *window;
@@ -207,6 +212,7 @@ class GLcanvas
         std::function<void(double x_pos,    double y_pos    )> callback_mouse_moved        = nullptr;
         std::function<void(double x_offset, double y_offset )> callback_mouse_scroll       = nullptr;
         std::function<void(void                             )> callback_app_controls       = nullptr; // useful to insert app-dependent visual controls (with ImGui)
+        std::function<void(void                             )> callback_camera_changed     = nullptr; 
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 };
