@@ -44,6 +44,7 @@
 #include <cinolib/gl/glproject.h>
 #include <cinolib/gl/glunproject.h>
 #include <cinolib/clamp.h>
+#include <cmath>
 
 namespace cinolib
 {
@@ -192,7 +193,8 @@ void GLcanvas::push_marker(const vec2d       & p,
                            const std::string & text,
                            const Color         color,
                            const unsigned int          disk_radius,
-                           const unsigned int          font_size)
+                           const unsigned int          font_size,
+                           bool                        fixed_size)
 {
     Marker m;
     m.pos_2d      = p;
@@ -200,6 +202,7 @@ void GLcanvas::push_marker(const vec2d       & p,
     m.color       = color;
     m.disk_radius = disk_radius;
     m.font_size   = font_size;
+    m.fixed_size  = fixed_size;
     push(m);
 }
 
@@ -210,7 +213,8 @@ void GLcanvas::push_marker(const vec3d       & p,
                            const std::string & text,
                            const Color         color,
                            const unsigned int          disk_radius,
-                           const unsigned int          font_size)
+                           const unsigned int          font_size,
+                           bool                        fixed_size)
 {
     Marker m;
     m.pos_3d      = p;
@@ -218,6 +222,7 @@ void GLcanvas::push_marker(const vec3d       & p,
     m.color       = color;
     m.disk_radius = disk_radius;
     m.font_size   = font_size;
+    m.fixed_size  = fixed_size;
     push(m);
 }
 
@@ -411,9 +416,9 @@ void GLcanvas::draw_markers() const
             if(depth_cull_markers && fabs(z-z_buf[x+W*(H-y-1)])>0.01) continue;
         }
         // adjust marker size based on zoom
-        auto zoom_factor = clamp(camera.zoom_factor, 1e-5, 1e10); // avoids overflow inside ImGui radius calculation
-        unsigned int zoom_radius = 0.5*m.disk_radius/zoom_factor;
-        unsigned int zoom_font_s = 0.5*m.font_size/zoom_factor;
+        double zoom_factor = m.fixed_size ? 1.0 : 0.5/clamp(camera.zoom_factor, 1e-5, 1e10); // avoids overflow inside ImGui radius calculation
+        unsigned int zoom_radius = static_cast<unsigned int>(std::round(m.disk_radius * zoom_factor));
+        unsigned int zoom_font_s = static_cast<unsigned int>(std::round(m.font_size * zoom_factor));
         //
         if(m.disk_radius>0)
         {

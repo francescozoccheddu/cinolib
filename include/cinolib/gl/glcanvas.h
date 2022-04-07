@@ -59,6 +59,7 @@ struct Marker
     Color       color       = Color::BLUE();     // color, for both the text and the disk
     unsigned int        disk_radius =  1;                // disk radius (in pixels). Set to zero to not render the disk
     unsigned int        font_size   = 12;                // font size;
+    bool                fixed_size  = false;
 };
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -148,13 +149,15 @@ class GLcanvas
                          const std::string & text        = "",
                          const Color         color       = Color::BLUE(),
                          const unsigned int          disk_radius =  5,
-                         const unsigned int          font_size   = 10);
+                         const unsigned int          font_size   = 10,
+                         bool                        fixed_size  = false);
 
         void push_marker(const vec3d       & p,
                          const std::string & text        = "",
                          const Color         color       = Color::BLUE(),
                          const unsigned int          disk_radius =  5,
-                         const unsigned int          font_size   = 10);
+                         const unsigned int          font_size   = 10,
+                         bool                        fixed_size  = false);
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
