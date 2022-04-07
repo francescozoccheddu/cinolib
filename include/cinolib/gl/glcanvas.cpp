@@ -51,6 +51,17 @@ namespace cinolib
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 CINO_INLINE
+void GLcanvas::notify_camera_change() const
+{
+    if (callback_camera_changed)
+    {
+        callback_camera_changed();
+    }
+}
+
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+CINO_INLINE
 GLcanvas::GLcanvas(const int width, const int height)
 {
     // make sure that only the first window
@@ -267,6 +278,7 @@ void GLcanvas::refit_scene(bool keep_model)
         camera.reset_matrices();
     }
     update_GL_matrices();
+    notify_camera_change();
 }
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -583,6 +595,7 @@ void GLcanvas::window_size_event(GLFWwindow *window, int width, int height)
     v->camera.reset_projection();                   // update the camera frustum
     v->update_GL_projection();                      // update OpenGL's projection matrix
     v->draw();                                      // refresh canvas while resizing
+    v->notify_camera_change();
 }
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -593,6 +606,8 @@ void GLcanvas::key_event(GLFWwindow *window, int key, int /*scancode*/, int acti
     // if visual controls claim the event, let them handle it!
     if(ImGui::GetIO().WantCaptureKeyboard) return;
 
+    bool camera_changed{ true };
+    
     // handle repeated keys as if they were a sequence of single key press events
     if(action==GLFW_PRESS || action==GLFW_REPEAT)
     {
@@ -603,7 +618,6 @@ void GLcanvas::key_event(GLFWwindow *window, int key, int /*scancode*/, int acti
         if(modifiers & GLFW_MOD_SHIFT) // handle SHIFT + KEY events...
         {
             double delta_t = v->camera.scene_radius*0.01; // translation factor
-
             switch(key)
             {
                 // translations along major axes
@@ -614,21 +628,23 @@ void GLcanvas::key_event(GLFWwindow *window, int key, int /*scancode*/, int acti
                 case GLFW_KEY_1     : v->camera.translate_z(+delta_t); break;
                 case GLFW_KEY_2     : v->camera.translate_z(-delta_t); break;
                 // camera control
-                case GLFW_KEY_Z     : v->camera.zoom(0.01); break; // zoom out
-            }                        
+                case GLFW_KEY_Z     : v->camera.zoom(0.01);            break; // zoom out
+                default             : camera_changed = false;          break;
+            }             
         }
         else if(modifiers & (GLFW_MOD_CONTROL|GLFW_MOD_SUPER)) // handle CTRL/CMD + KEY events...
         {
             switch(key)
             {
                 // camera control (copy/paste POV)
-                case GLFW_KEY_C : glfwSetClipboardString(window, v->camera.serialize().c_str()); break;
+                case GLFW_KEY_C : glfwSetClipboardString(window, v->camera.serialize().c_str()); camera_changed = false; break;
                 case GLFW_KEY_V : v->camera.deserialize(glfwGetClipboardString(window));
                                   // interesting resrouce to manage to correctly switch from full screen to windowed mode
                                   // https://stackoverflow.com/questions/47402766/switching-between-windowed-and-full-screen-in-opengl-glfw-3-2
                                   // meanwhile....
                                   glfwSetWindowSize(window, v->camera.width, v->camera.height);
                                   break;
+                default         : camera_changed = false; break;
             }
         }
         else // handle KEY events wihtout modifiers...
@@ -648,10 +664,15 @@ void GLcanvas::key_event(GLFWwindow *window, int key, int /*scancode*/, int acti
                 case GLFW_KEY_R     : v->camera.reset();                    break;
                 case GLFW_KEY_A     : v->show_axis = !v->show_axis;         break; // toggle show axis
                 case GLFW_KEY_TAB   : v->show_side_bar = !v->show_side_bar; break; // toggle side bar
+                default             : camera_changed = false;               break;
             }
         }
-        v->update_GL_matrices();
-        v->draw();
+        if (camera_changed)
+        {
+            v->update_GL_matrices();
+            v->draw();
+            v->notify_camera_change();
+        }
     }
 }
 
@@ -695,6 +716,7 @@ void GLcanvas::mouse_button_event(GLFWwindow *window, int button, int action, in
                 {
                     v->camera.set_focus_point(click_3d);
                     v->update_GL_matrices();
+                    v->notify_camera_change();
                 }
             }
             else if(button==GLFW_MOUSE_BUTTON_RIGHT)
@@ -745,6 +767,7 @@ void GLcanvas::cursor_event(GLFWwindow *window, double x_pos, double y_pos)
             v->camera.rotate(angle,axis);
             v->update_GL_matrices();
             v->draw();
+            v->notify_camera_change();
         }
         v->trackball.last_click_2d = click_2d;
         v->trackball.last_click_3d = click_3d;
@@ -761,6 +784,7 @@ void GLcanvas::cursor_event(GLFWwindow *window, double x_pos, double y_pos)
             v->camera.translate(vec3d(-delta.x(), delta.y(), 0));
             v->update_GL_matrices();
             v->draw();
+            v->notify_camera_change();
         }
         v->trackball.last_click_2d = click;
     }
@@ -781,6 +805,7 @@ void GLcanvas::scroll_event(GLFWwindow *window, double x_offset, double y_offset
     v->camera.zoom(y_offset*0.01);
     v->camera.reset_projection();
     v->update_GL_projection();
+    v->notify_camera_change();
     // TODO: add a zooming function to change speed according to the amount of current zoom
 }
 
