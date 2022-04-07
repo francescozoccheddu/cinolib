@@ -63,6 +63,15 @@ void GLcanvas::notify_camera_change() const
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 CINO_INLINE
+double GLcanvas::get_camera_speed_modifier() const
+{
+    const bool fast{ glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS };
+    const bool slow{ glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS };
+    return slow ? 0.5 : fast ? 2.0 : 1.0;
+}
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+CINO_INLINE
 GLcanvas::GLcanvas(const int width, const int height)
 {
     // make sure that only the first window
@@ -769,7 +778,7 @@ void GLcanvas::cursor_event(GLFWwindow *window, double x_pos, double y_pos)
             vec3d  axis;
             double angle;
             trackball_to_rotations(v->trackball.last_click_3d, click_3d, axis, angle);
-            v->camera.rotate(angle,axis);
+            v->camera.rotate(angle * v->get_camera_speed_modifier(), axis);
             v->update_GL_matrices();
             v->draw();
             v->notify_camera_change();
@@ -785,7 +794,7 @@ void GLcanvas::cursor_event(GLFWwindow *window, double x_pos, double y_pos)
         {
             vec2d delta = (v->trackball.last_click_2d - click);
             delta.normalize();
-            delta *= v->camera.scene_radius * 0.01;
+            delta *= v->camera.scene_radius * 0.01 * v->get_camera_speed_modifier();
             v->camera.translate(vec3d(-delta.x(), delta.y(), 0));
             v->update_GL_matrices();
             v->draw();
@@ -807,7 +816,7 @@ void GLcanvas::scroll_event(GLFWwindow *window, double x_offset, double y_offset
 
     if(v->callback_mouse_scroll) v->callback_mouse_scroll(x_offset, y_offset);
 
-    v->camera.zoom(y_offset*0.01);
+    v->camera.zoom(-y_offset * 0.01 * v->get_camera_speed_modifier());
     v->camera.reset_projection();
     v->update_GL_projection();
     v->notify_camera_change();
