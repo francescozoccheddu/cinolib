@@ -43,7 +43,7 @@
 namespace cinolib
 {
 
-template<uint r, uint c, class T>
+template<unsigned int r, unsigned int c, class T>
 class mat
 {
     public:
@@ -82,14 +82,14 @@ class mat
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-        mat<c,1,T> row (const uint i) const;
-        mat<r,1,T> col (const uint i) const;
+        mat<c,1,T> row (const unsigned int i) const;
+        mat<r,1,T> col (const unsigned int i) const;
         mat<r,1,T> diag()             const;
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-        void set_row (const uint i, const mat<c,1,T> & row);
-        void set_col (const uint i, const mat<r,1,T> & col );
+        void set_row (const unsigned int i, const mat<c,1,T> & row);
+        void set_col (const unsigned int i, const mat<r,1,T> & col );
         void set_diag(              const mat<r,1,T> & diag);
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -116,10 +116,10 @@ class mat
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-        const T          & operator[] (const uint i)  const;
-              T          & operator[] (const uint i);
-        const T          & operator() (const uint i, const uint j)  const;
-              T          & operator() (const uint i, const uint j);
+        const T          & operator[] (const unsigned int i)  const;
+              T          & operator[] (const unsigned int i);
+        const T          & operator() (const unsigned int i, const unsigned int j)  const;
+              T          & operator() (const unsigned int i, const unsigned int j);
               mat<r,c,T>   operator-  ()                            const;
               mat<r,c,T>   operator-  (const mat<r,c,T> & op)       const;
               mat<r,c,T>   operator+  (const mat<r,c,T> & op)       const;
@@ -132,7 +132,7 @@ class mat
               bool         operator== (const mat<r,c,T> & op)       const;
               bool         operator<  (const mat<r,c,T> & op)       const;
 
-        template<uint c2>
+        template<unsigned int c2>
         mat<r,c2,T> operator*(const mat<c,c2,T> & op) const;
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -158,7 +158,7 @@ class mat
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-        void swap(const uint i, const uint j, const uint k, const uint l);
+        void swap(const unsigned int i, const unsigned int j, const unsigned int k, const unsigned int l);
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -203,7 +203,7 @@ class mat
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint r, uint c, class T>
+template<unsigned int r, unsigned int c, class T>
 CINO_INLINE
 mat<r,c,T> operator*(const T & scalar, const mat<r,c,T> & m)
 {
@@ -214,7 +214,7 @@ mat<r,c,T> operator*(const T & scalar, const mat<r,c,T> & m)
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<uint r, uint c, class T>
+template<unsigned int r, unsigned int c, class T>
 CINO_INLINE
 std::ostream & operator<< (std::ostream & in, const mat<r,c,T> & op);
 
@@ -248,8 +248,6 @@ typedef mat<4,1,int>    vec4i;
 
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "vec_mat.cpp"
-#endif
+#include "vec_mat.tpp"
 
 #endif // CINO_VEC_MAT_H

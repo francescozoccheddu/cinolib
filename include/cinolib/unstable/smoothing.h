@@ -59,15 +59,13 @@ template<class M, class V, class E, class P>
 CINO_INLINE
 void smooth_taubin(AbstractMesh<M,V,E,P> & m,
                    const int               mode          =  COTANGENT,
-                   const std::set<uint>    do_not_smooth =  std::set<uint>(),
-                   const uint              n_iters       =  10,
+                   const std::set<unsigned int>    do_not_smooth =  std::set<unsigned int>(),
+                   const unsigned int              n_iters       =  10,
                    const double            lambda        =  0.89,
                    const double            mu            = -0.9);
 
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "smoothing.cpp"
-#endif
+#include "smoothing.tpp"
 
 #endif // CINO_SMOOTHING_H

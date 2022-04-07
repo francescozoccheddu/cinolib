@@ -83,8 +83,8 @@ class Color
               bool    operator!=(const Color & c) const;
               bool    operator< (const Color & c) const;
               bool    operator<=(const Color & c) const;
-              float & operator[](const uint    i);
-        const float & operator[](const uint    i) const;
+              float & operator[](const unsigned int    i);
+        const float & operator[](const unsigned int    i) const;
               Color & operator*=(const double  d);
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -96,9 +96,9 @@ class Color
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-        static Color scatter(uint range, uint value, float sat=.5f, float val=.85f);
-        static Color hsv_ramp(uint range, uint value);
-        static Color parula_ramp(uint range, uint value);
+        static Color scatter(unsigned int range, unsigned int value, float sat=.5f, float val=.85f);
+        static Color hsv_ramp(unsigned int range, unsigned int value);
+        static Color parula_ramp(unsigned int range, unsigned int value);
         static Color red_white_blue_ramp_01(float val);
         static Color red_ramp_01(const float val, const bool zero_is_white = true);
         static Color normal2rgb(const vec3d & n, bool flip_neg_z);

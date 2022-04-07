@@ -39,12 +39,17 @@
 *********************************************************************************/
 #include <cinolib/hex_transition_orient.h>
 #include <cinolib/hex_transition_schemes.h>
+#include <cassert>
+#include <algorithm>
+#include <cinolib/geometry/aabb.h>
+#include <cinolib/pi.h>
 
 namespace cinolib
 {
 
 namespace
 {
+
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -121,11 +126,11 @@ void try_rotations(std::vector<vec3d> & verts,
                    const vec3d        & poly_centroid)
 {
     auto tmp_verts = verts;
-    for(uint x=0; x<4; x++)
+    for(unsigned int x=0; x<4; x++)
     {
-        for(uint y=0; y<4; y++)
+        for(unsigned int y=0; y<4; y++)
         {
-            for(uint z=0; z<4; z++)
+            for(unsigned int z=0; z<4; z++)
             {
                 rotate(tmp_verts, "z", M_PI_2);
                 AABB bbox(tmp_verts);
@@ -153,8 +158,8 @@ void try_rotations(std::vector<vec3d> & verts,
 
 CINO_INLINE
 void orient_flat(std::vector<vec3d>             & verts,
-                 std::vector<std::vector<uint>> & faces,
-                 std::vector<std::vector<uint>> & polys,
+                 std::vector<std::vector<unsigned int>> & faces,
+                 std::vector<std::vector<unsigned int>> & polys,
                  std::vector<std::vector<bool>> & winding,
                  SchemeInfo                     & info,
                  const vec3d                    & poly_centroid)
@@ -162,7 +167,7 @@ void orient_flat(std::vector<vec3d>             & verts,
     if(info.type == HexTransition::FLAT)
     {
         verts.reserve(Flat::verts.size()/3);
-        for(uint vid=0; vid<Flat::verts.size(); vid+=3)
+        for(unsigned int vid=0; vid<Flat::verts.size(); vid+=3)
         {
             verts.push_back(vec3d(Flat::verts[vid]-0.5, Flat::verts[vid+1]-0.5, Flat::verts[vid+2]-0.5));
         }
@@ -173,7 +178,7 @@ void orient_flat(std::vector<vec3d>             & verts,
     else
     {
         verts.reserve(Flat_Convex::verts.size()/3);
-        for(uint vid=0; vid<Flat_Convex::verts.size(); vid+=3)
+        for(unsigned int vid=0; vid<Flat_Convex::verts.size(); vid+=3)
         {
             verts.push_back(vec3d(Flat_Convex::verts[vid]-0.5, Flat_Convex::verts[vid+1]-0.5, Flat_Convex::verts[vid+2]-0.5));
         }
@@ -187,11 +192,11 @@ void orient_flat(std::vector<vec3d>             & verts,
         switch(info.orientations[0])
         {
             case PLUS_Y:  break; //DEFAULT
-            case PLUS_X:  rotate(verts, "z", -M_PI/2); break;
-            case PLUS_Z:  rotate(verts, "x",  M_PI/2); break;
-            case MINUS_X: rotate(verts, "z",  M_PI/2); break;
+            case PLUS_X:  rotate(verts, "z", -M_PI_2); break;
+            case PLUS_Z:  rotate(verts, "x",  M_PI_2); break;
+            case MINUS_X: rotate(verts, "z",  M_PI_2); break;
             case MINUS_Y: rotate(verts, "z",  M_PI);   break;
-            case MINUS_Z: rotate(verts, "x", -M_PI/2); break;
+            case MINUS_Z: rotate(verts, "x", -M_PI_2); break;
         }
     }
     else if(info.scheme_type == SchemeType::CONC_S)
@@ -200,55 +205,55 @@ void orient_flat(std::vector<vec3d>             & verts,
         {
             case PLUS_X:
             {
-                rotate(verts, "z", -M_PI/2);
+                rotate(verts, "z", -M_PI_2);
                 if(info.orientations[1] == PLUS_Y)  break;
-                if(info.orientations[1] == PLUS_Z)  rotate(verts, "x", -M_PI/2);
+                if(info.orientations[1] == PLUS_Z)  rotate(verts, "x", -M_PI_2);
                 if(info.orientations[1] == MINUS_Y) rotate(verts, "x",  M_PI);
-                if(info.orientations[1] == MINUS_Z) rotate(verts, "x",  M_PI/2);
+                if(info.orientations[1] == MINUS_Z) rotate(verts, "x",  M_PI_2);
                 break;
             }
             case PLUS_Y:
             {
                 if(info.orientations[1] == PLUS_X ) break;
-                if(info.orientations[1] == PLUS_Z ) rotate(verts, "y",  M_PI/2);
+                if(info.orientations[1] == PLUS_Z ) rotate(verts, "y",  M_PI_2);
                 if(info.orientations[1] == MINUS_X) rotate(verts, "y",  M_PI);
-                if(info.orientations[1] == MINUS_Z) rotate(verts, "y", -M_PI/2);
+                if(info.orientations[1] == MINUS_Z) rotate(verts, "y", -M_PI_2);
                 break;
             }
             case PLUS_Z:
             {
-                rotate(verts, "x", M_PI/2);
+                rotate(verts, "x", M_PI_2);
                 if(info.orientations[1] == PLUS_X ) break;
-                if(info.orientations[1] == PLUS_Y ) rotate(verts, "z", -M_PI/2);
+                if(info.orientations[1] == PLUS_Y ) rotate(verts, "z", -M_PI_2);
                 if(info.orientations[1] == MINUS_X) rotate(verts, "z",  M_PI);
-                if(info.orientations[1] == MINUS_Y) rotate(verts, "z",  M_PI/2);
+                if(info.orientations[1] == MINUS_Y) rotate(verts, "z",  M_PI_2);
                 break;
             }
             case MINUS_X:
             {
-                rotate(verts, "z", M_PI/2);
+                rotate(verts, "z", M_PI_2);
                 if(info.orientations[1] == PLUS_Y ) break;
-                if(info.orientations[1] == PLUS_Z ) rotate(verts, "x",  M_PI/2);
+                if(info.orientations[1] == PLUS_Z ) rotate(verts, "x",  M_PI_2);
                 if(info.orientations[1] == MINUS_Y) rotate(verts, "x",  M_PI);
-                if(info.orientations[1] == MINUS_Z) rotate(verts, "x", -M_PI/2);
+                if(info.orientations[1] == MINUS_Z) rotate(verts, "x", -M_PI_2);
                 break;
             }
             case MINUS_Y:
             {
                 rotate(verts, "z", M_PI);
                 if(info.orientations[1] == MINUS_X) break;
-                if(info.orientations[1] == MINUS_Z) rotate(verts, "y",  M_PI/2);
+                if(info.orientations[1] == MINUS_Z) rotate(verts, "y",  M_PI_2);
                 if(info.orientations[1] == PLUS_X ) rotate(verts, "y",  M_PI);
-                if(info.orientations[1] == PLUS_Z ) rotate(verts, "y", -M_PI/2);
+                if(info.orientations[1] == PLUS_Z ) rotate(verts, "y", -M_PI_2);
                 break;
             }
             case MINUS_Z:
             {
-                rotate(verts, "x", -M_PI/2);
+                rotate(verts, "x", -M_PI_2);
                 if(info.orientations[1] == MINUS_X) break;
-                if(info.orientations[1] == MINUS_Y) rotate(verts, "z", -M_PI/2);
+                if(info.orientations[1] == MINUS_Y) rotate(verts, "z", -M_PI_2);
                 if(info.orientations[1] == PLUS_X ) rotate(verts, "z",  M_PI);
-                if(info.orientations[1] == PLUS_Y ) rotate(verts, "z",  M_PI/2);
+                if(info.orientations[1] == PLUS_Y ) rotate(verts, "z",  M_PI_2);
                 break;
             }
         }
@@ -260,7 +265,7 @@ void orient_flat(std::vector<vec3d>             & verts,
         {
             case PLUS_X:
             {
-                rotate(verts, "z", -M_PI/2);
+                rotate(verts, "z", -M_PI_2);
                 reflect(verts, "xz");
                 if(info.orientations[1] == PLUS_Y  && info.orientations[2] == PLUS_Z)    {} //DEFAULT;
                 if(info.orientations[1] == PLUS_Y  && info.orientations[2] == MINUS_Z)   reflect(verts, "xy");
@@ -270,7 +275,7 @@ void orient_flat(std::vector<vec3d>             & verts,
             }
             case PLUS_Y:
             {
-                rotate(verts, "y", M_PI/2);
+                rotate(verts, "y", M_PI_2);
                 reflect(verts, "xy");
 
                 if(info.orientations[1] == PLUS_X  && info.orientations[2] == PLUS_Z)   {} //DEFAULT
@@ -281,7 +286,7 @@ void orient_flat(std::vector<vec3d>             & verts,
             }
             case PLUS_Z:
             {
-                rotate(verts, "x", M_PI/2);
+                rotate(verts, "x", M_PI_2);
                 reflect(verts, "xz");
                 if(info.orientations[1] == PLUS_X  && info.orientations[2] == PLUS_Y)    {} //DEFAULT;
                 if(info.orientations[1] == PLUS_Y  && info.orientations[2] == MINUS_X)   reflect(verts, "yz");
@@ -291,7 +296,7 @@ void orient_flat(std::vector<vec3d>             & verts,
             }
             case MINUS_X:
             {
-                rotate(verts, "z", M_PI/2);
+                rotate(verts, "z", M_PI_2);
                 if(info.orientations[1] == PLUS_Y  && info.orientations[2] == PLUS_Z)   {} //DEFAULT;
                 if(info.orientations[1] == PLUS_Y  && info.orientations[2] == MINUS_Z)   reflect(verts, "xy");
                 if(info.orientations[1] == PLUS_Z  && info.orientations[2] == MINUS_Y)   reflect(verts, "xz");;
@@ -300,7 +305,7 @@ void orient_flat(std::vector<vec3d>             & verts,
             }
             case MINUS_Y:
             {
-                rotate(verts, "y", M_PI/2);
+                rotate(verts, "y", M_PI_2);
                 reflect(verts, "xy");
                 reflect(verts, "xz");
                 if(info.orientations[1] == PLUS_X  && info.orientations[2] == PLUS_Z)  {} //DEFAULT;
@@ -311,7 +316,7 @@ void orient_flat(std::vector<vec3d>             & verts,
             }
             case MINUS_Z:
             {
-                rotate(verts, "x", -M_PI/2);
+                rotate(verts, "x", -M_PI_2);
                 if(info.orientations[1] == PLUS_X  && info.orientations[2] == PLUS_Y)    {} //DEFAULT;
                 if(info.orientations[1] == PLUS_Y  && info.orientations[2] == MINUS_X)   reflect(verts, "yz");;
                 if(info.orientations[1] == PLUS_X  && info.orientations[2] == MINUS_Y)   reflect(verts, "xz");;
@@ -337,8 +342,8 @@ void orient_flat(std::vector<vec3d>             & verts,
 
 CINO_INLINE
 void orient_convex(std::vector<vec3d>             & verts,
-                   std::vector<std::vector<uint>> & faces,
-                   std::vector<std::vector<uint>> & polys,
+                   std::vector<std::vector<unsigned int>> & faces,
+                   std::vector<std::vector<unsigned int>> & polys,
                    std::vector<std::vector<bool>> & winding,
                    SchemeInfo                     & info,
                    const vec3d                    & poly_centroid)
@@ -346,7 +351,7 @@ void orient_convex(std::vector<vec3d>             & verts,
     if (info.type == HexTransition::CONVEX_1)
     {
         verts.reserve(Convex_1::verts.size()/3);
-        for(uint vid=0; vid<Convex_1::verts.size(); vid+=3)
+        for(unsigned int vid=0; vid<Convex_1::verts.size(); vid+=3)
         {
             verts.push_back(vec3d(Convex_1::verts[vid]-0.5, Convex_1::verts[vid+1]-0.5, Convex_1::verts[vid+2]-0.5));
         }
@@ -357,11 +362,11 @@ void orient_convex(std::vector<vec3d>             & verts,
         switch (info.orientations[0])
         {
             case PLUS_Y:  break; //DEFAULT
-            case PLUS_X:  rotate(verts, "z", -M_PI/2); break;
-            case PLUS_Z:  rotate(verts, "x",  M_PI/2); break;
-            case MINUS_X: rotate(verts, "z",  M_PI/2); break;
+            case PLUS_X:  rotate(verts, "z", -M_PI_2); break;
+            case PLUS_Z:  rotate(verts, "x",  M_PI_2); break;
+            case MINUS_X: rotate(verts, "z",  M_PI_2); break;
             case MINUS_Y: rotate(verts, "z",  M_PI);   break;
-            case MINUS_Z: rotate(verts, "x", -M_PI/2); break;
+            case MINUS_Z: rotate(verts, "x", -M_PI_2); break;
         }
 
         for(auto & v : verts)
@@ -377,7 +382,7 @@ void orient_convex(std::vector<vec3d>             & verts,
     else if(info.type == HexTransition::CONVEX_2)
     {
         verts.reserve(Convex_2::verts.size()/3);
-        for(uint vid=0; vid<Convex_2::verts.size(); vid+=3)
+        for(unsigned int vid=0; vid<Convex_2::verts.size(); vid+=3)
         {
             verts.push_back(vec3d(Convex_2::verts[vid]-0.5, Convex_2::verts[vid+1]-0.5, Convex_2::verts[vid+2]-0.5));
         }
@@ -401,7 +406,7 @@ void orient_convex(std::vector<vec3d>             & verts,
     else if(info.type == HexTransition::CONVEX_3)
     {
         verts.reserve(Convex_3::verts.size()/3);
-        for(uint vid=0; vid<Convex_3::verts.size(); vid+=3)
+        for(unsigned int vid=0; vid<Convex_3::verts.size(); vid+=3)
         {
             verts.push_back(vec3d(Convex_3::verts[vid]-0.5, Convex_3::verts[vid+1]-0.5, Convex_3::verts[vid+2]-0.5));
         }
@@ -431,7 +436,7 @@ void orient_convex(std::vector<vec3d>             & verts,
         }
         else if(info.cuts[PLUS_X] && info.cuts[PLUS_Y] && info.cuts[MINUS_Z])
         {
-            rotate(verts, "y", -M_PI/2); //10 11 15
+            rotate(verts, "y", -M_PI_2); //10 11 15
         }
         else if(info.cuts[PLUS_Y] && info.cuts[PLUS_Z] && info.cuts[MINUS_X])
         {
@@ -443,7 +448,7 @@ void orient_convex(std::vector<vec3d>             & verts,
         }
         else if(info.cuts[PLUS_Y] && info.cuts[MINUS_X] && info.cuts[MINUS_Z])
         {
-            //rotate(scheme, "z", M_PI/2); //11 13 15
+            //rotate(scheme, "z", pi2); //11 13 15
         }
 
         for(auto & v : verts)
@@ -458,8 +463,8 @@ void orient_convex(std::vector<vec3d>             & verts,
 
 CINO_INLINE
 void orient_concave_edge(std::vector<vec3d>             & verts,
-                         std::vector<std::vector<uint>> & faces,
-                         std::vector<std::vector<uint>> & polys,
+                         std::vector<std::vector<unsigned int>> & faces,
+                         std::vector<std::vector<unsigned int>> & polys,
                          std::vector<std::vector<bool>> & winding,
                          SchemeInfo                     & info,
                          const vec3d                    & poly_centroid)
@@ -467,7 +472,7 @@ void orient_concave_edge(std::vector<vec3d>             & verts,
     if(info.type == HexTransition::EDGE)
     {
         verts.reserve(Edge::verts.size()/3);
-        for(uint vid=0; vid<Edge::verts.size(); vid+=3)
+        for(unsigned int vid=0; vid<Edge::verts.size(); vid+=3)
         {
             verts.push_back(vec3d(Edge::verts[vid]-0.5, Edge::verts[vid+1]-0.5, Edge::verts[vid+2]-0.5));
         }
@@ -478,7 +483,7 @@ void orient_concave_edge(std::vector<vec3d>             & verts,
     else
     {
         verts.reserve(Edge_WB::verts.size()/3);
-        for(uint vid=0; vid<Edge_WB::verts.size(); vid+=3)
+        for(unsigned int vid=0; vid<Edge_WB::verts.size(); vid+=3)
         {
             verts.push_back(vec3d(Edge_WB::verts[vid]-0.5, Edge_WB::verts[vid+1]-0.5, Edge_WB::verts[vid+2]-0.5));
         }
@@ -491,11 +496,11 @@ void orient_concave_edge(std::vector<vec3d>             & verts,
     switch(info.orientations[0])
     {
         case PLUS_Y:                               reflect(verts, "xz"); break; //DEFAULT
-        case PLUS_X:  rotate(verts, "z", -M_PI/2); reflect(verts, "yz"); break;
-        case PLUS_Z:  rotate(verts, "x",  M_PI/2); reflect(verts, "xy"); break;
-        case MINUS_X: rotate(verts, "z",  M_PI/2); reflect(verts, "yz"); break;
+        case PLUS_X:  rotate(verts, "z", -M_PI_2); reflect(verts, "yz"); break;
+        case PLUS_Z:  rotate(verts, "x",  M_PI_2); reflect(verts, "xy"); break;
+        case MINUS_X: rotate(verts, "z",  M_PI_2); reflect(verts, "yz"); break;
         case MINUS_Y: rotate(verts, "z",  M_PI);   reflect(verts, "xz"); break;
-        case MINUS_Z: rotate(verts, "x", -M_PI/2); reflect(verts, "xy"); break;
+        case MINUS_Z: rotate(verts, "x", -M_PI_2); reflect(verts, "xy"); break;
     }
 
     for(auto & v : verts)
@@ -514,8 +519,8 @@ void orient_concave_edge(std::vector<vec3d>             & verts,
 
 CINO_INLINE
 void orient_concave_vert(std::vector<vec3d>             & verts,
-                         std::vector<std::vector<uint>> & faces,
-                         std::vector<std::vector<uint>> & polys,
+                         std::vector<std::vector<unsigned int>> & faces,
+                         std::vector<std::vector<unsigned int>> & polys,
                          std::vector<std::vector<bool>> & winding,
                          SchemeInfo                     & info,
                          const vec3d                    & poly_centroid)
@@ -523,7 +528,7 @@ void orient_concave_vert(std::vector<vec3d>             & verts,
     if(info.type == HexTransition::VERT_CENTER_WB_1)
     {
         verts.reserve(Vert_center_WB_1::verts.size()/3);
-        for(uint vid=0; vid<Vert_center_WB_1::verts.size(); vid+=3)
+        for(unsigned int vid=0; vid<Vert_center_WB_1::verts.size(); vid+=3)
         {
             verts.push_back(vec3d(Vert_center_WB_1::verts[vid]-0.5, Vert_center_WB_1::verts[vid+1]-0.5, Vert_center_WB_1::verts[vid+2]-0.5));
         }
@@ -534,7 +539,7 @@ void orient_concave_vert(std::vector<vec3d>             & verts,
     else if(info.type == HexTransition::VERT_CENTER_WB_2)
     {
         verts.reserve(Vert_center_WB_2::verts.size()/3);
-        for(uint vid=0; vid<Vert_center_WB_2::verts.size(); vid+=3)
+        for(unsigned int vid=0; vid<Vert_center_WB_2::verts.size(); vid+=3)
         {
             verts.push_back(vec3d(Vert_center_WB_2::verts[vid]-0.5, Vert_center_WB_2::verts[vid+1]-0.5, Vert_center_WB_2::verts[vid+2]-0.5));
         }
@@ -545,7 +550,7 @@ void orient_concave_vert(std::vector<vec3d>             & verts,
     else if(info.type == HexTransition::VERT_CENTER_WB_3)
     {
         verts.reserve(Vert_center_WB_3::verts.size()/3);
-        for(uint vid=0; vid<Vert_center_WB_3::verts.size(); vid+=3)
+        for(unsigned int vid=0; vid<Vert_center_WB_3::verts.size(); vid+=3)
         {
             verts.push_back(vec3d(Vert_center_WB_3::verts[vid]-0.5, Vert_center_WB_3::verts[vid+1]-0.5, Vert_center_WB_3::verts[vid+2]-0.5));
         }
@@ -556,7 +561,7 @@ void orient_concave_vert(std::vector<vec3d>             & verts,
     else
     {
         verts.reserve(Vert_center::verts.size()/3);
-        for(uint vid=0; vid<Vert_center::verts.size(); vid+=3)
+        for(unsigned int vid=0; vid<Vert_center::verts.size(); vid+=3)
         {
             verts.push_back(vec3d(Vert_center::verts[vid]-0.5, Vert_center::verts[vid+1]-0.5, Vert_center::verts[vid+2]-0.5));
         }
@@ -571,13 +576,13 @@ void orient_concave_vert(std::vector<vec3d>             & verts,
     {
         if(info.cuts[PLUS_X])
         {
-            rotate(verts, "z", M_PI/2);
-            rotate(verts, "y", M_PI/2);
+            rotate(verts, "z", M_PI_2);
+            rotate(verts, "y", M_PI_2);
         }
         else if(info.cuts[PLUS_Y])
         {
-            rotate(verts, "x", -M_PI/2);
-            rotate(verts, "y", -M_PI/2);
+            rotate(verts, "x", -M_PI_2);
+            rotate(verts, "y", -M_PI_2);
         }
         else if(info.cuts[PLUS_Z])
         {
@@ -588,8 +593,8 @@ void orient_concave_vert(std::vector<vec3d>             & verts,
     {
         if(info.cuts[PLUS_X] && info.cuts[PLUS_Y])
         {
-            rotate(verts, "x", M_PI/2);
-            rotate(verts, "z", M_PI/2);
+            rotate(verts, "x", M_PI_2);
+            rotate(verts, "z", M_PI_2);
         }
         else if(info.cuts[PLUS_X] && info.cuts[PLUS_Z])
         {
@@ -597,8 +602,8 @@ void orient_concave_vert(std::vector<vec3d>             & verts,
         }
         else if(info.cuts[PLUS_Y] && info.cuts[PLUS_Z])
         {
-            rotate(verts, "x", -M_PI/2);
-            rotate(verts, "y", -M_PI/2);
+            rotate(verts, "x", -M_PI_2);
+            rotate(verts, "y", -M_PI_2);
         }
     }
 
@@ -658,30 +663,30 @@ void orient_concave_vert(std::vector<vec3d>             & verts,
 
 CINO_INLINE
 void orient_concave_vert_side(std::vector<vec3d>             & verts,
-                              std::vector<std::vector<uint>> & faces,
-                              std::vector<std::vector<uint>> & polys,
+                              std::vector<std::vector<unsigned int>> & faces,
+                              std::vector<std::vector<unsigned int>> & polys,
                               std::vector<std::vector<bool>> & winding,
                               SchemeInfo                     & info,
                               const vec3d                    & poly_centroid)
 {
-    uint tv_idx = 0;
+    unsigned int tv_idx = 0;
     if(info.type == HexTransition::VERT_SIDE_WB)
     {
         verts.reserve(Vert_side_WB::verts.size()/3);
-        for(uint vid=0; vid<Vert_side_WB::verts.size(); vid+=3)
+        for(unsigned int vid=0; vid<Vert_side_WB::verts.size(); vid+=3)
         {
             verts.push_back(vec3d(Vert_side_WB::verts[vid]-0.5, Vert_side_WB::verts[vid+1]-0.5, Vert_side_WB::verts[vid+2]-0.5));
         }
         polys   = Vert_side_WB::polys;
         faces   = Vert_side_WB::faces;
         winding = Vert_side_WB::winding;
-        rotate(verts, "z", M_PI/2);
-        rotate(verts, "y", M_PI/2);
+        rotate(verts, "z", M_PI_2);
+        rotate(verts, "y", M_PI_2);
     }
     else
     {
         verts.reserve(Vert_side::verts.size()/3);
-        for(uint vid=0; vid<Vert_side::verts.size(); vid+=3)
+        for(unsigned int vid=0; vid<Vert_side::verts.size(); vid+=3)
         {
             verts.push_back(vec3d(Vert_side::verts[vid]-0.5, Vert_side::verts[vid+1]-0.5, Vert_side::verts[vid+2]-0.5));
         }
@@ -695,8 +700,8 @@ void orient_concave_vert_side(std::vector<vec3d>             & verts,
 
     if(info.orientations[0] == PLUS_X && info.orientations[1] == PLUS_Y) //DEFAULT
     {
-        rotate(verts, "y", M_PI/2);
-        rotate(verts, "x", M_PI/2);
+        rotate(verts, "y", M_PI_2);
+        rotate(verts, "x", M_PI_2);
 
         vec3d tmp_v0 = verts.at(tv_idx);
         tmp_v0 *= info.scale;
@@ -709,8 +714,8 @@ void orient_concave_vert_side(std::vector<vec3d>             & verts,
     }
     else if(info.orientations[0] == PLUS_X && info.orientations[1] == MINUS_Y)
     {
-        rotate(verts, "y", M_PI/2);
-        rotate(verts, "x", M_PI/2);
+        rotate(verts, "y", M_PI_2);
+        rotate(verts, "x", M_PI_2);
         reflect(verts, "xz");
         vec3d tmp_v0 = verts.at(tv_idx);
         tmp_v0 *= info.scale;
@@ -724,8 +729,8 @@ void orient_concave_vert_side(std::vector<vec3d>             & verts,
     }
     else if(info.orientations[0] == PLUS_Y && info.orientations[1] == PLUS_Z) //DEFAULT
     {
-        rotate(verts, "y", -M_PI/2);
-        rotate(verts, "z", -M_PI/2);
+        rotate(verts, "y", -M_PI_2);
+        rotate(verts, "z", -M_PI_2);
         vec3d tmp_v0 = verts.at(tv_idx);
         tmp_v0 *= info.scale;
         tmp_v0 += poly_centroid;
@@ -733,8 +738,8 @@ void orient_concave_vert_side(std::vector<vec3d>             & verts,
     }
     else if(info.orientations[0] == PLUS_Y && info.orientations[1] == MINUS_X)
     {
-        rotate(verts, "y", M_PI/2);
-        rotate(verts, "x", M_PI/2);
+        rotate(verts, "y", M_PI_2);
+        rotate(verts, "x", M_PI_2);
         reflect(verts, "yz");
         vec3d tmp_v0 = verts.at(tv_idx);
         tmp_v0 *= info.scale;
@@ -743,8 +748,8 @@ void orient_concave_vert_side(std::vector<vec3d>             & verts,
     }
     else if(info.orientations[0] == PLUS_Y && info.orientations[1] == MINUS_Z)
     {
-        rotate(verts, "y", -M_PI/2);
-        rotate(verts, "z", -M_PI/2);
+        rotate(verts, "y", -M_PI_2);
+        rotate(verts, "z", -M_PI_2);
         reflect(verts, "xy");
         vec3d tmp_v0 = verts.at(tv_idx);
         tmp_v0 *= info.scale;
@@ -758,8 +763,8 @@ void orient_concave_vert_side(std::vector<vec3d>             & verts,
     }
     else if(info.orientations[0] == PLUS_Z && info.orientations[1] == MINUS_Y)
     {
-        rotate(verts, "y", -M_PI/2);
-        rotate(verts, "z", -M_PI/2);
+        rotate(verts, "y", -M_PI_2);
+        rotate(verts, "z", -M_PI_2);
         reflect(verts, "xz");
         vec3d tmp_v0 = verts.at(tv_idx);
         tmp_v0 *= info.scale;
@@ -768,8 +773,8 @@ void orient_concave_vert_side(std::vector<vec3d>             & verts,
     }
     else if(info.orientations[0] == MINUS_X && info.orientations[1] == MINUS_Y)
     {
-        rotate(verts, "y", M_PI/2);
-        rotate(verts, "x", M_PI/2);
+        rotate(verts, "y", M_PI_2);
+        rotate(verts, "x", M_PI_2);
         reflect(verts, "xz");
         reflect(verts, "yz");
         vec3d tmp_v0 = verts.at(tv_idx);
@@ -784,8 +789,8 @@ void orient_concave_vert_side(std::vector<vec3d>             & verts,
     }
     else if(info.orientations[0] == MINUS_Y && info.orientations[1] == MINUS_Z)
     {
-        rotate(verts, "y", -M_PI/2);
-        rotate(verts, "z", -M_PI/2);
+        rotate(verts, "y", -M_PI_2);
+        rotate(verts, "z", -M_PI_2);
         reflect(verts, "xz");
         reflect(verts, "xy");
         vec3d tmp_v0 = verts.at(tv_idx);
@@ -807,8 +812,8 @@ void orient_concave_vert_side(std::vector<vec3d>             & verts,
 
 CINO_INLINE
 void hex_transition_orient(std::vector<vec3d>             & verts,
-                           std::vector<std::vector<uint>> & faces,
-                           std::vector<std::vector<uint>> & polys,
+                           std::vector<std::vector<unsigned int>> & faces,
+                           std::vector<std::vector<unsigned int>> & polys,
                            std::vector<std::vector<bool>> & winding,
                            SchemeInfo                     & info,
                            const vec3d                    & poly_centroid)

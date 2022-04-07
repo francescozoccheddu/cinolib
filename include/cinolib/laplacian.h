@@ -67,8 +67,6 @@ std::vector<Eigen::Triplet<double>> laplacian_matrix_entries(const AbstractMesh<
                                                              const int n);
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "laplacian.cpp"
-#endif
+#include "laplacian.tpp"
 
 #endif // CINO_LAPLACIAN_H

@@ -19,7 +19,7 @@ int main(int argc, char **argv)
 
     // position heat sources with CMD + left click
     Profiler profiler;
-    std::vector<uint> sources;
+    std::vector<unsigned int> sources;
     GeodesicsCache prefactored_matrices;
     gui.callback_mouse_left_click = [&](int modifiers)
     {
@@ -29,7 +29,7 @@ int main(int argc, char **argv)
             vec2d click = gui.cursor_pos();
             if(gui.unproject(click, p)) // transform click in a 3d point
             {
-                uint vid = m.pick_vert(p);
+                unsigned int vid = m.pick_vert(p);
                 sources.push_back(vid);
                 profiler.push("compute_geodesics");
                 compute_geodesics_amortized(m, prefactored_matrices, sources).copy_to_mesh(m);

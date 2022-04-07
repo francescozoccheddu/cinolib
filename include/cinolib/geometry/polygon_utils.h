@@ -37,6 +37,7 @@
 #define CINO_POLYGON_UTILS_H
 
 #include <cinolib/geometry/vec_mat.h>
+#include <vector>
 
 /*
  * Utilities for convex or concave, simply connected, non self-intersecting polygons
@@ -83,13 +84,13 @@ bool polygon_flatten(const std::vector<vec3d> & poly3d,
 
 CINO_INLINE
 bool polygon_triangulate(std::vector<vec2d> & poly,
-                         std::vector<uint>  & tris);
+                         std::vector<unsigned int>  & tris);
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 CINO_INLINE
 bool polygon_triangulate(std::vector<vec3d> & poly,
-                         std::vector<uint>  & tris);
+                         std::vector<unsigned int>  & tris);
 
 }
 

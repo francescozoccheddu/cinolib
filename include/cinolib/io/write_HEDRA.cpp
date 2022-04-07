@@ -42,8 +42,8 @@ namespace cinolib
 CINO_INLINE
 void write_HEDRA(const char                           * filename,
                  const std::vector<vec3d>             & verts,
-                 const std::vector<std::vector<uint>> & faces,
-                 const std::vector<std::vector<uint>> & polys,
+                 const std::vector<std::vector<unsigned int>> & faces,
+                 const std::vector<std::vector<unsigned int>> & polys,
                  const std::vector<std::vector<bool>> & polys_winding)
 {
     setlocale(LC_NUMERIC, "en_US.UTF-8"); // makes sure "." is the decimal separator
@@ -56,9 +56,9 @@ void write_HEDRA(const char                           * filename,
         exit(-1);
     }
 
-    uint nv = verts.size();
-    uint nf = faces.size();
-    uint np = polys.size();
+    unsigned int nv = verts.size();
+    unsigned int nf = faces.size();
+    unsigned int np = polys.size();
 
     fprintf(fp, "%d %d %d\n", nv, nf, np);
 
@@ -66,21 +66,21 @@ void write_HEDRA(const char                           * filename,
     //
     for(const vec3d & v : verts) fprintf(fp, "%.17g %.17g %.17g\n", v.x(), v.y(), v.z());
 
-    for(const std::vector<uint> & f : faces)
+    for(const std::vector<unsigned int> & f : faces)
     {
         fprintf(fp, "%d ", static_cast<int>(f.size()));
-        for(uint vid : f) fprintf(fp, "%d ", vid+1);
+        for(unsigned int vid : f) fprintf(fp, "%d ", vid+1);
         fprintf(fp, "\n");
     }
 
-    for(uint pid=0; pid<np; ++pid)
+    for(unsigned int pid=0; pid<np; ++pid)
     {
         fprintf(fp, "%d ", static_cast<int>(polys.at(pid).size()));
 
-        for(uint off=0; off<polys.at(pid).size(); ++off)
+        for(unsigned int off=0; off<polys.at(pid).size(); ++off)
         {
-            if (polys_winding.at(pid).at(off)) fprintf(fp, "%d ",   polys.at(pid).at(off)+1);
-            else                               fprintf(fp, "%d ", -(polys.at(pid).at(off)+1));
+            if (polys_winding.at(pid).at(off)) fprintf(fp, "%d ",     polys.at(pid).at(off)+1);
+            else                               fprintf(fp, "%d ", 0u-(polys.at(pid).at(off)+1));
         }
         fprintf(fp, "\n");
     }

@@ -35,6 +35,7 @@
 *********************************************************************************/
 #include <cinolib/non_manifold_edge_geometric_sorting.h>
 #include <cinolib/predicates.h>
+#include <cassert>
 
 namespace cinolib
 {
@@ -43,18 +44,18 @@ CINO_INLINE
 void non_manifold_edge_geometric_sorting(const vec3d              & e0,
                                          const vec3d              & e1,
                                          const std::vector<vec3d> & tris,
-                                               std::vector<uint>  & ordering,
-                                         const uint                 first_elem)
+                                               std::vector<unsigned int>  & ordering,
+                                         const unsigned int                 first_elem)
 {
     ordering.clear();
-    uint curr = first_elem;
+    unsigned int curr = first_elem;
     do
     {
         ordering.push_back(curr);
 
         // find all elements in the positive half space w.r.t. curr
-        std::vector<uint> next_pool;
-        for(uint i=0; i<tris.size(); ++i)
+        std::vector<unsigned int> next_pool;
+        for(unsigned int i=0; i<tris.size(); ++i)
         {
             if(i!=curr && orient3d(e0,e1,tris.at(curr),tris.at(i))>0)
             {
@@ -63,11 +64,11 @@ void non_manifold_edge_geometric_sorting(const vec3d              & e0,
         }
 
         // find element in next_pool that has all other elements in its positive half space
-        uint next = curr;
-        for(uint j=0; j<next_pool.size(); ++j)
+        unsigned int next = curr;
+        for(unsigned int j=0; j<next_pool.size(); ++j)
         {
             bool leftmost = true;
-            for(uint k=0; k<next_pool.size(); ++k)
+            for(unsigned int k=0; k<next_pool.size(); ++k)
             {
                 if(j==k) continue;
                 if(orient3d(e0,e1,tris.at(next_pool.at(j)),tris.at(next_pool.at(k)))<0)

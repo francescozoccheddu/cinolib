@@ -57,8 +57,6 @@ Eigen::SparseMatrix<double> vector_area_matrix(const AbstractPolygonMesh<M,V,E,P
 
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "vector_area_matrix.cpp"
-#endif
+#include "vector_area_matrix.tpp"
 
 #endif // CINO_VECTOR_AREA_MATRIX

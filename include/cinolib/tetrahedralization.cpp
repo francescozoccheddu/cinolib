@@ -37,39 +37,12 @@
 #include <cinolib/ipair.h>
 #include <cinolib/standard_elements_tables.h>
 #include <set>
+#include <cassert>
+#include <algorithm>
+#include <cinolib/stl_container_utilities.h>
 
 namespace cinolib
 {
-
-//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
-// Transforms a hexahedral mesh into a conforming tetrahedral
-// mesh, splitting all hexahedra into five or six tetrahedra
-template<class M, class V, class E, class F, class P>
-CINO_INLINE
-void hex_to_tets(const Hexmesh<M,V,E,F,P> & hm,
-                       Tetmesh<M,V,E,F,P> & tm)
-{
-    for(uint vid=0; vid<hm.num_verts(); ++vid)
-    {
-        tm.vert_add(hm.vert(vid));
-    }
-
-    for(uint pid=0; pid<hm.num_polys(); ++pid)
-    {
-        std::vector<uint> tets;
-        hex_to_tets(hm.poly_verts_id(pid),tets);
-
-        auto t = polys_from_serialized_vids(tets,4);
-        for(auto tet : t)
-        {
-            uint id = tm.poly_add(tet);
-            tm.poly_data(id).label = pid;
-        }
-    }
-}
-
-//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 // Subdivides a hexahedron either into 5 tets or into 6 tets
 // (according to four poossible schemes). Split schemes are
@@ -77,14 +50,14 @@ void hex_to_tets(const Hexmesh<M,V,E,F,P> & hm,
 // mesh, where diagonals of quad faces are compatible across
 // face-adjacent hexahedra
 CINO_INLINE
-void hex_to_tets(const std::vector<uint> & hex,
-                       std::vector<uint> & tets)
+void hex_to_tets(const std::vector<unsigned int> & hex,
+                       std::vector<unsigned int> & tets)
 {
     assert(hex.size()==8);
     tets.clear();
 
     // see Table 4 in "How to Subdivide Pyramids, Prisms and Hexahedra into Tetrahedra"
-    uint ref_h[8];
+    unsigned int ref_h[8];
     switch(INDEX_OF(hex, std::min_element(hex.begin(),hex.end())))
     {
         case 0: ref_h[0] = hex[0];
@@ -175,7 +148,7 @@ void hex_to_tets(const std::vector<uint> & hex,
     // alternative ways, for a total of 8 alternative configurations. The code below applies a
     // topological rotation of the vertices in ref_h[], reducing the configurations to 4
 
-    uint n = 0; // # of quad diagonals incident at v6
+    unsigned int n = 0; // # of quad diagonals incident at v6
     std::bitset<3> bits = { 0b000 };
     if(std::min(ref_h[1],ref_h[6]) < std::min(ref_h[2],ref_h[5])) { ++n; bits.set(2); }
     if(std::min(ref_h[3],ref_h[6]) < std::min(ref_h[2],ref_h[7])) { ++n; bits.set(1); }
@@ -349,14 +322,14 @@ void hex_to_tets(const std::vector<uint> & hex,
 //   bot base       top base
 //
 CINO_INLINE
-void prism_to_tets(const std::vector<uint> & prism,
-                         std::vector<uint> & tets)
+void prism_to_tets(const std::vector<unsigned int> & prism,
+                         std::vector<unsigned int> & tets)
 {
     assert(prism.size()==6);
     tets.clear();
 
     // see Table 2 in "How to Subdivide Pyramids, Prisms and Hexahedra into Tetrahedra"
-    uint ref_p[6];
+    unsigned int ref_p[6];
     switch(INDEX_OF(prism, std::min_element(prism.begin(),prism.end())))
     {
         case 0: ref_p[0] = prism[0];
@@ -452,41 +425,19 @@ void prism_to_tets(const std::vector<uint> & prism,
 // control the minimum jacobian, which is the minimum of the
 // per tet jacobians measured at the hex corners
 CINO_INLINE
-void hex_to_corner_tets(const std::vector<uint> & hex,
-                              std::vector<uint> & tets)
+void hex_to_corner_tets(const std::vector<unsigned int> & hex,
+                              std::vector<unsigned int> & tets)
 
 {
     assert(hex.size()==8);
     tets.clear();
 
-    for(uint i=0; i<8; ++i)
+    for(unsigned int i=0; i<8; ++i)
     {
         tets.push_back(hex.at(HEXA_CORNER_TETS[i][0]));
         tets.push_back(hex.at(HEXA_CORNER_TETS[i][1]));
         tets.push_back(hex.at(HEXA_CORNER_TETS[i][2]));
         tets.push_back(hex.at(HEXA_CORNER_TETS[i][3]));
-    }
-}
-
-//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
-template<class M, class V, class E, class F, class P>
-CINO_INLINE
-void hex_to_corner_tets(const Hexmesh<M,V,E,F,P> & hm,
-                              Tetmesh<M,V,E,F,P> & tm)
-{
-    for(uint vid=0; vid<hm.num_verts(); ++vid)
-    {
-        tm.vert_add(hm.vert(vid));
-    }
-
-    for(uint pid=0; pid<hm.num_polys(); ++pid)
-    {
-        std::vector<uint> tets;
-        hex_to_corner_tets(hm.poly_verts_id(pid),tets);
-
-        auto t = polys_from_serialized_vids(tets,4);
-        for(auto tet : t) tm.poly_add(tet);
     }
 }
 

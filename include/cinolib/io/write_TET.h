@@ -47,14 +47,14 @@ namespace cinolib
 CINO_INLINE
 void write_TET(const char                           * filename,
                const std::vector<vec3d>             & verts,
-               const std::vector<std::vector<uint>> & tets);
+               const std::vector<std::vector<unsigned int>> & tets);
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 CINO_INLINE
 void write_TET(const char               * filename,
                const std::vector<double> & xyz,
-               const std::vector<uint>  & tets);
+               const std::vector<unsigned int>  & tets);
 
 }
 

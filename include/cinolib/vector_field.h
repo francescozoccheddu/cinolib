@@ -39,6 +39,7 @@
 #include <cinolib/geometry/vec_mat.h>
 #include <cinolib/serializable.h>
 #include <Eigen/Dense>
+#include <vector>
 
 namespace cinolib
 {
@@ -48,7 +49,7 @@ class VectorField : public Eigen::VectorXd, public Serializable
     public:
 
         explicit VectorField();
-        explicit VectorField(const uint size);
+        explicit VectorField(const unsigned int size);
         explicit VectorField(const std::vector<vec3d> & data);
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -81,6 +82,7 @@ class VectorField : public Eigen::VectorXd, public Serializable
 
 }
 
+#include "vector_field.tpp"
 #ifndef  CINO_STATIC_LIB
 #include "vector_field.cpp"
 #endif

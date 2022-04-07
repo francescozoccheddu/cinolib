@@ -51,8 +51,6 @@ void extrude_mesh(AbstractPolygonMesh<M,V,E,P> & m, const vec3d & dir); // encod
 
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "extrude_mesh.cpp"
-#endif
+#include "extrude_mesh.tpp"
 
 #endif // CINO_EXTRUDE_MESH_H

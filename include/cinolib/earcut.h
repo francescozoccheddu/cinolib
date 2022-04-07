@@ -38,6 +38,7 @@
 
 #include <sys/types.h>
 #include <cinolib/cino_inline.h>
+#include <vector>
 
 namespace cinolib
 {
@@ -78,12 +79,10 @@ enum class EarSorting
 template<class point>
 CINO_INLINE
 bool earcut(const std::vector<point> & poly,
-                  std::vector<uint>  & tris,
+                  std::vector<unsigned int>  & tris,
             const EarSorting           sort = EarSorting::SEQUENTIAL);
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "earcut.cpp"
-#endif
+#include "earcut.tpp"
 
 #endif // CINO_EARCUT_H

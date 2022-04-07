@@ -12,8 +12,8 @@ int main(int argc, char **argv)
     DrawableTrimesh<> m(s.c_str());
     m.show_wireframe(false);
 
-    uint max_depth      = (argc>=3) ? atoi(argv[2]) :  7;
-    uint items_per_leaf = (argc>=4) ? atoi(argv[3]) : 50;
+    unsigned int max_depth      = (argc>=3) ? atoi(argv[2]) :  7;
+    unsigned int items_per_leaf = (argc>=4) ? atoi(argv[3]) : 50;
 
     DrawableOctree octree(max_depth, items_per_leaf);
     octree.debug_mode(true); // dump times and statistics
@@ -40,7 +40,7 @@ int main(int argc, char **argv)
             if(gui.unproject(click, p)) // transform click in a 3d point
             {
                 double t;
-                uint   pid;
+                unsigned int   pid;
                 vec3d  dir = m.centroid() - p;
                 if(octree.intersects_ray(p-dir, dir, t, pid)) // consider only the first hit
                 {

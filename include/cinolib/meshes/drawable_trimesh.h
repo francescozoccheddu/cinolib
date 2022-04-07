@@ -71,7 +71,7 @@ class DrawableTrimesh : public AbstractDrawablePolygonMesh<Trimesh<M,V,E,P>>
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
         explicit DrawableTrimesh(const std::vector<vec3d>             & coords,
-                                 const std::vector<std::vector<uint>> & polys)
+                                 const std::vector<std::vector<unsigned int>> & polys)
         : Trimesh<M,V,E,P>(coords, polys)
         {
             this->init_drawable_stuff();
@@ -80,7 +80,7 @@ class DrawableTrimesh : public AbstractDrawablePolygonMesh<Trimesh<M,V,E,P>>
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
         explicit DrawableTrimesh(const std::vector<double>            & coords,
-                                 const std::vector<std::vector<uint>> & polys)
+                                 const std::vector<std::vector<unsigned int>> & polys)
         : Trimesh<M,V,E,P>(coords, polys)
         {
             this->init_drawable_stuff();
@@ -89,7 +89,7 @@ class DrawableTrimesh : public AbstractDrawablePolygonMesh<Trimesh<M,V,E,P>>
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
         explicit DrawableTrimesh(const std::vector<vec3d> & coords,
-                                 const std::vector<uint>  & polys)
+                                 const std::vector<unsigned int>  & polys)
         : Trimesh<M,V,E,P>(coords, polys)
         {
             this->init_drawable_stuff();
@@ -98,7 +98,7 @@ class DrawableTrimesh : public AbstractDrawablePolygonMesh<Trimesh<M,V,E,P>>
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
         explicit DrawableTrimesh(const std::vector<double> & coords,
-                                 const std::vector<uint>   & polys)
+                                 const std::vector<unsigned int>   & polys)
         : Trimesh<M,V,E,P>(coords, polys)
         {
             this->init_drawable_stuff();

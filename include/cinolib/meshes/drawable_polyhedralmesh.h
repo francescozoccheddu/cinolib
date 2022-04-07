@@ -70,8 +70,8 @@ class DrawablePolyhedralmesh : public AbstractDrawablePolyhedralMesh<Polyhedralm
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
         explicit DrawablePolyhedralmesh(const std::vector<vec3d>             & verts,
-                                        const std::vector<std::vector<uint>> & faces,
-                                        const std::vector<std::vector<uint>> & polys,
+                                        const std::vector<std::vector<unsigned int>> & faces,
+                                        const std::vector<std::vector<unsigned int>> & polys,
                                         const std::vector<std::vector<bool>> & polys_face_winding)
         : Polyhedralmesh<M,V,E,F,P>(verts, faces, polys, polys_face_winding)
         {

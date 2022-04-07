@@ -53,7 +53,7 @@ namespace cinolib
 template<class M, class V, class E, class P>
 CINO_INLINE
 void dijkstra_exhaustive(const AbstractMesh<M,V,E,P> & m,
-                         const uint                    source,
+                         const unsigned int                    source,
                                std::vector<double>   & dist);
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -61,7 +61,7 @@ void dijkstra_exhaustive(const AbstractMesh<M,V,E,P> & m,
 template<class M, class V, class E, class P>
 CINO_INLINE
 void dijkstra_exhaustive(const AbstractMesh<M,V,E,P> & m,
-                         const std::vector<uint>     & sources,
+                         const std::vector<unsigned int>     & sources,
                                std::vector<double>   & dist);
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -69,7 +69,7 @@ void dijkstra_exhaustive(const AbstractMesh<M,V,E,P> & m,
 template<class M, class V, class E, class F, class P>
 CINO_INLINE
 void dijkstra_exhaustive_srf_only(const AbstractPolyhedralMesh<M,V,E,F,P> & m,
-                                  const std::vector<uint>                 & sources,
+                                  const std::vector<unsigned int>                 & sources,
                                         std::vector<double>               & dist); // unreached verts will have inf_double distance
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -77,7 +77,7 @@ void dijkstra_exhaustive_srf_only(const AbstractPolyhedralMesh<M,V,E,F,P> & m,
 template<class M, class V, class E, class P>
 CINO_INLINE
 void dijkstra_exhaustive_mask_on_edges(const AbstractMesh<M,V,E,P> & m,
-                                       const std::vector<uint>     & sources,
+                                       const std::vector<unsigned int>     & sources,
                                        const std::vector<double>   & weights, // per vert weights (used as metric instead of edge lengths)
                                        const std::vector<bool>     & mask,    // if mask[e] = true, path cannot pass through edge e
                                              std::vector<double>   & dist);
@@ -87,81 +87,81 @@ void dijkstra_exhaustive_mask_on_edges(const AbstractMesh<M,V,E,P> & m,
 template<class M, class V, class E, class P>
 CINO_INLINE
 double dijkstra(const AbstractMesh<M,V,E,P> & m,
-                const uint                    source,
-                const uint                    dest,
-                      std::vector<uint>     & path);
+                const unsigned int                    source,
+                const unsigned int                    dest,
+                      std::vector<unsigned int>     & path);
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 template<class M, class V, class E, class P>
 CINO_INLINE
 double dijkstra(const AbstractMesh<M,V,E,P> & m,
-                const uint                    source,
-                const uint                    dest,
+                const unsigned int                    source,
+                const unsigned int                    dest,
                 const std::vector<double>   & weights, // per vert weights (used as metric instead of edge lengths)
-                      std::vector<uint>     & path);
+                      std::vector<unsigned int>     & path);
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 template<class M, class V, class E, class P>
 CINO_INLINE
 double dijkstra(const AbstractMesh<M,V,E,P> & m,
-                const uint                    source,
-                const uint                    dest,
+                const unsigned int                    source,
+                const unsigned int                    dest,
                 const std::vector<double>   & weights, // per vert weights (used as metric instead of edge lengths)
-                      std::vector<uint>     & path);
+                      std::vector<unsigned int>     & path);
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 template<class M, class V, class E, class P>
 CINO_INLINE
 double dijkstra(const AbstractMesh<M,V,E,P> & m,
-                const uint                    source,
-                const uint                    dest,
+                const unsigned int                    source,
+                const unsigned int                    dest,
                 const std::vector<double>   & weights, // per vert weights (used as metric instead of edge lengths)
                 const std::vector<bool>     & mask, // if mask[v] = true, path cannot pass through it
-                      std::vector<uint>     & path);
+                      std::vector<unsigned int>     & path);
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 template<class M, class V, class E, class P>
 CINO_INLINE
 double dijkstra(const AbstractMesh<M,V,E,P> & m,
-                const uint                    source,
-                const uint                    dest,
+                const unsigned int                    source,
+                const unsigned int                    dest,
                 const std::vector<bool>     & mask, // if mask[v] = true, path cannot pass through it
-                      std::vector<uint>     & path);
+                      std::vector<unsigned int>     & path);
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 template<class M, class V, class E, class P>
 CINO_INLINE
 double dijkstra(const AbstractMesh<M,V,E,P> & m,
-                const uint                    source,
-                const std::set<uint>        & dest,
+                const unsigned int                    source,
+                const std::set<unsigned int>        & dest,
                 const std::vector<bool>     & mask, // if mask[v] = true, path cannot pass through it
-                      std::vector<uint>     & path);
+                      std::vector<unsigned int>     & path);
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 template<class M, class V, class E, class P>
 CINO_INLINE
 double dijkstra_mask_on_edges(const AbstractMesh<M,V,E,P> & m,
-                              const uint                    source,
-                              const uint                    dest,
+                              const unsigned int                    source,
+                              const unsigned int                    dest,
                               const std::vector<bool>     & mask, // if mask[e] = true, path cannot pass through edge e
-                                    std::vector<uint>     & path);
+                                    std::vector<unsigned int>     & path);
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 template<class M, class V, class E, class P>
 CINO_INLINE
 double dijkstra_mask_on_edges(const AbstractMesh<M,V,E,P> & m,
-                              const uint                    source,
-                              const uint                    dest,
+                              const unsigned int                    source,
+                              const unsigned int                    dest,
                               const std::vector<double>   & weights, // per vert weights (used as metric instead of edge lengths)
                               const std::vector<bool>     & mask,    // if mask[e] = true, path cannot pass through edge e
-                                    std::vector<uint>     & path);
+                                    std::vector<unsigned int>     & path);
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 //::::::::::::: DIJKSTRAs ON DUAL GRAPH (POLYGONS/POLYHEDRA) :::::::::::::
@@ -170,7 +170,7 @@ double dijkstra_mask_on_edges(const AbstractMesh<M,V,E,P> & m,
 template<class M, class V, class E, class P>
 CINO_INLINE
 void dijkstra_exhaustive_on_dual(const AbstractMesh<M,V,E,P> & m,
-                                 const uint                    source,
+                                 const unsigned int                    source,
                                        std::vector<double>   & dist);
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -178,7 +178,7 @@ void dijkstra_exhaustive_on_dual(const AbstractMesh<M,V,E,P> & m,
 template<class M, class V, class E, class P>
 CINO_INLINE
 void dijkstra_exhaustive_on_dual(const AbstractMesh<M,V,E,P> & m,
-                                 const std::vector<uint>     & sources,
+                                 const std::vector<unsigned int>     & sources,
                                        std::vector<double>   & dist);
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -186,43 +186,41 @@ void dijkstra_exhaustive_on_dual(const AbstractMesh<M,V,E,P> & m,
 template<class M, class V, class E, class P>
 CINO_INLINE
 double dijkstra_on_dual(const AbstractMesh<M,V,E,P> & m,
-                        const uint                    source,
-                        const uint                    dest,
-                              std::vector<uint>     & path);
+                        const unsigned int                    source,
+                        const unsigned int                    dest,
+                              std::vector<unsigned int>     & path);
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 template<class M, class V, class E, class P>
 CINO_INLINE
 double dijkstra_on_dual(const AbstractMesh<M,V,E,P> & m,
-                        const uint                    source,
-                        const uint                    dest,
+                        const unsigned int                    source,
+                        const unsigned int                    dest,
                         const std::vector<bool>     & mask, // if mask[p] = true, path cannot pass through it
-                              std::vector<uint>     & path);
+                              std::vector<unsigned int>     & path);
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 template<class M, class V, class E, class P>
 CINO_INLINE
 double dijkstra_on_dual(const AbstractMesh<M,V,E,P> & m,
-                        const uint                    source,
-                        const std::set<uint>        & dest,
+                        const unsigned int                    source,
+                        const std::set<unsigned int>        & dest,
                         const std::vector<bool>     & mask, // if mask[p] = true, path cannot pass through it
-                              std::vector<uint>     & path);
+                              std::vector<unsigned int>     & path);
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 template<class M, class V, class E, class P>
 CINO_INLINE
 double dijkstra_on_dual(const AbstractMesh<M,V,E,P> & m,
-                        const uint                    source,
-                        const std::set<uint>        & dest,
-                              std::vector<uint>     & path);
+                        const unsigned int                    source,
+                        const std::set<unsigned int>        & dest,
+                              std::vector<unsigned int>     & path);
 
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "dijkstra.cpp"
-#endif
+#include "dijkstra.tpp"
 
 #endif // CINO_DIJKSTRA_H

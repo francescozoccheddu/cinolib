@@ -31,7 +31,7 @@ int main(int argc, char **argv)
     // create a mesh of the uv parametric space (same connectivity, different embedding)
     DrawableTrimesh<> m_uvw = m_xyz;
     m_uvw.copy_uvw_to_xyz(UV_param);
-    for(uint vid=0; vid<m_uvw.num_verts(); ++vid) m_uvw.vert(vid).z() = 0.0;
+    for(unsigned int vid=0; vid<m_uvw.num_verts(); ++vid) m_uvw.vert(vid).z() = 0.0;
     m_uvw.normalize_bbox();
     m_uvw.update_normals();
     m_uvw.show_wireframe(true);

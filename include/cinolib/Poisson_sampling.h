@@ -38,6 +38,7 @@
 
 #include <cinolib/cino_inline.h>
 #include <sys/types.h>
+#include <vector>
 
 namespace cinolib
 {
@@ -50,19 +51,17 @@ namespace cinolib
  * SIGGRAPH Technical Sketch, 2007
 */
 
-template<uint Dim, class Point>
+template<unsigned int Dim, class Point>
 CINO_INLINE
 void Poisson_sampling(const double         radius,
                       const Point          min,
                       const Point          max,
                       std::vector<Point> & samples,
-                      uint                 seed=0,
+                      unsigned int                 seed=0,
                       const int            max_attempts=30);
 
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "Poisson_sampling.cpp"
-#endif
+#include "Poisson_sampling.tpp"
 
 #endif // CINO_POISSON_SAMPLING

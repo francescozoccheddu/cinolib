@@ -46,7 +46,7 @@ template<class M, class V, class E, class F, class P>
 CINO_INLINE
 void export_visible(const AbstractPolyhedralMesh<M,V,E,F,P> & m_in,
                           AbstractPolyhedralMesh<M,V,E,F,P> & m_out,
-                          std::unordered_map<uint,uint>     & v_map); // (m_in to m_out)
+                          std::unordered_map<unsigned int,unsigned int>     & v_map); // (m_in to m_out)
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -57,8 +57,6 @@ void export_visible(const AbstractPolyhedralMesh<M,V,E,F,P> & m_in,
 
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "export_visible.cpp"
-#endif
+#include "export_visible.tpp"
 
 #endif // CINO_EXPORT_VISIBLE_H

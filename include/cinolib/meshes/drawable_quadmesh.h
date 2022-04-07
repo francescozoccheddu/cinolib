@@ -69,7 +69,7 @@ class DrawableQuadmesh : public AbstractDrawablePolygonMesh<Quadmesh<M,V,E,P>>
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
         explicit DrawableQuadmesh(const std::vector<vec3d>             & coords,
-                                  const std::vector<std::vector<uint>> & polys)
+                                  const std::vector<std::vector<unsigned int>> & polys)
         : Quadmesh<M,V,E,P>(coords, polys)
         {
             this->init_drawable_stuff();
@@ -78,7 +78,7 @@ class DrawableQuadmesh : public AbstractDrawablePolygonMesh<Quadmesh<M,V,E,P>>
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
         explicit DrawableQuadmesh(const std::vector<double>            & coords,
-                                  const std::vector<std::vector<uint>> & polys)
+                                  const std::vector<std::vector<unsigned int>> & polys)
         : Quadmesh<M,V,E,P>(coords, polys)
         {
             this->init_drawable_stuff();
@@ -87,7 +87,7 @@ class DrawableQuadmesh : public AbstractDrawablePolygonMesh<Quadmesh<M,V,E,P>>
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
         explicit DrawableQuadmesh(const std::vector<vec3d> & coords,
-                                  const std::vector<uint>  & polys)
+                                  const std::vector<unsigned int>  & polys)
         : Quadmesh<M,V,E,P>(coords, polys)
         {
             this->init_drawable_stuff();
@@ -96,7 +96,7 @@ class DrawableQuadmesh : public AbstractDrawablePolygonMesh<Quadmesh<M,V,E,P>>
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
         explicit DrawableQuadmesh(const std::vector<double> & coords,
-                                  const std::vector<uint>   & polys)
+                                  const std::vector<unsigned int>   & polys)
         : Quadmesh<M,V,E,P>(coords, polys)
         {
             this->init_drawable_stuff();

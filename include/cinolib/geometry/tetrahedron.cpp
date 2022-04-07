@@ -35,7 +35,10 @@
 *********************************************************************************/
 #include <cinolib/geometry/tetrahedron.h>
 #include <cinolib/geometry/tetrahedron_utils.h>
+#include <cinolib/Moller_Trumbore_intersection.h>
 #include <cinolib/predicates.h>
+#include <algorithm>
+#include <cassert>
 
 namespace cinolib
 {
@@ -67,7 +70,7 @@ bool Tetrahedron::intersects_ray(const vec3d & p, const vec3d & dir, double & t,
     {
         // the smallest positive tt locates the correct intersection point
         t = 0;
-        for(uint i=0; i<4; ++i)
+        for(unsigned int i=0; i<4; ++i)
         {
             if(tt[i]>0 && tt[i]<t) t = tt[i];
         }

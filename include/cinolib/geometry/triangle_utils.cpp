@@ -53,13 +53,6 @@ vec3d triangle_normal(const vec3d & A, const vec3d & B, const vec3d & C)
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template <class vec>
-CINO_INLINE
-double triangle_area(const vec & A, const vec & B, const vec & C)
-{
-    return (0.5 * (B-A).cross(C-A).norm());
-}
-
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 // Given a triangle t(A,B,C) and a ray r(P,dir) compute both
@@ -72,7 +65,7 @@ void triangle_traverse_with_ray(const vec3d   tri[3],
                                 const vec3d & P,
                                 const vec3d & dir,
                                       vec3d & exit_pos,
-                                      uint  & exit_edge)
+                                      unsigned int  & exit_edge)
 {
     // 1) Find the exit edge
     //
@@ -80,12 +73,12 @@ void triangle_traverse_with_ray(const vec3d   tri[3],
     vec3d uvw[3] = { tri[0]-P, tri[1]-P, tri[2]-P };
 
     std::set<std::pair<double,int>> sorted_by_angle;
-    for(uint i=0; i<3; ++i)
+    for(unsigned int i=0; i<3; ++i)
     {
         sorted_by_angle.insert(std::make_pair(dir.angle_rad(uvw[i]),i));
     }
 
-    uint  vert  = (*sorted_by_angle.begin()).second;
+    unsigned int  vert  = (*sorted_by_angle.begin()).second;
     vec3d tn    = triangle_normal(tri[0], tri[1], tri[2]);
     vec3d cross = dir.cross(uvw[vert]);
 
@@ -119,54 +112,6 @@ double triangle_law_of_sines(const double angle_0, const double angle_1, const d
 {
     return sin(angle_1) * length_0 / sin(angle_0);
 }
-
-//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
-// http://gamedev.stackexchange.com/questions/23743/whats-the-most-efficient-way-to-find-barycentric-coordinates
-//
-// NOTE: the current implementation requires 21 multiplications and 2 divisions.
-// A good alternative could be the method proposed in:
-//
-//   Computing the Barycentric Coordinates of a Projected Point
-//   Wolfgang Heidrich
-//   Journal of Graphics, GPU, and Game Tools, 2011
-//
-// which takes 27 multiplications (3 cross, 3 dot products), and
-// combines together projection of the point in the triangle's plane
-// and computation of barycentric coordinates
-//
-template <class vec>
-CINO_INLINE
-void triangle_barycentric_coords(const vec & A,
-                                 const vec & B,
-                                 const vec & C,
-                                 const vec & P,
-                                 double wgts[])
-{
-    vec    u    = B - A;
-    vec    v    = C - A;
-    vec    w    = P - A;
-    double d00  = u.dot(u);
-    double d01  = u.dot(v);
-    double d11  = v.dot(v);
-    double d20  = w.dot(u);
-    double d21  = w.dot(v);
-    double den  = d00 * d11 - d01 * d01;
-
-    if(den==0) // degenerate
-    {
-        wgts[0] = inf_double;
-        wgts[1] = inf_double;
-        wgts[2] = inf_double;
-        return;
-    }
-
-    wgts[2] = (d00 * d21 - d01 * d20) / den; assert(!std::isnan(wgts[2]));
-    wgts[1] = (d11 * d20 - d01 * d21) / den; assert(!std::isnan(wgts[1]));
-    wgts[0] = 1.0f - wgts[1] - wgts[2];      assert(!std::isnan(wgts[0]));
-}
-
-//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 // Given a point P and a triangle ABC, finds the point in ABC that
 // is closest to P. This code was taken directly from Ericson's

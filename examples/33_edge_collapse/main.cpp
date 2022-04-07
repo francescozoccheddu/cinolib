@@ -21,7 +21,7 @@ int main(int argc, char **argv)
             do
             {
                 converged = true;
-                for(uint eid=0; eid<m.num_edges(); ++eid)
+                for(unsigned int eid=0; eid<m.num_edges(); ++eid)
                 {
                     if(m.edge_is_incident_to_boundary(eid)) continue;
                     if(m.edge_collapse(eid, 0.5, true, true))

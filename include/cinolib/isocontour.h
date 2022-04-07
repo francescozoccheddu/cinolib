@@ -56,7 +56,7 @@ class Isocontour
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-        std::vector<uint> tessellate(Trimesh<M,V,E,P> & m) const;
+        std::vector<unsigned int> tessellate(Trimesh<M,V,E,P> & m) const;
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -68,8 +68,6 @@ class Isocontour
 
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "isocontour.cpp"
-#endif
+#include "isocontour.tpp"
 
 #endif // CINO_ISOCONTOUR_H

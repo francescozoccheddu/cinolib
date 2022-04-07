@@ -94,35 +94,4 @@ std::string MeshSlicer::serialize() const
     return ss.str();
 }
 
-//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
-template<class M, class V, class E, class P>
-CINO_INLINE
-void MeshSlicer::slice(AbstractMesh<M,V,E,P> & m)
-{
-    double X_abs_thresh = m.bbox().min[0] + m.bbox().delta()[0] * (X_thresh);
-    double Y_abs_thresh = m.bbox().min[1] + m.bbox().delta()[1] * (Y_thresh);
-    double Z_abs_thresh = m.bbox().min[2] + m.bbox().delta()[2] * (Z_thresh);
-
-    for(uint pid=0; pid<m.num_polys(); ++pid)
-    {
-        vec3d c = m.poly_centroid(pid);
-        float q = m.poly_data(pid).quality;
-        int   l = m.poly_data(pid).label;
-
-        bool pass_X = (X_leq) ? (c.x() <= X_abs_thresh) : (c.x() >= X_abs_thresh);
-        bool pass_Y = (Y_leq) ? (c.y() <= Y_abs_thresh) : (c.y() >= Y_abs_thresh);
-        bool pass_Z = (Z_leq) ? (c.z() <= Z_abs_thresh) : (c.z() >= Z_abs_thresh);
-        bool pass_Q = (Q_leq) ? (q     <= Q_thresh    ) : (q     >= Q_thresh);
-        bool pass_L = (L_is ) ? (L_filter==-1 || l == L_filter) : (L_filter == -1 || l != L_filter);
-
-        bool b = (mode_AND) ? ( pass_X &&  pass_Y &&  pass_Z &&  pass_L &&  pass_Q)
-                            : (!pass_X || !pass_Y || !pass_Z || !pass_L || !pass_Q);
-
-        m.poly_data(pid).flags[HIDDEN] = !b;
-
-        //std::cout << pass_X << " " << pass_Y << " " << pass_Z << " " << pass_Q << " " << pass_L << std::endl;
-    }
-}
-
 }

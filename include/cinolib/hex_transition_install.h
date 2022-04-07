@@ -59,8 +59,6 @@ void hex_transition_install(const Polyhedralmesh<M,V,E,F,P> & m_in,
                                   Polyhedralmesh<M,V,E,F,P> & m_out);
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "hex_transition_install.cpp"
-#endif
+#include "hex_transition_install.tpp"
 
 #endif // CINO_HEX_TRANSITION_INSTALL_H

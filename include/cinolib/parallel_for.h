@@ -80,15 +80,13 @@ namespace cinolib
 */
 
 template<typename Func>
-CINO_INLINE
-static void PARALLEL_FOR(      uint   beg,
-                               uint   end,
-                         const uint   serial_if_less_than,
+inline void PARALLEL_FOR(      unsigned int   beg,
+                               unsigned int   end,
+                         const unsigned int   serial_if_less_than,
                          const Func & func);
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "parallel_for.cpp"
-#endif
+
+#include "parallel_for.tpp"
 
 #endif // CINO_PARALLEL_FOR_H

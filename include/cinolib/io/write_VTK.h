@@ -48,8 +48,8 @@ namespace cinolib
 CINO_INLINE
 void write_VTK(const char                * filename,
                const std::vector<double> & xyz,
-               const std::vector<uint>   & tets,
-               const std::vector<uint>   & hexa);
+               const std::vector<unsigned int>   & tets,
+               const std::vector<unsigned int>   & hexa);
 
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -57,7 +57,7 @@ void write_VTK(const char                * filename,
 CINO_INLINE
 void write_VTK(const char                           * filename,
                const std::vector<vec3d>             & verts,
-               const std::vector<std::vector<uint>> & polys);
+               const std::vector<std::vector<unsigned int>> & polys);
 
 }
 

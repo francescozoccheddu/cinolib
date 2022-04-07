@@ -56,7 +56,7 @@ namespace cinolib
 
 CINO_INLINE
 int winding_number(const std::vector<vec3d> & verts,
-                   const std::vector<uint>  & tris,
+                   const std::vector<unsigned int>  & tris,
                    const vec3d              & p);
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -67,6 +67,7 @@ int winding_number(const AbstractPolygonMesh<M,V,E,P> & m,
                    const vec3d                        & p);
 }
 
+#include "winding_number.tpp"
 #ifndef  CINO_STATIC_LIB
 #include "winding_number.cpp"
 #endif

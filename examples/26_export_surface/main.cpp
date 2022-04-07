@@ -16,7 +16,7 @@ int main(int argc, char **argv)
     std::string base_name = get_file_name(filename,false);
 
     Polygonmesh<> srf;
-    std::unordered_map<uint,uint> m2srf,srf2m;
+    std::unordered_map<unsigned int,unsigned int> m2srf,srf2m;
 
     bool export_map = argc>3 && strcmp(argv[3],"-vmap")==0;
 

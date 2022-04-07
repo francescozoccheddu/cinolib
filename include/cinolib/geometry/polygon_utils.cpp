@@ -49,7 +49,7 @@ CINO_INLINE
 double polygon_signed_area(const std::vector<vec2d> & poly)
 {
     double area = 0.0;
-    for(uint i=0; i<poly.size(); ++i)
+    for(unsigned int i=0; i<poly.size(); ++i)
     {
         const vec2d & a = poly.at(i);
         const vec2d & b = poly.at((i+1)%poly.size());
@@ -137,7 +137,7 @@ bool polygon_flatten(const std::vector<vec3d> & poly3d,
 
 CINO_INLINE
 bool polygon_triangulate(std::vector<vec2d> & poly,
-                         std::vector<uint>  & tris)
+                         std::vector<unsigned int>  & tris)
 {
     // if the polygon is not CCW, flip it along X
     if(!polygon_is_CCW(poly))
@@ -151,7 +151,7 @@ bool polygon_triangulate(std::vector<vec2d> & poly,
 
 CINO_INLINE
 bool polygon_triangulate(std::vector<vec3d> & poly,
-                         std::vector<uint>  & tris)
+                         std::vector<unsigned int>  & tris)
 {
     std::vector<vec2d> poly2d;
     if(polygon_flatten(poly, poly2d))
@@ -169,10 +169,10 @@ double polygon_is_convex(const std::vector<vec2d> & poly)
 {
     bool turn_left  = false;
     bool turn_right = false;
-    for(uint curr=0; curr<poly.size(); ++curr)
+    for(unsigned int curr=0; curr<poly.size(); ++curr)
     {
-        uint prev = (curr>0) ? curr-1 : poly.size()-1;
-        uint next = (curr<poly.size()-1) ? curr+1 : 0;
+        unsigned int prev = (curr>0) ? curr-1 : poly.size()-1;
+        unsigned int next = (curr<poly.size()-1) ? curr+1 : 0;
 
         double sign = orient2d(poly.at(prev), poly.at(curr), poly.at(next));
 

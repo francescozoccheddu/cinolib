@@ -14,10 +14,10 @@ int main(int argc, char **argv)
     m.show_wireframe(false);
 
     Profiler profiler;
-    std::vector<std::vector<uint>> basis;
+    std::vector<std::vector<unsigned int>> basis;
     std::vector<bool> tree, cotree;
 
-    uint root = 152; // best for torus
+    unsigned int root = 152; // best for torus
     profiler.push("Homotopy basis");
     double len = homotopy_basis(m, root, basis, tree, cotree);
     profiler.pop();
@@ -40,15 +40,15 @@ int main(int argc, char **argv)
     ss_tree.set_thickness(3);
 
     for(auto loop : basis)
-    for(uint i=0; i<loop.size(); ++i)
+    for(unsigned int i=0; i<loop.size(); ++i)
     {
-        uint v0  = loop.at(i);
-        uint v1  = loop.at((i+1)%loop.size());
+        unsigned int v0  = loop.at(i);
+        unsigned int v1  = loop.at((i+1)%loop.size());
          int eid = m.edge_id(v0, v1);
-        ss_basis.push_seg(m.edge_vert((uint)eid,0), m.edge_vert((uint)eid,1));
+        ss_basis.push_seg(m.edge_vert((unsigned int)eid,0), m.edge_vert((unsigned int)eid,1));
     }
 
-    for(uint eid=0; eid<m.num_edges(); ++eid)
+    for(unsigned int eid=0; eid<m.num_edges(); ++eid)
     {
         if(tree.at(eid))
         {

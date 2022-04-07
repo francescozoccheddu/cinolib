@@ -51,7 +51,7 @@ DrawableVectorField::DrawableVectorField()
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 CINO_INLINE
-DrawableVectorField::DrawableVectorField(const uint size) : VectorField(size)
+DrawableVectorField::DrawableVectorField(const unsigned int size) : VectorField(size)
 {
     pos.resize(size);
     arrow_color = Color::RED();
@@ -74,39 +74,10 @@ DrawableVectorField::DrawableVectorField(const std::vector<vec3d> & data,
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<class M, class V, class E, class P>
-CINO_INLINE
-DrawableVectorField::DrawableVectorField(const AbstractMesh<M,V,E,P> &m, const bool field_on_poly)
-{
-    if(field_on_poly)
-    {
-        setZero(3*m.num_polys());
-        pos.resize(m.num_polys());
-        for(uint pid=0; pid<m.num_polys(); ++pid)
-        {
-            pos.at(pid) = m.poly_centroid(pid);
-        }
-    }
-    else
-    {
-        setZero(3*m.num_verts());
-        pos.resize(m.num_verts());
-        for(uint vid=0; vid<m.num_verts(); ++vid)
-        {
-            pos.at(vid) = m.vert(vid);
-        }
-    }
-    arrow_color = Color::RED();
-    arrow_size  = 0.5 * m.edge_avg_length();
-    update_arrow_tessellation();
-}
-
-//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
 CINO_INLINE
 void DrawableVectorField::draw(const float) const
 {
-    for(uint i=0; i<pos.size(); ++i)
+    for(unsigned int i=0; i<pos.size(); ++i)
     {
         vec3d base = pos[i];
         vec3d tip  = base + (double)arrow_size * vec_at((int)i);

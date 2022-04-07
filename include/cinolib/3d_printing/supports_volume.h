@@ -78,12 +78,10 @@ CINO_INLINE
 float supports_volume(const Trimesh<M,V,E,P>                  & m,
                       const vec3d                             & build_dir,
                       const float                               floor,
-                      const std::vector<std::pair<uint,uint>> & overhangs);
+                      const std::vector<std::pair<unsigned int,unsigned int>> & overhangs);
 
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "supports_volume.cpp"
-#endif
+#include "supports_volume.tpp"
 
 #endif // CINO_SUPPORTS_VOLUME_H

@@ -24,7 +24,7 @@ int main(int argc, char **argv)
         if(ImGui::SmallButton("Map to Sphere"))
         {
             profiler.push("Compute MCF");
-            MCF(m, (uint)n_iter, (double)time_step);
+            MCF(m, (unsigned int)n_iter, (double)time_step);
             profiler.pop();
             m.updateGL();
             gui.refit_scene();

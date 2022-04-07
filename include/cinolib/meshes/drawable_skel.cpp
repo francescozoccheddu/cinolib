@@ -42,7 +42,6 @@
 #include <cinolib/color.h>
 #include <cinolib/gl/draw_cylinder.h>
 #include <cinolib/gl/draw_sphere.h>
-
 #include <cstdlib>
 
 namespace cinolib
@@ -101,7 +100,9 @@ void DrawableSkel::draw(const float scene_size) const
             {
                 vec3d v = vertex(vid);
                 glDisable(GL_DEPTH_TEST);
-                sphere<vec3d>(v, max_sphere_radius(vid), std_bone_color);
+                // FIXME (francescozoccheddu)
+                //sphere<vec3d>(v, max_sphere_radius(vid), std_bone_color);
+                abort(); // remove when fixed
                 glEnable(GL_DEPTH_TEST);
             }
         }
@@ -120,11 +121,15 @@ void DrawableSkel::draw(const float scene_size) const
                     glDisable(GL_DEPTH_TEST);
                     if (draw_mode & DRAW_STD_COLOR)
                     {
-                        sphere<vec3d>(v, bone_thickness, std_bone_color);
+                        // FIXME (francescozoccheddu)
+                        //sphere<vec3d>(v, bone_thickness, std_bone_color);
+                        abort(); // remove when fixed
                     }
                     else if (draw_mode & DRAW_BONE_COLOR)
                     {
-                        sphere<vec3d>(v, bone_thickness, vertex_color(vid));
+                        // FIXME (francescozoccheddu)
+                        //sphere<vec3d>(v, bone_thickness, vertex_color(vid));
+                        abort(); // remove when fixed
                     }
                     glEnable(GL_DEPTH_TEST);
                 }
@@ -140,11 +145,15 @@ void DrawableSkel::draw(const float scene_size) const
                     glDisable(GL_DEPTH_TEST);
                     if (draw_mode & DRAW_STD_COLOR)
                     {
-                        cylinder<vec3d>(v0, v1, bone_thickness, bone_thickness, std_bone_color);
+                        // FIXME (francescozoccheddu)
+                        //cylinder<vec3d>(v0, v1, bone_thickness, bone_thickness, std_bone_color);
+                        abort(); // remove when fixed
                     }
                     else if (draw_mode & DRAW_BONE_COLOR)
                     {
-                        cylinder<vec3d>(v0, v1, bone_thickness, bone_thickness, segment_color(sid));
+                        // FIXME (francescozoccheddu)
+                        //cylinder<vec3d>(v0, v1, bone_thickness, bone_thickness, segment_color(sid));
+                        abort(); // remove when fixed
                     }
                     glEnable(GL_DEPTH_TEST);
                 }
@@ -159,11 +168,15 @@ void DrawableSkel::draw(const float scene_size) const
                 glDisable(GL_DEPTH_TEST);
                 if (draw_mode & DRAW_STD_COLOR)
                 {
-                    sphere<vec3d>(v, sphere_radius, std_bone_color);
+                    // FIXME (francescozoccheddu)
+                    //sphere<vec3d>(v, sphere_radius, std_bone_color);
+                    abort(); // remove when fixed
                 }
                 else if (draw_mode & DRAW_BONE_COLOR)
                 {
-                    sphere<vec3d>(v, sphere_radius, vertex_color(vid));
+                    // FIXME (francescozoccheddu)
+                    //sphere<vec3d>(v, sphere_radius, vertex_color(vid));
+                    abort(); // remove when fixed
                 }
                 glEnable(GL_DEPTH_TEST);
             }
@@ -176,7 +189,9 @@ void DrawableSkel::draw(const float scene_size) const
                 if (vertex_is_bone(vid)) continue;
                 vec3d v = vertex(vid);
                 glDisable(GL_DEPTH_TEST);
-                sphere<vec3d>(v, sphere_radius, (vertex_is_leaf(vid) ? std_leaf_color : std_joint_color));
+                // FIXME (francescozoccheddu)
+                //sphere<vec3d>(v, sphere_radius, (vertex_is_leaf(vid) ? std_leaf_color : std_joint_color));
+                abort(); // remove when fixed
                 glEnable(GL_DEPTH_TEST);
             }
         }

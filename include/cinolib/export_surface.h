@@ -57,13 +57,11 @@ template<class M, class V, class E, class F, class P>
 CINO_INLINE
 void export_surface(const AbstractPolyhedralMesh<M,V,E,F,P> & m,
                           AbstractPolygonMesh<M,V,E,F>      & srf,
-                          std::unordered_map<uint,uint>     & m2srf_vmap,
-                          std::unordered_map<uint,uint>     & srf2m_vmap);
+                          std::unordered_map<unsigned int,unsigned int>     & m2srf_vmap,
+                          std::unordered_map<unsigned int,unsigned int>     & srf2m_vmap);
 
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "export_surface.cpp"
-#endif
+#include "export_surface.tpp"
 
 #endif // CINO_EXPORT_SURFACE_H

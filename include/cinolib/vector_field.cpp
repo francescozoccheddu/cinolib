@@ -45,7 +45,7 @@ VectorField::VectorField() {}
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 CINO_INLINE
-VectorField::VectorField(const uint size)
+VectorField::VectorField(const unsigned int size)
 {
     setZero(3 * size);
 }
@@ -56,7 +56,7 @@ CINO_INLINE
 VectorField::VectorField(const std::vector<vec3d> & data)
 {
     setZero(3 * data.size());
-    for(uint i=0; i<data.size(); ++i) set(i,data.at(i));
+    for(unsigned int i=0; i<data.size(); ++i) set(i,data.at(i));
 }
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -131,34 +131,13 @@ void VectorField::deserialize(const char *filename)
     f.precision(std::numeric_limits<double>::digits10+1);
     f.open(filename);
     assert(f.is_open());
-    uint size;
+    unsigned int size;
     std::string dummy;
     f >> dummy >> size;
     resize(size*3);
-    for(uint i=0; i<3*size; ++i) f >> (*this)[i];
+    for(unsigned int i=0; i<3*size; ++i) f >> (*this)[i];
     f.close();
 }
-
-//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
-// for more info, see:
-// http://eigen.tuxfamily.org/dox/TopicCustomizingEigen.html
-//
-// This method allows you to assign Eigen expressions to VectorField
-//
-template<typename OtherDerived>
-CINO_INLINE
-VectorField & VectorField::operator= (const Eigen::MatrixBase<OtherDerived>& other)
-{
-    this->Eigen::VectorXd::operator=(other);
-    return *this;
-}
-//
-// This constructor allows you to construct VectorField from Eigen expressions
-//
-template<typename OtherDerived>
-CINO_INLINE
-VectorField::VectorField(const Eigen::MatrixBase<OtherDerived>& other) : Eigen::VectorXd(other) {}
 
 }
 

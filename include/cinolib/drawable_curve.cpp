@@ -36,6 +36,7 @@
 #include "drawable_curve.h"
 #include <cinolib/cino_inline.h>
 #include <cinolib/gl/draw_cylinder.h>
+#include <cstdlib> // for abort()
 
 namespace cinolib
 {
@@ -72,9 +73,11 @@ void DrawableCurve::draw(const float scene_size) const
 {
     double cylind_rad = scene_size * 0.001 * thickness;
 
-    for(uint i=1; i<samples().size(); ++i)
+    for(unsigned int i=1; i<samples().size(); ++i)
     {
-        cylinder<vec3d>(samples()[i-1].pos, samples()[i].pos, cylind_rad, cylind_rad, color.rgba);
+        // FIXME (francescozoccheddu)
+        //cylinder<vec3d>(samples()[i-1].pos, samples()[i].pos, cylind_rad, cylind_rad, color.rgba); 
+        abort(); // remove when fixed
     }
 }
 

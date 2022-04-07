@@ -69,8 +69,6 @@ void canonical_polygonal_schema(      Trimesh<M,V,E,P>  & m_in,
                                 const int                 laplacian_mode = COTANGENT);
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "canonical_polygonal_schema.cpp"
-#endif
+#include "canonical_polygonal_schema.tpp"
 
 #endif // CINO_CANONICAL_POLYGONAL_SCHEMA_H

@@ -35,6 +35,7 @@
 *********************************************************************************/
 #include <cinolib/geometry/point.h>
 #include <cinolib/predicates.h>
+#include <cassert>
 
 namespace cinolib
 {

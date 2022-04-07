@@ -46,7 +46,7 @@ class Sphere : public SpatialDataStructureItem
 {
     public:
 
-        Sphere(const uint id, const vec3d & c, const double r)
+        Sphere(const unsigned int id, const vec3d & c, const double r)
         {
             this->c   = c;
             this->r   = r;

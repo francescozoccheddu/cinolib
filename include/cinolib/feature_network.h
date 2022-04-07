@@ -50,24 +50,21 @@ namespace cinolib
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-typedef struct
+struct FeatureNetworkOptions
 {
     bool  split_lines_at_high_curvature_points = true;
     float ang_thresh_deg                       = 60;
-}
-FeatureNetworkOptions;
+};
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 template<class M, class V, class E, class P>
 CINO_INLINE
 void feature_network(const AbstractPolygonMesh<M,V,E,P>   & m,                     
-                           std::vector<std::vector<uint>> & network,
+                           std::vector<std::vector<unsigned int>> & network,
                      const FeatureNetworkOptions          & opt = FeatureNetworkOptions());
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "feature_network.cpp"
-#endif
+#include "feature_network.tpp"
 
 #endif // CINO_FEATURE_NETWORK_H

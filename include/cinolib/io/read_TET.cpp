@@ -42,7 +42,7 @@ namespace cinolib
 CINO_INLINE
 void read_TET(const char          * filename,
               std::vector<double> & xyz,
-              std::vector<uint>  & tets)
+              std::vector<unsigned int>  & tets)
 {
     setlocale(LC_NUMERIC, "en_US.UTF-8"); // makes sure "." is the decimal separator
 
@@ -54,7 +54,7 @@ void read_TET(const char          * filename,
         exit(-1);
     }
 
-    uint  nv, nt;
+    unsigned int  nv, nt;
     char line[1024];
 
     fgets(line,1024,fp);
@@ -63,7 +63,7 @@ void read_TET(const char          * filename,
     fgets(line,1024,fp);
     sscanf(line, "%d tets", &nt);
 
-    for(uint vid=0; vid<nv; ++vid)
+    for(unsigned int vid=0; vid<nv; ++vid)
     {
         fgets(line, 1024, fp);
 
@@ -77,11 +77,11 @@ void read_TET(const char          * filename,
         xyz.push_back(z);
     }
 
-    for(uint tid=0; tid<nt; ++tid)
+    for(unsigned int tid=0; tid<nt; ++tid)
     {
         fgets(line, 1024, fp);
 
-        uint v0, v1, v2, v3;
+        unsigned int v0, v1, v2, v3;
         sscanf(line, "4 %d %d %d %d", &v0, &v1, &v2, &v3);
 
         tets.push_back(v0);
@@ -98,7 +98,7 @@ void read_TET(const char          * filename,
 CINO_INLINE
 void read_TET(const char                     * filename,
               std::vector<vec3d>             & verts,
-              std::vector<std::vector<uint>> & polys)
+              std::vector<std::vector<unsigned int>> & polys)
 {
     setlocale(LC_NUMERIC, "en_US.UTF-8"); // makes sure "." is the decimal separator
 
@@ -110,7 +110,7 @@ void read_TET(const char                     * filename,
         exit(-1);
     }
 
-    uint  nv, np;
+    unsigned int  nv, np;
     char line[1024];
 
     fgets(line,1024,fp);
@@ -122,7 +122,7 @@ void read_TET(const char                     * filename,
     verts.reserve(nv);
     polys.reserve(np);
 
-    for(uint vid=0; vid<nv; ++vid)
+    for(unsigned int vid=0; vid<nv; ++vid)
     {
         fgets(line, 1024, fp);
 
@@ -133,14 +133,14 @@ void read_TET(const char                     * filename,
         verts.push_back(p);
     }
 
-    for(uint pid=0; pid<np; ++pid)
+    for(unsigned int pid=0; pid<np; ++pid)
     {
         fgets(line, 1024, fp);
 
-        uint v0, v1, v2, v3;
+        unsigned int v0, v1, v2, v3;
         sscanf(line, "4 %d %d %d %d", &v0, &v1, &v2, &v3);
 
-        std::vector<uint> tet;
+        std::vector<unsigned int> tet;
         tet.push_back(v0);
         tet.push_back(v3);
         tet.push_back(v2);

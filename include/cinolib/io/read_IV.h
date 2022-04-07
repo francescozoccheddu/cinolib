@@ -46,7 +46,7 @@ namespace cinolib
 CINO_INLINE
 void read_IV(const char          * filename,
              std::vector<double> & xyz,
-             std::vector<uint>   & tri,
+             std::vector<unsigned int>   & tri,
              std::vector<int>    & patch);
 
 }

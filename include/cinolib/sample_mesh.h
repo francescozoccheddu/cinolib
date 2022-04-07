@@ -55,12 +55,10 @@ namespace cinolib
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-void sample_mesh(AbstractPolygonMesh<M,V,E,P> & m, const uint n_samples, std::vector<uint> & samples);
+void sample_mesh(AbstractPolygonMesh<M,V,E,P> & m, const unsigned int n_samples, std::vector<unsigned int> & samples);
 
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "sample_mesh.cpp"
-#endif
+#include "sample_mesh.tpp"
 
 #endif // CINO_SAMPLE_MESH

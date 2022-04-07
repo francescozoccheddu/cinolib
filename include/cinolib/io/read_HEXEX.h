@@ -56,7 +56,7 @@ namespace cinolib
 CINO_INLINE
 void read_HEXEX(const char         * filename,
                 std::vector<vec3d> & verts,
-                std::vector<uint>  & tets,        // serialized tets (4 vids per tet)
+                std::vector<unsigned int>  & tets,        // serialized tets (4 vids per tet)
                 std::vector<vec3d> & tets_param); // tets param (4 points per tet)
 
 }

@@ -54,7 +54,7 @@ template<class Mesh>
 CINO_INLINE
 void ambient_occlusion_srf_meshes(      Mesh & m,
                                   const int    buffer_size = 256,
-                                  const uint   sample_dirs = 32);
+                                  const unsigned int   sample_dirs = 32);
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -62,12 +62,10 @@ template<class Mesh>
 CINO_INLINE
 void ambient_occlusion_vol_meshes(      Mesh & m,
                                   const int    buffer_size = 350,
-                                  const uint   sample_dirs = 256);
+                                  const unsigned int   sample_dirs = 256);
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "ambient_occlusion.cpp"
-#endif
+#include "ambient_occlusion.tpp"
 
 #endif // CINOLIB_USES_OPENGL_GLFW_IMGUI
 #endif // CINO_AMBIENT_OCCLUSION_H

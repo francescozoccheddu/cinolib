@@ -37,12 +37,6 @@
 #undef CINO_INLINE
 #endif
 
-// hacky trick to define uint in windows systems.
-// NOTE: this belongs elsewhere!
-#ifdef _WIN32
-typedef unsigned int uint;
-#endif
-
 #ifndef CINO_STATIC_LIB
 #define CINO_INLINE inline
 #else

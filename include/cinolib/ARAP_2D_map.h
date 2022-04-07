@@ -53,7 +53,7 @@ namespace cinolib
 
 struct ARAP_2D_map_data
 {
-    uint n_iters = 4;
+    unsigned int n_iters = 4;
     bool init    = true; // initialize just once (useful for multiple calls, e.g. to make more iterations)
 
     std::vector<vec2d>  uv;     // output uv coords
@@ -72,8 +72,6 @@ void ARAP_2D_mapping(const Trimesh<M,V,E,P> & m, ARAP_2D_map_data & data);
 
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "ARAP_2D_map.cpp"
-#endif
+#include "ARAP_2D_map.tpp"
 
 #endif // CINO_ARAP_2D_MAP_H

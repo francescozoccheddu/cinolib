@@ -11,7 +11,7 @@ int main(int, char **)
     int n_points = 1000;
     std::vector<vec3d> samples;
     sphere_coverage(1000, samples);
-    std::vector<uint> no_polys = {};
+    std::vector<unsigned int> no_polys = {};
     DrawableTrimesh<> m(samples, no_polys);
     m.vert_set_color(Color::BLACK());
     m.show_wireframe_width(3);
@@ -27,7 +27,7 @@ int main(int, char **)
         if(ImGui::SliderInt("##Num points",&n_points,100,10000))
         {
             profiler.push("Sphere coverage");
-            sphere_coverage((uint)n_points, samples);
+            sphere_coverage((unsigned int)n_points, samples);
             profiler.pop();
             m = DrawableTrimesh<>(samples, no_polys);
             m.vert_set_color(Color::BLACK());

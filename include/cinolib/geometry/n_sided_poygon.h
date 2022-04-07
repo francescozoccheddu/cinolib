@@ -38,6 +38,7 @@
 
 #include <cinolib/geometry/vec_mat.h>
 #include <cinolib/symbols.h>
+#include <vector>
 
 namespace cinolib
 {
@@ -54,8 +55,8 @@ namespace cinolib
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 CINO_INLINE
-std::vector<vec3d> n_sided_polygon(const uint n,
-                                   const uint type); // CIRCLE, SQUARE, STAR
+std::vector<vec3d> n_sided_polygon(const unsigned int n,
+                                   const unsigned int type); // CIRCLE, SQUARE, STAR
 
 }
 

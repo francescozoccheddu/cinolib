@@ -57,7 +57,7 @@ namespace cinolib
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-static const uint TRI_EDGES[3][2] =
+static const unsigned int TRI_EDGES[3][2] =
 {
     { 0, 1 }, // e0
     { 1, 2 }, // e1
@@ -66,7 +66,7 @@ static const uint TRI_EDGES[3][2] =
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-static const uint QUAD_EDGES[4][2] =
+static const unsigned int QUAD_EDGES[4][2] =
 {
     { 0, 1 }, // e0
     { 1, 2 }, // e1
@@ -76,7 +76,7 @@ static const uint QUAD_EDGES[4][2] =
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-static const uint TET_FACES[4][3] = // for outgoing normals
+static const unsigned int TET_FACES[4][3] = // for outgoing normals
 {
     { 0, 2, 1 } , // f0
     { 0, 1, 3 } , // f1
@@ -86,7 +86,7 @@ static const uint TET_FACES[4][3] = // for outgoing normals
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-static const uint TET_EDGES[6][2] =
+static const unsigned int TET_EDGES[6][2] =
 {
     { 0, 2 }, // e0
     { 2, 1 }, // e1
@@ -122,7 +122,7 @@ static const vec3d REFERENCE_HEX_VERTS[8] =
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-static const uint TET_INCIDENT_EDEGES[4][3] =
+static const unsigned int TET_INCIDENT_EDEGES[4][3] =
 {
     { 0, 2, 4 }, // edges incident to v0
     { 1, 2, 3 }, // edges incident to v1
@@ -132,7 +132,7 @@ static const uint TET_INCIDENT_EDEGES[4][3] =
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-static const uint HEXA_FACES[6][4] = // for outgoing normals
+static const unsigned int HEXA_FACES[6][4] = // for outgoing normals
 {
     { 0 , 3 , 2 , 1 } , // f0
     { 1 , 2 , 6 , 5 } , // f1
@@ -144,7 +144,7 @@ static const uint HEXA_FACES[6][4] = // for outgoing normals
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-static const uint HEXA_EDGES[12][2] =
+static const unsigned int HEXA_EDGES[12][2] =
 {
     { 0, 1 }, // e0
     { 1, 2 }, // e1
@@ -162,7 +162,7 @@ static const uint HEXA_EDGES[12][2] =
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-static const uint HEXA_INCIDENT_EDGES[8][3] =
+static const unsigned int HEXA_INCIDENT_EDGES[8][3] =
 {
     { 0, 3,  8 }, // edges incident to v0
     { 0, 1,  9 }, // edges incident to v1
@@ -176,7 +176,7 @@ static const uint HEXA_INCIDENT_EDGES[8][3] =
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-static const uint HEXA_CORNER_TETS[8][4] =
+static const unsigned int HEXA_CORNER_TETS[8][4] =
 {
     { 3, 0, 1, 4 }, // tet incident at vertex v0
     { 0, 1, 2, 5 }, // tet incident at vertex v1
@@ -190,7 +190,7 @@ static const uint HEXA_CORNER_TETS[8][4] =
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-static const uint PRISM_FACES[5][4] =
+static const unsigned int PRISM_FACES[5][4] =
 {
     { 0 , 2 , 1 ,   } , // f0
     { 4 , 5 , 3 ,   } , // f1

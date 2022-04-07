@@ -24,9 +24,9 @@ int main(int argc, char **argv)
         ImGui::InputInt("Harmonic n", &n_harmonic);
         if(ImGui::SmallButton("Compute Field"))
         {
-            std::map<uint,double> bc = {{0,0.0}, {999,1.0}}; // Dirichlet boundary conditions
+            std::map<unsigned int,double> bc = {{0,0.0}, {999,1.0}}; // Dirichlet boundary conditions
             profiler.push("harmonic_map");
-            harmonic_map(m, bc, (uint)n_harmonic, COTANGENT).copy_to_mesh(m);
+            harmonic_map(m, bc, (unsigned int)n_harmonic, COTANGENT).copy_to_mesh(m);
             profiler.pop();
             m.show_in_texture1D (TEXTURE_1D_PARULA_W_ISOLINES);
             m.show_out_texture1D(TEXTURE_1D_PARULA_W_ISOLINES);

@@ -66,7 +66,7 @@ double Profiler::pop(const bool print_time, const std::string extra_string)
     log_calls[tree.node(tree_ptr).item.key] += 1;
 
     std::string s;
-    for(uint i=0; i<tree.node(tree_ptr).depth-1; ++i) s += "----";
+    for(unsigned int i=0; i<tree.node(tree_ptr).depth-1; ++i) s += "----";
     s += tree.node(tree_ptr).item.key + " [" + std::to_string(t) + "s]";
     tree.node(tree_ptr).item.s = s;
     if(print_time) std::cout << s  << extra_string << std::endl;
@@ -112,7 +112,7 @@ void Profiler::report() const
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 CINO_INLINE
-double Profiler::delta_s(const uint id) const
+double Profiler::delta_s(const unsigned int id) const
 {
     using namespace std::chrono;
     duration<double> delta = duration_cast<duration<double>>(tree.node(id).item.stop - tree.node(id).item.start);
