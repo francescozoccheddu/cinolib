@@ -75,15 +75,15 @@ class Profiler
 
     protected:
 
-        double delta_s(const uint id) const;
+        double delta_s(const unsigned int id) const;
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
         double                       tot_time;
         std::map<std::string,double> log_times; // how much time was spent into each function
-        std::map<std::string,uint>   log_calls; // how many times a function was called
+        std::map<std::string,unsigned int>   log_calls; // how many times a function was called
         Tree<ProfilerEntry>          tree;
-        uint                         tree_ptr;
+        unsigned int                         tree_ptr;
 };
 
 }

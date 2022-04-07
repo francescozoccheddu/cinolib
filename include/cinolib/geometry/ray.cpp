@@ -34,6 +34,7 @@
 *     Italy                                                                     *
 *********************************************************************************/
 #include <cinolib/geometry/ray.h>
+#include <cassert>
 
 namespace cinolib
 {

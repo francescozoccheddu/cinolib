@@ -37,6 +37,7 @@
 #define CINO_POLYGON_TOPOLOGICAL_OFFSETTING_H
 
 #include <cinolib/geometry/vec_mat.h>
+#include <vector>
 
 namespace cinolib
 {
@@ -69,8 +70,8 @@ namespace cinolib
 
 CINO_INLINE
 void polygon_topological_offsetting(std::vector<vec3d> & poly,
-                                    std::vector<uint>  & tris,
-                                    std::vector<uint>  & vmap);
+                                    std::vector<unsigned int>  & tris,
+                                    std::vector<unsigned int>  & vmap);
 
 }
 

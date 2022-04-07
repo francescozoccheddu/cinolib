@@ -50,12 +50,10 @@ namespace cinolib
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-void shortest_path_tree(AbstractPolygonMesh<M,V,E,P> & m, const uint root, std::vector<bool> & tree);
+void shortest_path_tree(AbstractPolygonMesh<M,V,E,P> & m, const unsigned int root, std::vector<bool> & tree);
 
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "shortest_path_tree.cpp"
-#endif
+#include "shortest_path_tree.tpp"
 
 #endif // CINO_SHORTEST_PATH_TREE_H

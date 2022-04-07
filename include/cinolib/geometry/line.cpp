@@ -35,6 +35,7 @@
 *********************************************************************************/
 #include "cinolib/geometry/line.h"
 #include <cinolib/cino_inline.h>
+#include <cassert>
 
 namespace cinolib
 {

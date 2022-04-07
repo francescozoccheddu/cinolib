@@ -60,13 +60,13 @@ class Hexmesh : public AbstractPolyhedralMesh<M,V,E,F,P>
         explicit Hexmesh(const char * filename);
 
         explicit Hexmesh(const std::vector<double> & coords,
-                         const std::vector<uint>   & polys);
+                         const std::vector<unsigned int>   & polys);
 
         explicit Hexmesh(const std::vector<vec3d> & verts,
-                         const std::vector<uint>  & polys);
+                         const std::vector<unsigned int>  & polys);
 
         explicit Hexmesh(const std::vector<vec3d>             & verts,
-                         const std::vector<std::vector<uint>> & polys);
+                         const std::vector<std::vector<unsigned int>> & polys);
 
         ~Hexmesh(){}
 
@@ -81,50 +81,48 @@ class Hexmesh : public AbstractPolyhedralMesh<M,V,E,F,P>
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-        void update_f_normal(const uint fid) override;
+        void update_f_normal(const unsigned int fid) override;
         void print_quality(const bool list_folded_elements = false);
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-        uint verts_per_poly(const uint) const override { return  8; }
-        uint verts_per_poly()           const          { return  8; }
-        uint edges_per_poly(const uint) const override { return 12; }
-        uint edges_per_poly()           const          { return 12; }
-        uint faces_per_poly(const uint) const override { return  6; }
-        uint faces_per_poly()           const          { return  6; }
-        uint verts_per_face(const uint) const override { return  4; }
-        uint verts_per_face()           const          { return  4; }
+        unsigned int verts_per_poly(const unsigned int) const override { return  8; }
+        unsigned int verts_per_poly()           const          { return  8; }
+        unsigned int edges_per_poly(const unsigned int) const override { return 12; }
+        unsigned int edges_per_poly()           const          { return 12; }
+        unsigned int faces_per_poly(const unsigned int) const override { return  6; }
+        unsigned int faces_per_poly()           const          { return  6; }
+        unsigned int verts_per_face(const unsigned int) const override { return  4; }
+        unsigned int verts_per_face()           const          { return  4; }
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-        bool  vert_is_singular(const uint vid) const;
-        bool  vert_is_regular (const uint vid) const;
-        vec3d verts_average   (const std::vector<uint> & vids) const;
+        bool  vert_is_singular(const unsigned int vid) const;
+        bool  vert_is_regular (const unsigned int vid) const;
+        vec3d verts_average   (const std::vector<unsigned int> & vids) const;
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-        bool  edge_is_singular(const uint eid) const;
-        bool  edge_is_regular (const uint eid) const;
+        bool  edge_is_singular(const unsigned int eid) const;
+        bool  edge_is_regular (const unsigned int eid) const;
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-        std::vector<uint> face_sheet(const uint fid) const; // stop at singular edges
+        std::vector<unsigned int> face_sheet(const unsigned int fid) const; // stop at singular edges
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-        uint   poly_face_opposite_to(const uint pid, const uint fid) const;
-        uint   poly_vert_opposite_to(const uint pid, const uint fid, const uint vid) const;
-        void   poly_subdivide       (const std::vector<std::vector<std::vector<uint>>> & split_scheme);
-        double poly_volume          (const uint pid) const override;
+        unsigned int   poly_face_opposite_to(const unsigned int pid, const unsigned int fid) const;
+        unsigned int   poly_vert_opposite_to(const unsigned int pid, const unsigned int fid, const unsigned int vid) const;
+        void   poly_subdivide       (const std::vector<std::vector<std::vector<unsigned int>>> & split_scheme);
+        double poly_volume          (const unsigned int pid) const override;
         bool   poly_fix_orientation ();
-        void   poly_local_frame     (const uint pid, vec3d & x, vec3d & y, vec3d & z);
-        void   poly_local_frame     (const uint pid, mat3d & xyz);
+        void   poly_local_frame     (const unsigned int pid, vec3d & x, vec3d & y, vec3d & z);
+        void   poly_local_frame     (const unsigned int pid, mat3d & xyz);
 };
 
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "hexmesh.cpp"
-#endif
+#include "hexmesh.tpp"
 
 #endif // CINO_HEXMESH_H

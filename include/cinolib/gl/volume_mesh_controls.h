@@ -43,6 +43,7 @@
 #include <cinolib/drawable_isosurface.h>
 #include <cinolib/drawable_vector_field.h>
 #include <cinolib/drawable_segment_soup.h>
+#include <imgui.h>
 
 namespace cinolib
 {
@@ -87,8 +88,8 @@ class VolumeMeshControls : public SideBarItem
     int        marked_edge_width = 1;
     int        isoline_width     = 1;
     float      wireframe_alpha   = 1;
-    float      vecfield_size     = 0.9;
-    float      iso_val           = 0.5;
+    float      vecfield_size     = 0.9f;
+    float      iso_val           = 0.5f;
     float      iso_min           = 0;
     float      iso_max           = 1;
     int        crease_deg        = 60;
@@ -149,8 +150,6 @@ class VolumeMeshControls : public SideBarItem
 
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "volume_mesh_controls.cpp"
-#endif
+#include "volume_mesh_controls.tpp"
 
 #endif // CINO_VOLUME_MESH_CONTROLS_H

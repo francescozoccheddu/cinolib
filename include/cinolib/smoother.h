@@ -89,9 +89,9 @@ namespace cinolib
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-typedef struct
+struct SmootherOptions
 {
-    uint   n_iters             = 1;       // # of smoothing iterations
+    unsigned int   n_iters             = 1;       // # of smoothing iterations
     double w_regular           = 10.0;    // attraction to tangent space  for regular vertices
     double w_feature           = 100.0;   // attraction to tangent curve  for feature vertices
     double w_corner            = 100.0;   // attraction to closest corner for features corner
@@ -99,8 +99,7 @@ typedef struct
     int    laplacian_mode      = UNIFORM; // laplacian mode (UNIFORM or COTANGENT)
     bool   reproject_on_target = true;    // reproject to target surface after each smoothing iteration
     //bool   with_ray_casting    = false;   // reproject via ray casting if true, via closest point if false
-}
-SmootherOptions;
+};
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -112,8 +111,6 @@ void mesh_smoother(      AbstractPolygonMesh<M1,V1,E1,P1> & m,
                    const SmootherOptions                  & opt = SmootherOptions());
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "smoother.cpp"
-#endif
+#include "smoother.tpp"
 
 #endif // CINO_SMOOTHER_H

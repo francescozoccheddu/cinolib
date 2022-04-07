@@ -36,40 +36,30 @@
 #include <cinolib/find_intersections.h>
 #include <cinolib/parallel_for.h>
 #include <cinolib/octree.h>
+#include <cinolib/geometry/triangle.h>
 #include <mutex>
 
 namespace cinolib
 {
 
-template<class M, class V, class E, class P>
-CINO_INLINE
-void find_intersections(const Trimesh<M,V,E,P> & m,
-                              std::set<ipair>  & intersections)
-{
-    auto tris = serialized_vids_from_polys(m.vector_polys());
-    find_intersections(m.vector_verts(), tris, intersections);
-}
-
-//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
 CINO_INLINE
 void find_intersections(const std::vector<vec3d> & verts,
-                        const std::vector<uint>  & tris,
+                        const std::vector<unsigned int>  & tris,
                               std::set<ipair>    & intersections)
 {
     Octree o(8,1000); // max 1000 elements per leaf, depth permitting
     o.build_from_vectors(verts, tris);
 
     std::mutex mutex;
-    PARALLEL_FOR(0, o.leaves.size(), 1, [&](uint i)
+    PARALLEL_FOR(0, o.leaves.size(), 1, [&](unsigned int i)
     {        
         auto & leaf = o.leaves.at(i);
         if(leaf->item_indices.empty()) return;
-        for(uint j=0;   j<leaf->item_indices.size()-1; ++j)
-        for(uint k=j+1; k<leaf->item_indices.size();   ++k)
+        for(unsigned int j=0;   j<leaf->item_indices.size()-1; ++j)
+        for(unsigned int k=j+1; k<leaf->item_indices.size();   ++k)
         {
-            uint tid0 = leaf->item_indices.at(j);
-            uint tid1 = leaf->item_indices.at(k);
+            unsigned int tid0 = leaf->item_indices.at(j);
+            unsigned int tid1 = leaf->item_indices.at(k);
             auto T0 = o.items.at(tid0);
             auto T1 = o.items.at(tid1);
             if(T0->aabb.intersects_box(T1->aabb)) // early reject based on AABB intersection

@@ -45,7 +45,7 @@ namespace cinolib
 CINO_INLINE
 void read_OFF(const char                     * filename,
               std::vector<vec3d>             & verts,
-              std::vector<std::vector<uint>> & polys)
+              std::vector<std::vector<unsigned int>> & polys)
 {
     std::vector<Color> poly_colors;
     read_OFF(filename, verts, polys, poly_colors);
@@ -56,7 +56,7 @@ void read_OFF(const char                     * filename,
 CINO_INLINE
 void read_OFF(const char                     * filename,
               std::vector<vec3d>             & verts,
-              std::vector<std::vector<uint>> & polys,
+              std::vector<std::vector<unsigned int>> & polys,
               std::vector<Color>             & poly_colors)
 {
     verts.clear();
@@ -73,14 +73,14 @@ void read_OFF(const char                     * filename,
     }
 
     std::string line;
-    uint        nv, np, ne;
+    unsigned int        nv, np, ne;
 
     // read header and number of elements
     do getline(f, line, '\n'); while(line.find("OFF")==std::string::npos);
     do getline(f, line, '\n'); while(sscanf(line.c_str(), "%d %d %d\n", &nv, &np, &ne)!=3);
 
     // read verts
-    for(uint i=0; i<nv; ++i)
+    for(unsigned int i=0; i<nv; ++i)
     {
         getline(f, line, '\n');
         std::stringstream ss(line);
@@ -94,17 +94,17 @@ void read_OFF(const char                     * filename,
     }
 
     // read polys
-    for(uint i=0; i<np; ++i)
+    for(unsigned int i=0; i<np; ++i)
     {
         getline(f, line, '\n');
         std::stringstream ss(line);
 
-        uint n_corners;
+        unsigned int n_corners;
         if(ss >> n_corners)
         {
-            uint vid;
-            std::vector<uint> p;
-            for(uint j=0; j<n_corners; ++j)
+            unsigned int vid;
+            std::vector<unsigned int> p;
+            for(unsigned int j=0; j<n_corners; ++j)
             {
                 ss >> vid;
                 p.push_back(vid);

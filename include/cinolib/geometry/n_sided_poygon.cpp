@@ -35,13 +35,14 @@
 *********************************************************************************/
 #include <cinolib/geometry/n_sided_poygon.h>
 #include <cinolib/pi.h>
+#include <cassert>
 
 namespace cinolib
 {
 
 CINO_INLINE
-std::vector<vec3d> n_sided_polygon(const uint n,
-                                   const uint type)
+std::vector<vec3d> n_sided_polygon(const unsigned int n,
+                                   const unsigned int type)
 {
     std::vector<vec3d> verts(n);
 
@@ -51,7 +52,7 @@ std::vector<vec3d> n_sided_polygon(const uint n,
         {
             assert(n>=3);
             verts[0] = vec3d(1,0,0);
-            for(uint i=1; i<n; ++i)
+            for(unsigned int i=1; i<n; ++i)
             {
                 verts[i] = verts[i-1];
                 verts[i].rotate(vec3d(0,0,1), 2.0*M_PI/double(n));
@@ -62,30 +63,30 @@ std::vector<vec3d> n_sided_polygon(const uint n,
         case SQUARE:
         {
             assert(n>=4);
-            uint a = 0;
-            uint b = n/4;   assert(a<b);
-            uint c = 2*n/4; assert(b<c);
-            uint d = 3*n/4; assert(c<d);
+            unsigned int a = 0;
+            unsigned int b = n/4;   assert(a<b);
+            unsigned int c = 2*n/4; assert(b<c);
+            unsigned int d = 3*n/4; assert(c<d);
             verts.at(a) = vec3d( 1, 1, 0);
             verts.at(b) = vec3d(-1, 1, 0);
             verts.at(c) = vec3d(-1,-1, 0);
             verts.at(d) = vec3d( 1,-1, 0);
-            for(uint i=a+1; i<b; ++i)
+            for(unsigned int i=a+1; i<b; ++i)
             {
                 double t = (double)(i-a)/(double)(b-a);
                 verts.at(i) = (1-t)*verts.at(a) + t*verts.at(b);
             }
-            for(uint i=b+1; i<c; ++i)
+            for(unsigned int i=b+1; i<c; ++i)
             {
                 double t = (double)(i-b)/(double)(c-b);
                 verts.at(i) = (1-t)*verts.at(b) + t*verts.at(c);
             }
-            for(uint i=c+1; i<d; ++i)
+            for(unsigned int i=c+1; i<d; ++i)
             {
                 double t = (double)(i-c)/(double)(d-c);
                 verts.at(i) = (1-t)*verts.at(c) + t*verts.at(d);
             }
-            for(uint i=d+1; i<n; ++i)
+            for(unsigned int i=d+1; i<n; ++i)
             {
                 double t = (double)(i-d)/(double)(n-d);
                 verts.at(i) = (1-t)*verts.at(d) + t*verts.at(a);
@@ -97,12 +98,12 @@ std::vector<vec3d> n_sided_polygon(const uint n,
         {
             assert(n>=4);// && n%2==0);
             verts[0] = vec3d(1,0,0);
-            for(uint i=1; i<n; ++i)
+            for(unsigned int i=1; i<n; ++i)
             {
                 verts[i] = verts[i-1];
                 verts[i].rotate(vec3d(0,0,1), 2.0*M_PI/double(n));
             }
-            for(uint i=1; i<n; i+=2) verts[i] -= 0.5*verts[i];
+            for(unsigned int i=1; i<n; i+=2) verts[i] -= 0.5*verts[i];
             break;
         }
 

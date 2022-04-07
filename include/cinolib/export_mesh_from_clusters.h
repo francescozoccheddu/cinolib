@@ -56,8 +56,6 @@ void export_mesh_from_clusters(const AbstractPolygonMesh<M,V,E,P> & m_in,
 
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "export_mesh_from_clusters.cpp"
-#endif
+#include "export_mesh_from_clusters.tpp"
 
 #endif // CINO_EXPORT_MESH_FROM_CLUSTERS_H

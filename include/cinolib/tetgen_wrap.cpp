@@ -46,11 +46,11 @@ namespace cinolib
 #ifdef CINOLIB_USES_TETGEN
 CINO_INLINE
 void tetgen_wrap(const std::vector<double>            & coords_in,
-                 const std::vector<std::vector<uint>> & polys_in,
-                 const std::vector<uint>              & edges_in,
+                 const std::vector<std::vector<unsigned int>> & polys_in,
+                 const std::vector<unsigned int>              & edges_in,
                  const std::string                    & flags, // options
                        std::vector<double>            & coords_out,
-                       std::vector<uint>              & tets_out)
+                       std::vector<unsigned int>              & tets_out)
 {
     assert(!coords_in.empty());
     coords_out.clear();
@@ -66,7 +66,7 @@ void tetgen_wrap(const std::vector<double>            & coords_in,
     in.numberofpoints = coords_in.size() / 3;
     in.pointlist      = new REAL[coords_in.size()];
 
-    for(uint i=0; i<coords_in.size(); ++i)
+    for(unsigned int i=0; i<coords_in.size(); ++i)
     {
         in.pointlist[i] = static_cast<REAL>(coords_in[i]);
     }
@@ -96,7 +96,7 @@ void tetgen_wrap(const std::vector<double>            & coords_in,
     //
     in.numberofedges = edges_in.size() / 2;
     in.edgelist       = new int[edges_in.size()];
-    for(uint i=0; i<edges_in.size(); ++i)
+    for(unsigned int i=0; i<edges_in.size(); ++i)
     {
         in.edgelist[i] = edges_in[i];
     }
@@ -129,11 +129,11 @@ void tetgen_wrap(const std::vector<double>            & coords_in,
 #else
 CINO_INLINE
 void tetgen_wrap(const std::vector<double>            & /*coords_in*/,
-                 const std::vector<std::vector<uint>> & /*polys_in*/,
-                 const std::vector<uint>              & /*edges_in*/,
+                 const std::vector<std::vector<unsigned int>> & /*polys_in*/,
+                 const std::vector<unsigned int>              & /*edges_in*/,
                  const std::string                    & /*flags*/, // options
                        std::vector<double>            & /*coords_out*/,
-                       std::vector<uint>              & /*tets_out*/)
+                       std::vector<unsigned int>              & /*tets_out*/)
 {
     std::cerr << "ERROR : Tetgen missing. Install Tetgen and recompile defining symbol CINOLIB_USES_TETGEN" << std::endl;
     exit(-1);
@@ -144,11 +144,11 @@ void tetgen_wrap(const std::vector<double>            & /*coords_in*/,
 
 CINO_INLINE
 void tetgen_wrap(const std::vector<double> & coords_in,
-                 const std::vector<uint>   & tris_in,
-                 const std::vector<uint>   & edges_in,
+                 const std::vector<unsigned int>   & tris_in,
+                 const std::vector<unsigned int>   & edges_in,
                  const std::string         & flags,
                        std::vector<double> & coords_out,
-                       std::vector<uint>   & tets_out)
+                       std::vector<unsigned int>   & tets_out)
 {
     tetgen_wrap(coords_in, polys_from_serialized_vids(tris_in,3), edges_in, flags, coords_out, tets_out);
 }
@@ -157,11 +157,11 @@ void tetgen_wrap(const std::vector<double> & coords_in,
 
 CINO_INLINE
 void tetgen_wrap(const std::vector<vec3d>             & verts_in,
-                 const std::vector<std::vector<uint>> & polys_in,
-                 const std::vector<uint>              & edges_in,
+                 const std::vector<std::vector<unsigned int>> & polys_in,
+                 const std::vector<unsigned int>              & edges_in,
                  const std::string                    & flags,
                        std::vector<vec3d>             & verts_out,
-                       std::vector<uint>              & tets_out)
+                       std::vector<unsigned int>              & tets_out)
 {
     std::vector<double> coords_out;
     tetgen_wrap(serialized_xyz_from_vec3d(verts_in), polys_in, edges_in, flags, coords_out, tets_out);
@@ -172,58 +172,16 @@ void tetgen_wrap(const std::vector<vec3d>             & verts_in,
 
 CINO_INLINE
 void tetgen_wrap(const std::vector<vec3d>  & verts_in,
-                 const std::vector<uint>   & tris_in,
-                 const std::vector<uint>   & edges_in,
+                 const std::vector<unsigned int>   & tris_in,
+                 const std::vector<unsigned int>   & edges_in,
                  const std::string         & flags,
                        std::vector<vec3d>  & verts_out,
-                       std::vector<uint>   & tets_out)
+                       std::vector<unsigned int>   & tets_out)
 {
     std::vector<double> coords_out;
     tetgen_wrap(serialized_xyz_from_vec3d(verts_in), polys_from_serialized_vids(tris_in,3), edges_in, flags, coords_out, tets_out);
     verts_out = vec3d_from_serialized_xyz(coords_out);
 }
 
-//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
-template<class M, class V, class E, class F, class P>
-CINO_INLINE
-void tetgen_wrap(const std::vector<vec3d>  & verts_in,
-                 const std::vector<uint>   & tris_in,
-                 const std::vector<uint>   & edges_in,
-                 const std::string         & flags,
-                       Tetmesh<M,V,E,F,P>  & m)
-{
-    std::vector<vec3d> verts;
-    std::vector<uint>  tets;
-    tetgen_wrap(verts_in, tris_in, edges_in, flags, verts, tets);
-    m = Tetmesh<M,V,E,F,P>(verts,tets);
-}
-
-//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
-template<class M, class V, class E, class F, class P>
-CINO_INLINE
-void tetgen_wrap(const std::vector<vec3d>             & verts_in,
-                 const std::vector<std::vector<uint>> & polys_in,
-                 const std::vector<uint>              & edges_in,
-                 const std::string                    & flags,
-                       Tetmesh<M,V,E,F,P>             & m)
-{
-    std::vector<vec3d> verts;
-    std::vector<uint>  tets;
-    tetgen_wrap(verts_in, polys_in, edges_in, flags, verts, tets);
-    m = Tetmesh<M,V,E,F,P>(verts,tets);
-}
-
-//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
-template<class M, class V, class E, class F, class P>
-CINO_INLINE
-void tetgen_wrap(const AbstractPolygonMesh<M,V,E,F> & m_srf,
-                 const std::string                  & flags,
-                       Tetmesh<M,V,E,F,P>           & m)
-{
-    tetgen_wrap(m_srf.vector_verts(), m_srf.vector_polys(), {}, flags, m);
-}
 
 }

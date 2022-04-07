@@ -34,6 +34,7 @@
 *     Italy                                                                     *
 *********************************************************************************/
 #include <cinolib/tangent_space.h>
+#include <cassert>
 
 namespace cinolib
 {

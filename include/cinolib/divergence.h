@@ -80,8 +80,6 @@ ScalarField divergence(const AbstractPolyhedralMesh<M,V,E,F,P> & m, ScalarField 
 
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "divergence.cpp"
-#endif
+#include "divergence.tpp"
 
 #endif // CINO_DIVERGENCE_H

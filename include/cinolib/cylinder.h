@@ -53,14 +53,12 @@ CINO_INLINE
 void cylinder(const T            height,
               const T            bot_radius,
               const T            top_radius,
-              const uint         n_sides,    // cross section
+              const unsigned int         n_sides,    // cross section
               std::vector<T>    & verts,     // output vertices
-              std::vector<uint> & tris,      // output triangles
+              std::vector<unsigned int> & tris,      // output triangles
               std::vector<T>    & normals);  // output normals (per vertex)
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "cylinder.cpp"
-#endif
+#include "cylinder.tpp"
 
 #endif // CINO_CYLINDER_H

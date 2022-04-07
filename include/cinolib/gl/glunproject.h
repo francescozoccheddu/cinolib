@@ -54,8 +54,6 @@ bool gl_unproject(const mat<2,1,T>   & p_in,       // 2d point in screen space
                         mat<3,1,T>   & p_out);     // 3d point in object space
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "glunproject.cpp"
-#endif
+#include "glunproject.tpp"
 
 #endif // CINO_GLUNPROJECT_H

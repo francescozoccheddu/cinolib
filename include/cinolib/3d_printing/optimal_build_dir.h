@@ -36,7 +36,9 @@
 #ifndef CINO_OPTIMAL_BUILD_DIR_H
 #define CINO_OPTIMAL_BUILD_DIR_H
 
+#include <cinolib/cino_inline.h>
 #include <cinolib/meshes/drawable_trimesh.h>
+#include <unordered_set>
 
 namespace cinolib
 {
@@ -82,8 +84,8 @@ namespace cinolib
 
 struct OptimalBuildDirOptions
 {
-    uint  n_dirs             = 300;     // # of candidate build directions to test
-    uint  buffer_size        = 128;     // size of the rasterization buffer (used for shadow area)
+    unsigned int  n_dirs             = 300;     // # of candidate build directions to test
+    unsigned int  buffer_size        = 128;     // size of the rasterization buffer (used for shadow area)
     float overhang_threshold = 30.0;    // deg
     float w_height           = 0.25;    //
     float w_shadow_area      = 0.25;    //
@@ -92,7 +94,7 @@ struct OptimalBuildDirOptions
     float crit_srf_boost     = 10.0;    // boost penalty for critical surfaces touched by supports
     float forb_cone_angle    = 3.0;     // amplitude of each cone hosting a forbidden build direction
     std::vector<vec3d>       forb_dirs; // set of forbidden build directions
-    std::unordered_set<uint> crit_srf;  // list of triangles that are critical
+    std::unordered_set<unsigned int> crit_srf;  // list of triangles that are critical
 };
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -103,8 +105,6 @@ vec3d optimal_build_dir(const DrawableTrimesh<M,V,E,P> & m,
                         const OptimalBuildDirOptions   & opt);
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "optimal_build_dir.cpp"
-#endif
+#include "optimal_build_dir.tpp"
 
 #endif // CINO_OPTIMAL_BUILD_DIR_H

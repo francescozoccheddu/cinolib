@@ -64,7 +64,7 @@ void triangle_traverse_with_ray(const vec3d   tri[3],
                                 const vec3d & P,
                                 const vec3d & dir,
                                       vec3d & exit_pos,
-                                      uint  & exit_edge);
+                                      unsigned int  & exit_edge);
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -110,8 +110,6 @@ double point_to_triangle_dist_sqrd(const vec3d & P,
                                    const vec3d & C);
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "triangle_utils.cpp"
-#endif
+#include "triangle_utils.tpp"
 
 #endif // CINO_TRIANGLE_UTILS_H

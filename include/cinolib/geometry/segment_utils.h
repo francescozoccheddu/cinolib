@@ -75,8 +75,6 @@ mat<3,1,T> segment_intersection(const mat<3,1,T> & s00,
                                 const mat<3,1,T> & s11);
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "segment_utils.cpp"
-#endif
+#include "segment_utils.tpp"
 
 #endif // CINO_SEGMENT_UTILS_H

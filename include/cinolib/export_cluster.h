@@ -41,6 +41,7 @@
 #include <cinolib/cino_inline.h>
 #include <cinolib/meshes/meshes.h>
 #include <unordered_map>
+#include <unordered_set>
 
 /* 
 * These methods take in input a surface/volumetric mesh M and a label L, and output
@@ -63,8 +64,8 @@ CINO_INLINE
 void export_cluster(const AbstractPolygonMesh<M,V,E,P>  & m,
                     const std::unordered_set<int>       & labels,
                           AbstractPolygonMesh<M,V,E,P>  & subm,
-                          std::unordered_map<uint,uint> & m2subm_vmap,
-                          std::unordered_map<uint,uint> & subm2m_vmap);
+                          std::unordered_map<unsigned int,unsigned int> & m2subm_vmap,
+                          std::unordered_map<unsigned int,unsigned int> & subm2m_vmap);
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -81,8 +82,8 @@ CINO_INLINE
 void export_cluster(const AbstractPolygonMesh<M,V,E,P>  & m,
                     const int                             label,
                           AbstractPolygonMesh<M,V,E,P>  & subm,
-                          std::unordered_map<uint,uint> & m2subm_vmap,
-                          std::unordered_map<uint,uint> & subm2m_vmap);
+                          std::unordered_map<unsigned int,unsigned int> & m2subm_vmap,
+                          std::unordered_map<unsigned int,unsigned int> & subm2m_vmap);
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -99,8 +100,8 @@ CINO_INLINE
 void export_cluster(const AbstractPolyhedralMesh<M,V,E,F,P>  & m,
                     const std::unordered_set<int>            & labels,
                           AbstractPolyhedralMesh<M,V,E,F,P>  & subm,
-                          std::unordered_map<uint,uint>      & m2subm_vmap,
-                          std::unordered_map<uint,uint>      & subm2m_vmap);
+                          std::unordered_map<unsigned int,unsigned int>      & m2subm_vmap,
+                          std::unordered_map<unsigned int,unsigned int>      & subm2m_vmap);
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -117,12 +118,10 @@ CINO_INLINE
 void export_cluster(const AbstractPolyhedralMesh<M,V,E,F,P>  & m,
                     const int                                  label,
                           AbstractPolyhedralMesh<M,V,E,F,P>  & subm,
-                          std::unordered_map<uint,uint>      & m2subm_vmap,
-                          std::unordered_map<uint,uint>      & subm2m_vmap);
+                          std::unordered_map<unsigned int,unsigned int>      & m2subm_vmap,
+                          std::unordered_map<unsigned int,unsigned int>      & subm2m_vmap);
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "export_cluster.cpp"
-#endif
+#include "export_cluster.tpp"
 
 #endif // CINO_EXPORT_CLUSTER_H

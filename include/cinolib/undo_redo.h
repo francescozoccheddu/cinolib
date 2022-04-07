@@ -83,8 +83,6 @@ class AbstractUndoRedo
 
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "undo_redo.cpp"
-#endif
+#include "undo_redo.tpp"
 
 #endif // CINO_UNDO_REDO_H

@@ -65,8 +65,8 @@ void hex_to_tets(const Hexmesh<M,V,E,F,P> & hm,
 // mesh, where diagonals of quad faces are compatible across
 // face-adjacent hexahedra.
 CINO_INLINE
-void hex_to_tets(const std::vector<uint> & hex,
-                       std::vector<uint> & tets);
+void hex_to_tets(const std::vector<unsigned int> & hex,
+                       std::vector<unsigned int> & tets);
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -76,8 +76,8 @@ void hex_to_tets(const std::vector<uint> & hex,
 // control the minimum jacobian, which is the minimum of the
 // per tet jacobians measured at the hex corners
 CINO_INLINE
-void hex_to_corner_tets(const std::vector<uint> & hex,
-                              std::vector<uint> & tets);
+void hex_to_corner_tets(const std::vector<unsigned int> & hex,
+                              std::vector<unsigned int> & tets);
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -98,10 +98,11 @@ void hex_to_corner_tets(const Hexmesh<M,V,E,F,P> & hm,
 //   bot base       top base
 //
 CINO_INLINE
-void prism_to_tets(const std::vector<uint> & prism,
-                         std::vector<uint> & tets);
+void prism_to_tets(const std::vector<unsigned int> & prism,
+                         std::vector<unsigned int> & tets);
 }
 
+#include "tetrahedralization.tpp"
 #ifndef  CINO_STATIC_LIB
 #include "tetrahedralization.cpp"
 #endif

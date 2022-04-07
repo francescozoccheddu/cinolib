@@ -35,6 +35,7 @@
 *********************************************************************************/
 #include <cinolib/quality_hex.h>
 #include <cinolib/min_max_inf.h>
+#include <algorithm>
 
 /*
  * All metrics implemented here all based on:

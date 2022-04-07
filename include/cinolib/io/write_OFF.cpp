@@ -44,8 +44,8 @@ namespace cinolib
 CINO_INLINE
 void write_OFF(const char                * filename,
               const std::vector<double> & xyz,
-              const std::vector<uint>  & tri,
-              const std::vector<uint>  & quad)
+              const std::vector<unsigned int>  & tri,
+              const std::vector<unsigned int>  & quad)
 {
     setlocale(LC_NUMERIC, "en_US.UTF-8"); // makes sure "." is the decimal separator
 
@@ -85,7 +85,7 @@ void write_OFF(const char                * filename,
 CINO_INLINE
 void write_OFF(const char                           * filename,
                const std::vector<double>            & xyz,
-               const std::vector<std::vector<uint>> & faces)
+               const std::vector<std::vector<unsigned int>> & faces)
 {
     setlocale(LC_NUMERIC, "en_US.UTF-8"); // makes sure "." is the decimal separator
 
@@ -97,20 +97,20 @@ void write_OFF(const char                           * filename,
         exit(-1);
     }
 
-    uint n_faces = faces.size();
+    unsigned int n_faces = faces.size();
     fprintf (fp, "OFF\n%zu %d 0\n", xyz.size()/3, n_faces);
 
-    for(uint i=0; i<xyz.size(); i+=3)
+    for(unsigned int i=0; i<xyz.size(); i+=3)
     {
         // http://stackoverflow.com/questions/16839658/printf-width-specifier-to-maintain-precision-of-floating-point-value
         //
         fprintf(fp, "%.17g %.17g %.17g\n", xyz[i], xyz[i+1], xyz[i+2]);
     }
 
-    for(uint i=0; i<faces.size(); ++i)
+    for(unsigned int i=0; i<faces.size(); ++i)
     {
         fprintf(fp, "%d ", static_cast<int>(faces.at(i).size()));
-        for(uint j=0; j<faces.at(i).size(); ++j)
+        for(unsigned int j=0; j<faces.at(i).size(); ++j)
         {
             fprintf(fp, "%d ", faces.at(i).at(j));
         }

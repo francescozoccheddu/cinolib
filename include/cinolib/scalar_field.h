@@ -53,7 +53,7 @@ class ScalarField : public Eigen::VectorXd, public Serializable
 
         explicit ScalarField();
         explicit ScalarField(const std::vector<double> & data);
-        explicit ScalarField(const uint size);
+        explicit ScalarField(const unsigned int size);
         explicit ScalarField(const char *filename);
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -63,13 +63,13 @@ class ScalarField : public Eigen::VectorXd, public Serializable
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-        uint size() const { return rows(); }
+        unsigned int size() const { return rows(); }
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
         void clamp(const float thresh_from_below, const float thresh_from_above);
         void normalize_in_01();
-        uint min_element_index() const;
+        unsigned int min_element_index() const;
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -95,6 +95,7 @@ class ScalarField : public Eigen::VectorXd, public Serializable
 
 }
 
+#include "scalar_field.tpp"
 #ifndef  CINO_STATIC_LIB
 #include "scalar_field.cpp"
 #endif

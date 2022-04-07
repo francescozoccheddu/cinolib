@@ -66,11 +66,12 @@ void find_intersections(const Trimesh<M,V,E,P> & m,
 
 CINO_INLINE
 void find_intersections(const std::vector<vec3d> & verts,
-                        const std::vector<uint>  & tris,
+                        const std::vector<unsigned int>  & tris,
                               std::set<ipair>    & intersections);
 
 }
 
+#include "find_intersections.tpp"
 #ifndef  CINO_STATIC_LIB
 #include "find_intersections.cpp"
 #endif

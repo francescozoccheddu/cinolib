@@ -67,17 +67,17 @@ namespace cinolib
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 CINO_INLINE
-void sort_poly_vertices_as_hexa(const std::vector<std::vector<uint>> & poly_faces,
+void sort_poly_vertices_as_hexa(const std::vector<std::vector<unsigned int>> & poly_faces,
                                 const std::vector<bool>              & poly_winding,
-                                      std::vector<uint>              & hexa);
+                                      std::vector<unsigned int>              & hexa);
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 CINO_INLINE
-void sort_poly_vertices_as_hexa(const std::vector<std::vector<uint>> & faces,
-                                const std::vector<std::vector<uint>> & polys,
+void sort_poly_vertices_as_hexa(const std::vector<std::vector<unsigned int>> & faces,
+                                const std::vector<std::vector<unsigned int>> & polys,
                                 const std::vector<std::vector<bool>> & winding,
-                                      std::vector<std::vector<uint>> & hexas);
+                                      std::vector<std::vector<unsigned int>> & hexas);
 }
 
 #ifndef  CINO_STATIC_LIB

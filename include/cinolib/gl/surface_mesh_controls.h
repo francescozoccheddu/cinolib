@@ -43,6 +43,7 @@
 #include <cinolib/drawable_isocontour.h>
 #include <cinolib/drawable_vector_field.h>
 #include <cinolib/drawable_segment_soup.h>
+#include <imgui.h>
 
 namespace cinolib
 {
@@ -137,8 +138,6 @@ class SurfaceMeshControls : public SideBarItem
 
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "surface_mesh_controls.cpp"
-#endif
+#include "surface_mesh_controls.tpp"
 
 #endif // CINO_SURFACE_MESH_CONTROLS_H

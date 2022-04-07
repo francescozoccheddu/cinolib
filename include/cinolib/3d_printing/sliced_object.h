@@ -36,6 +36,9 @@
 #ifndef CINO_SLICED_OBJ
 #define CINO_SLICED_OBJ
 
+// FIXME (francescozoccheddu)
+#ifdef CINOLIB_USES_BOOST
+
 #include <cinolib/meshes/trimesh.h>
 #include <cinolib/boost_polygon_wrap.h>
 
@@ -70,15 +73,15 @@ class SlicedObj : public Trimesh<M,V,E,P>
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-        uint num_slices() const { return slices.size(); }
+        unsigned int num_slices() const { return slices.size(); }
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-        BoostMultiPolygon slice_as_boost_poly(const uint sid) const;
-        void              slice_segments     (const uint sid, std::vector<vec3d> & verts, std::vector<uint> & segs) const;
-        float             slice_z            (const uint sid) const;
-        float             slice_thickness    (const uint sid) const;
-        bool              slice_contains     (const uint sid, const vec2d & p) const;
+        BoostMultiPolygon slice_as_boost_poly(const unsigned int sid) const;
+        void              slice_segments     (const unsigned int sid, std::vector<vec3d> & verts, std::vector<unsigned int> & segs) const;
+        float             slice_z            (const unsigned int sid) const;
+        float             slice_thickness    (const unsigned int sid) const;
+        bool              slice_contains     (const unsigned int sid, const vec2d & p) const;
         float             slice_avg_thickness() const;
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -103,8 +106,8 @@ class SlicedObj : public Trimesh<M,V,E,P>
 
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "sliced_object.cpp"
+#include "sliced_object.tpp"
+
 #endif
 
 #endif // CINO_DRAWABLE_SLICED_OBJ

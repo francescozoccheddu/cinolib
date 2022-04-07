@@ -122,7 +122,7 @@ namespace Flat
           0 , 0.5 ,   1 ,
     };
 
-    static const std::vector<std::vector<uint>> faces =
+    static const std::vector<std::vector<unsigned int>> faces =
     {
         { 10 ,  4 , 15 ,  9      },
         {  9 , 15 ,  5 , 11      },
@@ -146,7 +146,7 @@ namespace Flat
         { 11 ,  5 ,  7 ,  3 , 14 },
     };
 
-    static const std::vector<std::vector<uint>> polys =
+    static const std::vector<std::vector<unsigned int>> polys =
     {
         {  5 ,  6 ,  8 , 10 ,  2              },
         {  6 ,  7 ,  9 , 11 ,  3              },
@@ -192,7 +192,7 @@ namespace Flat_Convex
           1 , 0.5 ,   1 ,
     };
 
-    static const std::vector<std::vector<uint>> faces =
+    static const std::vector<std::vector<unsigned int>> faces =
     {
         { 10 ,  4 , 15 ,  9           },
         {  9 , 15 ,  5 , 11           },
@@ -220,7 +220,7 @@ namespace Flat_Convex
         { 18 , 19 ,  7                },
     };
 
-    static const std::vector<std::vector<uint>> polys =
+    static const std::vector<std::vector<unsigned int>> polys =
     {
         {  5 ,  6 ,  8 , 10 ,  2                    },
         {  6 ,  7 ,  9 , 11 ,  3                    },
@@ -259,7 +259,7 @@ namespace Convex_1
           0 ,   0 , 0.5 ,
     };
 
-    static const std::vector<std::vector<uint>> faces =
+    static const std::vector<std::vector<unsigned int>> faces =
     {
         { 6 , 3 ,  1 , 2      },
         { 3 , 5 ,  4 , 1      },
@@ -273,7 +273,7 @@ namespace Convex_1
         { 5 , 4 ,  7 , 8 , 10 },
     };
 
-    static const std::vector<std::vector<uint>> polys =
+    static const std::vector<std::vector<unsigned int>> polys =
     {
         { 6 , 3 , 4 , 5             },
         { 5 , 7 , 8 , 9 , 0 , 1 , 2 },
@@ -308,7 +308,7 @@ namespace Convex_2
           0 ,   1 , 0.5 ,
     };
 
-    static const std::vector<std::vector<uint>> faces =
+    static const std::vector<std::vector<unsigned int>> faces =
     {
         {  6 ,  3 ,  1 ,  2           },
         { 13 ,  7 ,  8 , 10 ,  5 , 11 },
@@ -326,7 +326,7 @@ namespace Convex_2
         { 11 , 12 , 4                 },
     };
 
-    static const std::vector<std::vector<uint>> polys =
+    static const std::vector<std::vector<unsigned int>> polys =
     {
         {  6 ,  3 ,  4 ,  5                  },
         {  5 ,  7 ,  8 ,  1 , 0 , 2 , 9 , 10 },
@@ -366,7 +366,7 @@ namespace Convex_3
         0.5 ,   1 ,   0 ,
     };
 
-    static const std::vector<std::vector<uint>> faces =
+    static const std::vector<std::vector<unsigned int>> faces =
     {
         { 16 ,  7 ,  8 ,  9 ,  6 , 15 },
         { 13 ,  7 ,  8 , 10 ,  5 , 11 },
@@ -388,7 +388,7 @@ namespace Convex_3
         { 14 , 15 ,  2                },
     };
 
-    static const std::vector<std::vector<uint>> polys =
+    static const std::vector<std::vector<unsigned int>> polys =
     {
         {  6 ,  3 ,  4 ,  5                       },
         {  5 ,  7 ,  0 ,  1 , 8 , 2 , 9 , 10 , 14 },
@@ -438,7 +438,7 @@ namespace Edge
         0.5 ,   1 ,   1 ,
     };
 
-    static const std::vector<std::vector<uint>> faces =
+    static const std::vector<std::vector<unsigned int>> faces =
     {
         {  5 ,  6 ,  3 ,  2 ,  7     },
         {  6 ,  8 ,  5               },
@@ -472,7 +472,7 @@ namespace Edge
         { 24 , 11 , 14 , 17 ,  2 , 4 },
     };
 
-    static const std::vector<std::vector<uint>> polys =
+    static const std::vector<std::vector<unsigned int>> polys =
     {
         {  4 , 11 , 12 , 16 , 18                     },
         {  6 ,  8 , 12 , 13 , 22 , 23                },
@@ -530,7 +530,7 @@ namespace Vert_center
         0.5 ,   1 , 0.3 ,
     };
 
-    static const std::vector<std::vector<uint>> faces =
+    static const std::vector<std::vector<unsigned int>> faces =
     {
         {  6 ,  1 ,  4 ,  3           },
         {  1 ,  2 ,  5 ,  4           },
@@ -570,7 +570,7 @@ namespace Vert_center
         { 28 , 15 ,  3 ,  4 , 26 , 21 },
     };
 
-    static const std::vector<std::vector<uint>> polys =
+    static const std::vector<std::vector<unsigned int>> polys =
     {
         { 1 , 12 , 15 , 16 , 21                     },
         { 7 , 13 , 17 , 18 , 22                     },
@@ -626,7 +626,7 @@ namespace Vert_side
         0.5 ,   1 ,   0 ,
     };
 
-    static const std::vector<std::vector<uint>> faces =
+    static const std::vector<std::vector<unsigned int>> faces =
     {
         {  4 ,  8 , 10 ,  3           },
         {  1 ,  6 ,  0                },
@@ -660,7 +660,7 @@ namespace Vert_side
         {  2 ,  3 , 17 , 18           },
     };
 
-    static const std::vector<std::vector<uint>> polys =
+    static const std::vector<std::vector<unsigned int>> polys =
     {
         { 11 ,  6 ,  1 , 19 ,  5                    },
         { 10 , 21 ,  6 , 17 , 20                    },
@@ -718,7 +718,7 @@ namespace Edge_WB
         0.25 ,  0.5 ,    0 ,
     };
 
-    static const std::vector<std::vector<uint>> faces =
+    static const std::vector<std::vector<unsigned int>> faces =
     {
         {  5 ,  6 ,  3 ,  2 ,  7      },
         {  6 ,  8 ,  5                },
@@ -759,7 +759,7 @@ namespace Edge_WB
         { 28 , 18 , 22 , 21 , 12 , 25 },
     };
 
-    static const std::vector<std::vector<uint>> polys =
+    static const std::vector<std::vector<unsigned int>> polys =
     {
         { 4 , 11 , 12 , 16 , 18 },
         { 6 , 8 , 32 , 23 },
@@ -825,7 +825,7 @@ namespace Vert_center_WB_1
         0.25 ,    0 ,  0.5 ,
     };
 
-    static const std::vector<std::vector<uint>> faces =
+    static const std::vector<std::vector<unsigned int>> faces =
     {
         {  6 ,  1 ,  4 ,  3                },
         {  1 ,  2 ,  5 ,  4                },
@@ -872,7 +872,7 @@ namespace Vert_center_WB_1
         { 32 , 10 , 27 , 23 , 26 ,  4 , 29 },
     };
 
-    static const std::vector<std::vector<uint>> polys =
+    static const std::vector<std::vector<unsigned int>> polys =
     {
         {  1 , 12 , 15 , 16 , 21                         },
         {  7 , 13 , 17 , 18 , 22                         },
@@ -944,7 +944,7 @@ namespace Vert_center_WB_2
          0.5 , 0.25 ,    0 ,
     };
 
-    static const std::vector<std::vector<uint>> faces =
+    static const std::vector<std::vector<unsigned int>> faces =
     {
         {  6 ,  1 ,  4 ,  3                },
         {  1 ,  2 ,  5 ,  4                },
@@ -998,7 +998,7 @@ namespace Vert_center_WB_2
         { 36 , 15 , 28 , 25 , 27 , 10 , 33 },
     };
 
-    static const std::vector<std::vector<uint>> polys =
+    static const std::vector<std::vector<unsigned int>> polys =
     {
         {  1 , 12 , 15 , 16 , 21                             },
         {  7 , 13 , 17 , 18 , 22                             },
@@ -1078,7 +1078,7 @@ namespace Vert_center_WB_3
         0.25 ,  0.5 ,    0 ,
     };
 
-    static const std::vector<std::vector<uint>> faces =
+    static const std::vector<std::vector<unsigned int>> faces =
     {
         { 37 , 39 , 40                     },
         {  1 ,  2 ,  5 ,  4                },
@@ -1139,7 +1139,7 @@ namespace Vert_center_WB_3
         { 37 ,  4 , 26 , 21 , 28 , 15 , 40 },
     };
 
-    static const std::vector<std::vector<uint>> polys =
+    static const std::vector<std::vector<unsigned int>> polys =
     {
         {  1 , 12 , 15 , 16 , 21                                 },
         {  7 , 13 , 17 , 18 , 22                                 },
@@ -1211,7 +1211,7 @@ namespace Vert_side_WB
         0.25 ,    0 ,    0 ,
     };
 
-    static const std::vector<std::vector<uint>> faces =
+    static const std::vector<std::vector<unsigned int>> faces =
     {
         {  2 ,  6 , 10 ,  1                },
         {  3 ,  8 ,  4                     },
@@ -1252,7 +1252,7 @@ namespace Vert_side_WB
         { 27 , 17 , 10 ,  9 , 11 , 22 , 25 },
     };
 
-    static const std::vector<std::vector<uint>> polys =
+    static const std::vector<std::vector<unsigned int>> polys =
     {
         { 11 ,  6 ,  1 , 19 ,  5                         },
         { 10 , 21 ,  6 , 17 , 20                         },

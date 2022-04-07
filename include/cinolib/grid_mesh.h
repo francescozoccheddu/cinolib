@@ -47,14 +47,12 @@ namespace cinolib
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-void grid_mesh(const uint                quads_per_row,
-               const uint                quads_per_col,
+void grid_mesh(const unsigned int                quads_per_row,
+               const unsigned int                quads_per_col,
                      Quadmesh<M,V,E,P> & m);
 
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "grid_mesh.cpp"
-#endif
+#include "grid_mesh.tpp"
 
 #endif // CINO_GRID_MESH_H

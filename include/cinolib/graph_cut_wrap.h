@@ -61,6 +61,8 @@ namespace cinolib
  *
 */
 
+// FIXME (francescozoccheddu)
+/*
 template<class M, class V, class E, class P>
 CINO_INLINE
 std::vector<int> graph_cut_wrap(const  AbstractMesh<M,V,E,P>             & m,
@@ -68,6 +70,8 @@ std::vector<int> graph_cut_wrap(const  AbstractMesh<M,V,E,P>             & m,
                                 const std::vector<double>               & data_term,
                                       GCoptimization::SmoothCostFnExtra   smooth_term,
                                       void                              * smooth_data = NULL);
+
+*/
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -81,19 +85,20 @@ std::vector<int> graph_cut_wrap(const  AbstractMesh<M,V,E,P>             & m,
  *
 */
 
+// FIXME (francescozoccheddu)
+/*
 template<class M, class V, class E, class P>
 CINO_INLINE
 std::vector<int> graph_cut_wrap(const AbstractMesh<M,V,E,P>             & m,
                                 const int                                 n_labels,
-                                const std::vector<std::vector<uint>>    & feasible_region,
+                                const std::vector<std::vector<unsigned int>>    & feasible_region,
                                 const std::vector<std::vector<double>>  & data_term,
                                       GCoptimization::SmoothCostFnExtra   smooth_term,
                                       void                              * smooth_data = NULL);
 
+*/
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "graph_cut_wrap.cpp"
-#endif
+#include "graph_cut_wrap.tpp"
 
 #endif // CINO_GRAPH_CUT_WRAP_H

@@ -34,6 +34,7 @@
 *     Italy                                                                     *
 *********************************************************************************/
 #include <cinolib/io/write_VTK.h>
+#include <iostream>
 
 
 #ifdef CINOLIB_USES_VTK
@@ -53,7 +54,7 @@ namespace cinolib
 CINO_INLINE
 void write_VTK(const char                           * filename,
                const std::vector<vec3d>             & verts,
-               const std::vector<std::vector<uint>> & polys)
+               const std::vector<std::vector<unsigned int>> & polys)
 {
     setlocale(LC_NUMERIC, "en_US.UTF-8"); // makes sure "." is the decimal separator
 
@@ -123,8 +124,8 @@ void write_VTK(const char                           * filename,
 CINO_INLINE
 void write_VTK(const char                * filename,
                const std::vector<double> & xyz,
-               const std::vector<uint>   & tets,
-               const std::vector<uint>   & hexa)
+               const std::vector<unsigned int>   & tets,
+               const std::vector<unsigned int>   & hexa)
 {
     setlocale(LC_NUMERIC, "en_US.UTF-8"); // makes sure "." is the decimal separator
 
@@ -174,8 +175,8 @@ void write_VTK(const char                * filename,
 CINO_INLINE
 void write_VTK(const char                *,
                const std::vector<double> &,
-               const std::vector<uint>   &,
-               const std::vector<uint>   &)
+               const std::vector<unsigned int>   &,
+               const std::vector<unsigned int>   &)
 {
     std::cerr << "ERROR : VTK missing. Install VTK and recompile defining symbol CINOLIB_USES_VTK" << std::endl;
     exit(-1);
@@ -187,7 +188,7 @@ void write_VTK(const char                *,
 CINO_INLINE
 void write_VTK(const char                           *,
                const std::vector<vec3d>             &,
-               const std::vector<std::vector<uint>> &)
+               const std::vector<std::vector<unsigned int>> &)
 {
     std::cerr << "ERROR : VTK missing. Install VTK and recompile defining symbol CINOLIB_USES_VTK" << std::endl;
     exit(-1);

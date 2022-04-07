@@ -51,13 +51,11 @@ namespace cinolib
 template<class T>
 CINO_INLINE
 void icosphere(const T             radius, // sphere radius
-               const uint          n_subd, // number of subdivisions of the icosahedron
+               const unsigned int          n_subd, // number of subdivisions of the icosahedron
                std::vector<T>    & verts,  // output vertices
-               std::vector<uint> & tris);  // output triangles
+               std::vector<unsigned int> & tris);  // output triangles
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "icosphere.cpp"
-#endif
+#include "icosphere.tpp"
 
 #endif // CINO_ICOSPHERE

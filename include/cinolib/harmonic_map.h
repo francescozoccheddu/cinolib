@@ -39,10 +39,12 @@
 #include <sys/types.h>
 #include <vector>
 #include <map>
+#include <cinolib/geometry/vec_mat.h>
 #include <cinolib/cino_inline.h>
 #include <cinolib/scalar_field.h>
 #include <cinolib/linear_solvers.h>
 #include <cinolib/symbols.h>
+#include <cinolib/meshes/abstract_mesh.h>
 
 namespace cinolib
 {
@@ -62,8 +64,8 @@ namespace cinolib
 template<class M, class V, class E, class P>
 CINO_INLINE
 ScalarField harmonic_map(const AbstractMesh<M,V,E,P> & m,
-                         const std::map<uint,double> & bc,
-                         const uint                    n = 1,
+                         const std::map<unsigned int,double> & bc,
+                         const unsigned int                    n = 1,
                          const int                     laplacian_mode = COTANGENT,
                          const int                     solver = SIMPLICIAL_LLT);
 
@@ -72,14 +74,12 @@ ScalarField harmonic_map(const AbstractMesh<M,V,E,P> & m,
 template<class M, class V, class E, class P>
 CINO_INLINE
 std::vector<vec3d> harmonic_map_3d(const AbstractMesh<M,V,E,P> & m,
-                                   const std::map<uint,vec3d>  & bc,
-                                   const uint                    n = 1,
+                                   const std::map<unsigned int,vec3d>  & bc,
+                                   const unsigned int                    n = 1,
                                    const int                     laplacian_mode = COTANGENT,
                                    const int                     solver = SIMPLICIAL_LLT);
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "harmonic_map.cpp"
-#endif
+#include "harmonic_map.tpp"
 
 #endif // CINO_HARMONIC_MAP_H

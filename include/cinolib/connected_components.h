@@ -37,6 +37,7 @@
 #define CINO_CONNECTED_COMPONENTS_H
 
 #include <vector>
+#include <unordered_set>
 #include <sys/types.h>
 #include <cinolib/cino_inline.h>
 #include <cinolib/meshes/abstract_mesh.h>
@@ -46,19 +47,17 @@ namespace cinolib
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-uint connected_components(const AbstractMesh<M,V,E,P> & m);
+unsigned int connected_components(const AbstractMesh<M,V,E,P> & m);
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-uint connected_components(const AbstractMesh<M,V,E,P> & m,
-                          std::vector<std::unordered_set<uint>> & ccs);
+unsigned int connected_components(const AbstractMesh<M,V,E,P> & m,
+                          std::vector<std::unordered_set<unsigned int>> & ccs);
 
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "connected_components.cpp"
-#endif
+#include "connected_components.tpp"
 
 #endif // CINO_CONNECTED_COMPONENTS_H

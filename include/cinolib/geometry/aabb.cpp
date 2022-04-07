@@ -36,6 +36,7 @@
 #include <cinolib/geometry/aabb.h>
 #include <algorithm>
 #include <cmath>
+#include <cassert>
 
 namespace cinolib
 {
@@ -387,8 +388,8 @@ bool AABB::intersects_triangle(const vec3d t[3]) const
     // (i)  this can be optimized!
     // (ii) this is not safe, XYZ[i] and f[j] may be parallel
     // see Real Time Collision Detection for hints on how to address both
-    for(uint i=0; i<3; ++i)
-    for(uint j=0; j<3; ++j)
+    for(unsigned int i=0; i<3; ++i)
+    for(unsigned int j=0; j<3; ++j)
     {
         vec3d  a   = XYZ[i].cross(f[j]);
         double p0  = a.dot(v[0]);
@@ -446,9 +447,9 @@ std::vector<vec3d> AABB::corners(const double scaling_factor) const
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 CINO_INLINE
-std::vector<uint> AABB::tris() const
+std::vector<unsigned int> AABB::tris() const
 {
-    static std::vector<uint> t =
+    static std::vector<unsigned int> t =
     {
         0, 3, 2,
         0, 2, 1,
@@ -469,9 +470,9 @@ std::vector<uint> AABB::tris() const
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 CINO_INLINE
-std::vector<uint> AABB::quads() const
+std::vector<unsigned int> AABB::quads() const
 {
-    static std::vector<uint> q =
+    static std::vector<unsigned int> q =
     {
         0, 3, 2, 1,
         1, 2, 6, 5,
@@ -486,9 +487,9 @@ std::vector<uint> AABB::quads() const
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 CINO_INLINE
-std::vector<uint> AABB::edges() const
+std::vector<unsigned int> AABB::edges() const
 {
-    static std::vector<uint> e =
+    static std::vector<unsigned int> e =
     {
         0, 1,
         0, 3,

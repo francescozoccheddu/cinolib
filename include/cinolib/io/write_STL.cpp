@@ -41,7 +41,7 @@ namespace cinolib
 CINO_INLINE
 void write_STL(const char                           * filename,
                const std::vector<double>            & xyz,
-               const std::vector<std::vector<uint>> & poly,
+               const std::vector<std::vector<unsigned int>> & poly,
                const std::vector<double>            & normals)
 {
     setlocale(LC_NUMERIC, "en_US.UTF-8"); // makes sure "." is the decimal separator
@@ -54,7 +54,7 @@ void write_STL(const char                           * filename,
     }
 
     fprintf(fp, "solid cinolib_mesh\n");
-    for(uint pid=0; pid<poly.size(); ++pid)
+    for(unsigned int pid=0; pid<poly.size(); ++pid)
     {
         fprintf(fp, "facet normal %f %f %f\n", normals.at(pid*3+0), normals.at(pid*3+1), normals.at(pid*3+2));
         fprintf(fp, "  outer loop\n");

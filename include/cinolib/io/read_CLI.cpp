@@ -37,6 +37,8 @@
 #include <string>
 #include <sstream>
 #include <fstream>
+#include <algorithm>
+#include <iostream>
 
 namespace cinolib
 {
@@ -59,14 +61,14 @@ std::vector<vec3d> read_polyline(std::string line, const double z)
     std::replace(line.begin(), line.end(), '/', ' ');
     std::replace(line.begin(), line.end(), ',', ' ');
 
-    uint        n_points, dummy;
+    unsigned int        n_points, dummy;
     std::string dummy_str;
 
     std::istringstream ss(line);
     ss >> dummy_str >> dummy >> dummy >> n_points;
 
     std::vector<vec3d> polyline;
-    for(uint i=0; i<n_points; ++i)
+    for(unsigned int i=0; i<n_points; ++i)
     {
         vec3d p(0,0,z);
         ss >> p.x() >> p.y();
@@ -100,7 +102,7 @@ void read_CLI(const char                                   * filename,
 
     std::ifstream f(filename);
     std::string   line;
-    uint          n_layers, type;
+    unsigned int          n_layers, type;
     int           layer = -1;
     double        z;
 

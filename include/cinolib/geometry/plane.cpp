@@ -34,6 +34,7 @@
 *     Italy                                                                     *
 *********************************************************************************/
 #include <cinolib/geometry/plane.h>
+#include <cassert>
 
 namespace cinolib
 {

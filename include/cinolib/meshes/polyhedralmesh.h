@@ -58,8 +58,8 @@ class Polyhedralmesh : public AbstractPolyhedralMesh<M,V,E,F,P>
         explicit Polyhedralmesh(const char * filename);
 
         explicit Polyhedralmesh(const std::vector<vec3d>             & verts,
-                                const std::vector<std::vector<uint>> & faces,
-                                const std::vector<std::vector<uint>> & polys,
+                                const std::vector<std::vector<unsigned int>> & faces,
+                                const std::vector<std::vector<unsigned int>> & polys,
                                 const std::vector<std::vector<bool>> & polys_face_winding);
 
         ~Polyhedralmesh(){}
@@ -75,17 +75,15 @@ class Polyhedralmesh : public AbstractPolyhedralMesh<M,V,E,F,P>
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-        void update_f_normal(const uint fid) override;
+        void update_f_normal(const unsigned int fid) override;
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-        double poly_volume(const uint pid) const override;
+        double poly_volume(const unsigned int pid) const override;
 };
 
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "polyhedralmesh.cpp"
-#endif
+#include "polyhedralmesh.tpp"
 
 #endif // CINO_POLYHEDRALMESH_H

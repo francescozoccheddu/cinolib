@@ -89,8 +89,6 @@ Eigen::SparseMatrix<double> gradient_matrix(const AbstractPolyhedralMesh<M,V,E,F
 
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "gradient.cpp"
-#endif
+#include "gradient.tpp"
 
 #endif // CINO_GRADIENT_H

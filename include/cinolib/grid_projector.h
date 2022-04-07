@@ -43,14 +43,13 @@ namespace cinolib
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-typedef struct
+struct GridProjectorOptions
 {
     double conv_thresh = 1e-4;  // convergence threshold (either H or mean distance from target)
-    uint   max_iter    = 10;    // force convergence after a maximum number of iterations
+    unsigned int   max_iter    = 10;    // force convergence after a maximum number of iterations
     bool   use_H_dist  = false; // uses Hausdorff distance if true. Average distance otherwise
     double SJ_thresh   = 0;     // minimum threshold for SJ (elements must be strictly above the thresh...)
-}
-GridProjectorOptions;
+};
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -63,8 +62,6 @@ double grid_projector(      Hexmesh<M1,V1,E1,F1,P1> & m,
 
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "grid_projector.cpp"
-#endif
+#include "grid_projector.tpp"
 
 #endif // CINO_GRID_PROJECTOR_H

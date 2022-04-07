@@ -42,8 +42,8 @@ namespace cinolib
 CINO_INLINE
 void read_HEDRA(const char                     * filename,
                 std::vector<vec3d>             & verts,
-                std::vector<std::vector<uint>> & faces,
-                std::vector<std::vector<uint>> & polys,
+                std::vector<std::vector<unsigned int>> & faces,
+                std::vector<std::vector<unsigned int>> & polys,
                 std::vector<std::vector<bool>> & polys_winding)
 {
     setlocale(LC_NUMERIC, "en_US.UTF-8"); // makes sure "." is the decimal separator
@@ -61,51 +61,51 @@ void read_HEDRA(const char                     * filename,
         exit(-1);
     }
 
-    uint nv, nf, np;
+    unsigned int nv, nf, np;
     fscanf(fp, "%d %d %d", &nv, &nf, &np);
 
-    for(uint i=0; i<nv; ++i)
+    for(unsigned int i=0; i<nv; ++i)
     {
         double x, y, z;
         fscanf(fp, "%lf %lf %lf", &x, &y, &z);
         verts.push_back(vec3d(x,y,z));
     }
 
-    for(uint i=0; i<nf; ++i)
+    for(unsigned int i=0; i<nf; ++i)
     {
-        uint n_verts;
+        unsigned int n_verts;
         fscanf(fp, "%d", &n_verts);
 
-        std::vector<uint> f;
-        for(uint j=0; j<n_verts; ++j)
+        std::vector<unsigned int> f;
+        for(unsigned int j=0; j<n_verts; ++j)
         {
-            uint vid;
+            unsigned int vid;
             fscanf(fp, "%d", &vid);
             f.push_back(vid-1);
         }
         faces.push_back(f);
     }
 
-    for(uint i=0; i<np; ++i)
+    for(unsigned int i=0; i<np; ++i)
     {
-        uint nf;
+        unsigned int nf;
         fscanf(fp, "%d", &nf);
 
-        std::vector<uint> p;
+        std::vector<unsigned int> p;
         std::vector<bool> p_winding;
-        for(uint j=0; j<nf; ++j)
+        for(unsigned int j=0; j<nf; ++j)
         {
             int fid;
             fscanf(fp, "%d", &fid);
 
             if (fid > 0)
             {
-                p.push_back(static_cast<uint>(fid-1));
+                p.push_back(static_cast<unsigned int>(fid-1));
                 p_winding.push_back(true);
             }
             else
             {
-                p.push_back(static_cast<uint>(std::fabs(fid)-1));
+                p.push_back(static_cast<unsigned int>(std::fabs(fid)-1));
                 p_winding.push_back(false);
             }
         }

@@ -59,8 +59,6 @@ void padding(AbstractPolyhedralMesh<M,V,E,F,P> & m, const bool inwards);
 
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "padding.cpp"
-#endif
+#include "padding.tpp"
 
 #endif // CINO_PADDING_H

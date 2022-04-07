@@ -52,12 +52,12 @@ class IntegralCurve : public DrawableCurve
 
         explicit IntegralCurve(const Mesh                & m,
                                const VectorField         & grad,
-                               const uint                  pid,
+                               const unsigned int                  pid,
                                const std::vector<double> & bary);
 
         explicit IntegralCurve(const Mesh        & m,
                                const VectorField & grad,
-                               const uint          vid);
+                               const unsigned int          vid);
 
         typedef enum
         {
@@ -86,29 +86,27 @@ class IntegralCurve : public DrawableCurve
         //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
         Curve::Sample move_forward             (const Sample & s);
-        Curve::Sample move_forward_from_vertex (const uint vid) ;
-        Curve::Sample move_forward_from_edge   (const uint eid, const vec3d & p);
-        Curve::Sample move_forward_from_face   (const uint tid, const vec3d & p);
-        Curve::Sample move_forward_from_face   (const uint tid, const uint fid, const vec3d & p);
-        Curve::Sample move_forward_from_poly   (const uint pid, const vec3d & p);
+        Curve::Sample move_forward_from_vertex (const unsigned int vid) ;
+        Curve::Sample move_forward_from_edge   (const unsigned int eid, const vec3d & p);
+        Curve::Sample move_forward_from_face   (const unsigned int tid, const vec3d & p);
+        Curve::Sample move_forward_from_face   (const unsigned int tid, const unsigned int fid, const vec3d & p);
+        Curve::Sample move_forward_from_poly   (const unsigned int pid, const vec3d & p);
 
         //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-        bool is_on_vertex (const Sample & s, uint & vid, const double tol = 1e-7) const;
-        bool is_on_edge   (const Sample & s, uint & eid, const double tol = 1e-7) const;
-        bool is_on_face   (const Sample & s, uint & tid, const double tol = 1e-7) const;
-        bool is_on_face   (const Sample & s, uint & tid, uint & fid, const double tol = 1e-7) const;
-        bool is_on_poly   (const Sample & s, uint & pid, const double tol = 1e-7) const;
+        bool is_on_vertex (const Sample & s, unsigned int & vid, const double tol = 1e-7) const;
+        bool is_on_edge   (const Sample & s, unsigned int & eid, const double tol = 1e-7) const;
+        bool is_on_face   (const Sample & s, unsigned int & tid, const double tol = 1e-7) const;
+        bool is_on_face   (const Sample & s, unsigned int & tid, unsigned int & fid, const double tol = 1e-7) const;
+        bool is_on_poly   (const Sample & s, unsigned int & pid, const double tol = 1e-7) const;
 
         //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-        Curve::Sample make_sample(const uint vid) const;
+        Curve::Sample make_sample(const unsigned int vid) const;
 };
 
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "integral_curve.cpp"
-#endif
+#include "integral_curve.tpp"
 
 #endif // CINO_INTEGRAL_CURVE_H

@@ -42,7 +42,8 @@
 #include <cinolib/gl/camera.h>
 #include <cinolib/min_max_inf.h>
 #include <cinolib/color.h>
-
+#include <vector>
+#include <functional>
 #include <chrono>
 
 namespace cinolib
@@ -56,8 +57,8 @@ struct Marker
     vec3d       pos_3d      = vec3d(inf_double); // used to position a 3D marker IFF pos_2d is INF
     std::string text        = "";                // text to render. Set to the empty string to not render the text
     Color       color       = Color::BLUE();     // color, for both the text and the disk
-    uint        disk_radius =  1;                // disk radius (in pixels). Set to zero to not render the disk
-    uint        font_size   = 12;                // font size;
+    unsigned int        disk_radius =  1;                // disk radius (in pixels). Set to zero to not render the disk
+    unsigned int        font_size   = 12;                // font size;
 };
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -74,6 +75,11 @@ struct Trackball
 
 class GLcanvas
 {
+
+    private:
+
+        void notify_camera_change() const;
+
     public:
 
         GLFWwindow                        *window;
@@ -128,7 +134,7 @@ class GLcanvas
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-        void refit_scene();
+        void refit_scene(bool keep_model = false);
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -141,14 +147,14 @@ class GLcanvas
         void push_marker(const vec2d       & p,
                          const std::string & text        = "",
                          const Color         color       = Color::BLUE(),
-                         const uint          disk_radius =  5,
-                         const uint          font_size   = 10);
+                         const unsigned int          disk_radius =  5,
+                         const unsigned int          font_size   = 10);
 
         void push_marker(const vec3d       & p,
                          const std::string & text        = "",
                          const Color         color       = Color::BLUE(),
-                         const uint          disk_radius =  5,
-                         const uint          font_size   = 10);
+                         const unsigned int          disk_radius =  5,
+                         const unsigned int          font_size   = 10);
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -206,6 +212,7 @@ class GLcanvas
         std::function<void(double x_pos,    double y_pos    )> callback_mouse_moved        = nullptr;
         std::function<void(double x_offset, double y_offset )> callback_mouse_scroll       = nullptr;
         std::function<void(void                             )> callback_app_controls       = nullptr; // useful to insert app-dependent visual controls (with ImGui)
+        std::function<void(void                             )> callback_camera_changed     = nullptr; 
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 };

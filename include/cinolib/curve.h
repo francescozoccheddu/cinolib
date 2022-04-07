@@ -52,7 +52,7 @@ class Curve
 {
     public:
 
-        typedef struct
+        struct Sample
         {
             vec3d pos = vec3d(0,0,0);
             float t   = -1; // arc-length param (t=0 => begin, t=1 => end)
@@ -65,14 +65,13 @@ class Curve
             //
             int                 pid  = -1;
             std::vector<double> bary = std::vector<double>();            
-        }
-        Sample;
+        };
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
         explicit Curve();
         explicit Curve(const std::vector<vec3d> & samples);
-        explicit Curve(const Skel & skel, const uint bone);
+        explicit Curve(const Skel & skel, const unsigned int bone);
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -80,7 +79,7 @@ class Curve
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-        uint                        size()    const;
+        unsigned int                        size()    const;
         double                      length()  const;
         const std::vector<Sample> & samples() const;
               std::vector<Sample> & samples();
@@ -98,12 +97,12 @@ class Curve
         // Arc-length parameterization (t \in [0,1])
         //
         void              update_arc_length_param(); // recomputes parameter t for each sample
-        uint              last_sample_lower_equal_than(const float t) const; // returns index
-        uint              sample_closest_to(const float t) const; // reteurns index
+        unsigned int              last_sample_lower_equal_than(const float t) const; // returns index
+        unsigned int              sample_closest_to(const float t) const; // reteurns index
         vec3d             sample_curve_at(const float t) const;
         vec3d             sample_curve_at(const float t, const double tot_length) const;
-        void              resample_curve(const uint n_samples);
-        std::vector<uint> select_n_samples(const uint n_samples) const;
+        void              resample_curve(const unsigned int n_samples);
+        std::vector<unsigned int> select_n_samples(const unsigned int n_samples) const;
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 

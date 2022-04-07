@@ -53,14 +53,12 @@ namespace cinolib
 template<class M, class V, class E, class P>
 CINO_INLINE
 ScalarField heat_flow(const AbstractMesh<M,V,E,P> & m,
-                      const std::vector<uint>     & heat_charges,
+                      const std::vector<unsigned int>     & heat_charges,
                       const double                  time = 1.0,
                       const int                     laplacian_mode = COTANGENT,
                       const bool                    hard_contraint_bcs = false);
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "heat_flow.cpp"
-#endif
+#include "heat_flow.tpp"
 
 #endif // CINO_HEAT_FLOW_H

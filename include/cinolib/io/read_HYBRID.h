@@ -47,8 +47,8 @@ namespace cinolib
 CINO_INLINE
 void read_HYBDRID(const char                     * filename,
                   std::vector<vec3d>             & verts,
-                  std::vector<std::vector<uint>> & faces,
-                  std::vector<std::vector<uint>> & polys,
+                  std::vector<std::vector<unsigned int>> & faces,
+                  std::vector<std::vector<unsigned int>> & polys,
                   std::vector<std::vector<bool>> & polys_face_winding);
 
 }

@@ -54,9 +54,9 @@ void read_OBJ(const char                     * filename,
               std::vector<vec3d>             & pos,           // vertex xyz positions
               std::vector<vec3d>             & tex,           // vertex uv(w) texture coordinates
               std::vector<vec3d>             & nor,           // vertex normals
-              std::vector<std::vector<uint>> & poly_pos,      // polygons with references to pos
-              std::vector<std::vector<uint>> & poly_tex,      // polygons with references to tex
-              std::vector<std::vector<uint>> & poly_nor,      // polygons with references to nor
+              std::vector<std::vector<unsigned int>> & poly_pos,      // polygons with references to pos
+              std::vector<std::vector<unsigned int>> & poly_tex,      // polygons with references to tex
+              std::vector<std::vector<unsigned int>> & poly_nor,      // polygons with references to nor
               std::vector<Color>             & poly_col,      // per polygon colors
               std::vector<int>               & poly_labels,   // per polygon labels (cluster by OBJ groups "g")
               std::string                    & diffuse_path,  // path of the image encoding the diffuse  texture component
@@ -70,9 +70,9 @@ void read_OBJ(const char                     * filename,
               std::vector<vec3d>             & pos,         // vertex xyz positions
               std::vector<vec3d>             & tex,         // vertex uv(w) texture coordinates
               std::vector<vec3d>             & nor,         // vertex normals
-              std::vector<std::vector<uint>> & poly_pos,    // polygons with references to pos
-              std::vector<std::vector<uint>> & poly_tex,    // polygons with references to tex
-              std::vector<std::vector<uint>> & poly_nor,    // polygons with references to nor
+              std::vector<std::vector<unsigned int>> & poly_pos,    // polygons with references to pos
+              std::vector<std::vector<unsigned int>> & poly_tex,    // polygons with references to tex
+              std::vector<std::vector<unsigned int>> & poly_nor,    // polygons with references to nor
               std::vector<Color>             & poly_col,    // per polygon colors
               std::vector<int>               & poly_lab);   // per polygon labels (OBJ groups)
 
@@ -81,14 +81,14 @@ void read_OBJ(const char                     * filename,
 CINO_INLINE
 void read_OBJ(const char                     * filename,
               std::vector<vec3d>             & verts,
-              std::vector<std::vector<uint>> & poly);
+              std::vector<std::vector<unsigned int>> & poly);
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 CINO_INLINE
 void read_OBJ(const char                     * filename,
               std::vector<vec3d>             & verts,
-              std::vector<std::vector<uint>> & poly,
+              std::vector<std::vector<unsigned int>> & poly,
               std::vector<int>               & labels); // => cluster by OBJ groups
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -97,7 +97,7 @@ CINO_INLINE
 void read_OBJ(const char                     * filename,
               std::vector<vec3d>             & xyz,
               std::vector<vec3d>             & uvw,
-              std::vector<std::vector<uint>> & poly);
+              std::vector<std::vector<unsigned int>> & poly);
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 

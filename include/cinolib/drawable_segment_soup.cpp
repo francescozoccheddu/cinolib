@@ -37,6 +37,7 @@
 #include <cinolib/cino_inline.h>
 #include <cinolib/gl/draw_sphere.h>
 #include <cinolib/gl/draw_cylinder.h>
+#include <cassert>
 
 namespace cinolib
 {
@@ -68,7 +69,7 @@ void DrawableSegmentSoup::draw(const float scene_size) const
             draw_sphere(p, cylind_rad, color);
         }
 
-        for(uint i=0; i<size()/2; ++i)
+        for(unsigned int i=0; i<size()/2; ++i)
         {
             draw_cylinder(at(2*i+0), at(2*i+1), cylind_rad, cylind_rad, color);
         }
@@ -80,7 +81,7 @@ void DrawableSegmentSoup::draw(const float scene_size) const
         glHint(GL_LINE_SMOOTH_HINT,  GL_NICEST);
         glDisable(GL_LIGHTING);
         glColor3fv(color.rgba);
-        for(uint i=0; i<size()/2; ++i)
+        for(unsigned int i=0; i<size()/2; ++i)
         {
             vec3d a = at(2*i+0);
             vec3d b = at(2*i+1);

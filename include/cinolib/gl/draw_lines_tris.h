@@ -94,14 +94,14 @@ struct RenderData
     //
     int                draw_mode;
     //
-    std::vector<uint>  tris;
+    std::vector<unsigned int>  tris;
     std::vector<float> tri_coords;
     std::vector<float> tri_v_norms;
     std::vector<float> tri_v_colors; // rgba
     std::vector<float> tri_text;
     Texture            texture;
     //
-    std::vector<uint>  segs;
+    std::vector<unsigned int>  segs;
     std::vector<float> seg_coords;
     std::vector<float> seg_colors; // rgba
     GLfloat            seg_width = 1;

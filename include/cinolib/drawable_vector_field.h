@@ -51,7 +51,7 @@ class DrawableVectorField : public VectorField, public DrawableObject
 
         explicit DrawableVectorField();
 
-        explicit DrawableVectorField(const uint size);
+        explicit DrawableVectorField(const unsigned int size);
 
         explicit DrawableVectorField(const std::vector<vec3d> & data,
                                      const std::vector<vec3d> & pos);
@@ -107,13 +107,11 @@ class DrawableVectorField : public VectorField, public DrawableObject
         Color arrow_color;
         // arrow tessellation
         std::vector<float> verts, normals;
-        std::vector<uint>  tris;
+        std::vector<unsigned int>  tris;
 };
 
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "drawable_vector_field.cpp"
-#endif
+#include "drawable_vector_field.tpp"
 
 #endif // CINO_DRAWABLE_VECTOR_FIELD_H

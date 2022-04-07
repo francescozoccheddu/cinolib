@@ -138,9 +138,7 @@ class AbstractDrawablePolyhedralMesh : public virtual Mesh, public DrawableObjec
 
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "abstract_drawable_polyhedralmesh.cpp"
-#endif
+#include "abstract_drawable_polyhedralmesh.tpp"
 
 #endif // #ifdef CINOLIB_USES_OPENGL_GLFW_IMGUI
 

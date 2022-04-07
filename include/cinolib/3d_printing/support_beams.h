@@ -50,13 +50,11 @@ template<class M, class V, class E, class P>
 CINO_INLINE
 void support_beams(const Trimesh<M,V,E,P>                  & m,
                    const vec3d                             & build_dir,
-                   const std::vector<std::pair<uint,uint>> & overhangs,
+                   const std::vector<std::pair<unsigned int,unsigned int>> & overhangs,
                    const float                               floor,
                          std::vector<vec3d>                & beams);
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "support_beams.cpp"
-#endif
+#include "support_beams.tpp"
 
 #endif // CINO_SUPPORT_BEAMS_H

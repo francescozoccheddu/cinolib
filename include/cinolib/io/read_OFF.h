@@ -48,14 +48,14 @@ namespace cinolib
 CINO_INLINE
 void read_OFF(const char                     * filename,
               std::vector<vec3d>             & verts,
-              std::vector<std::vector<uint>> & polys);
+              std::vector<std::vector<unsigned int>> & polys);
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 CINO_INLINE
 void read_OFF(const char                     * filename,
               std::vector<vec3d>             & verts,
-              std::vector<std::vector<uint>> & polys,
+              std::vector<std::vector<unsigned int>> & polys,
               std::vector<Color>             & poly_colors);
 
 }

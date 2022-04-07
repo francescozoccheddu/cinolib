@@ -36,7 +36,7 @@
 #include "color.h"
 #include <cinolib/textures/texture_hsv.h>
 #include <cinolib/textures/texture_parula.h>
-#include <assert.h>
+#include <cassert>
 #include <algorithm>
 #include <cmath>
 
@@ -55,7 +55,7 @@ std::ostream & operator<<(std::ostream & in, const Color & c)
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 CINO_INLINE
-const float & Color::operator[](const uint i) const
+const float & Color::operator[](const unsigned int i) const
 {
     return rgba[i];
 }
@@ -74,7 +74,7 @@ Color & Color::operator*=(const double d)
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 CINO_INLINE
-float & Color::operator[](const uint i)
+float & Color::operator[](const unsigned int i)
 {
     return rgba[i];
 }
@@ -84,7 +84,7 @@ float & Color::operator[](const uint i)
 CINO_INLINE
 bool Color::operator==(const Color & c) const
 {
-    for(uint i=0; i<4; ++i)
+    for(unsigned int i=0; i<4; ++i)
     {
         if (this->operator[](i) != c[i]) return false;
     }
@@ -96,7 +96,7 @@ bool Color::operator==(const Color & c) const
 CINO_INLINE
 bool Color::operator!=(const Color & c) const
 {
-    for(uint i=0; i<4; ++i)
+    for(unsigned int i=0; i<4; ++i)
     {
         if (this->operator[](i) != c[i]) return true;
     }
@@ -108,7 +108,7 @@ bool Color::operator!=(const Color & c) const
 CINO_INLINE
 bool Color::operator<(const Color & c) const
 {
-    for(uint i=0; i<4; ++i)
+    for(unsigned int i=0; i<4; ++i)
     {
         if (this->operator[](i) < c[i]) return true;
         if (this->operator[](i) > c[i]) return false;
@@ -121,7 +121,7 @@ bool Color::operator<(const Color & c) const
 CINO_INLINE
 bool Color::operator<=(const Color & c) const
 {
-    for(uint i=0; i<4; ++i)
+    for(unsigned int i=0; i<4; ++i)
     {
         if (this->operator[](i) <= c[i]) return true;
         if (this->operator[](i) >  c[i]) return false;
@@ -230,7 +230,7 @@ Color Color::hsv2rgb(float h, float s, float v)
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 CINO_INLINE
-Color Color::scatter(uint n_colors, uint pos, float sat, float val)
+Color Color::scatter(unsigned int n_colors, unsigned int pos, float sat, float val)
 {
     n_colors += 1; // for some reason I am getting duplicated colors without this... :(
 
@@ -238,8 +238,8 @@ Color Color::scatter(uint n_colors, uint pos, float sat, float val)
 
     // Magic stolen from VCG :P
 
-    uint b, k, m = n_colors;
-    uint r = n_colors;
+    unsigned int b, k, m = n_colors;
+    unsigned int r = n_colors;
 
     for (b=0, k=1; k<n_colors; k<<=1)
     {
@@ -260,11 +260,11 @@ Color Color::scatter(uint n_colors, uint pos, float sat, float val)
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 CINO_INLINE
-Color Color::hsv_ramp(uint n_colors, uint pos)
+Color Color::hsv_ramp(unsigned int n_colors, unsigned int pos)
 {
     assert(pos<n_colors);
 
-    uint i = std::round(255 * static_cast<float>(pos)/static_cast<float>(n_colors));
+    unsigned int i = std::round(255 * static_cast<float>(pos)/static_cast<float>(n_colors));
 
     float r = hsv_texture1D[3*i+0]/255.f;
     float g = hsv_texture1D[3*i+1]/255.f;
@@ -276,11 +276,11 @@ Color Color::hsv_ramp(uint n_colors, uint pos)
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 CINO_INLINE
-Color Color::parula_ramp(uint n_colors, uint pos)
+Color Color::parula_ramp(unsigned int n_colors, unsigned int pos)
 {
     assert(pos<n_colors);
 
-    uint i = std::round(64 * static_cast<float>(pos)/static_cast<float>(n_colors));
+    unsigned int i = std::round(64 * static_cast<float>(pos)/static_cast<float>(n_colors));
 
     float r = parula_texture1D[3*i+0]/255.f;
     float g = parula_texture1D[3*i+1]/255.f;

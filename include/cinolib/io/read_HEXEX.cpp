@@ -36,7 +36,7 @@
 #include <cinolib/io/read_HEXEX.h>
 #include <sstream>
 #include <iostream>
-#include <assert.h>
+#include <cassert>
 
 namespace cinolib
 {
@@ -44,7 +44,7 @@ namespace cinolib
 CINO_INLINE
 void read_HEXEX(const char         * filename,
                 std::vector<vec3d> & verts,
-                std::vector<uint>  & tets,        // serialized tets (4 vids per tet)
+                std::vector<unsigned int>  & tets,        // serialized tets (4 vids per tet)
                 std::vector<vec3d> & tets_param) // tets param (4 points per tet)
 {
     setlocale(LC_NUMERIC, "en_US.UTF-8"); // makes sure "." is the decimal separator
@@ -75,7 +75,7 @@ void read_HEXEX(const char         * filename,
     tets_param = std::vector<vec3d>(4*nt);
     for(int tid=0; tid<nt; ++tid)
     {
-        uint v0,v1,v2,v3;
+        unsigned int v0,v1,v2,v3;
         fscanf(f,"%d %d %d %d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
                &v0, &v1, &v2, &v3,
                &tets_param.at(4*tid+0).x(),

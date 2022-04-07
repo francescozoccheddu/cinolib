@@ -57,7 +57,7 @@ void draw_sphere(const mat<3,1,T>         & center,
                  const T                    radius,
                  const Color              & color,
                  const std::vector<float> & verts,
-                 const std::vector<uint>  & tris)
+                 const std::vector<unsigned int>  & tris)
 {
     glEnable(GL_LIGHTING);
     glShadeModel(GL_SMOOTH);
@@ -91,10 +91,10 @@ CINO_INLINE
 void draw_sphere(const mat<3,1,T> & center,
                  const T            radius,
                  const Color      & color,
-                 const uint         subdiv = 1) // number of subdivisions of the regular icosahedron
+                 const unsigned int         subdiv = 1) // number of subdivisions of the regular icosahedron
 {
     std::vector<float> verts;
-    std::vector<uint>  tris;
+    std::vector<unsigned int>  tris;
     icosphere(1.f, subdiv, verts, tris);
     draw_sphere(center, radius, color, verts, tris);
 }

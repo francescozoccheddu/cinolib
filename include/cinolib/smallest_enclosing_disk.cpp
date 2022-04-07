@@ -47,7 +47,7 @@ namespace cinolib
 
 CINO_INLINE
 std::pair<vec2d,double> make_disk(const std::vector<vec2d> & points,
-                                  const uint                 id)
+                                  const unsigned int                 id)
 {
     // (degenerate) disk passing through 1 point
     std::pair<vec2d,double> disk;
@@ -60,8 +60,8 @@ std::pair<vec2d,double> make_disk(const std::vector<vec2d> & points,
 
 CINO_INLINE
 std::pair<vec2d,double> make_disk(const std::vector<vec2d> & points,
-                                    const uint               id0,
-                                    const uint               id1)
+                                    const unsigned int               id0,
+                                    const unsigned int               id1)
 {
     // disk passing through 2 points
     std::pair<vec2d,double> disk;
@@ -74,9 +74,9 @@ std::pair<vec2d,double> make_disk(const std::vector<vec2d> & points,
 
 CINO_INLINE
 std::pair<vec2d,double> make_disk(const std::vector<vec2d> & points,
-                                    const uint               id0,
-                                    const uint               id1,
-                                    const uint               id2)
+                                    const unsigned int               id0,
+                                    const unsigned int               id1,
+                                    const unsigned int               id2)
 {
     // disk passing through 3 points
     std::pair<vec2d,double> disk;
@@ -115,10 +115,10 @@ std::pair<vec2d,double> make_disk(const std::vector<vec2d> & points,
 //
 CINO_INLINE
 std::pair<vec2d,double> Welzl_algorithm(const std::vector<vec2d> & points,
-                                        const std::vector<uint>  & P,
-                                        const uint                 nP,
-                                              std::vector<uint>  & R,
-                                        const uint                 nR)
+                                        const std::vector<unsigned int>  & P,
+                                        const unsigned int                 nP,
+                                              std::vector<unsigned int>  & R,
+                                        const unsigned int                 nR)
 {
     if(nP == 1)
     {
@@ -145,8 +145,8 @@ void smallest_enclosing_disk(const std::vector<vec2d> & points,
                                    vec2d              & center,
                                    double             & radius)
 {
-    std::vector<uint> P(points.size());
-    std::vector<uint> R(points.size(),0);
+    std::vector<unsigned int> P(points.size());
+    std::vector<unsigned int> R(points.size(),0);
     std::iota(P.begin(), P.end(), 0);
 
     // randomize points (http://www.cplusplus.com/reference/algorithm/shuffle/)

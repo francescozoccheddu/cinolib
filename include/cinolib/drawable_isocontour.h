@@ -74,8 +74,6 @@ class DrawableIsocontour : public Isocontour<M,V,E,P>, public DrawableObject
 
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "drawable_isocontour.cpp"
-#endif
+#include "drawable_isocontour.tpp"
 
 #endif // CINO_DRAWABLE_ISOCONTOUR_H

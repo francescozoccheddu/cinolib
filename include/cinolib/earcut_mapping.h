@@ -38,6 +38,7 @@
 
 #include <cinolib/geometry/vec_mat.h>
 #include <cinolib/symbols.h>
+#include <vector>
 
 namespace cinolib
 {
@@ -91,17 +92,16 @@ namespace cinolib
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-typedef struct
+struct EarcutMapping_data
 {
     std::vector<vec3d> poly_A; // circular list of vertices for polygon A
     std::vector<vec3d> poly_B; // circular list of vertices for polygon A
-    std::vector<uint>  tris;   // serialized triangles (for both A and B)
+    std::vector<unsigned int>  tris;   // serialized triangles (for both A and B)
 
     bool   strictly_convex = true;     // true if polygon B is strictly convex, false otherwise
     vec3d  disk_center = vec3d(0,0,0); // center of a disk inside polygon B (used when strictly_convex is false)
-    float  disk_radius = 0.4;          // radius of a disk inside polygon B (used when strictly_convex is false)
-}
-EarcutMapping_data;
+    float  disk_radius = 0.4f;          // radius of a disk inside polygon B (used when strictly_convex is false)
+};
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 

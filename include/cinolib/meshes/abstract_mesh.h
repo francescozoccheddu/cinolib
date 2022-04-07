@@ -72,20 +72,20 @@ class AbstractMesh
         AABB bb;
 
         std::vector<vec3d>             verts;
-        std::vector<uint>              edges;
-        std::vector<std::vector<uint>> polys; // either polygons or polyhedra
+        std::vector<unsigned int>              edges;
+        std::vector<std::vector<unsigned int>> polys; // either polygons or polyhedra
 
         M              m_data;
         std::vector<V> v_data;
         std::vector<E> e_data;
         std::vector<P> p_data;
 
-        std::vector<std::vector<uint>> v2v; // vert to vert adjacency
-        std::vector<std::vector<uint>> v2e; // vert to edge adjacency
-        std::vector<std::vector<uint>> v2p; // vert to poly adjacency
-        std::vector<std::vector<uint>> e2p; // edge to poly adjacency        
-        std::vector<std::vector<uint>> p2e; // poly to edge adjacency
-        std::vector<std::vector<uint>> p2p; // poly to poly adjacency
+        std::vector<std::vector<unsigned int>> v2v; // vert to vert adjacency
+        std::vector<std::vector<unsigned int>> v2e; // vert to edge adjacency
+        std::vector<std::vector<unsigned int>> v2p; // vert to poly adjacency
+        std::vector<std::vector<unsigned int>> e2p; // edge to poly adjacency        
+        std::vector<std::vector<unsigned int>> p2e; // poly to edge adjacency
+        std::vector<std::vector<unsigned int>> p2p; // poly to poly adjacency
 
     public:
 
@@ -132,24 +132,24 @@ class AbstractMesh
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-        virtual uint verts_per_poly(const uint pid) const = 0;
-        virtual uint edges_per_poly(const uint pid) const { return this->p2e.at(pid).size(); }
+        virtual unsigned int verts_per_poly(const unsigned int pid) const = 0;
+        virtual unsigned int edges_per_poly(const unsigned int pid) const { return this->p2e.at(pid).size(); }
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-        uint num_verts() const { return verts.size();     }
-        uint num_edges() const { return edges.size() / 2; }
-        uint num_polys() const { return polys.size();     }
+        unsigned int num_verts() const { return verts.size();     }
+        unsigned int num_edges() const { return edges.size() / 2; }
+        unsigned int num_polys() const { return polys.size();     }
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
         const AABB                           & bbox()          const { return bb;    }
         const std::vector<vec3d>             & vector_verts()  const { return verts; }
               std::vector<vec3d>             & vector_verts()        { return verts; }
-        const std::vector<uint>              & vector_edges()  const { return edges; }
-              std::vector<uint>              & vector_edges()        { return edges; }
-        const std::vector<std::vector<uint>> & vector_polys()  const { return polys; }
-              std::vector<std::vector<uint>> & vector_polys()        { return polys; }
+        const std::vector<unsigned int>              & vector_edges()  const { return edges; }
+              std::vector<unsigned int>              & vector_edges()        { return edges; }
+        const std::vector<std::vector<unsigned int>> & vector_polys()  const { return polys; }
+              std::vector<std::vector<unsigned int>> & vector_polys()        { return polys; }
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -174,131 +174,129 @@ class AbstractMesh
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-                const std::vector<uint> & adj_v2v(const uint vid) const { return v2v.at(vid); }
-                      std::vector<uint> & adj_v2v(const uint vid)       { return v2v.at(vid); }
-                const std::vector<uint> & adj_v2e(const uint vid) const { return v2e.at(vid); }
-                      std::vector<uint> & adj_v2e(const uint vid)       { return v2e.at(vid); }
-                const std::vector<uint> & adj_v2p(const uint vid) const { return v2p.at(vid); }
-                      std::vector<uint> & adj_v2p(const uint vid)       { return v2p.at(vid); }
-                      std::vector<uint>   adj_e2v(const uint eid) const;
-                      std::vector<uint>   adj_e2e(const uint eid) const;
-                const std::vector<uint> & adj_e2p(const uint eid) const { return e2p.at(eid); }
-                      std::vector<uint> & adj_e2p(const uint eid)       { return e2p.at(eid); }
-                const std::vector<uint> & adj_p2e(const uint pid) const { return p2e.at(pid); }
-                      std::vector<uint> & adj_p2e(const uint pid)       { return p2e.at(pid); }
-                const std::vector<uint> & adj_p2p(const uint pid) const { return p2p.at(pid); }
-                      std::vector<uint> & adj_p2p(const uint pid)       { return p2p.at(pid); }
-        virtual const std::vector<uint> & adj_p2v(const uint pid) const = 0;
-        virtual       std::vector<uint> & adj_p2v(const uint pid)       = 0;
+                const std::vector<unsigned int> & adj_v2v(const unsigned int vid) const { return v2v.at(vid); }
+                      std::vector<unsigned int> & adj_v2v(const unsigned int vid)       { return v2v.at(vid); }
+                const std::vector<unsigned int> & adj_v2e(const unsigned int vid) const { return v2e.at(vid); }
+                      std::vector<unsigned int> & adj_v2e(const unsigned int vid)       { return v2e.at(vid); }
+                const std::vector<unsigned int> & adj_v2p(const unsigned int vid) const { return v2p.at(vid); }
+                      std::vector<unsigned int> & adj_v2p(const unsigned int vid)       { return v2p.at(vid); }
+                      std::vector<unsigned int>   adj_e2v(const unsigned int eid) const;
+                      std::vector<unsigned int>   adj_e2e(const unsigned int eid) const;
+                const std::vector<unsigned int> & adj_e2p(const unsigned int eid) const { return e2p.at(eid); }
+                      std::vector<unsigned int> & adj_e2p(const unsigned int eid)       { return e2p.at(eid); }
+                const std::vector<unsigned int> & adj_p2e(const unsigned int pid) const { return p2e.at(pid); }
+                      std::vector<unsigned int> & adj_p2e(const unsigned int pid)       { return p2e.at(pid); }
+                const std::vector<unsigned int> & adj_p2p(const unsigned int pid) const { return p2p.at(pid); }
+                      std::vector<unsigned int> & adj_p2p(const unsigned int pid)       { return p2p.at(pid); }
+        virtual const std::vector<unsigned int> & adj_p2v(const unsigned int pid) const = 0;
+        virtual       std::vector<unsigned int> & adj_p2v(const unsigned int pid)       = 0;
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
         const M & mesh_data()               const { return m_data;         }
               M & mesh_data()                     { return m_data;         }
-        const V & vert_data(const uint vid) const { return v_data.at(vid); }
-              V & vert_data(const uint vid)       { return v_data.at(vid); }
-        const E & edge_data(const uint eid) const { return e_data.at(eid); }
-              E & edge_data(const uint eid)       { return e_data.at(eid); }
-        const P & poly_data(const uint pid) const { return p_data.at(pid); }
-              P & poly_data(const uint pid)       { return p_data.at(pid); }
+        const V & vert_data(const unsigned int vid) const { return v_data.at(vid); }
+              V & vert_data(const unsigned int vid)       { return v_data.at(vid); }
+        const E & edge_data(const unsigned int eid) const { return e_data.at(eid); }
+              E & edge_data(const unsigned int eid)       { return e_data.at(eid); }
+        const P & poly_data(const unsigned int pid) const { return p_data.at(pid); }
+              P & poly_data(const unsigned int pid)       { return p_data.at(pid); }
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
         // useful for GUIs with mouse picking
-        uint pick_vert(const vec3d & p) const;
-        uint pick_edge(const vec3d & p) const;
-        uint pick_poly(const vec3d & p) const;
+        unsigned int pick_vert(const vec3d & p) const;
+        unsigned int pick_edge(const vec3d & p) const;
+        unsigned int pick_poly(const vec3d & p) const;
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-          const vec3d          & vert                       (const uint vid) const { return verts.at(vid); }
-                vec3d          & vert                       (const uint vid)       { return verts.at(vid); }
-                void             vert_weights_uniform       (const uint vid, std::vector<std::pair<uint,double>> & wgts) const;
-                std::set<uint>   vert_n_ring                (const uint vid, const uint n) const;
-                bool             verts_are_adjacent         (const uint vid0, const uint vid1) const;
-                bool             vert_is_local_min          (const uint vid, const int tex_coord = U_param) const;
-                bool             vert_is_local_max          (const uint vid, const int tex_coord = U_param) const;
-                uint             vert_valence               (const uint vid) const;
-                uint             vert_shared                (const uint eid0, const uint eid1) const;
-                int              vert_shared_between_polys  (const std::vector<uint> & pids) const;
+          const vec3d          & vert                       (const unsigned int vid) const { return verts.at(vid); }
+                vec3d          & vert                       (const unsigned int vid)       { return verts.at(vid); }
+                void             vert_weights_uniform       (const unsigned int vid, std::vector<std::pair<unsigned int,double>> & wgts) const;
+                std::set<unsigned int>   vert_n_ring                (const unsigned int vid, const unsigned int n) const;
+                bool             verts_are_adjacent         (const unsigned int vid0, const unsigned int vid1) const;
+                bool             vert_is_local_min          (const unsigned int vid, const int tex_coord = U_param) const;
+                bool             vert_is_local_max          (const unsigned int vid, const int tex_coord = U_param) const;
+                unsigned int             vert_valence               (const unsigned int vid) const;
+                unsigned int             vert_shared                (const unsigned int eid0, const unsigned int eid1) const;
+                int              vert_shared_between_polys  (const std::vector<unsigned int> & pids) const;
                 double           vert_min_uvw_value         (const int tex_coord = U_param) const;
                 double           vert_max_uvw_value         (const int tex_coord = U_param) const;
                 void             vert_apply_labels          (const std::vector<int> & labels);
                 void             vert_apply_label           (const int label);                
-        virtual double           vert_mass                  (const uint vid) const = 0;
+        virtual double           vert_mass                  (const unsigned int vid) const = 0;
         virtual void             vert_set_color             (const Color & c);
         virtual void             vert_set_alpha             (const float alpha);
-        virtual uint             vert_opposite_to           (const uint eid, const uint vid) const;
-        virtual void             vert_weights               (const uint vid, const int type, std::vector<std::pair<uint,double>> & wgts) const;
+        virtual unsigned int             vert_opposite_to           (const unsigned int eid, const unsigned int vid) const;
+        virtual void             vert_weights               (const unsigned int vid, const int type, std::vector<std::pair<unsigned int,double>> & wgts) const;
                 void             vert_set_flag              (const int flag, const bool b);
-                void             vert_set_flag              (const int flag, const bool b, const std::vector<uint> & vids);
+                void             vert_set_flag              (const int flag, const bool b, const std::vector<unsigned int> & vids);
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-                vec3d                  edge_vert                  (const uint eid, const uint offset) const;
-                uint                   edge_vert_id               (const uint eid, const uint offset) const;
-                std::vector<uint>      edge_vert_ids              (const uint eid) const;
-                std::vector<vec3d>     edge_verts                 (const uint eid) const;
-                int                    edge_id                    (const uint vid0, const uint vid1) const;
+                vec3d                  edge_vert                  (const unsigned int eid, const unsigned int offset) const;
+                unsigned int                   edge_vert_id               (const unsigned int eid, const unsigned int offset) const;
+                std::vector<unsigned int>      edge_vert_ids              (const unsigned int eid) const;
+                std::vector<vec3d>     edge_verts                 (const unsigned int eid) const;
+                int                    edge_id                    (const unsigned int vid0, const unsigned int vid1) const;
                 int                    edge_id                    (const ipair & vids) const;
-                int                    edge_id                    (const std::vector<uint> & vids) const;
-                vec3d                  edge_sample_at             (const uint eid, double lambda) const; // arc-length param
-                uint                   edge_valence               (const uint eid) const;
-                bool                   edge_contains_vert         (const uint eid, const uint vid) const;
-                bool                   edges_are_adjacent         (const uint eid0, const uint eid1) const;
-                double                 edge_length                (const uint eid) const;
-                vec3d                  edge_vec                   (const uint eid, const bool normalized = false) const;
+                int                    edge_id                    (const std::vector<unsigned int> & vids) const;
+                vec3d                  edge_sample_at             (const unsigned int eid, double lambda) const; // arc-length param
+                unsigned int                   edge_valence               (const unsigned int eid) const;
+                bool                   edge_contains_vert         (const unsigned int eid, const unsigned int vid) const;
+                bool                   edges_are_adjacent         (const unsigned int eid0, const unsigned int eid1) const;
+                double                 edge_length                (const unsigned int eid) const;
+                vec3d                  edge_vec                   (const unsigned int eid, const bool normalized = false) const;
                 double                 edge_avg_length            () const;
-                double                 edge_avg_length            (const uint vid) const;
+                double                 edge_avg_length            (const unsigned int vid) const;
                 double                 edge_max_length            () const;
                 double                 edge_min_length            () const;
                 void                   edge_apply_labels          (const std::vector<int> & labels);
                 void                   edge_apply_label           (const int label);
                 void                   edge_mark_sharp_creases    (const float thresh_rad = 1.0472); // 60 degrees
-        virtual double                 edge_dihedral_angle        (const uint eid) const = 0;
+        virtual double                 edge_dihedral_angle        (const unsigned int eid) const = 0;
         virtual void                   edge_set_color             (const Color & c);
         virtual void                   edge_set_alpha             (const float alpha);
                 void                   edge_set_flag              (const int flag, const bool b);
-                void                   edge_set_flag              (const int flag, const bool b, const std::vector<uint> & eids);
+                void                   edge_set_flag              (const int flag, const bool b, const std::vector<unsigned int> & eids);
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-                vec3d              poly_vert                  (const uint pid, const uint offset) const;
-                std::vector<vec3d> poly_verts                 (const uint pid) const;
-                std::vector<uint>  poly_verts_id              (const uint pid, const bool sort_by_vid = false) const;
-                std::vector<uint>  poly_v2v                   (const uint pid, const uint vid) const;
-                std::vector<uint>  poly_v2e                   (const uint pid, const uint vid) const;
-                uint               poly_vert_valence          (const uint pid, const uint vid) const;
-                uint               poly_vert_id               (const uint pid, const uint offset) const;
-                uint               poly_vert_offset           (const uint pid, const uint vid) const;
-                vec3d              poly_centroid              (const uint pid) const;
-                vec3d              poly_sample_at             (const uint pid, const double bc[]) const;
-                double             poly_sample_param_at       (const uint pid, const double bc[], const int tex_coord = U_param) const;
-                uint               poly_edge_id               (const uint pid, const uint vid0, const uint vid1) const;
-                bool               poly_contains_vert         (const uint pid, const uint vid) const;
-                bool               poly_contains_edge         (const uint pid, const uint eid) const;
-                bool               poly_contains_edge         (const uint pid, const uint vid0, const uint vid1) const;
+                vec3d              poly_vert                  (const unsigned int pid, const unsigned int offset) const;
+                std::vector<vec3d> poly_verts                 (const unsigned int pid) const;
+                std::vector<unsigned int>  poly_verts_id              (const unsigned int pid, const bool sort_by_vid = false) const;
+                std::vector<unsigned int>  poly_v2v                   (const unsigned int pid, const unsigned int vid) const;
+                std::vector<unsigned int>  poly_v2e                   (const unsigned int pid, const unsigned int vid) const;
+                unsigned int               poly_vert_valence          (const unsigned int pid, const unsigned int vid) const;
+                unsigned int               poly_vert_id               (const unsigned int pid, const unsigned int offset) const;
+                unsigned int               poly_vert_offset           (const unsigned int pid, const unsigned int vid) const;
+                vec3d              poly_centroid              (const unsigned int pid) const;
+                vec3d              poly_sample_at             (const unsigned int pid, const double bc[]) const;
+                double             poly_sample_param_at       (const unsigned int pid, const double bc[], const int tex_coord = U_param) const;
+                unsigned int               poly_edge_id               (const unsigned int pid, const unsigned int vid0, const unsigned int vid1) const;
+                bool               poly_contains_vert         (const unsigned int pid, const unsigned int vid) const;
+                bool               poly_contains_edge         (const unsigned int pid, const unsigned int eid) const;
+                bool               poly_contains_edge         (const unsigned int pid, const unsigned int vid0, const unsigned int vid1) const;
                 void               poly_color_wrt_label       (const bool sorted=false, const float s=.5f, float v=.85f); // s => saturation, v => value in HSV color space
                 void               poly_label_wrt_color       ();
                 void               poly_set_flag              (const int flag, const bool b);
-                void               poly_set_flag              (const int flag, const bool b, const std::vector<uint> & pids);
-                uint               polys_n_unique_colors      () const;
-                uint               polys_n_unique_labels      () const;
+                void               poly_set_flag              (const int flag, const bool b, const std::vector<unsigned int> & pids);
+                unsigned int               polys_n_unique_colors      () const;
+                unsigned int               polys_n_unique_labels      () const;
                 bool               polys_are_colored          () const;
                 bool               polys_are_labeled          () const;
                 void               poly_apply_labels          (const std::vector<int> & labels);
                 void               poly_apply_label           (const int label);
-                AABB               poly_aabb                  (const uint pid) const;
-        virtual double             poly_mass                  (const uint pid) const = 0;
+                AABB               poly_aabb                  (const unsigned int pid) const;
+        virtual double             poly_mass                  (const unsigned int pid) const = 0;
         virtual void               poly_set_color             (const Color & c);
         virtual void               poly_set_alpha             (const float alpha);
-        virtual void               poly_export_element        (const uint pid, std::vector<vec3d> & verts, std::vector<std::vector<uint>> & faces) const = 0;
+        virtual void               poly_export_element        (const unsigned int pid, std::vector<vec3d> & verts, std::vector<std::vector<unsigned int>> & faces) const = 0;
 };
 
 }
 
-#ifndef  CINO_STATIC_LIB
-#include "abstract_mesh.cpp"
-#endif
+#include "abstract_mesh.tpp"
 
 #endif //CINO_ABSTRACT_MESH_H

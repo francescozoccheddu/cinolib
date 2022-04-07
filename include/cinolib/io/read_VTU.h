@@ -48,15 +48,15 @@ namespace cinolib
 CINO_INLINE
 void read_VTU(const char          * filename,
                std::vector<double> & xyz,
-               std::vector<uint>   & tet,
-               std::vector<uint>   & hexa);
+               std::vector<unsigned int>   & tet,
+               std::vector<unsigned int>   & hexa);
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 CINO_INLINE
 void read_VTU(const char                      * filename,
                std::vector<double>            & xyz,
-               std::vector<std::vector<uint>> & poly);
+               std::vector<std::vector<unsigned int>> & poly);
 
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -64,7 +64,7 @@ void read_VTU(const char                      * filename,
 CINO_INLINE
 void read_VTU(const char                      * filename,
                std::vector<vec3d>             & verts,
-               std::vector<std::vector<uint>> & poly);
+               std::vector<std::vector<unsigned int>> & poly);
 
 }
 

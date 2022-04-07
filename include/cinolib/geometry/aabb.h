@@ -101,9 +101,9 @@ class AABB
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
         std::vector<vec3d> corners(const double scaling_factor = 1.0) const;
-        std::vector<uint>  tris()  const;
-        std::vector<uint>  quads() const;
-        std::vector<uint>  edges() const;
+        std::vector<unsigned int>  tris()  const;
+        std::vector<unsigned int>  quads() const;
+        std::vector<unsigned int>  edges() const;
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
