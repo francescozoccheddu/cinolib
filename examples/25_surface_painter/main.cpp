@@ -1,6 +1,7 @@
 #include <cinolib/gl/glcanvas.h>
 #include <cinolib/meshes/meshes.h>
 #include <cinolib/geodesics.h>
+#include <imgui.h>
 
 int main(int argc, char **argv)
 {

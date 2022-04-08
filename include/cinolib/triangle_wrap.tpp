@@ -56,7 +56,11 @@
 #define REAL double
 #define VOID int
 
+// FIXME (francescozoccheddu) This guard should perhaps be included directly inside triangle.h
+#ifndef TRIANGLE_H
+#define TRIANGLE_H
 #include <triangle.h>
+#endif // TRIANGLE_H
 
 // restore previously existing symbols
 #undef ANSI_DECLARATORS

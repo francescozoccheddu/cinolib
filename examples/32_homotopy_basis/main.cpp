@@ -3,6 +3,7 @@
 #include <cinolib/drawable_segment_soup.h>
 #include <cinolib/homotopy_basis.h>
 #include <cinolib/profiler.h>
+#include <imgui.h>
 
 int main(int argc, char **argv)
 {

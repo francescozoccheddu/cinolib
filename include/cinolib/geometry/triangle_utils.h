@@ -111,5 +111,8 @@ double point_to_triangle_dist_sqrd(const vec3d & P,
 }
 
 #include "triangle_utils.tpp"
+#ifndef  CINO_STATIC_LIB
+#include "triangle_utils.cpp"
+#endif
 
 #endif // CINO_TRIANGLE_UTILS_H

@@ -3,6 +3,7 @@
 #include <cinolib/profiler.h>
 #include <cinolib/drawable_isosurface.h>
 #include <cinolib/gl/glcanvas.h>
+#include <imgui.h>
 
 int main(int argc, char **argv)
 {

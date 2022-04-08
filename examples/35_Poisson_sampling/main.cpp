@@ -2,6 +2,7 @@
 #include <cinolib/Poisson_sampling.h>
 #include <cinolib/profiler.h>
 #include <cinolib/gl/glcanvas.h>
+#include <imgui.h>
 
 int main(int, char **)
 {
