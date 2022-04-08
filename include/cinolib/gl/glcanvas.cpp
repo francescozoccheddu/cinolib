@@ -330,7 +330,6 @@ CINO_INLINE
 void GLcanvas::draw()
 {
     glfwMakeContextCurrent(window);
-    glViewport(0, 0, camera.width, camera.height);
     glClearColor(1,1,1,1);
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 
@@ -602,6 +601,7 @@ void GLcanvas::project(const vec3d & p3d, vec2d & p2d, GLdouble & depth) const
 CINO_INLINE
 void GLcanvas::window_size_event(GLFWwindow *window, int width, int height)
 {
+    glViewport(0, 0, width, height);
     GLcanvas* v = static_cast<GLcanvas*>(glfwGetWindowUserPointer(window));
     v->camera.height           = height;
     v->camera.width            = width;
