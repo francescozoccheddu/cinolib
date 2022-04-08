@@ -113,5 +113,8 @@ class DrawableVectorField : public VectorField, public DrawableObject
 }
 
 #include "drawable_vector_field.tpp"
+#ifndef  CINO_STATIC_LIB
+#include "drawable_vector_field.cpp"
+#endif
 
 #endif // CINO_DRAWABLE_VECTOR_FIELD_H

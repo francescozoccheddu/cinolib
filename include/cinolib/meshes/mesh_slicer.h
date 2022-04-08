@@ -80,5 +80,8 @@ class MeshSlicer
 }
 
 #include "mesh_slicer.tpp"
+#ifndef  CINO_STATIC_LIB
+#include "mesh_slicer.cpp"
+#endif
 
 #endif // CINO_MESH_SLICER_H

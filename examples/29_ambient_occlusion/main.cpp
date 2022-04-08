@@ -2,6 +2,7 @@
 #include <cinolib/gl/glcanvas.h>
 #include <cinolib/ambient_occlusion.h>
 #include <cinolib/profiler.h>
+#include <imgui.h>
 
 int main(int argc, char **argv)
 {

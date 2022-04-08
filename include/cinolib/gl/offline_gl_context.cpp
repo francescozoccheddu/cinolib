@@ -59,7 +59,7 @@ GLFWwindow * create_offline_GL_context(const int w,  const int h)
     int fb_w,fb_h;
     glfwGetFramebufferSize(context, &fb_w, &fb_h);
     assert(w%2==0 && h%2==0); // sanity checks
-    assert(fb_w==w && fb_h==h);
+    assert(fb_w==w && fb_h==h); // FIXME (francescozoccheddu) fb_w = fb_h = 204 != 256 = w = h
     return context;
 }
 
