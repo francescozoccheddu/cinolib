@@ -12,6 +12,8 @@ set(CINOLIB_USES_BOOST             ON )
 set(CINOLIB_USES_VTK               ON ) # optional, if added VTK formats will be supported everywhere
 
 # pass cinolib and the external dependencies to all examples
+set (CINOLIB_HEADER_ONLY ON)
+set (cinolib_DIR "${PROJECT_SOURCE_DIR}/..")
 find_package(cinolib REQUIRED)
 link_libraries(cinolib)
 
