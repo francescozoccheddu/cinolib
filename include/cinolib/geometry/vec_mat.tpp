@@ -42,14 +42,28 @@ namespace cinolib
 
 template<unsigned int r, unsigned int c, class T>
 CINO_INLINE
-std::ostream & operator<< (std::ostream & in, const mat<r,c,T> & op)
+std::ostream & operator<< (std::ostream& out, const mat<r,c,T>& mat)
 {
     for(unsigned int i=0; i<r; ++i)
-    for(unsigned int j=0; j<c; ++j)
-    {
-        if(i>0 && c>1 && j%c==0) std::cout << "\n";
-        std::cout << op(i,j) << " ";
-    }
+        for(unsigned int j=0; j<c; ++j)
+        {
+            if(i>0 && c>1 && j%c==0) out << "\n";
+            out << mat(i,j) << " ";
+        }
+    return out;
+}
+
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+template<unsigned int r, unsigned int c, class T>
+CINO_INLINE
+std::istream& operator>> (std::istream& in, mat<r, c, T>& mat)
+{
+    for (unsigned int i = 0; i < r; ++i)
+        for (unsigned int j = 0; j < c; ++j)
+        {
+            in >> mat(i, j);
+        }
     return in;
 }
 
@@ -591,6 +605,17 @@ mat<r,c,T> & mat<r,c,T>::rotate(const mat<3,1,T> & axis, const T angle_rad)
 
 template<unsigned int r, unsigned int c, class T>
 CINO_INLINE
+mat<r,c,T> mat<r, c, T>::normalized() const
+{
+    mat clone(*this);
+    clone.normalize();
+    return clone;
+}
+
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+template<unsigned int r, unsigned int c, class T>
+CINO_INLINE
 double mat<r,c,T>::normalize()
 {
     return vec_normalize<r*c,T>(_vec);
@@ -716,6 +741,15 @@ CINO_INLINE
 bool mat<r,c,T>::is_deg() const // either null, nan or inf
 {
     return vec_is_deg<r*c,T>(_vec);
+}
+
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+template<unsigned int r, unsigned int c, class T>
+CINO_INLINE
+bool mat<r, c, T>::is_finite() const // either null, nan or inf
+{
+    return vec_is_finite<r* c, T>(_vec);
 }
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
