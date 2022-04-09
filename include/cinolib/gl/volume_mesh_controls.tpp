@@ -99,7 +99,7 @@ void VolumeMeshControls<Mesh>::header_IO(const bool open)
             if(!filename.empty())
             {
                 *m = Mesh(filename.c_str());
-                gui->refit_scene();
+                gui->reset_camera();
             }
         }
         ImGui::SameLine();
@@ -591,7 +591,7 @@ void VolumeMeshControls<Mesh>::header_manual_digging(const bool open)
 {
     //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-    static auto func_dig = [&](int modifiers)
+    static auto func_dig = [&](int modifiers) -> bool
     {
         if(modifiers & GLFW_MOD_SHIFT)
         {
@@ -610,11 +610,12 @@ void VolumeMeshControls<Mesh>::header_manual_digging(const bool open)
                 m->updateGL();
             }
         }
+        return false;
     };
 
     //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-    static auto func_undig = [&](int modifiers)
+    static auto func_undig = [&](int modifiers) -> bool
     {
         if(modifiers & GLFW_MOD_SHIFT)
         {
@@ -633,11 +634,12 @@ void VolumeMeshControls<Mesh>::header_manual_digging(const bool open)
                 m->updateGL();
             }
         }
+        return false;
     };
 
     //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-    static auto func_isolate = [&](int modifiers)
+    static auto func_isolate = [&](int modifiers) -> bool
     {
         if(modifiers & GLFW_MOD_SHIFT)
         {
@@ -650,7 +652,7 @@ void VolumeMeshControls<Mesh>::header_manual_digging(const bool open)
                 if(!m->face_is_visible(fid,pid_beneath))
                 {
                     // not a good selection...
-                    return;
+                    return false;
                 }
                 for(unsigned int vid : m->adj_p2v(pid_beneath))
                 for(unsigned int pid : m->adj_v2p(vid))
@@ -664,6 +666,7 @@ void VolumeMeshControls<Mesh>::header_manual_digging(const bool open)
                 m->updateGL();
             }
         }
+        return false;
     };
 
     //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -695,7 +698,7 @@ void VolumeMeshControls<Mesh>::header_debug(const bool open)
                 vert_normals.clear();
                 vert_normals.set_cheap_rendering(true);
                 vert_normals.set_color(vert_debug_color);
-                double l = gui->camera.scene_radius/5.0;
+                double l = gui->scene_radius/5.0;
                 for(unsigned int vid=0; vid<m->num_verts(); ++vid)
                 {
                     if(m->vert_is_visible(vid))
@@ -719,7 +722,7 @@ void VolumeMeshControls<Mesh>::header_debug(const bool open)
                 face_normals.clear();
                 face_normals.set_cheap_rendering(true);
                 face_normals.set_color(face_debug_color);
-                double l = gui->camera.scene_radius/5.0;
+                double l = gui->scene_radius/5.0;
                 for(unsigned int fid=0; fid<m->num_faces(); ++fid)
                 {
                     unsigned int pid_beneath;

@@ -65,9 +65,9 @@ void GLcanvas::notify_camera_change() const
 CINO_INLINE
 double GLcanvas::get_camera_speed_modifier() const
 {
-    const bool fast{ glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS };
-    const bool slow{ glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS };
-    return slow ? 0.5 : fast ? 2.0 : 1.0;
+    const bool fast{ glfwGetKey(window, key_bindings.camera_faster) == GLFW_PRESS };
+    const bool slow{ glfwGetKey(window, key_bindings.camera_slower) == GLFW_PRESS };
+    return slow ? camera_settings.slower_factor : fast ? camera_settings.faster_factor : 1.0;
 }
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -80,12 +80,13 @@ GLcanvas::GLcanvas(const int width, const int height)
     owns_ImGui = (window_count==0);
     window_count++;
 
-    camera = Camera<double>(width,height);
-    camera.toggle_persp_ortho(); // make it perspective
-
     glfwInit();
     window = glfwCreateWindow(width, height, "", NULL, NULL);
     if(!window) glfwTerminate();
+
+    this->width = width;
+    this->height = height;
+    reset_camera();
 
     glfwSwapInterval(1); // enable vsync
 
@@ -167,13 +168,13 @@ GLcanvas::~GLcanvas()
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 CINO_INLINE
-void GLcanvas::push(const DrawableObject *obj, const bool refit_scene)
+void GLcanvas::push(const DrawableObject *obj, const bool reset_camera)
 {
     drawlist.push_back(obj);
 
-    if(obj->scene_radius()>0 && refit_scene)
+    if(obj->scene_radius()>0 && reset_camera)
     {
-        this->refit_scene();
+        this->reset_camera();
     }
 }
 
@@ -202,8 +203,7 @@ void GLcanvas::push_marker(const vec2d       & p,
                            const std::string & text,
                            const Color         color,
                            const unsigned int          disk_radius,
-                           const unsigned int          font_size,
-                           bool                        fixed_size)
+                           const unsigned int          font_size)
 {
     Marker m;
     m.pos_2d      = p;
@@ -211,7 +211,6 @@ void GLcanvas::push_marker(const vec2d       & p,
     m.color       = color;
     m.disk_radius = disk_radius;
     m.font_size   = font_size;
-    m.fixed_size  = fixed_size;
     push(m);
 }
 
@@ -222,8 +221,7 @@ void GLcanvas::push_marker(const vec3d       & p,
                            const std::string & text,
                            const Color         color,
                            const unsigned int          disk_radius,
-                           const unsigned int          font_size,
-                           bool                        fixed_size)
+                           const unsigned int          font_size)
 {
     Marker m;
     m.pos_3d      = p;
@@ -231,7 +229,6 @@ void GLcanvas::push_marker(const vec3d       & p,
     m.color       = color;
     m.disk_radius = disk_radius;
     m.font_size   = font_size;
-    m.fixed_size  = fixed_size;
     push(m);
 }
 
@@ -263,34 +260,48 @@ void GLcanvas::pop_all_markers()
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 CINO_INLINE
-void GLcanvas::refit_scene(bool keep_model)
+void GLcanvas::reset_camera_only()
 {
     // update camera scene parameters
-    camera.scene_center = vec3d(0.0);
-    camera.scene_radius = 0;
+    scene_center = vec3d{};
+    scene_radius = 0;
     unsigned int count = 0;
-    for(auto obj : drawlist)
+    for (auto obj : drawlist)
     {
-        if(obj->scene_radius()>0)
+        if (obj->scene_radius() > 0)
         {
-            camera.scene_center += obj->scene_center();
-            camera.scene_radius += obj->scene_radius();
+            scene_center += obj->scene_center();
+            scene_radius += obj->scene_radius();
             ++count;
         }
     }
-    camera.scene_center /= static_cast<double>(count);
-    camera.scene_radius /= static_cast<double>(count);
-
-    // update camera matrices and pass them to the GL system
-    if (keep_model)
+    if (count)
     {
-        camera.reset_view();
-        camera.reset_projection();
+        scene_center /= static_cast<double>(count);
+        scene_radius /= static_cast<double>(count);
+        camera.projection.farZ = scene_radius * 10;
+        camera.projection.nearZ = scene_radius / 1000.0;
     }
     else
     {
-        camera.reset_matrices();
+        camera.projection.farZ = 1;
+        camera.projection.nearZ = 0.1;
     }
+
+    camera.projection.setAspect(width, height);
+    camera.projection.perspective = true;
+    camera.projection.verticalFieldOfView = 67;
+    camera.view.eye = scene_center - vec3d{ 0, 0, -scene_radius };
+    camera.view.forward = vec3d{ 0, 0, 1 };
+    camera.view.up = vec3d{ 0, 1, 0 };
+    camera.updateView();
+}
+
+CINO_INLINE
+void GLcanvas::reset_camera()
+{
+    reset_camera_only();
+    camera.updateProjectionAndView();
     update_GL_matrices();
     notify_camera_change();
 }
@@ -300,18 +311,18 @@ void GLcanvas::refit_scene(bool keep_model)
 CINO_INLINE
 void GLcanvas::update_GL_matrices() const
 {
-    update_GL_modelview();
+    update_GL_view();
     update_GL_projection();
 }
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 CINO_INLINE
-void GLcanvas::update_GL_modelview() const
+void GLcanvas::update_GL_view() const
 {
     glfwMakeContextCurrent(window);
     glMatrixMode(GL_MODELVIEW);
-    glLoadMatrixd((camera.view * camera.model).transpose().ptr());
+    glLoadMatrixd((camera.viewMatrix()).transpose().ptr());
 }
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -321,7 +332,7 @@ void GLcanvas::update_GL_projection() const
 {
     glfwMakeContextCurrent(window);
     glMatrixMode(GL_PROJECTION);
-    glLoadMatrixd(camera.projection.transpose().ptr());
+    glLoadMatrixd(camera.projectionMatrix().transpose().ptr());
 }
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -358,11 +369,11 @@ void GLcanvas::draw()
 CINO_INLINE
 void GLcanvas::draw_axis() const
 {
-    vec3d  O = camera.scene_center;
-    vec3d  X = O + vec3d(1,0,0)*camera.scene_radius;
-    vec3d  Y = O + vec3d(0,1,0)*camera.scene_radius;
-    vec3d  Z = O + vec3d(0,0,1)*camera.scene_radius;
-    double r = camera.scene_radius*0.02;
+    vec3d  O = scene_center;
+    vec3d  X = O + vec3d(1,0,0)*scene_radius;
+    vec3d  Y = O + vec3d(0,1,0)*scene_radius;
+    vec3d  Z = O + vec3d(0,0,1)*scene_radius;
+    double r = scene_radius*0.02;
     glfwMakeContextCurrent(window);
     glDisable(GL_DEPTH_TEST);
     draw_arrow(O, X, r, Color::RED(),   0.9, 0.5, 8);
@@ -402,8 +413,8 @@ void GLcanvas::draw_markers() const
     ImDrawList* drawList = ImGui::GetWindowDrawList();
 
     // if marker culling is enabled, read the Z buffer to depth-test 3D markers
-    GLint    W     = static_cast<GLint>(camera.width  * DPI_factor);
-    GLint    H     = static_cast<GLint>(camera.height * DPI_factor);
+    GLint    W     = static_cast<GLint>(width  * DPI_factor);
+    GLint    H     = static_cast<GLint>(height * DPI_factor);
     GLfloat *z_buf = (depth_cull_markers) ? new GLfloat[W*H] : nullptr;
     if(depth_cull_markers) whole_Z_buffer(z_buf);
 
@@ -423,10 +434,7 @@ void GLcanvas::draw_markers() const
             assert((x+W*(H-y-1)<W*H));
             if(depth_cull_markers && fabs(z-z_buf[x+W*(H-y-1)])>0.01) continue;
         }
-        // adjust marker size based on zoom
-        double zoom_factor = m.fixed_size ? 1.0 : 0.5/clamp(camera.zoom_factor, 1e-5, 1e10); // avoids overflow inside ImGui radius calculation
-        unsigned int zoom_radius = static_cast<unsigned int>(std::round(m.disk_radius * zoom_factor));
-        unsigned int zoom_font_s = static_cast<unsigned int>(std::round(m.font_size * zoom_factor));
+
         //
         if(m.disk_radius>0)
         {
@@ -435,14 +443,14 @@ void GLcanvas::draw_markers() const
             //    so I am always approximating circles with 20-gons
             //  - Besides, I should probably use something like AddSquare or AddRect to save limit polygon vertices....
             drawList->AddCircleFilled(ImVec2(pos.x(),pos.y()),
-                                      zoom_radius,
+                                      m.disk_radius,
                                       ImGui::GetColorU32(ImVec4(m.color.r, m.color.g, m.color.b, m.color.a)), 20);
         }
         if(m.font_size>0 && m.text.length()>0)
         {
             drawList->AddText(ImGui::GetFont(),
-                              zoom_font_s,
-                              ImVec2(pos.x()+zoom_radius, pos.y()-2*zoom_radius),
+                              m.font_size,
+                              ImVec2(pos.x()+m.disk_radius, pos.y()-2*m.disk_radius),
                               ImGui::GetColorU32(ImVec4(m.color.r, m.color.g, m.color.b, m.color.a)),
                               &m.text[0],
                               &m.text[0] + m.text.size());
@@ -464,7 +472,7 @@ void GLcanvas::draw_side_bar()
     assert(owns_ImGui && "Only the first canvas created handles the ImGui context");
 
     ImGui::SetNextWindowPos({0,0}, ImGuiCond_Always);
-    ImGui::SetNextWindowSize({camera.width*side_bar_width, camera.height*1.f}, ImGuiCond_Always);
+    ImGui::SetNextWindowSize({width*side_bar_width, height*1.f}, ImGuiCond_Always);
     ImGui::SetNextWindowBgAlpha(side_bar_alpha);
     ImGui::Begin("MENU");
     if(callback_app_controls!=nullptr)
@@ -486,7 +494,7 @@ void GLcanvas::draw_side_bar()
         }
     }    
     // this allows the user to interactively resize the width of the side bar
-    side_bar_width = ImGui::GetWindowWidth() / camera.width;
+    side_bar_width = ImGui::GetWindowWidth() / width;
     ImGui::End();        
 }
 
@@ -522,7 +530,7 @@ void GLcanvas::update_DPI_factor()
     // https://www.glfw.org/docs/latest/window_guide.html#window_fbsize
     int fb_width, fb_height;
     glfwGetFramebufferSize(window, &fb_width, &fb_height);
-    DPI_factor = (float)fb_width/camera.width;
+    DPI_factor = (float)fb_width/width;
 }
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -554,7 +562,7 @@ GLfloat GLcanvas::query_Z_buffer(const vec2d & p) const
     glfwMakeContextCurrent(window);
     GLint x = p.x()         * DPI_factor;
     GLint y = p.y()         * DPI_factor;
-    GLint H = camera.height * DPI_factor;
+    GLint H = height * DPI_factor;
     GLfloat depth;
     glReadPixels(x, H-1-y, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &depth);
     return depth;
@@ -577,10 +585,10 @@ bool GLcanvas::unproject(const vec2d & p2d, vec3d & p3d) const
 CINO_INLINE
 bool GLcanvas::unproject(const vec2d & p2d, const GLdouble & depth, vec3d & p3d) const
 {
-    mat2i viewport({ 0,             camera.height,
-                     camera.width, -camera.height});
+    mat2i viewport({ 0,      height,
+                     width, -height});
 
-    return gl_unproject(p2d, depth, camera.MV(), camera.projection, viewport, p3d);
+    return gl_unproject(p2d, depth, camera.viewMatrix(), camera.projectionMatrix(), viewport, p3d);
 }
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -588,10 +596,10 @@ bool GLcanvas::unproject(const vec2d & p2d, const GLdouble & depth, vec3d & p3d)
 CINO_INLINE
 void GLcanvas::project(const vec3d & p3d, vec2d & p2d, GLdouble & depth) const
 {
-    mat2i viewport({0,             camera.height,
-                    camera.width, -camera.height});
+    mat2i viewport({0,             height,
+                    width, -height});
 
-    gl_project(p3d, camera.MV(), camera.projection, viewport, p2d, depth);
+    gl_project(p3d, camera.viewMatrix(), camera.projectionMatrix(), viewport, p2d, depth);
 }
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -603,10 +611,10 @@ void GLcanvas::window_size_event(GLFWwindow *window, int width, int height)
 {
     glViewport(0, 0, width, height);
     GLcanvas* v = static_cast<GLcanvas*>(glfwGetWindowUserPointer(window));
-    v->camera.height           = height;
-    v->camera.width            = width;
-    v->trackball.last_click_2d = vec2d(inf_double); // fixes crazy translation deltas after window resizing!
-    v->camera.reset_projection();                   // update the camera frustum
+    v->height           = height;
+    v->width            = width;
+    v->camera.projection.setAspect(width, height);  // update the camera frustum
+    v->camera.updateProjection();
     v->update_GL_projection();                      // update OpenGL's projection matrix
     v->draw();                                      // refresh canvas while resizing
     v->notify_camera_change();
@@ -620,72 +628,110 @@ void GLcanvas::key_event(GLFWwindow *window, int key, int /*scancode*/, int acti
     // if visual controls claim the event, let them handle it!
     if(ImGui::GetIO().WantCaptureKeyboard) return;
 
-    bool camera_changed{ true };
     
     // handle repeated keys as if they were a sequence of single key press events
     if(action==GLFW_PRESS || action==GLFW_REPEAT)
     {
         GLcanvas* v = static_cast<GLcanvas*>(glfwGetWindowUserPointer(window));
 
-        if(v->callback_key_pressed) v->callback_key_pressed(key,modifiers);
+        if (v->callback_key_pressed && v->callback_key_pressed(key, modifiers))
+        {
+            return;
+        }
 
-        if(modifiers & GLFW_MOD_SHIFT) // handle SHIFT + KEY events...
+
+        bool camera_changed{ false }, needs_redraw{false};
+
+        if (!(modifiers & ~(v->key_bindings.camera_faster | v->key_bindings.camera_slower)))
         {
-            double delta_t = v->camera.scene_radius*0.01; // translation factor
-            switch(key)
+            vec3d translation{0,0,0};
+            if (v->key_bindings.pan_with_arrow_keys)
             {
-                // translations along major axes
-                case GLFW_KEY_LEFT  : v->camera.translate_x(-delta_t); break;
-                case GLFW_KEY_RIGHT : v->camera.translate_x(+delta_t); break;
-                case GLFW_KEY_UP    : v->camera.translate_y(+delta_t); break;
-                case GLFW_KEY_DOWN  : v->camera.translate_y(-delta_t); break;
-                case GLFW_KEY_1     : v->camera.translate_z(+delta_t); break;
-                case GLFW_KEY_2     : v->camera.translate_z(-delta_t); break;
-                // camera control
-                case GLFW_KEY_Z     : v->camera.zoom(0.01);            break; // zoom out
-                default             : camera_changed = false;          break;
-            }             
-        }
-        else if(modifiers & (GLFW_MOD_CONTROL|GLFW_MOD_SUPER)) // handle CTRL/CMD + KEY events...
-        {
-            switch(key)
+                switch (key)
+                {
+                    case GLFW_KEY_LEFT: translation += v->camera.view.normLeft(); break;
+                    case GLFW_KEY_RIGHT: translation += v->camera.view.normRight(); break;
+                    case GLFW_KEY_UP: translation += v->camera.view.normUp(); break;
+                    case GLFW_KEY_DOWN: translation += v->camera.view.normDown(); break;
+                }
+            }
+            if (v->key_bindings.pan_with_numpad_keys)
             {
-                // camera control (copy/paste POV)
-                case GLFW_KEY_C : glfwSetClipboardString(window, v->camera.serialize().c_str()); camera_changed = false; break;
-                case GLFW_KEY_V : v->camera.deserialize(glfwGetClipboardString(window));
-                                  // interesting resrouce to manage to correctly switch from full screen to windowed mode
-                                  // https://stackoverflow.com/questions/47402766/switching-between-windowed-and-full-screen-in-opengl-glfw-3-2
-                                  // meanwhile....
-                                  glfwSetWindowSize(window, v->camera.width, v->camera.height);
-                                  break;
-                default         : camera_changed = false; break;
+                vec3d kpTranslation{0,0,0};
+                switch (key)
+                {
+                    case GLFW_KEY_KP_4: kpTranslation += v->camera.view.normLeft(); break;
+                    case GLFW_KEY_KP_6: kpTranslation += v->camera.view.normRight(); break;
+                    case GLFW_KEY_KP_8: kpTranslation += v->camera.view.normUp(); break;
+                    case GLFW_KEY_KP_2: kpTranslation += v->camera.view.normDown(); break;
+                    case GLFW_KEY_KP_1: kpTranslation += v->camera.view.normDown() + v->camera.view.normLeft(); break;
+                    case GLFW_KEY_KP_3: kpTranslation += v->camera.view.normDown() + v->camera.view.normRight(); break;
+                    case GLFW_KEY_KP_7: kpTranslation += v->camera.view.normUp() + v->camera.view.normLeft(); break;
+                    case GLFW_KEY_KP_9: kpTranslation += v->camera.view.normUp() + v->camera.view.normRight(); break;
+                    case GLFW_KEY_KP_5: kpTranslation += v->camera.view.normForward(); break;
+                    case GLFW_KEY_KP_0: kpTranslation += v->camera.view.normBack(); break;
+                }
+                if (!kpTranslation.is_null())
+                {
+                    kpTranslation.normalize();
+                }
+                translation += kpTranslation;
+                if (!translation.is_null())
+                {
+                    camera_changed = true;
+                    v->camera.view.eye += translation * v->get_camera_speed_modifier() * v->camera_settings.translate_key_speed / 100;
+                    v->camera.updateView();
+                    v->update_GL_view();
+                }
             }
         }
-        else // handle KEY events wihtout modifiers...
+
+        if (action == GLFW_PRESS && !modifiers)
         {
-            switch(key)
+            if (key == v->key_bindings.store_camera)
             {
-                // rotations around major axes (in degrees)
-                case GLFW_KEY_LEFT  : v->camera.rotate_y(-3); break;
-                case GLFW_KEY_RIGHT : v->camera.rotate_y(+3); break;
-                case GLFW_KEY_UP    : v->camera.rotate_x(-3); break;
-                case GLFW_KEY_DOWN  : v->camera.rotate_x(+3); break;
-                case GLFW_KEY_1     : v->camera.rotate_z(+3); break;
-                case GLFW_KEY_2     : v->camera.rotate_z(-3); break;
-                // camera control
-                case GLFW_KEY_O     : v->camera.toggle_persp_ortho();       break;
-                case GLFW_KEY_Z     : v->camera.zoom(-0.01);                break; // zoom in
-                case GLFW_KEY_R     : v->camera.reset();                    break;
-                case GLFW_KEY_A     : v->show_axis = !v->show_axis;         break; // toggle show axis
-                case GLFW_KEY_TAB   : v->show_side_bar = !v->show_side_bar; break; // toggle side bar
-                default             : camera_changed = false;               break;
+                glfwSetClipboardString(window, v->camera.serialize().c_str());
+            }
+            if (key == v->key_bindings.restore_camera)
+            {
+                v->camera = FreeCamera<double>::deserialize(glfwGetClipboardString(window));
+                v->camera.updateProjectionAndView();
+                v->update_GL_matrices();
+                camera_changed = true;
+                glfwSetWindowSize(window, v->width, v->height);
+            }
+            if (key == v->key_bindings.reset_camera)
+            {
+                v->reset_camera_only();
+                v->update_GL_matrices();
+                camera_changed = true;
+            }
+            if (key == v->key_bindings.toggle_axes)
+            {
+                v->show_axis ^= true;
+                needs_redraw = true;
+            }
+            if (key == v->key_bindings.toggle_ortho)
+            {
+                v->camera.projection.perspective ^= true;
+                v->camera.projection.verticalFieldOfView = v->camera.projection.perspective ? 67 : v->scene_radius;
+                v->camera.updateProjection();
+                v->update_GL_projection();
+                camera_changed = true;
+            }
+            if (key == v->key_bindings.toggle_sidebar)
+            {
+                v->show_side_bar ^= true;
+                needs_redraw = true;
             }
         }
-        if (camera_changed)
+        if (camera_changed || needs_redraw)
         {
-            v->update_GL_matrices();
             v->draw();
-            v->notify_camera_change();
+            if (camera_changed)
+            {
+                v->notify_camera_change();
+            }
         }
     }
 }
@@ -723,33 +769,39 @@ void GLcanvas::mouse_button_event(GLFWwindow *window, int button, int action, in
         {
             if(button==GLFW_MOUSE_BUTTON_LEFT)
             {
-                if(v->callback_mouse_left_click2) v->callback_mouse_left_click2(modifiers);
-
-                vec3d click_3d;
-                if(v->unproject(click, click_3d))
+                if (v->callback_mouse_left_click2 && v->callback_mouse_left_click2(modifiers))
                 {
-                    v->camera.set_focus_point(click_3d);
-                    v->update_GL_matrices();
-                    v->notify_camera_change();
+                    return;
                 }
+
+                // TODO Focus point
             }
             else if(button==GLFW_MOUSE_BUTTON_RIGHT)
             {
-                if(v->callback_mouse_right_click2) v->callback_mouse_right_click2(modifiers);
+                if (v->callback_mouse_right_click2 && v->callback_mouse_right_click2(modifiers))
+                {
+                    return;
+                }
             }
         }
         else // single click
         {
             if(button==GLFW_MOUSE_BUTTON_LEFT)
             {
-                if(v->callback_mouse_left_click) v->callback_mouse_left_click(modifiers);
+                if (v->callback_mouse_left_click &&v->callback_mouse_left_click(modifiers))
+                {
+                    return;    
+                }
                 v->trackball.mouse_pressed = true;
                 v->trackball.last_click_2d = click;
-                v->trackball.last_click_3d = trackball_to_sphere(click, v->camera.width, v->camera.height);
+                v->trackball.last_click_3d = trackball_to_sphere(click, v->width, v->height);
             }
             else if(button==GLFW_MOUSE_BUTTON_RIGHT)
             {
-                if(v->callback_mouse_right_click) v->callback_mouse_right_click(modifiers);
+                if (v->callback_mouse_right_click && v->callback_mouse_right_click(modifiers))
+                {
+                    return;        
+                }
             }
         }
     }
@@ -766,37 +818,41 @@ void GLcanvas::cursor_event(GLFWwindow *window, double x_pos, double y_pos)
 
     GLcanvas* v = static_cast<GLcanvas*>(glfwGetWindowUserPointer(window));
 
-    if(v->callback_mouse_moved) v->callback_mouse_moved(x_pos,y_pos);
+    if (v->callback_mouse_moved && v->callback_mouse_moved(x_pos, y_pos))
+    {
+        return;
+    }
 
-    // mouse move + left click => rotate
-    if(glfwGetMouseButton(window,GLFW_MOUSE_BUTTON_LEFT)==GLFW_PRESS)
+    if(glfwGetMouseButton(window, v->mouse_bindings.camera_rotate) == GLFW_PRESS)
     {
         vec2d click_2d(x_pos, y_pos);
-        vec3d click_3d = trackball_to_sphere(click_2d, v->camera.width, v->camera.height);
+        vec3d click_3d = trackball_to_sphere(click_2d, v->width, v->height);
         if(v->trackball.mouse_pressed)
         {
             vec3d  axis;
             double angle;
             trackball_to_rotations(v->trackball.last_click_3d, click_3d, axis, angle);
-            v->camera.rotate(angle * v->get_camera_speed_modifier(), axis);
-            v->update_GL_matrices();
+            angle *= v->camera_settings.rotate_mouse_speed * v->get_camera_speed_modifier();
+            v->camera.view.rotateAroundPivot(axis, angle, v->scene_center);
+            v->camera.updateView();
+            v->update_GL_view();
             v->draw();
             v->notify_camera_change();
         }
         v->trackball.last_click_2d = click_2d;
         v->trackball.last_click_3d = click_3d;
     }
-    // mouse move + right click => translate
-    else if(glfwGetMouseButton(window,GLFW_MOUSE_BUTTON_RIGHT)==GLFW_PRESS)
+    if (glfwGetMouseButton(window, v->mouse_bindings.camera_pan) == GLFW_PRESS)
     {
         vec2d click(x_pos, y_pos);
         if(!v->trackball.last_click_2d.is_inf())
         {
-            vec2d delta = (v->trackball.last_click_2d - click);
+            vec2d delta = click - v->trackball.last_click_2d;
             delta.normalize();
-            delta *= v->camera.scene_radius * 0.01 * v->get_camera_speed_modifier();
-            v->camera.translate(vec3d(-delta.x(), delta.y(), 0));
-            v->update_GL_matrices();
+            delta *= v->scene_radius * v->camera_settings.pan_mouse_speed * v->get_camera_speed_modifier() / 100;
+            v->camera.view.eye += vec3d(-delta.x(), delta.y(), 0);
+            v->camera.updateView();
+            v->update_GL_view();
             v->draw();
             v->notify_camera_change();
         }
@@ -814,13 +870,19 @@ void GLcanvas::scroll_event(GLFWwindow *window, double x_offset, double y_offset
     // if visual controls claim the event, let them handle it
     if(ImGui::GetIO().WantCaptureMouse) return;
 
-    if(v->callback_mouse_scroll) v->callback_mouse_scroll(x_offset, y_offset);
+    if (v->callback_mouse_scroll && v->callback_mouse_scroll(x_offset, y_offset))
+    {
+        return;
+    }
 
-    v->camera.zoom(-y_offset * 0.01 * v->get_camera_speed_modifier());
-    v->camera.reset_projection();
-    v->update_GL_projection();
-    v->notify_camera_change();
-    // TODO: add a zooming function to change speed according to the amount of current zoom
+    if (v->mouse_bindings.zoom_with_wheel)
+    {
+        const double delta{ y_offset * v->camera_settings.zoom_scroll_speed * v->get_camera_speed_modifier() / 100};
+        v->camera.view.eye += v->camera.view.normForward() * delta;
+        v->camera.updateView();
+        v->update_GL_view();
+        v->notify_camera_change();
+    }
 }
 
 }

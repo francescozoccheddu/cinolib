@@ -27,12 +27,12 @@ int main(int argc, char **argv)
             MCF(m, (unsigned int)n_iter, (double)time_step);
             profiler.pop();
             m.updateGL();
-            gui.refit_scene();
+            gui.reset_camera();
         }
         if(ImGui::SmallButton("Reset"))
         {
             m = DrawableTrimesh<>(s.c_str());
-            gui.refit_scene();
+            gui.reset_camera();
         }
     };
 
