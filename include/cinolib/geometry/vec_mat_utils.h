@@ -86,6 +86,7 @@ template<unsigned int d, typename T> CINO_INLINE bool   vec_is_null  (const T * 
 template<unsigned int d, typename T> CINO_INLINE bool   vec_is_nan   (const T * vec);
 template<unsigned int d, typename T> CINO_INLINE bool   vec_is_inf   (const T * vec);
 template<unsigned int d, typename T> CINO_INLINE bool   vec_is_deg   (const T * vec);
+template<unsigned int d, typename T> CINO_INLINE bool   vec_is_finite(const T * vec);
 template<unsigned int d, typename T> CINO_INLINE void   vec_copy     (const T * v_0, T * v_1);
 template<unsigned int d, typename T> CINO_INLINE void   vec_print    (const T * vec);
 

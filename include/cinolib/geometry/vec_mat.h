@@ -37,6 +37,7 @@
 #define CINO_VEC_MAT_H
 
 #include <ostream>
+#include <istream>
 #include <cinolib/geometry/vec_mat_utils.h>
 #include <cinolib/symbols.h>
 
@@ -141,6 +142,8 @@ class mat
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
+        mat normalized() const;
+
         double normalize();
         double norm     () const;
         T      norm_sqrd() const;
@@ -171,6 +174,7 @@ class mat
         bool is_nan()  const;
         bool is_inf()  const;
         bool is_deg()  const; // either null, nan or inf
+        bool is_finite()  const; // null, normal or subnormal
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -216,7 +220,14 @@ mat<r,c,T> operator*(const T & scalar, const mat<r,c,T> & m)
 
 template<unsigned int r, unsigned int c, class T>
 CINO_INLINE
-std::ostream & operator<< (std::ostream & in, const mat<r,c,T> & op);
+std::ostream & operator<< (std::ostream& out, const mat<r,c,T>& mat);
+
+
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+template<unsigned int r, unsigned int c, class T>
+CINO_INLINE
+std::istream& operator>> (std::istream& in, mat<r, c, T>& mat);
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -237,6 +248,12 @@ typedef mat<4,4,int>    mat4i;
 typedef mat<2,1,double> vec2d;
 typedef mat<2,1,float>  vec2f;
 typedef mat<2,1,int>    vec2i;
+
+template<unsigned int d, typename T>
+using vec = mat<d,1,T>;
+
+template<typename T>
+using vec3 = vec<3,T>;
 
 typedef mat<3,1,double> vec3d;
 typedef mat<3,1,float>  vec3f;

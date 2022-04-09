@@ -426,6 +426,20 @@ bool vec_is_deg(const T * v)
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
+// true if all entries are null, normal or subnormal
+template<unsigned int d, typename T>
+CINO_INLINE
+bool vec_is_finite(const T* v)
+{
+    for (std::size_t i = 0; i < d; ++i)
+    {
+        if (!std::isfinite(v[i])) return false;
+    }
+    return true;
+}
+
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
 template<unsigned int d, typename T>
 CINO_INLINE
 void vec_copy(const T * v0, T * v1)
