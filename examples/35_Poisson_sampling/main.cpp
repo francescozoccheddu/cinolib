@@ -35,7 +35,7 @@ int main(int, char **)
         profiler.pop();
         for(auto p : samples_2d) m_2d.vert_add(vec3d(p.x(),p.y(),0));
         m_2d.vert_set_color(Color::BLACK());
-        gui_2d.refit_scene();
+        gui_2d.reset_camera();
 
         std::vector<vec3d> samples_3d;
         profiler.push("Poisson sampling 3D");
@@ -43,7 +43,7 @@ int main(int, char **)
         profiler.pop();
         for(auto & p : samples_3d) m_3d.vert_add(p);
         m_3d.vert_set_color(Color::BLACK());
-        gui_3d.refit_scene();
+        gui_3d.reset_camera();
     };
 
     gui_2d.callback_app_controls = [&]()

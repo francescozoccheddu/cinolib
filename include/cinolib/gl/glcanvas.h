@@ -39,7 +39,7 @@
 #include <cinolib/gl/gl_glfw.h>
 #include <cinolib/drawable_object.h>
 #include <cinolib/gl/side_bar_item.h>
-#include <cinolib/gl/camera.h>
+#include <cinolib/gl/FreeCamera.hpp>
 #include <cinolib/min_max_inf.h>
 #include <cinolib/color.h>
 #include <vector>
@@ -82,7 +82,45 @@ class GLcanvas
         void notify_camera_change() const;
         double get_camera_speed_modifier() const;
 
+        void reset_camera_only();
+
     public:
+
+        struct
+        {
+            int toggle_ortho{ GLFW_KEY_O };
+            int camera_faster{ GLFW_KEY_LEFT_SHIFT };
+            int camera_slower{ GLFW_KEY_LEFT_CONTROL };
+            int reset_camera{ GLFW_KEY_R };
+            int toggle_axes{ GLFW_KEY_A };
+            int toggle_sidebar{ GLFW_KEY_TAB };
+            int store_camera{ GLFW_KEY_C };
+            int restore_camera{ GLFW_KEY_V };
+            bool pan_with_arrow_keys{ true };
+            bool pan_with_numpad_keys{ true };
+        } key_bindings;
+
+        struct
+        {
+            int camera_pan{ GLFW_MOUSE_BUTTON_RIGHT };
+            int camera_zoom{ GLFW_MOUSE_BUTTON_MIDDLE };
+            int camera_rotate{ GLFW_MOUSE_BUTTON_LEFT };
+            bool zoom_with_wheel{ true };
+        } mouse_bindings;
+
+        struct
+        {
+            double zoom_scroll_speed{ 1 };
+            double translate_key_speed{ 1 };
+            double pan_mouse_speed{ 1 };
+            double rotate_mouse_speed{ 1 };
+            double faster_factor{ 2 };
+            double slower_factor{ 0.5 };
+        } camera_settings;
+
+        vec3d scene_center{};
+        float scene_radius{};
+        int width, height;
 
         GLFWwindow                        *window;
         std::vector<const DrawableObject*> drawlist;
@@ -108,8 +146,8 @@ class GLcanvas
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-        Camera<double> camera;
-        Trackball      trackball;
+        FreeCamera<double> camera{};
+        Trackball trackball{};
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -136,11 +174,11 @@ class GLcanvas
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-        void refit_scene(bool keep_model = false);
+        void reset_camera();
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-        void push(const DrawableObject * obj, const bool refit_scene = true);
+        void push(const DrawableObject * obj, const bool reset_camera = true);
         void push(const Marker         & m);
         void push(SideBarItem          * item);
 
@@ -150,15 +188,13 @@ class GLcanvas
                          const std::string & text        = "",
                          const Color         color       = Color::BLUE(),
                          const unsigned int          disk_radius =  5,
-                         const unsigned int          font_size   = 10,
-                         bool                        fixed_size  = false);
+                         const unsigned int          font_size   = 10);
 
         void push_marker(const vec3d       & p,
                          const std::string & text        = "",
                          const Color         color       = Color::BLUE(),
                          const unsigned int          disk_radius =  5,
-                         const unsigned int          font_size   = 10,
-                         bool                        fixed_size  = false);
+                         const unsigned int          font_size   = 10);
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -168,7 +204,7 @@ class GLcanvas
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
         void update_GL_matrices()   const;
-        void update_GL_modelview()  const;
+        void update_GL_view()  const;
         void update_GL_projection() const;
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -208,13 +244,13 @@ class GLcanvas
         // these callbacks can be used to execute external code when mouse and keyboard
         // events occurr (e.g. for picking, drawing). If defined, they will be called
         // **before** the internal event handlers
-        std::function<void(int    key,      int    modifiers)> callback_key_pressed        = nullptr;
-        std::function<void(int    modifiers                 )> callback_mouse_left_click   = nullptr;
-        std::function<void(int    modifiers                 )> callback_mouse_left_click2  = nullptr; // double click
-        std::function<void(int    modifiers                 )> callback_mouse_right_click  = nullptr;
-        std::function<void(int    modifiers                 )> callback_mouse_right_click2 = nullptr; // double click
-        std::function<void(double x_pos,    double y_pos    )> callback_mouse_moved        = nullptr;
-        std::function<void(double x_offset, double y_offset )> callback_mouse_scroll       = nullptr;
+        std::function<bool(int    key,      int    modifiers)> callback_key_pressed        = nullptr;
+        std::function<bool(int    modifiers                 )> callback_mouse_left_click   = nullptr;
+        std::function<bool(int    modifiers                 )> callback_mouse_left_click2  = nullptr; // double click
+        std::function<bool(int    modifiers                 )> callback_mouse_right_click  = nullptr;
+        std::function<bool(int    modifiers                 )> callback_mouse_right_click2 = nullptr; // double click
+        std::function<bool(double x_pos,    double y_pos    )> callback_mouse_moved        = nullptr;
+        std::function<bool(double x_offset, double y_offset )> callback_mouse_scroll       = nullptr;
         std::function<void(void                             )> callback_app_controls       = nullptr; // useful to insert app-dependent visual controls (with ImGui)
         std::function<void(void                             )> callback_camera_changed     = nullptr; 
 
