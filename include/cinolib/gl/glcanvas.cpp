@@ -51,6 +51,11 @@ namespace cinolib
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
+const int GLcanvas::KeyBindings::none{ 0 };
+const int GLcanvas::MouseBindings::none{ 0 };
+
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
 CINO_INLINE
 void GLcanvas::notify_camera_change() const
 {
@@ -60,8 +65,6 @@ void GLcanvas::notify_camera_change() const
     }
 }
 
-//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
 CINO_INLINE
 double GLcanvas::get_camera_speed_modifier() const
 {
@@ -69,6 +72,40 @@ double GLcanvas::get_camera_speed_modifier() const
     const bool slow{ glfwGetKey(window, key_bindings.camera_slower) == GLFW_PRESS };
     return slow ? camera_settings.slower_factor : fast ? camera_settings.faster_factor : 1.0;
 }
+
+CINO_INLINE
+void GLcanvas::handle_zoom(double amount)
+{
+    amount *= get_camera_speed_modifier();
+    if (camera.projection.perspective && !glfwGetKey(window, key_bindings.camera_inplace_zoom))
+    {
+        camera.view.eye += camera.view.normForward() * amount;
+        camera.updateView();
+        update_GL_view();
+    }
+    else
+    {
+        double min, max;
+        if (camera.projection.perspective)
+        {
+            min = camera_settings.min_persp_fov;
+            max = camera_settings.max_persp_fov;
+        }
+        else
+        {
+            const double camera_scene_radius{ scene_radius ? scene_radius : 1 };
+            min = camera_settings.min_ortho_fov_scene_radius_factor * camera_scene_radius;
+            max = camera_settings.max_ortho_fov_scene_radius_factor * camera_scene_radius;
+        }
+        double fov{ camera.projection.verticalFieldOfView + amount * (max - min) };
+        camera.projection.verticalFieldOfView = clamp(fov, min, max);
+        camera.updateProjection();
+        update_GL_projection();
+    }
+    draw();
+    notify_camera_change();
+}
+
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 CINO_INLINE
@@ -86,7 +123,6 @@ GLcanvas::GLcanvas(const int width, const int height)
 
     this->width = width;
     this->height = height;
-    reset_camera();
 
     glfwSwapInterval(1); // enable vsync
 
@@ -148,6 +184,9 @@ GLcanvas::GLcanvas(const int width, const int height)
                  "          CMD + V  : paste POV                             \n"
                  " Mouse Double Clik : center scene and zoom in              \n"
                  ":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n" << std::endl;
+
+    reset_camera();
+
 }
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -172,7 +211,7 @@ void GLcanvas::push(const DrawableObject *obj, const bool reset_camera)
 {
     drawlist.push_back(obj);
 
-    if(obj->scene_radius()>0 && reset_camera)
+    if(reset_camera && obj->scene_radius()>0)
     {
         this->reset_camera();
     }
@@ -260,9 +299,8 @@ void GLcanvas::pop_all_markers()
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 CINO_INLINE
-void GLcanvas::reset_camera_only()
+void GLcanvas::refit_scene(bool update_gl)
 {
-    // update camera scene parameters
     scene_center = vec3d{};
     scene_radius = 0;
     unsigned int count = 0;
@@ -279,31 +317,38 @@ void GLcanvas::reset_camera_only()
     {
         scene_center /= static_cast<double>(count);
         scene_radius /= static_cast<double>(count);
-        camera.projection.farZ = scene_radius * 10;
-        camera.projection.nearZ = scene_radius / 1000.0;
     }
-    else
+    const double camera_scene_radius{ scene_radius ? scene_radius : 1 };
+    camera.projection.nearZ = camera_scene_radius * camera_settings.near_scene_radius_factor;
+    camera.projection.farZ = camera_scene_radius * camera_settings.far_scene_radius_factor;
+    if (update_gl)
     {
-        camera.projection.farZ = 1;
-        camera.projection.nearZ = 0.1;
+        camera.updateProjection();
+        update_GL_projection();
+        draw();
+        notify_camera_change();
     }
-
-    camera.projection.setAspect(width, height);
-    camera.projection.perspective = true;
-    camera.projection.verticalFieldOfView = 67;
-    camera.view.eye = scene_center - vec3d{ 0, 0, -scene_radius };
-    camera.view.forward = vec3d{ 0, 0, 1 };
-    camera.view.up = vec3d{ 0, 1, 0 };
-    camera.updateView();
 }
 
 CINO_INLINE
-void GLcanvas::reset_camera()
+void GLcanvas::reset_camera(bool update_gl)
 {
-    reset_camera_only();
-    camera.updateProjectionAndView();
-    update_GL_matrices();
-    notify_camera_change();
+    refit_scene(false);
+    camera.projection.setAspect(width, height);
+    camera.projection.perspective = true;
+    camera.projection.verticalFieldOfView = (camera_settings.min_persp_fov + camera_settings.max_persp_fov) / 2.0;
+    const double camera_scene_radius{ scene_radius ? scene_radius : 1 };
+    camera.view.eye = scene_center - vec3d{ 0, 0, -scene_radius * 2};
+    camera.view.forward = vec3d{ 0, 0, 1 };
+    camera.view.up = vec3d{ 0, 1, 0 };
+
+    if (update_gl)
+    {
+        camera.updateProjectionAndView();
+        update_GL_matrices();
+        draw();
+        notify_camera_change();
+    }
 }
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -347,6 +392,8 @@ void GLcanvas::draw()
     // draw your 3D scene
     for(auto obj : drawlist) obj->draw();
 
+    if(show_axis) draw_axis();
+
     if(owns_ImGui)
     {
         // draw markers and visual controls
@@ -358,8 +405,6 @@ void GLcanvas::draw()
         ImGui::Render();
         ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
     }
-
-    if(show_axis) draw_axis();
 
     glfwSwapBuffers(window);
 }
@@ -702,7 +747,8 @@ void GLcanvas::key_event(GLFWwindow *window, int key, int /*scancode*/, int acti
             }
             if (key == v->key_bindings.reset_camera)
             {
-                v->reset_camera_only();
+                v->reset_camera(false);
+                v->camera.updateProjectionAndView();
                 v->update_GL_matrices();
                 camera_changed = true;
             }
@@ -832,7 +878,7 @@ void GLcanvas::cursor_event(GLFWwindow *window, double x_pos, double y_pos)
             vec3d  axis;
             double angle;
             trackball_to_rotations(v->trackball.last_click_3d, click_3d, axis, angle);
-            angle *= v->camera_settings.rotate_mouse_speed * v->get_camera_speed_modifier();
+            angle *= v->camera_settings.rotate_drag_speed * v->get_camera_speed_modifier();
             v->camera.view.rotateAroundPivot(axis, angle, v->scene_center);
             v->camera.updateView();
             v->update_GL_view();
@@ -849,7 +895,7 @@ void GLcanvas::cursor_event(GLFWwindow *window, double x_pos, double y_pos)
         {
             vec2d delta = click - v->trackball.last_click_2d;
             delta.normalize();
-            delta *= v->scene_radius * v->camera_settings.pan_mouse_speed * v->get_camera_speed_modifier() / 100;
+            delta *= v->scene_radius * v->camera_settings.pan_drag_speed * v->get_camera_speed_modifier() / 100;
             v->camera.view.eye += vec3d(-delta.x(), delta.y(), 0);
             v->camera.updateView();
             v->update_GL_view();
@@ -877,11 +923,8 @@ void GLcanvas::scroll_event(GLFWwindow *window, double x_offset, double y_offset
 
     if (v->mouse_bindings.zoom_with_wheel)
     {
-        const double delta{ y_offset * v->camera_settings.zoom_scroll_speed * v->get_camera_speed_modifier() / 100};
-        v->camera.view.eye += v->camera.view.normForward() * delta;
-        v->camera.updateView();
-        v->update_GL_view();
-        v->notify_camera_change();
+        const double amount{ -y_offset * v->camera_settings.zoom_scroll_speed / 100};
+        v->handle_zoom(amount);
     }
 }
 

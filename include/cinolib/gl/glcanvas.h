@@ -79,18 +79,36 @@ class GLcanvas
 
     private:
 
+        //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
         void notify_camera_change() const;
         double get_camera_speed_modifier() const;
+        void handle_zoom(double amount);
+        void handle_rotation(double x, double y);
 
-        void reset_camera_only();
+        //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+        // internal event handlers
+        static void window_size_event(GLFWwindow* w, int    width, int    height);
+        static void key_event(GLFWwindow* w, int    key, int    unused, int action, int modif);
+        static void mouse_button_event(GLFWwindow* w, int    butt, int    action, int modif);
+        static void cursor_event(GLFWwindow* w, double x_pos, double y_pos);
+        static void scroll_event(GLFWwindow* w, double x_off, double y_off);
+
+        //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
     public:
 
-        struct
+        //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+        struct KeyBindings final
         {
+            static const int none;
+
             int toggle_ortho{ GLFW_KEY_O };
             int camera_faster{ GLFW_KEY_LEFT_SHIFT };
             int camera_slower{ GLFW_KEY_LEFT_CONTROL };
+            int camera_inplace_zoom{ GLFW_KEY_LEFT_ALT };
             int reset_camera{ GLFW_KEY_R };
             int toggle_axes{ GLFW_KEY_A };
             int toggle_sidebar{ GLFW_KEY_TAB };
@@ -100,27 +118,42 @@ class GLcanvas
             bool pan_with_numpad_keys{ true };
         } key_bindings;
 
-        struct
+        struct MouseBindings final
         {
+            static const int none;
+
             int camera_pan{ GLFW_MOUSE_BUTTON_RIGHT };
             int camera_zoom{ GLFW_MOUSE_BUTTON_MIDDLE };
             int camera_rotate{ GLFW_MOUSE_BUTTON_LEFT };
             bool zoom_with_wheel{ true };
         } mouse_bindings;
 
-        struct
+        struct CameraSettings final
         {
             double zoom_scroll_speed{ 1 };
+            double zoom_drag_speed{ 1 };
             double translate_key_speed{ 1 };
-            double pan_mouse_speed{ 1 };
-            double rotate_mouse_speed{ 1 };
+            double pan_drag_speed{ 1 };
+            double rotate_drag_speed{ 1 };
             double faster_factor{ 2 };
             double slower_factor{ 0.5 };
+            double far_scene_radius_factor{ 10 };
+            double near_scene_radius_factor{ 1.0 / 100 };
+            double max_persp_fov{ 120 };
+            double min_persp_fov{ 20 };
+            double max_ortho_fov_scene_radius_factor{ 2 };
+            double min_ortho_fov_scene_radius_factor{ 1.0 / 100 };
+            double max_up_angle_diff{ 10 };
         } camera_settings;
+
+        //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
         vec3d scene_center{};
         float scene_radius{};
         int width, height;
+        double DPI_factor;
+
+        //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
         GLFWwindow                        *window;
         std::vector<const DrawableObject*> drawlist;
@@ -132,7 +165,6 @@ class GLcanvas
         int                                font_size          = 13;
         bool                               show_axis          = false;
         bool                               depth_cull_markers = true; // skip occluded 3D markers, testing their depth with the Z-buffer
-        double                             DPI_factor;
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -174,7 +206,8 @@ class GLcanvas
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-        void reset_camera();
+        void refit_scene(bool update_gl = true);
+        void reset_camera(bool update_gl = true);
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -229,15 +262,6 @@ class GLcanvas
         void project  (const vec3d & p3d, vec2d & p2d, GLdouble & depth)      const;
         bool unproject(const vec2d & p2d, vec3d & p3d)                        const;
         bool unproject(const vec2d & p2d, const GLdouble & depth, vec3d & p3d) const;
-
-        //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
-        // internal event handlers
-        static void window_size_event (GLFWwindow *w, int    width, int    height);
-        static void key_event         (GLFWwindow *w, int    key,   int    unused, int action, int modif);
-        static void mouse_button_event(GLFWwindow *w, int    butt,  int    action, int modif);
-        static void cursor_event      (GLFWwindow *w, double x_pos, double y_pos);
-        static void scroll_event      (GLFWwindow *w, double x_off, double y_off);
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
