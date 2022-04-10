@@ -74,12 +74,12 @@ double GLcanvas::get_camera_speed_modifier() const
 }
 
 CINO_INLINE
-void GLcanvas::handle_zoom(double amount)
+void GLcanvas::handle_zoom(double _amount)
 {
-    amount *= get_camera_speed_modifier();
+    _amount *= get_camera_speed_modifier();
     if (camera.projection.perspective && !glfwGetKey(window, key_bindings.camera_inplace_zoom))
     {
-        camera.view.eye += camera.view.normForward() * amount;
+        camera.view.eye += camera.view.normForward() * _amount;
         camera.updateView();
         update_GL_view();
     }
@@ -97,11 +97,38 @@ void GLcanvas::handle_zoom(double amount)
             min = camera_settings.min_ortho_fov_scene_radius_factor * camera_scene_radius;
             max = camera_settings.max_ortho_fov_scene_radius_factor * camera_scene_radius;
         }
-        double fov{ camera.projection.verticalFieldOfView + amount * (max - min) };
+        double fov{ camera.projection.verticalFieldOfView + _amount * (max - min) };
         camera.projection.verticalFieldOfView = clamp(fov, min, max);
         camera.updateProjection();
         update_GL_projection();
     }
+    draw();
+    notify_camera_change();
+}
+
+CINO_INLINE
+void GLcanvas::handle_rotation(const vec2d& amount)
+{
+}
+
+CINO_INLINE
+void GLcanvas::handle_translation(const vec3d& amount)
+{
+    vec3d translation{0,0,0};
+    translation += amount.x() * camera.view.normRight();
+    translation += amount.y() * camera.view.normUp();
+    if (camera.projection.perspective)
+    {
+        translation += amount.z() * camera.view.normForward();
+    }
+    else
+    {
+        handle_zoom(amount.z());
+    }
+    translation *= get_camera_speed_modifier() * scene_radius;
+    camera.view.eye += translation;
+    camera.updateView();
+    update_GL_view();
     draw();
     notify_camera_change();
 }
@@ -338,8 +365,8 @@ void GLcanvas::reset_camera(bool update_gl)
     camera.projection.perspective = true;
     camera.projection.verticalFieldOfView = (camera_settings.min_persp_fov + camera_settings.max_persp_fov) / 2.0;
     const double camera_scene_radius{ scene_radius ? scene_radius : 1 };
-    camera.view.eye = scene_center - vec3d{ 0, 0, -scene_radius * 2};
-    camera.view.forward = vec3d{ 0, 0, 1 };
+    camera.view.eye = scene_center + vec3d{ 0, 0, scene_radius * 2};
+    camera.view.forward = vec3d{ 0, 0, -1 };
     camera.view.up = vec3d{ 0, 1, 0 };
 
     if (update_gl)
@@ -654,6 +681,10 @@ void GLcanvas::project(const vec3d & p3d, vec2d & p2d, GLdouble & depth) const
 CINO_INLINE
 void GLcanvas::window_size_event(GLFWwindow *window, int width, int height)
 {
+    if (width <= 0 || height <= 0)
+    {
+        return;
+    }
     glViewport(0, 0, width, height);
     GLcanvas* v = static_cast<GLcanvas*>(glfwGetWindowUserPointer(window));
     v->height           = height;
@@ -684,49 +715,38 @@ void GLcanvas::key_event(GLFWwindow *window, int key, int /*scancode*/, int acti
             return;
         }
 
-
-        bool camera_changed{ false }, needs_redraw{false};
-
-        if (!(modifiers & ~(v->key_bindings.camera_faster | v->key_bindings.camera_slower)))
         {
-            vec3d translation{0,0,0};
+            vec3d amount{0,0,0};
             if (v->key_bindings.pan_with_arrow_keys)
             {
                 switch (key)
                 {
-                    case GLFW_KEY_LEFT: translation += v->camera.view.normLeft(); break;
-                    case GLFW_KEY_RIGHT: translation += v->camera.view.normRight(); break;
-                    case GLFW_KEY_UP: translation += v->camera.view.normUp(); break;
-                    case GLFW_KEY_DOWN: translation += v->camera.view.normDown(); break;
+                    case GLFW_KEY_LEFT:     amount += vec3d{-1, 0, 0 }; break;
+                    case GLFW_KEY_RIGHT:    amount += vec3d{ 1, 0, 0 }; break;
+                    case GLFW_KEY_UP:       amount += vec3d{ 0, 1, 0 }; break;
+                    case GLFW_KEY_DOWN:     amount += vec3d{ 0,-1, 0 }; break;
                 }
             }
             if (v->key_bindings.pan_with_numpad_keys)
             {
-                vec3d kpTranslation{0,0,0};
                 switch (key)
                 {
-                    case GLFW_KEY_KP_4: kpTranslation += v->camera.view.normLeft(); break;
-                    case GLFW_KEY_KP_6: kpTranslation += v->camera.view.normRight(); break;
-                    case GLFW_KEY_KP_8: kpTranslation += v->camera.view.normUp(); break;
-                    case GLFW_KEY_KP_2: kpTranslation += v->camera.view.normDown(); break;
-                    case GLFW_KEY_KP_1: kpTranslation += v->camera.view.normDown() + v->camera.view.normLeft(); break;
-                    case GLFW_KEY_KP_3: kpTranslation += v->camera.view.normDown() + v->camera.view.normRight(); break;
-                    case GLFW_KEY_KP_7: kpTranslation += v->camera.view.normUp() + v->camera.view.normLeft(); break;
-                    case GLFW_KEY_KP_9: kpTranslation += v->camera.view.normUp() + v->camera.view.normRight(); break;
-                    case GLFW_KEY_KP_5: kpTranslation += v->camera.view.normForward(); break;
-                    case GLFW_KEY_KP_0: kpTranslation += v->camera.view.normBack(); break;
+                    case GLFW_KEY_KP_0:     amount += vec3d{ 0, 0,-1 }; break;
+                    case GLFW_KEY_KP_1:     amount += vec3d{-1,-1, 0 }; break;
+                    case GLFW_KEY_KP_2:     amount += vec3d{ 0,-1, 0 }; break;
+                    case GLFW_KEY_KP_3:     amount += vec3d{ 1,-1, 0 }; break;
+                    case GLFW_KEY_KP_4:     amount += vec3d{-1, 0, 0 }; break;
+                    case GLFW_KEY_KP_5:     amount += vec3d{ 0, 0, 1 }; break;
+                    case GLFW_KEY_KP_6:     amount += vec3d{ 1, 0, 0 }; break;
+                    case GLFW_KEY_KP_7:     amount += vec3d{-1, 1, 0 }; break;
+                    case GLFW_KEY_KP_8:     amount += vec3d{ 0, 1, 0 }; break;
+                    case GLFW_KEY_KP_9:     amount += vec3d{ 1, 1, 0 }; break;
                 }
-                if (!kpTranslation.is_null())
+                if (!amount.is_null())
                 {
-                    kpTranslation.normalize();
-                }
-                translation += kpTranslation;
-                if (!translation.is_null())
-                {
-                    camera_changed = true;
-                    v->camera.view.eye += translation * v->get_camera_speed_modifier() * v->camera_settings.translate_key_speed / 100;
-                    v->camera.updateView();
-                    v->update_GL_view();
+                    amount.normalize();
+                    amount *= v->camera_settings.translate_key_speed / 50;
+                    v->handle_translation(amount);
                 }
             }
         }
@@ -740,22 +760,21 @@ void GLcanvas::key_event(GLFWwindow *window, int key, int /*scancode*/, int acti
             if (key == v->key_bindings.restore_camera)
             {
                 v->camera = FreeCamera<double>::deserialize(glfwGetClipboardString(window));
+                v->width = static_cast<int>(std::round(v->height * v->camera.projection.aspectRatio));
+                glfwSetWindowSize(window, v->width, v->height);
                 v->camera.updateProjectionAndView();
                 v->update_GL_matrices();
-                camera_changed = true;
-                glfwSetWindowSize(window, v->width, v->height);
+                v->draw();
+                v->notify_camera_change();
             }
             if (key == v->key_bindings.reset_camera)
             {
-                v->reset_camera(false);
-                v->camera.updateProjectionAndView();
-                v->update_GL_matrices();
-                camera_changed = true;
+                v->reset_camera();
             }
             if (key == v->key_bindings.toggle_axes)
             {
                 v->show_axis ^= true;
-                needs_redraw = true;
+                v->draw();
             }
             if (key == v->key_bindings.toggle_ortho)
             {
@@ -763,20 +782,13 @@ void GLcanvas::key_event(GLFWwindow *window, int key, int /*scancode*/, int acti
                 v->camera.projection.verticalFieldOfView = v->camera.projection.perspective ? 67 : v->scene_radius;
                 v->camera.updateProjection();
                 v->update_GL_projection();
-                camera_changed = true;
+                v->draw();
+                v->notify_camera_change();
             }
             if (key == v->key_bindings.toggle_sidebar)
             {
                 v->show_side_bar ^= true;
-                needs_redraw = true;
-            }
-        }
-        if (camera_changed || needs_redraw)
-        {
-            v->draw();
-            if (camera_changed)
-            {
-                v->notify_camera_change();
+                v->draw();
             }
         }
     }
@@ -792,13 +804,8 @@ void GLcanvas::mouse_button_event(GLFWwindow *window, int button, int action, in
 
     GLcanvas* v = static_cast<GLcanvas*>(glfwGetWindowUserPointer(window));
 
-    if(action==GLFW_RELEASE)
+    if(action==GLFW_PRESS)
     {
-        v->trackball.mouse_pressed = false;
-    }
-    else // GLFW_PRESS
-    {
-        assert(action==GLFW_PRESS);
 
         // thanks GLFW for asking me to handle the single/double click burden...
         auto double_click = [&]() -> bool
@@ -809,7 +816,6 @@ void GLcanvas::mouse_button_event(GLFWwindow *window, int button, int action, in
             return (dt < 0.2);
         };
 
-        vec2d click = v->cursor_pos();
 
         if(double_click())
         {
@@ -819,8 +825,6 @@ void GLcanvas::mouse_button_event(GLFWwindow *window, int button, int action, in
                 {
                     return;
                 }
-
-                // TODO Focus point
             }
             else if(button==GLFW_MOUSE_BUTTON_RIGHT)
             {
@@ -838,9 +842,6 @@ void GLcanvas::mouse_button_event(GLFWwindow *window, int button, int action, in
                 {
                     return;    
                 }
-                v->trackball.mouse_pressed = true;
-                v->trackball.last_click_2d = click;
-                v->trackball.last_click_3d = trackball_to_sphere(click, v->width, v->height);
             }
             else if(button==GLFW_MOUSE_BUTTON_RIGHT)
             {
@@ -863,46 +864,34 @@ void GLcanvas::cursor_event(GLFWwindow *window, double x_pos, double y_pos)
     if (ImGui::GetIO().WantCaptureMouse) return;
 
     GLcanvas* v = static_cast<GLcanvas*>(glfwGetWindowUserPointer(window));
+    const vec2d cursor_pos{ v->cursor_pos() };
+    const vec2d delta{ cursor_pos - v->trackball.last_cursor_pos };
+    v->trackball.last_cursor_pos = cursor_pos;
 
     if (v->callback_mouse_moved && v->callback_mouse_moved(x_pos, y_pos))
     {
         return;
     }
 
-    if(glfwGetMouseButton(window, v->mouse_bindings.camera_rotate) == GLFW_PRESS)
+    if(!delta.is_inf())
     {
-        vec2d click_2d(x_pos, y_pos);
-        vec3d click_3d = trackball_to_sphere(click_2d, v->width, v->height);
-        if(v->trackball.mouse_pressed)
+        if (glfwGetMouseButton(window, v->mouse_bindings.camera_rotate) == GLFW_PRESS)
         {
-            vec3d  axis;
-            double angle;
-            trackball_to_rotations(v->trackball.last_click_3d, click_3d, axis, angle);
-            angle *= v->camera_settings.rotate_drag_speed * v->get_camera_speed_modifier();
-            v->camera.view.rotateAroundPivot(axis, angle, v->scene_center);
-            v->camera.updateView();
-            v->update_GL_view();
-            v->draw();
-            v->notify_camera_change();
+            const vec2d amount{ delta * v->camera_settings.rotate_drag_speed / 200 };
+            v->handle_rotation(amount);
         }
-        v->trackball.last_click_2d = click_2d;
-        v->trackball.last_click_3d = click_3d;
-    }
-    if (glfwGetMouseButton(window, v->mouse_bindings.camera_pan) == GLFW_PRESS)
-    {
-        vec2d click(x_pos, y_pos);
-        if(!v->trackball.last_click_2d.is_inf())
+
+        if (glfwGetMouseButton(window, v->mouse_bindings.camera_zoom) == GLFW_PRESS)
         {
-            vec2d delta = click - v->trackball.last_click_2d;
-            delta.normalize();
-            delta *= v->scene_radius * v->camera_settings.pan_drag_speed * v->get_camera_speed_modifier() / 100;
-            v->camera.view.eye += vec3d(-delta.x(), delta.y(), 0);
-            v->camera.updateView();
-            v->update_GL_view();
-            v->draw();
-            v->notify_camera_change();
+            const double amount{ delta.y() * v->camera_settings.zoom_drag_speed / 300 };
+            v->handle_zoom(-amount);
         }
-        v->trackball.last_click_2d = click;
+
+        if (glfwGetMouseButton(window, v->mouse_bindings.camera_pan) == GLFW_PRESS)
+        {
+            const vec2d amount{ delta * v->camera_settings.pan_drag_speed / 200 };
+            v->handle_translation(vec3d(-amount.x(), amount.y(), 0));
+        }
     }
 }
 
@@ -923,7 +912,7 @@ void GLcanvas::scroll_event(GLFWwindow *window, double x_offset, double y_offset
 
     if (v->mouse_bindings.zoom_with_wheel)
     {
-        const double amount{ -y_offset * v->camera_settings.zoom_scroll_speed / 100};
+        const double amount{ y_offset * v->camera_settings.zoom_scroll_speed / 100};
         v->handle_zoom(amount);
     }
 }
