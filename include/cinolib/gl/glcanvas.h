@@ -113,7 +113,7 @@ class GLcanvas
             int store_camera{ GLFW_KEY_C };
             int restore_camera{ GLFW_KEY_V };
             bool pan_with_arrow_keys{ true };
-            bool pan_with_numpad_keys{ true };
+            bool pan_and_zoom_with_numpad_keys{ true };
 
             void print() const;
 

@@ -44,6 +44,8 @@
 #include <cinolib/gl/glproject.h>
 #include <cinolib/gl/glunproject.h>
 #include <cinolib/clamp.h>
+#include <iostream>
+#include <string>
 #include <cmath>
 
 namespace cinolib
@@ -53,6 +55,73 @@ namespace cinolib
 
 const int GLcanvas::KeyBindings::none{ 0 };
 const int GLcanvas::MouseBindings::none{ 0 };
+
+CINO_INLINE
+void GLcanvas::KeyBindings::print() const
+{
+    auto binding = [](const char* binding, const char* desc)
+    {
+        std::cout << binding << ": " << desc << '\n';
+    };
+    auto key = [&binding](int key, const char* desc)
+    {
+        if (key != none)
+        {
+            const char* key_name{ glfwGetKeyName(key, 0) }; // TODO not working for non-character keys
+            if (key_name)
+            {
+                binding(key_name, desc);
+            }
+        }
+    };
+    key(toggle_sidebar, "toggle sidebar");
+    key(toggle_axes, "toggle axes");
+    key(toggle_ortho, "toggle perspective/orthographic camera");
+    key(reset_camera, "reset camera");
+    key(store_camera, "copy camera to clipboard");
+    key(restore_camera, "restore camera from clipboard");
+    key(camera_faster, "move camera faster (hold down)");
+    key(camera_slower, "move camera slower (hold down)");
+    key(camera_inplace_zoom, "change fov instead of moving forward when zooming (hold down)");
+    if (pan_with_arrow_keys)
+    {
+        binding("arrows", "pan");
+    }
+    if (pan_and_zoom_with_numpad_keys)
+    {
+        binding("numpad", "pan and zoom");
+    }
+}
+
+void GLcanvas::MouseBindings::print() const
+{
+    auto binding = [](const char* binding, const char* desc)
+    {
+        std::cout << binding << ": " << desc << '\n';
+    };
+    auto button = [&binding](int button, const char* desc)
+    {
+        switch (button)
+        {
+            case GLFW_MOUSE_BUTTON_LEFT:
+                binding("left mouse button", desc);
+                break;
+            case GLFW_MOUSE_BUTTON_MIDDLE:
+                binding("middle mouse button", desc);
+                break;
+            case GLFW_MOUSE_BUTTON_RIGHT:
+                binding("right mouse button", desc);
+                break;
+        }
+    };
+    button(camera_pan, "pan (drag)");
+    button(camera_zoom, "zoom (drag)");
+    button(camera_rotate, "rotate camera (drag)");
+    if (zoom_with_wheel)
+    {
+        binding("scroll wheel", "zoom");
+    }
+}
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -109,12 +178,13 @@ void GLcanvas::handle_zoom(double _amount)
 CINO_INLINE
 void GLcanvas::handle_rotation(const vec2d& amount)
 {
+
 }
 
 CINO_INLINE
 void GLcanvas::handle_translation(const vec3d& amount)
 {
-    vec3d translation{0,0,0};
+    vec3d translation{ 0,0,0 };
     translation += amount.x() * camera.view.normRight();
     translation += amount.y() * camera.view.normUp();
     if (camera.projection.perspective)
@@ -198,19 +268,10 @@ GLcanvas::GLcanvas(const int width, const int height)
         io.FontGlobalScale = 0.1f; // compensate for high-res fonts
     }
 
-    std::cout << ":::::::::::::::::::::::: SHORTCUTS ::::::::::::::::::::::::\n"
-                 "              TAB  : toggle show side bar (if any)         \n"
-                 "                A  : toggle show axis                      \n"
-                 "                P  : toggle perspective/orthographic camera\n"
-                 "                R  : reset camera                          \n"
-                 "       Left/Right  : rotate around Y                       \n"
-                 "          Up/Down  : rotate around X                       \n"
-                 "              1/2  : rotate around Z                       \n"
-                 "  SHIFT + Rot Keys : translate around same axis            \n"
-                 "          CMD + C  : copy  POV                             \n"
-                 "          CMD + V  : paste POV                             \n"
-                 " Mouse Double Clik : center scene and zoom in              \n"
-                 ":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n" << std::endl;
+    std::cout << "--------------\n";
+    key_bindings.print();
+    mouse_bindings.print();
+    std::cout << "--------------\n";
 
     reset_camera();
 
@@ -365,7 +426,7 @@ void GLcanvas::reset_camera(bool update_gl)
     camera.projection.perspective = true;
     camera.projection.verticalFieldOfView = (camera_settings.min_persp_fov + camera_settings.max_persp_fov) / 2.0;
     const double camera_scene_radius{ scene_radius ? scene_radius : 1 };
-    camera.view.eye = scene_center + vec3d{ 0, 0, scene_radius * 2};
+    camera.view.eye = scene_center + vec3d{ 0, 0, scene_radius * 2 };
     camera.view.forward = vec3d{ 0, 0, -1 };
     camera.view.up = vec3d{ 0, 1, 0 };
 
@@ -699,14 +760,14 @@ void GLcanvas::window_size_event(GLFWwindow *window, int width, int height)
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 CINO_INLINE
-void GLcanvas::key_event(GLFWwindow *window, int key, int /*scancode*/, int action, int modifiers)
+void GLcanvas::key_event(GLFWwindow* window, int key, int /*scancode*/, int action, int modifiers)
 {
     // if visual controls claim the event, let them handle it!
-    if(ImGui::GetIO().WantCaptureKeyboard) return;
+    if (ImGui::GetIO().WantCaptureKeyboard) return;
 
-    
+
     // handle repeated keys as if they were a sequence of single key press events
-    if(action==GLFW_PRESS || action==GLFW_REPEAT)
+    if (action == GLFW_PRESS || action == GLFW_REPEAT)
     {
         GLcanvas* v = static_cast<GLcanvas*>(glfwGetWindowUserPointer(window));
 
@@ -716,7 +777,7 @@ void GLcanvas::key_event(GLFWwindow *window, int key, int /*scancode*/, int acti
         }
 
         {
-            vec3d amount{0,0,0};
+            vec3d amount{ 0,0,0 };
             if (v->key_bindings.pan_with_arrow_keys)
             {
                 switch (key)
@@ -727,7 +788,7 @@ void GLcanvas::key_event(GLFWwindow *window, int key, int /*scancode*/, int acti
                     case GLFW_KEY_DOWN:     amount += vec3d{ 0,-1, 0 }; break;
                 }
             }
-            if (v->key_bindings.pan_with_numpad_keys)
+            if (v->key_bindings.pan_and_zoom_with_numpad_keys)
             {
                 switch (key)
                 {
@@ -797,36 +858,36 @@ void GLcanvas::key_event(GLFWwindow *window, int key, int /*scancode*/, int acti
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 CINO_INLINE
-void GLcanvas::mouse_button_event(GLFWwindow *window, int button, int action, int modifiers)
+void GLcanvas::mouse_button_event(GLFWwindow* window, int button, int action, int modifiers)
 {
     // if visual controls claim the event, let them handle it
-    if(ImGui::GetIO().WantCaptureMouse) return;
+    if (ImGui::GetIO().WantCaptureMouse) return;
 
     GLcanvas* v = static_cast<GLcanvas*>(glfwGetWindowUserPointer(window));
 
-    if(action==GLFW_PRESS)
+    if (action == GLFW_PRESS)
     {
 
         // thanks GLFW for asking me to handle the single/double click burden...
         auto double_click = [&]() -> bool
         {
-            auto   t  = std::chrono::high_resolution_clock::now();
-            double dt = how_many_seconds(v->trackball.t_last_click,t);
+            auto   t = std::chrono::high_resolution_clock::now();
+            double dt = how_many_seconds(v->trackball.t_last_click, t);
             v->trackball.t_last_click = t;
             return (dt < 0.2);
         };
 
 
-        if(double_click())
+        if (double_click())
         {
-            if(button==GLFW_MOUSE_BUTTON_LEFT)
+            if (button == GLFW_MOUSE_BUTTON_LEFT)
             {
                 if (v->callback_mouse_left_click2 && v->callback_mouse_left_click2(modifiers))
                 {
                     return;
                 }
             }
-            else if(button==GLFW_MOUSE_BUTTON_RIGHT)
+            else if (button == GLFW_MOUSE_BUTTON_RIGHT)
             {
                 if (v->callback_mouse_right_click2 && v->callback_mouse_right_click2(modifiers))
                 {
@@ -836,18 +897,18 @@ void GLcanvas::mouse_button_event(GLFWwindow *window, int button, int action, in
         }
         else // single click
         {
-            if(button==GLFW_MOUSE_BUTTON_LEFT)
+            if (button == GLFW_MOUSE_BUTTON_LEFT)
             {
-                if (v->callback_mouse_left_click &&v->callback_mouse_left_click(modifiers))
+                if (v->callback_mouse_left_click && v->callback_mouse_left_click(modifiers))
                 {
-                    return;    
+                    return;
                 }
             }
-            else if(button==GLFW_MOUSE_BUTTON_RIGHT)
+            else if (button == GLFW_MOUSE_BUTTON_RIGHT)
             {
                 if (v->callback_mouse_right_click && v->callback_mouse_right_click(modifiers))
                 {
-                    return;        
+                    return;
                 }
             }
         }
@@ -857,7 +918,7 @@ void GLcanvas::mouse_button_event(GLFWwindow *window, int button, int action, in
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 CINO_INLINE
-void GLcanvas::cursor_event(GLFWwindow *window, double x_pos, double y_pos)
+void GLcanvas::cursor_event(GLFWwindow* window, double x_pos, double y_pos)
 {
 
     // if visual controls claim the event, let them handle it
@@ -873,7 +934,7 @@ void GLcanvas::cursor_event(GLFWwindow *window, double x_pos, double y_pos)
         return;
     }
 
-    if(!delta.is_inf())
+    if (!delta.is_inf())
     {
         if (glfwGetMouseButton(window, v->mouse_bindings.camera_rotate) == GLFW_PRESS)
         {
@@ -898,12 +959,12 @@ void GLcanvas::cursor_event(GLFWwindow *window, double x_pos, double y_pos)
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 CINO_INLINE
-void GLcanvas::scroll_event(GLFWwindow *window, double x_offset, double y_offset)
+void GLcanvas::scroll_event(GLFWwindow* window, double x_offset, double y_offset)
 {
     GLcanvas* v = static_cast<GLcanvas*>(glfwGetWindowUserPointer(window));
 
     // if visual controls claim the event, let them handle it
-    if(ImGui::GetIO().WantCaptureMouse) return;
+    if (ImGui::GetIO().WantCaptureMouse) return;
 
     if (v->callback_mouse_scroll && v->callback_mouse_scroll(x_offset, y_offset))
     {
@@ -912,7 +973,7 @@ void GLcanvas::scroll_event(GLFWwindow *window, double x_offset, double y_offset
 
     if (v->mouse_bindings.zoom_with_wheel)
     {
-        const double amount{ y_offset * v->camera_settings.zoom_scroll_speed / 100};
+        const double amount{ y_offset * v->camera_settings.zoom_scroll_speed / 100 };
         v->handle_zoom(amount);
     }
 }

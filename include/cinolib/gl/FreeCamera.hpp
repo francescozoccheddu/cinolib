@@ -62,8 +62,9 @@ namespace cinolib
 			inline vec normForward() const;
 
 			inline void lookAt(const vec& _target);
-			inline void rotateAroundPivot(const vec& _axis, TScalar _angle, const vec& _pivot);
-			inline void rotateAround(const vec& _axis, TScalar _angle);
+			inline void lookAtFrom(const vec& _target, const vec& _eye);
+			inline void rotateAroundPivot(const vec& _axis, TScalar _angle, const vec& _pivot); // angle degrees; axis does not have to be normalized
+			inline void rotate(const vec& _axis, TScalar _angle); // angle degrees; axis does not have to be normalized
 
 			inline void validate() const;
 
