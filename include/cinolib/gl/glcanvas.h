@@ -59,16 +59,13 @@ struct Marker
     Color       color       = Color::BLUE();     // color, for both the text and the disk
     unsigned int        disk_radius =  1;                // disk radius (in pixels). Set to zero to not render the disk
     unsigned int        font_size   = 12;                // font size;
-    bool                fixed_size  = false;
 };
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 struct Trackball
 {
-    vec2d last_click_2d = vec2d(inf_double);
-    vec3d last_click_3d = vec3d(inf_double);
-    bool  mouse_pressed = false;
+    vec2d last_cursor_pos = vec2d(inf_double);
     std::chrono::high_resolution_clock::time_point t_last_click;
 };
 
@@ -84,7 +81,8 @@ class GLcanvas
         void notify_camera_change() const;
         double get_camera_speed_modifier() const;
         void handle_zoom(double amount);
-        void handle_rotation(double x, double y);
+        void handle_rotation(const vec2d& amount);
+        void handle_translation(const vec3d& amount);
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -116,6 +114,9 @@ class GLcanvas
             int restore_camera{ GLFW_KEY_V };
             bool pan_with_arrow_keys{ true };
             bool pan_with_numpad_keys{ true };
+
+            void print() const;
+
         } key_bindings;
 
         struct MouseBindings final
@@ -126,6 +127,9 @@ class GLcanvas
             int camera_zoom{ GLFW_MOUSE_BUTTON_MIDDLE };
             int camera_rotate{ GLFW_MOUSE_BUTTON_LEFT };
             bool zoom_with_wheel{ true };
+
+            void print() const;
+
         } mouse_bindings;
 
         struct CameraSettings final
