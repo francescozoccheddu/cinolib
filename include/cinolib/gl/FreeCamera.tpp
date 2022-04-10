@@ -92,7 +92,7 @@ namespace cinolib
 	template<typename TScalar>
 	inline std::ostream& operator<<(std::ostream& _out, const typename FreeCamera<TScalar>::Projection& _projection)
 	{
-		constexpr char sep = ' ';
+		constexpr char sep{ ' ' };
 		_out
 			<< _projection.aspectRatio << sep
 			<< _projection.nearZ << sep
@@ -155,7 +155,16 @@ namespace cinolib
 	template<typename TScalar>
 	inline void FreeCamera<TScalar>::View::lookAt(const vec& _target)
 	{
+		forward = _target - eye;
+		const vec right{ normRight() };
+		up = right.cross(forward);
+	}
 
+	template<typename TScalar>
+	inline void FreeCamera<TScalar>::View::lookAtFrom(const vec& _target, const vec& _eye)
+	{
+		eye = _eye;
+		lookAt(_target);
 	}
 
 	template<typename TScalar>
@@ -165,9 +174,9 @@ namespace cinolib
 	}
 
 	template<typename TScalar>
-	inline void FreeCamera<TScalar>::View::rotateAround(const vec& _axis, TScalar _angle)
+	inline void FreeCamera<TScalar>::View::rotate(const vec& _axis, TScalar _angle)
 	{
-
+		rotateAroundPivot(_axis, _angle, eye);
 	}
 
 	template<typename TScalar>
@@ -225,7 +234,7 @@ namespace cinolib
 	template<typename TScalar>
 	inline std::ostream& operator<<(std::ostream& _out, const typename FreeCamera<TScalar>::View& _view)
 	{
-		constexpr char sep = ' ';
+		constexpr char sep{ ' ' };
 		_out
 			<< _view.eye << sep
 			<< _view.up << sep
@@ -317,7 +326,7 @@ namespace cinolib
 	template<typename TScalar>
 	inline std::ostream& operator<<(std::ostream& _out, const FreeCamera<TScalar>& _camera)
 	{
-		constexpr char sep = ' ';
+		constexpr char sep{ ' ' };
 		/*_out
 			<< _camera.projection << sep
 			<< _camera.view;*/
