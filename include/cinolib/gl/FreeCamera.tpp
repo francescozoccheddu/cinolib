@@ -6,6 +6,7 @@
 #include <stdexcept>
 #include <cmath>
 #include <cinolib/deg_rad.h>
+#include <cinolib/cot.h>
 #include <sstream>
 
 namespace cinolib
