@@ -67,7 +67,7 @@ void GLcanvas::KeyBindings::print() const
     {
         if (key != none)
         {
-            const char* key_name{ glfwGetKeyName(key, 0) }; // TODO not working for non-character keys
+            const char* key_name{ glfwGetKeyName(key, 0) }; // TODO (francescozoccheddu) not working for non-character keys
             if (key_name)
             {
                 binding(key_name, desc);
@@ -188,7 +188,7 @@ void GLcanvas::handle_rotation(const vec2d& amount)
     else
     {
         const double camera_scene_radius{ scene_radius ? scene_radius : 1 };
-        const double distance{ camera_scene_radius * camera_settings.camera_distance_scene_radius_factor };
+        const double distance{ camera_scene_radius * camera_settings.camera_distance_scene_radius_factor }; // TODO (francescozoccheddu) find a better pivot point
         camera.view.rotateTps(world_up, world_forward, distance, angles.x(), angles.y());
     }
     camera.updateView();
