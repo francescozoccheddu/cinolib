@@ -151,9 +151,10 @@ void GLcanvas::handle_zoom(double _amount)
     if (camera.projection.perspective && glfwGetKey(window, key_bindings.camera_inplace_zoom) != GLFW_PRESS)
     {
         camera.view.eye += camera.view.normForward() * _amount * scene_radius;
-        if ((camera_pivot - camera.view.eye).dot(camera.view.normForward()) < 0);
+        const double min_pivot_distance{ camera_settings.min_camera_pivot_distance_scene_radius_factor * scene_radius };
+        if ((camera_pivot - camera.view.eye).dot(camera.view.normForward()) < min_pivot_distance)
         {
-            camera_pivot = camera.view.eye;
+            camera_pivot = camera.view.centerAt(min_pivot_distance);
         }
         camera.updateView();
         update_GL_view();
