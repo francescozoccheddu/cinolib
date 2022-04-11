@@ -120,11 +120,16 @@ namespace cinolib
 	template<typename TScalar>
 	void FreeCamera<TScalar>::View::getYawAndPitch(const vec& _worldUp, const vec& _worldForward, TScalar& _yaw, TScalar& _pitch) const
 	{
-		// FIXME (francescozoccheddu)
+		// FIXME (francescozoccheddu) placeholder that only works for up=(0,1,0) and forward=(0,0,-1)
 		const vec& normWorldUp{ _worldUp.normalized() };
 		const vec& normWorldForward{ _worldForward.normalized() };
-		_pitch = to_deg(std::asin(-normBack().y()));
-		_yaw = to_deg(std::atan2(normBack().x(), normBack().z()));
+		if (!(normWorldUp == vec{ 0,1,0 } && normWorldForward == vec{ 0,0,-1 }))
+		{
+			throw std::runtime_error{ "not implemented yet" };
+		}
+		const vec3d back{ normBack() };
+		_pitch = to_deg(std::asin(-back.y()));
+		_yaw = to_deg(std::atan2(back.x(), back.z()));
 	}
 
 	template<typename TScalar>
