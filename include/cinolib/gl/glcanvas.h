@@ -82,7 +82,7 @@ class GLcanvas
         double get_camera_speed_modifier() const;
         void handle_zoom(double amount);
         void handle_rotation(const vec2d& amount);
-        void handle_translation(const vec3d& amount);
+        void handle_pan(const vec2d& amount);
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -158,6 +158,7 @@ class GLcanvas
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
         vec3d scene_center{};
+        vec3d camera_pivot{};
         float scene_radius{};
         int width, height;
         double DPI_factor;
