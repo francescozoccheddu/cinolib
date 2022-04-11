@@ -78,11 +78,13 @@ void GLcanvas::KeyBindings::print() const
     key(toggle_axes, "toggle axes");
     key(toggle_ortho, "toggle perspective/orthographic camera");
     key(reset_camera, "reset camera");
+    key(look_at_center, "look at center");
     key(store_camera, "copy camera to clipboard");
     key(restore_camera, "restore camera from clipboard");
     key(camera_faster, "move camera faster (hold down)");
     key(camera_slower, "move camera slower (hold down)");
     key(camera_inplace_zoom, "change fov instead of moving forward when zooming (hold down)");
+    key(camera_inplace_rotation, "rotate camera around itself instead of the center (hold down)");
     if (pan_with_arrow_keys)
     {
         binding("arrows", "pan");
@@ -146,9 +148,9 @@ CINO_INLINE
 void GLcanvas::handle_zoom(double _amount)
 {
     _amount *= get_camera_speed_modifier();
-    if (camera.projection.perspective && !glfwGetKey(window, key_bindings.camera_inplace_zoom))
+    if (camera.projection.perspective && glfwGetKey(window, key_bindings.camera_inplace_zoom) != GLFW_PRESS)
     {
-        camera.view.eye += camera.view.normForward() * _amount;
+        camera.view.eye += camera.view.normForward() * _amount * scene_radius;
         camera.updateView();
         update_GL_view();
     }
@@ -178,7 +180,21 @@ void GLcanvas::handle_zoom(double _amount)
 CINO_INLINE
 void GLcanvas::handle_rotation(const vec2d& amount)
 {
-
+    const vec2d angles(amount * get_camera_speed_modifier());
+    if (glfwGetKey(window, key_bindings.camera_inplace_rotation) == GLFW_PRESS)
+    {
+        camera.view.rotateFps(vec3d{ 0,1,0 }, vec3d{0,0,-1}, angles.x(), angles.y());
+    }
+    else
+    {
+        const double camera_scene_radius{ scene_radius ? scene_radius : 1 };
+        const double distance{ camera_scene_radius * camera_settings.camera_distance_scene_radius_factor };
+        camera.view.rotateTps(vec3d{ 0,1,0 }, vec3d{0,0,-1}, distance, angles.x(), angles.y());
+    }
+    camera.updateView();
+    update_GL_view();
+    draw();
+    notify_camera_change();
 }
 
 CINO_INLINE
@@ -426,9 +442,8 @@ void GLcanvas::reset_camera(bool update_gl)
     camera.projection.perspective = true;
     camera.projection.verticalFieldOfView = (camera_settings.min_persp_fov + camera_settings.max_persp_fov) / 2.0;
     const double camera_scene_radius{ scene_radius ? scene_radius : 1 };
-    camera.view.eye = scene_center + vec3d{ 0, 0, scene_radius * 2 };
-    camera.view.forward = vec3d{ 0, 0, -1 };
-    camera.view.up = vec3d{ 0, 1, 0 };
+    const double distance{ camera_scene_radius * camera_settings.camera_distance_scene_radius_factor };
+    camera.view = FreeCamera<double>::View::tps(vec3d{ 0,1,0 }, vec3d{ 0,0,-1 }, scene_center, distance, 0, 0);
 
     if (update_gl)
     {
@@ -832,6 +847,14 @@ void GLcanvas::key_event(GLFWwindow* window, int key, int /*scancode*/, int acti
             {
                 v->reset_camera();
             }
+            if (key == v->key_bindings.look_at_center)
+            {
+                v->camera.view.lookAt(v->scene_center);
+                v->camera.updateView();
+                v->update_GL_view();
+                v->draw();
+                v->notify_camera_change();
+            }
             if (key == v->key_bindings.toggle_axes)
             {
                 v->show_axis ^= true;
@@ -938,7 +961,7 @@ void GLcanvas::cursor_event(GLFWwindow* window, double x_pos, double y_pos)
     {
         if (glfwGetMouseButton(window, v->mouse_bindings.camera_rotate) == GLFW_PRESS)
         {
-            const vec2d amount{ delta * v->camera_settings.rotate_drag_speed / 200 };
+            const vec2d amount{ -delta * v->camera_settings.rotate_drag_speed / 10 };
             v->handle_rotation(amount);
         }
 
@@ -973,7 +996,7 @@ void GLcanvas::scroll_event(GLFWwindow* window, double x_offset, double y_offset
 
     if (v->mouse_bindings.zoom_with_wheel)
     {
-        const double amount{ y_offset * v->camera_settings.zoom_scroll_speed / 100 };
+        const double amount{ y_offset * v->camera_settings.zoom_scroll_speed / 20 };
         v->handle_zoom(amount);
     }
 }

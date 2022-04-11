@@ -13,11 +13,13 @@
 namespace cinolib
 {
 
+	// angles in degrees; vectors do not have to be normalized (unless stated otherwise)
+
 	template<typename TScalar>
 	class FreeCamera final
 	{
 
-		// Components
+		// components
 
 	public:
 
@@ -31,51 +33,68 @@ namespace cinolib
 
 			TScalar aspectRatio{ 1 }; // width / height
 			TScalar farZ{ 100 }, nearZ{ 1 }; // world units
-			TScalar verticalFieldOfView{ 67 }; // angle degrees (perspective) or world units (orthographic)
+			TScalar verticalFieldOfView{ 67 }; // angle (perspective) or world units (orthographic)
 			bool perspective{ true };
 
 			void setAspect(unsigned int _width, unsigned int _height);
 
-			inline void validate() const;
+			void validate() const;
 
-			inline mat matrix() const; // not cached
+			mat matrix() const; // not cached
 
-			inline std::string serialize() const;
-			inline static Projection deserialize(const std::string& _data);
+			std::string serialize() const;
+			static Projection deserialize(const std::string& _data);
 
 		} projection;
 
 		class View final
 		{
 
+		private:
+
+			void getYawAndPitch(const vec& _worldUp, const vec& _worldForward, TScalar& _yaw, TScalar& _pitch) const;
+			static TScalar wrapAngle(TScalar _angle);
+			static void validateWorldDirections(const vec& _worldUp, const vec& _worldForward);
+			static void validatePitch(TScalar _pitch);
+			static void validatePitchLimit(TScalar _pitchLimit);
+
 		public:
 
 			vec eye{ 0,0,0 };
-			vec up{ 0,1,0 }; // does not have to be normalized
-			vec forward{ 0,0,1 }; // does not have to be normalized
+			vec up{ 0,1,0 };
+			vec forward{ 0,0,-1 };
 
-			inline vec normLeft() const;
-			inline vec normRight() const;
-			inline vec normDown() const;
-			inline vec normUp() const;
-			inline vec normBack() const;
-			inline vec normForward() const;
+			vec normLeft() const;
+			vec normRight() const;
+			vec normDown() const;
+			vec normUp() const;
+			vec normBack() const;
+			vec normForward() const;
 
-			inline void lookAt(const vec& _target);
-			inline void lookAtFrom(const vec& _target, const vec& _eye);
-			inline void rotateAroundPivot(const vec& _axis, TScalar _angle, const vec& _pivot); // angle degrees; axis does not have to be normalized
-			inline void rotate(const vec& _axis, TScalar _angle); // angle degrees; axis does not have to be normalized
+			vec centerAt(TScalar _depth) const;
 
-			inline void validate() const;
+			void lookAt(const vec& _target);
+			void lookAtFrom(const vec& _target, const vec& _eye);
+			void rotateAroundCenterAt(const vec& _axis, TScalar _angle, TScalar _depth);
+			void rotate(const vec& _axis, TScalar _angle);
 
-			inline mat matrix() const; // not cached
+			void rotateFps(const vec& _worldUp, const vec& _worldForward, TScalar _yaw, TScalar _pitch, TScalar _pitchLimit = 10);
+			void rotateTps(const vec& _worldUp, const vec& _worldForward, TScalar _pivotDepth, TScalar _yaw, TScalar _pitch, TScalar _pitchLimit = 10);
 
-			inline std::string serialize() const;
-			inline static View deserialize(const std::string& _data);
+			static View lookAt(const vec& _eye, const vec& _target, const vec& _up);
+			static View fps(const vec& _worldUp, const vec& _worldForward, const vec& _eye, TScalar _yaw, TScalar _pitch);
+			static View tps(const vec& _worldUp, const vec& _worldForward, const vec& _target, const TScalar _distance, TScalar _yaw, TScalar _pitch);
+
+			void validate() const;
+
+			mat matrix() const; // not cached
+
+			std::string serialize() const;
+			static View deserialize(const std::string& _data);
 
 		} view;
 
-		// Matrices
+		// matrices
 
 	private:
 
@@ -84,36 +103,36 @@ namespace cinolib
 
 	public:
 
-		inline void updateProjection();
-		inline void updateView();
-		inline void updateProjectionAndView();
+		void updateProjection();
+		void updateView();
+		void updateProjectionAndView();
 
-		inline const mat& projectionMatrix() const; // cached
-		inline const mat& viewMatrix() const; // cached
-		inline const mat& projectionViewMatrix() const; // cached
+		const mat& projectionMatrix() const; // cached
+		const mat& viewMatrix() const; // cached
+		const mat& projectionViewMatrix() const; // cached
 
-		inline std::string serialize() const;
-		inline static FreeCamera deserialize(const std::string& _data);
+		std::string serialize() const;
+		static FreeCamera deserialize(const std::string& _data);
 
 
 	};
 
-	// Serialization
+	// serialization
 
 	template<typename TScalar>
-	inline std::ostream& operator<<(std::ostream& _out, const typename FreeCamera<TScalar>::Projection& _projection);
+	std::ostream& operator<<(std::ostream& _out, const typename FreeCamera<TScalar>::Projection& _projection);
 	template<typename TScalar>
-	inline std::istream& operator>>(std::istream& _in, typename FreeCamera<TScalar>::Projection& _projection);
+	std::istream& operator>>(std::istream& _in, typename FreeCamera<TScalar>::Projection& _projection);
 
 	template<typename TScalar>
-	inline std::ostream& operator<<(std::ostream& _out, const typename FreeCamera<TScalar>::View& _view);
+	std::ostream& operator<<(std::ostream& _out, const typename FreeCamera<TScalar>::View& _view);
 	template<typename TScalar>
-	inline std::istream& operator>>(std::istream& _in, typename FreeCamera<TScalar>::View& _view);
+	std::istream& operator>>(std::istream& _in, typename FreeCamera<TScalar>::View& _view);
 
 	template<typename TScalar>
-	inline std::ostream& operator<<(std::ostream& _out, const FreeCamera<TScalar>& _camera);
+	std::ostream& operator<<(std::ostream& _out, const FreeCamera<TScalar>& _camera);
 	template<typename TScalar>
-	inline std::istream& operator>>(std::istream& _in, FreeCamera<TScalar>& _camera);
+	std::istream& operator>>(std::istream& _in, FreeCamera<TScalar>& _camera);
 
 }
 

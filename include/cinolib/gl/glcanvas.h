@@ -107,7 +107,9 @@ class GLcanvas
             int camera_faster{ GLFW_KEY_LEFT_SHIFT };
             int camera_slower{ GLFW_KEY_LEFT_CONTROL };
             int camera_inplace_zoom{ GLFW_KEY_LEFT_ALT };
+            int camera_inplace_rotation{ GLFW_KEY_LEFT_ALT };
             int reset_camera{ GLFW_KEY_R };
+            int look_at_center{ GLFW_KEY_L };
             int toggle_axes{ GLFW_KEY_A };
             int toggle_sidebar{ GLFW_KEY_TAB };
             int store_camera{ GLFW_KEY_C };
@@ -148,6 +150,7 @@ class GLcanvas
             double max_ortho_fov_scene_radius_factor{ 2 };
             double min_ortho_fov_scene_radius_factor{ 1.0 / 100 };
             double max_up_angle_diff{ 10 };
+            double camera_distance_scene_radius_factor{ 2 };
         } camera_settings;
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
