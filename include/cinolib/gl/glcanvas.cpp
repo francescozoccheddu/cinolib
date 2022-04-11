@@ -46,6 +46,7 @@
 #include <cinolib/clamp.h>
 #include <iostream>
 #include <string>
+#include <cstring>
 #include <cmath>
 
 namespace cinolib
@@ -833,19 +834,32 @@ void GLcanvas::key_event(GLFWwindow* window, int key, int /*scancode*/, int acti
 
         if (action == GLFW_PRESS && !modifiers)
         {
+            static const std::string camera_clipboard_token{ "cinolib_gl_glcanvas_camera\n" };
             if (key == v->key_bindings.store_camera)
             {
-                glfwSetClipboardString(window, v->camera.serialize().c_str());
+                constexpr char sep{ ' ' };
+                std::stringstream stream{};
+                stream 
+                    << camera_clipboard_token
+                    << v->camera << sep
+                    << v->camera_pivot;
+                glfwSetClipboardString(window, stream.str().c_str());
             }
             if (key == v->key_bindings.restore_camera)
             {
-                v->camera = FreeCamera<double>::deserialize(glfwGetClipboardString(window));
-                v->width = static_cast<int>(std::round(v->height * v->camera.projection.aspectRatio));
-                glfwSetWindowSize(window, v->width, v->height);
-                v->camera.updateProjectionAndView();
-                v->update_GL_matrices();
-                v->draw();
-                v->notify_camera_change();
+                const char* const clipboard{ glfwGetClipboardString(window) };
+                if (clipboard && std::strstr(clipboard, camera_clipboard_token.c_str()) == clipboard)
+                {
+                    std::stringstream{ clipboard + camera_clipboard_token.length() }
+                        >> v->camera
+                        >> v->camera_pivot;
+                    v->width = static_cast<int>(std::round(v->height * v->camera.projection.aspectRatio));
+                    glfwSetWindowSize(window, v->width, v->height);
+                    v->camera.updateProjectionAndView();
+                    v->update_GL_matrices();
+                    v->draw();
+                    v->notify_camera_change();
+                }
             }
             if (key == v->key_bindings.reset_camera)
             {
