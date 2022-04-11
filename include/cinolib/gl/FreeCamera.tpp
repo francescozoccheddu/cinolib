@@ -90,31 +90,6 @@ namespace cinolib
 		return obj;
 	}
 
-	template<typename TScalar>
-	std::ostream& operator<<(std::ostream& _out, const typename FreeCamera<TScalar>::Projection& _projection)
-	{
-		constexpr char sep{ ' ' };
-		_out
-			<< _projection.aspectRatio << sep
-			<< _projection.nearZ << sep
-			<< _projection.farZ << sep
-			<< _projection.verticalFieldOfView << sep
-			<< _projection.perspective;
-		return _out;
-	}
-
-	template<typename TScalar>
-	std::istream& operator>>(std::istream& _in, typename FreeCamera<TScalar>::Projection& _projection)
-	{
-		_in
-			>> _projection.aspectRatio
-			>> _projection.nearZ
-			>> _projection.farZ
-			>> _projection.verticalFieldOfView
-			>> _projection.perspective;
-		return _in;
-	}
-
 	// FreeCamera::View
 
 	template<typename TScalar>
@@ -375,21 +350,19 @@ namespace cinolib
 	std::ostream& operator<<(std::ostream& _out, const typename FreeCamera<TScalar>::View& _view)
 	{
 		constexpr char sep{ ' ' };
-		_out
+		return _out
 			<< _view.eye << sep
 			<< _view.up << sep
 			<< _view.forward << sep;
-		return _out;
 	}
 
 	template<typename TScalar>
 	std::istream& operator>>(std::istream& _in, typename FreeCamera<TScalar>::View& _view)
 	{
-		_in
+		return _in
 			>> _view.eye
 			>> _view.up
 			>> _view.forward;
-		return _in;
 	}
 
 	// FreeCamera
@@ -466,22 +439,18 @@ namespace cinolib
 	template<typename TScalar>
 	std::ostream& operator<<(std::ostream& _out, const FreeCamera<TScalar>& _camera)
 	{
-		// FIXME (francescozoccheddu)
 		constexpr char sep{ ' ' };
-		/*_out
+		return _out
 			<< _camera.projection << sep
-			<< _camera.view;*/
-		return _out;
+			<< _camera.view;
 	}
 
 	template<typename TScalar>
 	std::istream& operator>>(std::istream& _in, FreeCamera<TScalar>& _camera)
 	{
-		// FIXME (francescozoccheddu)
-		/*_in
+		return _in
 			>> _camera.projection
-			>> _camera.view;*/
-		return _in;
+			>> _camera.view;
 	}
 
 }

@@ -7,8 +7,7 @@
 #include <cinolib/geometry/vec_mat.h>
 #include <cinolib/deg_rad.h>
 #include <string>
-#include <ostream>
-#include <istream>
+#include <iostream>
 
 namespace cinolib
 {
@@ -44,6 +43,28 @@ namespace cinolib
 
 			std::string serialize() const;
 			static Projection deserialize(const std::string& _data);
+
+			friend std::ostream& operator<<(std::ostream& _out, const Projection& _projection) // ugly, but the only way I found
+			{
+				constexpr char sep{ ' ' };
+				return _out
+					<< _projection.aspectRatio << sep
+					<< _projection.nearZ << sep
+					<< _projection.farZ << sep
+					<< _projection.verticalFieldOfView << sep
+					<< _projection.perspective;
+			}
+
+			friend std::istream& operator>>(std::istream& _in, Projection& _projection) // ugly, but the only way I found
+			{
+				return _in
+					>> _projection.aspectRatio
+					>> _projection.nearZ
+					>> _projection.farZ
+					>> _projection.verticalFieldOfView
+					>> _projection.perspective;
+			}
+
 
 		} projection;
 
@@ -92,6 +113,23 @@ namespace cinolib
 			std::string serialize() const;
 			static View deserialize(const std::string& _data);
 
+			friend std::ostream& operator<<(std::ostream& _out, const View& _view) // ugly, but the only way I found
+			{
+				constexpr char sep{ ' ' };
+				return _out
+					<< _view.eye << sep
+					<< _view.up << sep
+					<< _view.forward << sep;
+			}
+
+			friend std::istream& operator>>(std::istream& _in, View& _view) // ugly, but the only way I found
+			{
+				return _in
+					>> _view.eye
+					>> _view.up
+					>> _view.forward;
+			}
+
 		} view;
 
 		// matrices
@@ -114,20 +152,9 @@ namespace cinolib
 		std::string serialize() const;
 		static FreeCamera deserialize(const std::string& _data);
 
-
 	};
 
 	// serialization
-
-	template<typename TScalar>
-	std::ostream& operator<<(std::ostream& _out, const typename FreeCamera<TScalar>::Projection& _projection);
-	template<typename TScalar>
-	std::istream& operator>>(std::istream& _in, typename FreeCamera<TScalar>::Projection& _projection);
-
-	template<typename TScalar>
-	std::ostream& operator<<(std::ostream& _out, const typename FreeCamera<TScalar>::View& _view);
-	template<typename TScalar>
-	std::istream& operator>>(std::istream& _in, typename FreeCamera<TScalar>::View& _view);
 
 	template<typename TScalar>
 	std::ostream& operator<<(std::ostream& _out, const FreeCamera<TScalar>& _camera);
