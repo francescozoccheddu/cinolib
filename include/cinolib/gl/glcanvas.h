@@ -99,6 +99,8 @@ class GLcanvas
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
+        static const vec3d world_right, world_up, world_forward;
+
         struct KeyBindings final
         {
             static const int none;
