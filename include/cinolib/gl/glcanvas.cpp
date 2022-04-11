@@ -151,6 +151,10 @@ void GLcanvas::handle_zoom(double _amount)
     if (camera.projection.perspective && glfwGetKey(window, key_bindings.camera_inplace_zoom) != GLFW_PRESS)
     {
         camera.view.eye += camera.view.normForward() * _amount * scene_radius;
+        if ((camera_pivot - camera.view.eye).dot(camera.view.normForward()) < 0);
+        {
+            camera_pivot = camera.view.eye;
+        }
         camera.updateView();
         update_GL_view();
     }
@@ -181,16 +185,16 @@ CINO_INLINE
 void GLcanvas::handle_rotation(const vec2d& amount)
 {
     const vec2d angles(amount * get_camera_speed_modifier());
+    const double distance{ camera.view.eye.dist(camera_pivot) };
     if (glfwGetKey(window, key_bindings.camera_inplace_rotation) == GLFW_PRESS)
     {
         camera.view.rotateFps(world_up, world_forward, angles.x(), angles.y());
     }
     else
     {
-        const double camera_scene_radius{ scene_radius ? scene_radius : 1 };
-        const double distance{ camera_scene_radius * camera_settings.camera_distance_scene_radius_factor }; // TODO (francescozoccheddu) find a better pivot point
         camera.view.rotateTps(world_up, world_forward, distance, angles.x(), angles.y());
     }
+    camera_pivot = camera.view.centerAt(distance);
     camera.updateView();
     update_GL_view();
     draw();
@@ -198,20 +202,13 @@ void GLcanvas::handle_rotation(const vec2d& amount)
 }
 
 CINO_INLINE
-void GLcanvas::handle_translation(const vec3d& amount)
+void GLcanvas::handle_pan(const vec2d& amount)
 {
     vec3d translation{ 0,0,0 };
     translation += amount.x() * camera.view.normRight();
     translation += amount.y() * camera.view.normUp();
-    if (camera.projection.perspective)
-    {
-        translation += amount.z() * camera.view.normForward();
-    }
-    else
-    {
-        handle_zoom(amount.z());
-    }
-    translation *= get_camera_speed_modifier() * scene_radius;
+    translation *= scene_radius * get_camera_speed_modifier();
+    camera_pivot += translation;
     camera.view.eye += translation;
     camera.updateView();
     update_GL_view();
@@ -410,6 +407,7 @@ CINO_INLINE
 void GLcanvas::refit_scene(bool update_gl)
 {
     scene_center = vec3d{0, 0, 0};
+    camera_pivot = scene_center;
     scene_radius = 0;
     unsigned int count = 0;
     for (auto obj : drawlist)
@@ -826,7 +824,8 @@ void GLcanvas::key_event(GLFWwindow* window, int key, int /*scancode*/, int acti
                 {
                     amount.normalize();
                     amount *= v->camera_settings.translate_key_speed / 50;
-                    v->handle_translation(amount);
+                    v->handle_zoom(amount.z());
+                    v->handle_pan(vec2d{amount.x(), amount.y()});
                 }
             }
         }
@@ -980,7 +979,7 @@ void GLcanvas::cursor_event(GLFWwindow* window, double x_pos, double y_pos)
         if (glfwGetMouseButton(window, v->mouse_bindings.camera_pan) == GLFW_PRESS)
         {
             const vec2d amount{ delta * v->camera_settings.pan_drag_speed / 200 };
-            v->handle_translation(vec3d(-amount.x(), amount.y(), 0));
+            v->handle_pan(vec2d{ -amount.x(), amount.y() });
         }
     }
 }
