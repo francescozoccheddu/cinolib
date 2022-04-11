@@ -153,6 +153,7 @@ class GLcanvas
             double min_ortho_fov_scene_radius_factor{ 1.0 / 100 };
             double max_up_angle_diff{ 10 };
             double camera_distance_scene_radius_factor{ 2 };
+            double min_camera_pivot_distance_scene_radius_factor{ 1.0 / 100 };
         } camera_settings;
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
