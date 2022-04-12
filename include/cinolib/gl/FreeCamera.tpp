@@ -94,7 +94,7 @@ namespace cinolib
 
 	template<typename TScalar>
 	void FreeCamera<TScalar>::View::getYawAndPitch(const vec& _worldUp, const vec& _worldForward, TScalar& _yaw, TScalar& _pitch) const
-	{
+	{		
 		// FIXME (francescozoccheddu) placeholder that only works for up=(0,1,0) and forward=(0,0,-1)
 		const vec& normWorldUp{ _worldUp.normalized() };
 		const vec& normWorldForward{ _worldForward.normalized() };
@@ -205,7 +205,7 @@ namespace cinolib
 	template<typename TScalar>
 	void FreeCamera<TScalar>::View::rotateAroundCenterAt(const vec& _axis, TScalar _angle, TScalar _depth)
 	{
-		const cinolib::mat<3, 3, TScalar> rotation(cinolib::mat<3, 3, TScalar>::ROT_3D(_axis.normalized(), to_rad(_angle)));
+		const cinolib::mat<3, 3, TScalar> rotation(cinolib::mat<3, 3, TScalar>::ROT_3D(_axis.normalized(), static_cast<TScalar>(to_rad(_angle))));
 		const vec target{ centerAt(_depth) };
 		eye = rotation * (eye - target) + target;
 		lookAt(target);
@@ -214,7 +214,7 @@ namespace cinolib
 	template<typename TScalar>
 	void FreeCamera<TScalar>::View::rotate(const vec& _axis, TScalar _angle)
 	{
-		const cinolib::mat<3, 3, TScalar> rotation(cinolib::mat<3, 3, TScalar>::ROT_3D(_axis.normalized(), to_rad(_angle)));
+		const cinolib::mat<3, 3, TScalar> rotation(cinolib::mat<3, 3, TScalar>::ROT_3D(_axis.normalized(), static_cast<TScalar>(to_rad(_angle))));
 		up = rotation * up;
 		forward = rotation * forward;
 	}

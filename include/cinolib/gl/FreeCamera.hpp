@@ -5,7 +5,6 @@
 // TODO (francescozoccheddu) documentation should be added
 
 #include <cinolib/geometry/vec_mat.h>
-#include <cinolib/deg_rad.h>
 #include <string>
 #include <iostream>
 
