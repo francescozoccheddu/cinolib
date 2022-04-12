@@ -80,9 +80,10 @@ class GLcanvas
 
         void notify_camera_change() const;
         double get_camera_speed_modifier() const;
-        void handle_zoom(double amount);
-        void handle_rotation(const vec2d& amount);
-        void handle_pan(const vec2d& amount);
+        void handle_zoom(double amount, bool update_gl=true);
+        void handle_rotation(const vec2d& amount, bool update_gl = true);
+        void handle_pan(const vec2d& amount, bool update_gl = true);
+        void handle_pan_and_zoom(const vec3d& amount, bool update_gl = true);
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 

@@ -146,19 +146,22 @@ double GLcanvas::get_camera_speed_modifier() const
 }
 
 CINO_INLINE
-void GLcanvas::handle_zoom(double _amount)
+void GLcanvas::handle_zoom(double amount, bool update_gl)
 {
-    _amount *= get_camera_speed_modifier();
+    amount *= get_camera_speed_modifier();
     if (camera.projection.perspective && glfwGetKey(window, key_bindings.camera_inplace_zoom) != GLFW_PRESS)
     {
-        camera.view.eye += camera.view.normForward() * _amount * scene_radius;
+        camera.view.eye += camera.view.normForward() * amount * scene_radius;
         const double min_pivot_distance{ camera_settings.min_camera_pivot_distance_scene_radius_factor * scene_radius };
         if ((camera_pivot - camera.view.eye).dot(camera.view.normForward()) < min_pivot_distance)
         {
             camera_pivot = camera.view.centerAt(min_pivot_distance);
         }
-        camera.updateView();
-        update_GL_view();
+        if (update_gl)
+        {
+            camera.updateView();
+            update_GL_view();
+        }
     }
     else
     {
@@ -174,17 +177,23 @@ void GLcanvas::handle_zoom(double _amount)
             min = camera_settings.min_ortho_fov_scene_radius_factor * camera_scene_radius;
             max = camera_settings.max_ortho_fov_scene_radius_factor * camera_scene_radius;
         }
-        double fov{ camera.projection.verticalFieldOfView + _amount * (max - min) };
+        double fov{ camera.projection.verticalFieldOfView - amount * (max - min) };
         camera.projection.verticalFieldOfView = clamp(fov, min, max);
-        camera.updateProjection();
-        update_GL_projection();
+        if (update_gl)
+        {
+            camera.updateProjection();
+            update_GL_projection();
+        }
     }
-    draw();
-    notify_camera_change();
+    if (update_gl)
+    {
+        draw();
+        notify_camera_change();
+    }
 }
 
 CINO_INLINE
-void GLcanvas::handle_rotation(const vec2d& amount)
+void GLcanvas::handle_rotation(const vec2d& amount, bool update_gl)
 {
     const vec2d angles(amount * get_camera_speed_modifier());
     const double distance{ camera.view.eye.dist(camera_pivot) };
@@ -197,14 +206,17 @@ void GLcanvas::handle_rotation(const vec2d& amount)
         camera.view.rotateTps(world_up, world_forward, distance, angles.x(), angles.y());
     }
     camera_pivot = camera.view.centerAt(distance);
-    camera.updateView();
-    update_GL_view();
-    draw();
-    notify_camera_change();
+    if (update_gl)
+    {
+        camera.updateView();
+        update_GL_view();
+        draw();
+        notify_camera_change();
+    }
 }
 
 CINO_INLINE
-void GLcanvas::handle_pan(const vec2d& amount)
+void GLcanvas::handle_pan(const vec2d& amount, bool update_gl)
 {
     vec3d translation{ 0,0,0 };
     translation += amount.x() * camera.view.normRight();
@@ -212,10 +224,27 @@ void GLcanvas::handle_pan(const vec2d& amount)
     translation *= scene_radius * get_camera_speed_modifier();
     camera_pivot += translation;
     camera.view.eye += translation;
-    camera.updateView();
-    update_GL_view();
-    draw();
-    notify_camera_change();
+    if (update_gl)
+    {
+        camera.updateView();
+        update_GL_view();
+        draw();
+        notify_camera_change();
+    }
+}
+
+CINO_INLINE
+void GLcanvas::handle_pan_and_zoom(const vec3d& amount, bool update_gl)
+{
+    handle_zoom(amount.z(), false);
+    handle_pan(vec2d{amount.x(), amount.y()}, false);
+    if (update_gl)
+    {
+        camera.updateProjectionAndView();
+        update_GL_matrices();
+        draw();
+        notify_camera_change();
+    }
 }
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -826,8 +855,7 @@ void GLcanvas::key_event(GLFWwindow* window, int key, int /*scancode*/, int acti
                 {
                     amount.normalize();
                     amount *= v->camera_settings.translate_key_speed / 50;
-                    v->handle_zoom(amount.z());
-                    v->handle_pan(vec2d{amount.x(), amount.y()});
+                    v->handle_pan_and_zoom(amount);
                 }
             }
         }
