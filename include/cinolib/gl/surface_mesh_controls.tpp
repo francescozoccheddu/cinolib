@@ -475,7 +475,7 @@ void SurfaceMeshControls<Mesh>::header_debug(const bool open)
                 vert_normals.clear();
                 vert_normals.set_cheap_rendering(true);
                 vert_normals.set_color(vert_debug_color);
-                double l = gui->scene_radius/5.0;
+                double l = gui->scene_radius()/5.0;
                 for(unsigned int vid=0; vid<m->num_verts(); ++vid)
                 {
                     if(m->vert_is_visible(vid))
@@ -499,7 +499,7 @@ void SurfaceMeshControls<Mesh>::header_debug(const bool open)
                 poly_normals.clear();
                 poly_normals.set_cheap_rendering(true);
                 poly_normals.set_color(poly_debug_color);
-                double l = gui->scene_radius/5.0;
+                double l = gui->scene_radius()/5.0;
                 for(unsigned int pid=0; pid<m->num_polys(); ++pid)
                 {
                     if(!m->poly_data(pid).flags[HIDDEN])

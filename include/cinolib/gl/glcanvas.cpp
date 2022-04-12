@@ -54,7 +54,10 @@ namespace cinolib
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
+CINO_INLINE
 const int GLcanvas::KeyBindings::none{ 0 };
+
+CINO_INLINE
 const int GLcanvas::MouseBindings::none{ 0 };
 
 CINO_INLINE
@@ -96,6 +99,7 @@ void GLcanvas::KeyBindings::print() const
     }
 }
 
+CINO_INLINE
 void GLcanvas::MouseBindings::print() const
 {
     auto binding = [](const char* binding, const char* desc)
@@ -151,11 +155,11 @@ void GLcanvas::handle_zoom(double amount, bool update_gl)
     amount *= get_camera_speed_modifier();
     if (camera.projection.perspective && glfwGetKey(window, key_bindings.camera_inplace_zoom) != GLFW_PRESS)
     {
-        camera.view.eye += camera.view.normForward() * amount * scene_radius;
-        const double min_pivot_distance{ camera_settings.min_camera_pivot_distance_scene_radius_factor * scene_radius };
-        if ((camera_pivot - camera.view.eye).dot(camera.view.normForward()) < min_pivot_distance)
+        camera.view.eye += camera.view.normForward() * amount * m_sceneRadius;
+        const double min_pivot_distance{ camera_settings.min_camera_pivot_distance_scene_radius_factor * m_sceneRadius };
+        if ((m_cameraPivot - camera.view.eye).dot(camera.view.normForward()) < min_pivot_distance)
         {
-            camera_pivot = camera.view.centerAt(min_pivot_distance);
+            m_cameraPivot = camera.view.centerAt(min_pivot_distance);
         }
         if (update_gl)
         {
@@ -173,7 +177,7 @@ void GLcanvas::handle_zoom(double amount, bool update_gl)
         }
         else
         {
-            const double camera_scene_radius{ scene_radius ? scene_radius : 1 };
+            const double camera_scene_radius{ m_sceneRadius ? m_sceneRadius : 1 };
             min = camera_settings.min_ortho_fov_scene_radius_factor * camera_scene_radius;
             max = camera_settings.max_ortho_fov_scene_radius_factor * camera_scene_radius;
         }
@@ -196,7 +200,7 @@ CINO_INLINE
 void GLcanvas::handle_rotation(const vec2d& amount, bool update_gl)
 {
     const vec2d angles(amount * get_camera_speed_modifier());
-    const double distance{ camera.view.eye.dist(camera_pivot) };
+    const double distance{ camera.view.eye.dist(m_cameraPivot) };
     if (glfwGetKey(window, key_bindings.camera_inplace_rotation) == GLFW_PRESS)
     {
         camera.view.rotateFps(world_up, world_forward, angles.x(), angles.y());
@@ -205,7 +209,7 @@ void GLcanvas::handle_rotation(const vec2d& amount, bool update_gl)
     {
         camera.view.rotateTps(world_up, world_forward, distance, angles.x(), angles.y());
     }
-    camera_pivot = camera.view.centerAt(distance);
+    m_cameraPivot = camera.view.centerAt(distance);
     if (update_gl)
     {
         camera.updateView();
@@ -221,8 +225,8 @@ void GLcanvas::handle_pan(const vec2d& amount, bool update_gl)
     vec3d translation{ 0,0,0 };
     translation += amount.x() * camera.view.normRight();
     translation += amount.y() * camera.view.normUp();
-    translation *= scene_radius * get_camera_speed_modifier();
-    camera_pivot += translation;
+    translation *= m_sceneRadius * get_camera_speed_modifier();
+    m_cameraPivot += translation;
     camera.view.eye += translation;
     if (update_gl)
     {
@@ -247,6 +251,121 @@ void GLcanvas::handle_pan_and_zoom(const vec3d& amount, bool update_gl)
     }
 }
 
+CINO_INLINE
+void GLcanvas::update_viewport(bool update_gl, bool redraw)
+{
+    camera.projection.setAspect(canvas_width(), m_height);
+    if (update_gl)
+    {
+        glViewport(current_sidebar_width(), 0, canvas_width(), m_height);
+        camera.updateProjection();
+        update_GL_projection();
+        if (redraw)
+        {
+            draw();
+            notify_camera_change();
+        }
+    }
+}
+
+CINO_INLINE
+int GLcanvas::s_windowsCount{ 0 };
+
+CINO_INLINE
+GLFWwindow* GLcanvas::createWindow(int width, int height)
+{
+    glfwInit();
+    GLFWwindow* const window{ glfwCreateWindow(width, height, "Cinolib", nullptr, nullptr) };
+    if (!window) glfwTerminate();
+    return window;
+}
+
+CINO_INLINE
+vec3d GLcanvas::scene_center() const
+{
+    return m_sceneCenter;
+}
+CINO_INLINE
+float GLcanvas::scene_radius() const
+{
+    return m_sceneRadius;
+}
+
+CINO_INLINE
+int GLcanvas::width() const
+{
+    return m_width;
+}
+
+CINO_INLINE
+int GLcanvas::canvas_width() const
+{
+    return m_width - current_sidebar_width();
+}
+
+CINO_INLINE
+int GLcanvas::height() const
+{
+    return m_height;
+}
+
+CINO_INLINE
+int GLcanvas::sidebar_width() const
+{
+    return static_cast<int>(std::round(m_sidebarRelativeWidth * m_width));
+}
+
+CINO_INLINE
+int GLcanvas::current_sidebar_width() const
+{
+    return m_showSidebar ? sidebar_width() : 0;
+}
+
+CINO_INLINE
+void GLcanvas::sidebar_width(int width, bool update_gl, bool redraw)
+{
+    sidebar_relative_width(width * m_width, update_gl, redraw);
+}
+
+CINO_INLINE
+float GLcanvas::sidebar_relative_width() const
+{
+    return m_sidebarRelativeWidth;
+}
+
+CINO_INLINE
+void GLcanvas::sidebar_relative_width(float width, bool update_gl, bool redraw)
+{
+    const int old_width{ sidebar_width() };
+    m_sidebarRelativeWidth = clamp(width, 0.2f, 0.8f);
+    if (old_width != sidebar_width())
+    {
+        update_viewport(update_gl, redraw);
+    }
+}
+
+CINO_INLINE
+bool GLcanvas::show_sidebar() const
+{
+    return m_showSidebar;
+}
+
+CINO_INLINE
+void GLcanvas::show_sidebar(bool show, bool update_gl, bool redraw)
+{
+    if (m_showSidebar != show)
+    {
+        m_showSidebar = show;
+        update_viewport(update_gl, redraw);
+    }
+}
+
+CINO_INLINE
+double GLcanvas::dpi_factor() const
+{
+    return m_dpiFactor;
+}
+
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 const vec3d GLcanvas::world_right{ 1,0,0 }, GLcanvas::world_up{ 0,1,0 }, GLcanvas::world_forward{ 0,0,-1 };
@@ -254,20 +373,11 @@ const vec3d GLcanvas::world_right{ 1,0,0 }, GLcanvas::world_up{ 0,1,0 }, GLcanva
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 CINO_INLINE
-GLcanvas::GLcanvas(const int width, const int height)
+GLcanvas::GLcanvas(const int width, const int height, const int font_size)
+    : owns_ImGui{s_windowsCount == 0}, window{createWindow(width, height)}, m_width{width}, m_height{height}, font_size{ font_size }
 {
-    // make sure that only the first window
-    // in the app creates a ImGui context
-    static int window_count = 0;
-    owns_ImGui = (window_count==0);
-    window_count++;
 
-    glfwInit();
-    window = glfwCreateWindow(width, height, "", NULL, NULL);
-    if(!window) glfwTerminate();
-
-    this->width = width;
-    this->height = height;
+    s_windowsCount++;
 
     glfwSwapInterval(1); // enable vsync
 
@@ -322,7 +432,6 @@ GLcanvas::GLcanvas(const int width, const int height)
     std::cout << "--------------\n";
 
     reset_camera();
-
 }
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -435,55 +544,61 @@ void GLcanvas::pop_all_markers()
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 CINO_INLINE
-void GLcanvas::refit_scene(bool update_gl)
+void GLcanvas::refit_scene(bool update_gl, bool redraw)
 {
-    scene_center = vec3d{0, 0, 0};
-    camera_pivot = scene_center;
-    scene_radius = 0;
+    m_sceneCenter = vec3d{0, 0, 0};
+    m_cameraPivot = m_sceneCenter;
+    m_sceneRadius = 0;
     unsigned int count = 0;
     for (auto obj : drawlist)
     {
         if (obj->scene_radius() > 0)
         {
-            scene_center += obj->scene_center();
-            scene_radius += obj->scene_radius();
+            m_sceneCenter += obj->scene_center();
+            m_sceneRadius += obj->scene_radius();
             ++count;
         }
     }
     if (count)
     {
-        scene_center /= static_cast<double>(count);
-        scene_radius /= static_cast<double>(count);
+        m_sceneCenter /= static_cast<double>(count);
+        m_sceneRadius /= static_cast<double>(count);
     }
-    const double camera_scene_radius{ scene_radius ? scene_radius : 1 };
+    const double camera_scene_radius{ m_sceneRadius ? m_sceneRadius : 1 };
     camera.projection.nearZ = camera_scene_radius * camera_settings.near_scene_radius_factor;
     camera.projection.farZ = camera_scene_radius * camera_settings.far_scene_radius_factor;
     if (update_gl)
     {
         camera.updateProjection();
         update_GL_projection();
-        draw();
-        notify_camera_change();
+        if (redraw)
+        {
+            draw();
+            notify_camera_change();
+        }
     }
 }
 
 CINO_INLINE
-void GLcanvas::reset_camera(bool update_gl)
+void GLcanvas::reset_camera(bool update_gl, bool redraw)
 {
     refit_scene(false);
-    camera.projection.setAspect(width, height);
+    update_viewport(false);
     camera.projection.perspective = true;
     camera.projection.verticalFieldOfView = (camera_settings.min_persp_fov + camera_settings.max_persp_fov) / 2.0;
-    const double camera_scene_radius{ scene_radius ? scene_radius : 1 };
+    const double camera_scene_radius{ m_sceneRadius ? m_sceneRadius : 1 };
     const double distance{ camera_scene_radius * camera_settings.camera_distance_scene_radius_factor };
-    camera.view = FreeCamera<double>::View::tps(world_up, world_forward, scene_center, distance, 0, 0);
+    camera.view = FreeCamera<double>::View::tps(world_up, world_forward, m_sceneCenter, distance, 0, 0);
 
     if (update_gl)
     {
         camera.updateProjectionAndView();
         update_GL_matrices();
-        draw();
-        notify_camera_change();
+        if (redraw)
+        {
+            draw();
+            notify_camera_change();
+        }
     }
 }
 
@@ -537,7 +652,7 @@ void GLcanvas::draw()
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
         draw_markers();
-        if(show_side_bar) draw_side_bar();
+        if(m_showSidebar) draw_side_bar();
         ImGui::Render();
         ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
     }
@@ -550,11 +665,11 @@ void GLcanvas::draw()
 CINO_INLINE
 void GLcanvas::draw_axis() const
 {
-    vec3d  O = scene_center;
-    vec3d  X = O + world_right * scene_radius;
-    vec3d  Y = O + world_up * scene_radius;
-    vec3d  Z = O + world_forward * scene_radius;
-    double r = scene_radius*0.02;
+    vec3d  O = m_sceneCenter;
+    vec3d  X = O + world_right * m_sceneRadius;
+    vec3d  Y = O + world_up * m_sceneRadius;
+    vec3d  Z = O + world_forward * m_sceneRadius;
+    double r = m_sceneRadius * 0.02;
     glfwMakeContextCurrent(window);
     glDisable(GL_DEPTH_TEST);
     draw_arrow(O, X, r, Color::RED(),   0.9, 0.5, 8);
@@ -594,8 +709,8 @@ void GLcanvas::draw_markers() const
     ImDrawList* drawList = ImGui::GetWindowDrawList();
 
     // if marker culling is enabled, read the Z buffer to depth-test 3D markers
-    GLint    W     = static_cast<GLint>(width  * DPI_factor);
-    GLint    H     = static_cast<GLint>(height * DPI_factor);
+    GLint    W     = static_cast<GLint>(m_width  * m_dpiFactor);
+    GLint    H     = static_cast<GLint>(m_height * m_dpiFactor);
     GLfloat *z_buf = (depth_cull_markers) ? new GLfloat[W*H] : nullptr;
     if(depth_cull_markers) whole_Z_buffer(z_buf);
 
@@ -607,8 +722,8 @@ void GLcanvas::draw_markers() const
             assert(!m.pos_3d.is_inf());
             GLdouble z;
             project(m.pos_3d, pos, z);
-            int x  = static_cast<int>(pos.x()*DPI_factor);
-            int y  = static_cast<int>(pos.y()*DPI_factor);
+            int x  = static_cast<int>(pos.x()* m_dpiFactor);
+            int y  = static_cast<int>(pos.y()* m_dpiFactor);
             // marker is outside the frustum
             if(z<0 || z>=1 || x<=0 || x>=W || y<=0 || y>=H) continue;
             // marker is occluded in the current view
@@ -653,8 +768,8 @@ void GLcanvas::draw_side_bar()
     assert(owns_ImGui && "Only the first canvas created handles the ImGui context");
 
     ImGui::SetNextWindowPos({0,0}, ImGuiCond_Always);
-    ImGui::SetNextWindowSize({width*side_bar_width, height*1.f}, ImGuiCond_Always);
-    ImGui::SetNextWindowBgAlpha(side_bar_alpha);
+    ImGui::SetNextWindowSize({ m_sidebarRelativeWidth * m_width, m_height*1.f}, ImGuiCond_Always);
+    ImGui::SetNextWindowBgAlpha(1.0f);
     ImGui::Begin("MENU");
     if(callback_app_controls!=nullptr)
     {
@@ -675,7 +790,12 @@ void GLcanvas::draw_side_bar()
         }
     }    
     // this allows the user to interactively resize the width of the side bar
-    side_bar_width = ImGui::GetWindowWidth() / width;
+    const float relativeWidth = ImGui::GetWindowWidth() / m_width;
+    if (relativeWidth < 0.05f)
+    {
+        show_sidebar(false, true, false);
+    }
+    sidebar_relative_width(relativeWidth, true, false);
     ImGui::End();        
 }
 
@@ -711,7 +831,7 @@ void GLcanvas::update_DPI_factor()
     // https://www.glfw.org/docs/latest/window_guide.html#window_fbsize
     int fb_width, fb_height;
     glfwGetFramebufferSize(window, &fb_width, &fb_height);
-    DPI_factor = (float)fb_width/width;
+    m_dpiFactor = (float)fb_width/m_width;
 }
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -741,9 +861,9 @@ CINO_INLINE
 GLfloat GLcanvas::query_Z_buffer(const vec2d & p) const
 {
     glfwMakeContextCurrent(window);
-    GLint x = p.x()         * DPI_factor;
-    GLint y = p.y()         * DPI_factor;
-    GLint H = height * DPI_factor;
+    GLint x = p.x()         * m_dpiFactor;
+    GLint y = p.y()         * m_dpiFactor;
+    GLint H = m_height * m_dpiFactor;
     GLfloat depth;
     glReadPixels(x, H-1-y, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &depth);
     return depth;
@@ -766,8 +886,8 @@ bool GLcanvas::unproject(const vec2d & p2d, vec3d & p3d) const
 CINO_INLINE
 bool GLcanvas::unproject(const vec2d & p2d, const GLdouble & depth, vec3d & p3d) const
 {
-    mat2i viewport({ 0,      height,
-                     width, -height});
+    mat2i viewport({current_sidebar_width(),    m_height,
+                    canvas_width(),            -m_height });
 
     return gl_unproject(p2d, depth, camera.viewMatrix(), camera.projectionMatrix(), viewport, p3d);
 }
@@ -777,8 +897,8 @@ bool GLcanvas::unproject(const vec2d & p2d, const GLdouble & depth, vec3d & p3d)
 CINO_INLINE
 void GLcanvas::project(const vec3d & p3d, vec2d & p2d, GLdouble & depth) const
 {
-    mat2i viewport({0,             height,
-                    width, -height});
+    mat2i viewport({current_sidebar_width(),    m_height,
+                    canvas_width(),            -m_height});
 
     gl_project(p3d, camera.viewMatrix(), camera.projectionMatrix(), viewport, p2d, depth);
 }
@@ -794,15 +914,11 @@ void GLcanvas::window_size_event(GLFWwindow *window, int width, int height)
     {
         return;
     }
-    glViewport(0, 0, width, height);
     GLcanvas* v = static_cast<GLcanvas*>(glfwGetWindowUserPointer(window));
-    v->height           = height;
-    v->width            = width;
-    v->camera.projection.setAspect(width, height);  // update the camera frustum
-    v->camera.updateProjection();
-    v->update_GL_projection();                      // update OpenGL's projection matrix
-    v->draw();                                      // refresh canvas while resizing
-    v->notify_camera_change();
+    v->m_height           = height;
+    v->m_width            = width;
+    v->update_DPI_factor();
+    v->update_viewport();
 }
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -870,7 +986,7 @@ void GLcanvas::key_event(GLFWwindow* window, int key, int /*scancode*/, int acti
                 stream 
                     << camera_clipboard_token
                     << v->camera << sep
-                    << v->camera_pivot;
+                    << v->m_cameraPivot;
                 glfwSetClipboardString(window, stream.str().c_str());
             }
             if (key == v->key_bindings.restore_camera)
@@ -880,9 +996,9 @@ void GLcanvas::key_event(GLFWwindow* window, int key, int /*scancode*/, int acti
                 {
                     std::stringstream{ clipboard + camera_clipboard_token.length() }
                         >> v->camera
-                        >> v->camera_pivot;
-                    v->width = static_cast<int>(std::round(v->height * v->camera.projection.aspectRatio));
-                    glfwSetWindowSize(window, v->width, v->height);
+                        >> v->m_cameraPivot;
+                    v->m_width = static_cast<int>(std::round(v->m_height * v->camera.projection.aspectRatio));
+                    glfwSetWindowSize(window, v->m_width, v->m_height);
                     v->camera.updateProjectionAndView();
                     v->update_GL_matrices();
                     v->draw();
@@ -895,7 +1011,7 @@ void GLcanvas::key_event(GLFWwindow* window, int key, int /*scancode*/, int acti
             }
             if (key == v->key_bindings.look_at_center)
             {
-                v->camera.view.lookAt(v->scene_center);
+                v->camera.view.lookAt(v->m_sceneCenter);
                 // get rid of roll
                 v->camera.view.rotateFps(world_up, world_forward, 0,0); // TODO (francescozoccheddu) this is ugly
                 v->camera.updateView();
@@ -911,7 +1027,10 @@ void GLcanvas::key_event(GLFWwindow* window, int key, int /*scancode*/, int acti
             if (key == v->key_bindings.toggle_ortho)
             {
                 v->camera.projection.perspective ^= true;
-                v->camera.projection.verticalFieldOfView = v->camera.projection.perspective ? 67 : v->scene_radius;
+                v->camera.projection.verticalFieldOfView = (v->camera.projection.perspective 
+                    ? v->camera_settings.min_persp_fov + v->camera_settings.max_persp_fov
+                    : v->m_sceneRadius * (v->camera_settings.min_ortho_fov_scene_radius_factor + v->camera_settings.max_ortho_fov_scene_radius_factor)) 
+                    / 2;
                 v->camera.updateProjection();
                 v->update_GL_projection();
                 v->draw();
@@ -919,8 +1038,7 @@ void GLcanvas::key_event(GLFWwindow* window, int key, int /*scancode*/, int acti
             }
             if (key == v->key_bindings.toggle_sidebar)
             {
-                v->show_side_bar ^= true;
-                v->draw();
+                v->show_sidebar(!v->m_showSidebar);
             }
         }
     }
@@ -943,8 +1061,8 @@ void GLcanvas::mouse_button_event(GLFWwindow* window, int button, int action, in
         auto double_click = [&]() -> bool
         {
             auto   t = std::chrono::high_resolution_clock::now();
-            double dt = how_many_seconds(v->trackball.t_last_click, t);
-            v->trackball.t_last_click = t;
+            double dt = how_many_seconds(v->m_trackball.t_last_click, t);
+            v->m_trackball.t_last_click = t;
             return (dt < 0.2);
         };
 
@@ -997,8 +1115,8 @@ void GLcanvas::cursor_event(GLFWwindow* window, double x_pos, double y_pos)
 
     GLcanvas* v = static_cast<GLcanvas*>(glfwGetWindowUserPointer(window));
     const vec2d cursor_pos{ v->cursor_pos() };
-    const vec2d delta{ cursor_pos - v->trackball.last_cursor_pos };
-    v->trackball.last_cursor_pos = cursor_pos;
+    const vec2d delta{ cursor_pos - v->m_trackball.last_cursor_pos };
+    v->m_trackball.last_cursor_pos = cursor_pos;
 
     if (v->callback_mouse_moved && v->callback_mouse_moved(x_pos, y_pos))
     {
