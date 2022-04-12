@@ -96,6 +96,27 @@ class GLcanvas
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
+        void draw_side_bar();        // render side bar with visual controls (if any)
+        void draw_markers()   const; // render text labels with ImGui (3d markers are depth tested if culling is enabled)
+        void draw_axis()      const; // render the global frame XYZ
+
+        //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+        static GLFWwindow* createWindow(int width, int height);
+
+        vec3d m_sceneCenter;
+        vec3d m_cameraPivot;
+        double m_sceneRadius;
+        int m_width, m_height;
+        float m_sidebarRelativeWidth{ 0.4f };
+        bool m_showSidebar{ false };
+        double m_dpiFactor;
+        static int s_windowsCount;
+
+        Trackball m_trackball{};
+
+        int current_sidebar_width() const;
+
     public:
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -159,24 +180,29 @@ class GLcanvas
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-        vec3d scene_center{};
-        vec3d camera_pivot{};
-        float scene_radius{};
-        int width, height;
-        double DPI_factor;
+        vec3d scene_center() const;
+        float scene_radius() const;
+        int width() const;
+        int canvas_width() const;
+        int height() const;
+        int sidebar_width() const;
+        void sidebar_width(int width, bool update_gl=true, bool redraw = true);
+        float sidebar_relative_width() const;
+        void sidebar_relative_width(float width, bool update_gl=true, bool redraw = true);
+        bool show_sidebar() const;
+        void show_sidebar(bool show, bool update_gl=true, bool redraw = true);
+        double dpi_factor() const;
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-        GLFWwindow                        *window;
+        GLFWwindow * const                 window;
         std::vector<const DrawableObject*> drawlist;
         std::vector<Marker>                markers;
         std::vector<SideBarItem*>          side_bar_items;
-        bool                               show_side_bar      = false;
-        float                              side_bar_width     = 0.2f;
-        float                              side_bar_alpha     = 1.f;
-        int                                font_size          = 13;
+        const int                          font_size;
         bool                               show_axis          = false;
         bool                               depth_cull_markers = true; // skip occluded 3D markers, testing their depth with the Z-buffer
+        FreeCamera<double>                 camera{};
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -186,16 +212,11 @@ class GLcanvas
         // window will benefit from the functionalities implemented
         // with ImGui, such as the side bar with visual controls and
         // the visual markers
-        bool owns_ImGui = false;
+        const bool owns_ImGui;
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-        FreeCamera<double> camera{};
-        Trackball trackball{};
-
-        //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
-         GLcanvas(const int width = 700, const int height = 700);
+         GLcanvas(const int width = 700, const int height = 700, const int font_size=13);
         ~GLcanvas();
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -212,14 +233,12 @@ class GLcanvas
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
         void draw();                 // single render pass
-        void draw_side_bar();        // render side bar with visual controls (if any)
-        void draw_markers()   const; // render text labels with ImGui (3d markers are depth tested if culling is enabled)
-        void draw_axis()      const; // render the global frame XYZ
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-        void refit_scene(bool update_gl = true);
-        void reset_camera(bool update_gl = true);
+        void refit_scene(bool update_gl = true, bool redraw = true);
+        void reset_camera(bool update_gl = true, bool redraw = true);
+        void update_viewport(bool update_gl = true, bool redraw = true);
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
