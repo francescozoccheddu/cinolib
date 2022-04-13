@@ -105,7 +105,7 @@ class GLcanvas
         static GLFWwindow* createWindow(int width, int height);
 
         vec3d m_sceneCenter;
-        vec3d m_cameraPivot;
+        double m_cameraPivotDepth;
         double m_sceneRadius;
         int m_width, m_height;
         float m_sidebarRelativeWidth{ 0.4f };
@@ -116,6 +116,7 @@ class GLcanvas
         Trackball m_trackball{};
 
         int current_sidebar_width() const;
+        void clamp_camera_pivot();
 
     public:
 
@@ -192,6 +193,8 @@ class GLcanvas
         bool show_sidebar() const;
         void show_sidebar(bool show, bool update_gl=true, bool redraw = true);
         double dpi_factor() const;
+        double camera_pivot_depth() const;
+        void camera_pivot_depth(double depth);
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -203,6 +206,7 @@ class GLcanvas
         bool                               show_axis          = false;
         bool                               depth_cull_markers = true; // skip occluded 3D markers, testing their depth with the Z-buffer
         FreeCamera<double>                 camera{};
+        cinolib::Color                     background{ cinolib::Color::WHITE() };
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
