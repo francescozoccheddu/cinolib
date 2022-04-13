@@ -150,17 +150,21 @@ double GLcanvas::get_camera_speed_modifier() const
 }
 
 CINO_INLINE
+void GLcanvas::clamp_camera_pivot()
+{
+    const double min_depth{ camera_settings.min_camera_pivot_distance_scene_radius_factor * m_sceneRadius };
+    m_cameraPivotDepth = std::max(m_cameraPivotDepth, min_depth);
+}
+
+CINO_INLINE
 void GLcanvas::handle_zoom(double amount, bool update_gl)
 {
     amount *= get_camera_speed_modifier();
     if (camera.projection.perspective && glfwGetKey(window, key_bindings.camera_inplace_zoom) != GLFW_PRESS)
     {
         camera.view.eye += camera.view.normForward() * amount * m_sceneRadius;
-        const double min_pivot_distance{ camera_settings.min_camera_pivot_distance_scene_radius_factor * m_sceneRadius };
-        if ((m_cameraPivot - camera.view.eye).dot(camera.view.normForward()) < min_pivot_distance)
-        {
-            m_cameraPivot = camera.view.centerAt(min_pivot_distance);
-        }
+        m_cameraPivotDepth -= amount * m_sceneRadius;
+        clamp_camera_pivot();
         if (update_gl)
         {
             camera.updateView();
@@ -200,16 +204,14 @@ CINO_INLINE
 void GLcanvas::handle_rotation(const vec2d& amount, bool update_gl)
 {
     const vec2d angles(amount * get_camera_speed_modifier());
-    const double distance{ camera.view.eye.dist(m_cameraPivot) };
     if (glfwGetKey(window, key_bindings.camera_inplace_rotation) == GLFW_PRESS)
     {
         camera.view.rotateFps(world_up, world_forward, angles.x(), angles.y());
     }
     else
     {
-        camera.view.rotateTps(world_up, world_forward, distance, angles.x(), angles.y());
+        camera.view.rotateTps(world_up, world_forward, m_cameraPivotDepth, angles.x(), angles.y());
     }
-    m_cameraPivot = camera.view.centerAt(distance);
     if (update_gl)
     {
         camera.updateView();
@@ -226,7 +228,6 @@ void GLcanvas::handle_pan(const vec2d& amount, bool update_gl)
     translation += amount.x() * camera.view.normRight();
     translation += amount.y() * camera.view.normUp();
     translation *= m_sceneRadius * get_camera_speed_modifier();
-    m_cameraPivot += translation;
     camera.view.eye += translation;
     if (update_gl)
     {
@@ -364,6 +365,19 @@ CINO_INLINE
 double GLcanvas::dpi_factor() const
 {
     return m_dpiFactor;
+}
+
+CINO_INLINE
+double GLcanvas::camera_pivot_depth() const
+{
+    return m_cameraPivotDepth;
+}
+
+CINO_INLINE
+void GLcanvas::camera_pivot_depth(double depth)
+{
+    m_cameraPivotDepth = depth;
+    clamp_camera_pivot();
 }
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -547,8 +561,8 @@ CINO_INLINE
 void GLcanvas::refit_scene(bool update_gl, bool redraw)
 {
     m_sceneCenter = vec3d{0, 0, 0};
-    m_cameraPivot = m_sceneCenter;
     m_sceneRadius = 0;
+    clamp_camera_pivot();
     unsigned int count = 0;
     for (auto obj : drawlist)
     {
@@ -589,7 +603,7 @@ void GLcanvas::reset_camera(bool update_gl, bool redraw)
     const double camera_scene_radius{ m_sceneRadius ? m_sceneRadius : 1 };
     const double distance{ camera_scene_radius * camera_settings.camera_distance_scene_radius_factor };
     camera.view = FreeCamera<double>::View::tps(world_up, world_forward, m_sceneCenter, distance, 0, 0);
-
+    camera_pivot_depth(m_sceneCenter.dist(camera.view.eye));
     if (update_gl)
     {
         camera.updateProjectionAndView();
@@ -637,7 +651,7 @@ CINO_INLINE
 void GLcanvas::draw()
 {
     glfwMakeContextCurrent(window);
-    glClearColor(1,1,1,1);
+    glClearColor(background.r, background.g, background.b, 1);
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 
     // draw your 3D scene
@@ -986,7 +1000,7 @@ void GLcanvas::key_event(GLFWwindow* window, int key, int /*scancode*/, int acti
                 stream 
                     << camera_clipboard_token
                     << v->camera << sep
-                    << v->m_cameraPivot;
+                    << v->m_cameraPivotDepth;
                 glfwSetClipboardString(window, stream.str().c_str());
             }
             if (key == v->key_bindings.restore_camera)
@@ -996,8 +1010,9 @@ void GLcanvas::key_event(GLFWwindow* window, int key, int /*scancode*/, int acti
                 {
                     std::stringstream{ clipboard + camera_clipboard_token.length() }
                         >> v->camera
-                        >> v->m_cameraPivot;
+                        >> v->m_cameraPivotDepth;
                     v->m_width = static_cast<int>(std::round(v->m_height * v->camera.projection.aspectRatio));
+                    v->clamp_camera_pivot();
                     glfwSetWindowSize(window, v->m_width, v->m_height);
                     v->camera.updateProjectionAndView();
                     v->update_GL_matrices();
@@ -1014,6 +1029,7 @@ void GLcanvas::key_event(GLFWwindow* window, int key, int /*scancode*/, int acti
                 v->camera.view.lookAt(v->m_sceneCenter);
                 // get rid of roll
                 v->camera.view.rotateFps(world_up, world_forward, 0,0); // TODO (francescozoccheddu) this is ugly
+                v->camera_pivot_depth(v->m_sceneCenter.dist(v->camera.view.eye));
                 v->camera.updateView();
                 v->update_GL_view();
                 v->draw();
