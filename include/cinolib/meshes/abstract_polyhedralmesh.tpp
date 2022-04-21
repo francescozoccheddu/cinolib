@@ -3063,15 +3063,24 @@ std::vector<bool> AbstractPolyhedralMesh<M,V,E,F,P>::poly_faces_winding(const un
 
 template<class M, class V, class E, class F, class P>
 CINO_INLINE
-unsigned int AbstractPolyhedralMesh<M,V,E,F,P>::pick_face(const vec3d & p) const
+unsigned int AbstractPolyhedralMesh<M,V,E,F,P>::pick_face(const vec3d & p, bool include_hidden) const
 {
-    std::vector<std::pair<double,unsigned int>> closest;
-    for(unsigned int fid=0; fid<this->num_faces(); ++fid)
+    double closest_dist{ inf_double };
+    unsigned int closest_fid{};
+    for (unsigned int fid{ 0 }; fid < num_faces(); ++fid)
     {
-        if(!this->face_data(fid).flags[HIDDEN]) closest.push_back(std::make_pair(this->face_centroid(fid).dist(p),fid));
+        if (!include_hidden && face_data(fid).flags[HIDDEN])
+        {
+            continue;
+        }
+        const double dist{ face_centroid(fid).dist(p) };
+        if (dist < closest_dist)
+        {
+            closest_dist = dist;
+            closest_fid = fid;
+        }
     }
-    std::sort(closest.begin(), closest.end());
-    return closest.front().second;
+    return closest_fid;
 }
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::

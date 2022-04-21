@@ -207,7 +207,7 @@ class AbstractMesh
         // useful for GUIs with mouse picking
         unsigned int pick_vert(const vec3d & p) const;
         unsigned int pick_edge(const vec3d & p) const;
-        unsigned int pick_poly(const vec3d & p) const;
+        unsigned int pick_poly(const vec3d & p, bool include_hidden = false) const;
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 

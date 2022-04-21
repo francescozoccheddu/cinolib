@@ -172,7 +172,7 @@ class AbstractPolyhedralMesh : public AbstractMesh<M,V,E,P>
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
         // useful for GUIs with mouse picking
-        unsigned int pick_face(const vec3d & p) const;
+        unsigned int pick_face(const vec3d & p, bool include_hidden = false) const;
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
