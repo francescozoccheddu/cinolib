@@ -1301,10 +1301,18 @@ template<class M, class V, class E, class P>
 CINO_INLINE
 unsigned int AbstractMesh<M,V,E,P>::pick_vert(const vec3d & p) const
 {
-    std::vector<std::pair<double,unsigned int>> closest;
-    for(unsigned int vid=0; vid<this->num_verts(); ++vid) closest.push_back(std::make_pair(this->vert(vid).dist(p),vid));
-    std::sort(closest.begin(), closest.end());
-    return closest.front().second;
+    double closest_dist{ inf_double };
+    unsigned int closest_vid{};
+    for (unsigned int vid{0}; vid < num_verts(); ++vid)
+    {
+        const double dist{ vert(vid).dist(p) };
+        if (dist < closest_dist)
+        {
+            closest_dist = dist;
+            closest_vid = vid;
+        }
+    }
+    return closest_vid;
 }
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -1313,25 +1321,42 @@ template<class M, class V, class E, class P>
 CINO_INLINE
 unsigned int AbstractMesh<M,V,E,P>::pick_edge(const vec3d & p) const
 {
-    std::vector<std::pair<double,unsigned int>> closest;
-    for(unsigned int eid=0; eid<this->num_edges(); ++eid) closest.push_back(std::make_pair(this->edge_sample_at(eid, 0.5).dist(p),eid));
-    std::sort(closest.begin(), closest.end());
-    return closest.front().second;
+    double closest_dist{ inf_double };
+    unsigned int closest_eid{};
+    for (unsigned int eid{0}; eid < num_edges(); ++eid)
+    {
+        const double dist{ edge_sample_at(eid, 0.5).dist(p) };
+        if (dist < closest_dist)
+        {
+            closest_dist = dist;
+            closest_eid = eid;
+        }
+    }
+    return closest_eid;
 }
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 template<class M, class V, class E, class P>
 CINO_INLINE
-unsigned int AbstractMesh<M,V,E,P>::pick_poly(const vec3d & p) const
+unsigned int AbstractMesh<M,V,E,P>::pick_poly(const vec3d & p, bool include_hidden) const
 {
-    std::vector<std::pair<double,unsigned int>> closest;
-    for(unsigned int pid=0; pid<this->num_polys(); ++pid)
+    double closest_dist{ inf_double };
+    unsigned int closest_pid{};
+    for (unsigned int pid{ 0 }; pid < num_polys(); ++pid)
     {
-        if(!this->poly_data(pid).flags[HIDDEN]) closest.push_back(std::make_pair(this->poly_centroid(pid).dist(p),pid));
+        if (!include_hidden && poly_data(pid).flags[HIDDEN])
+        {
+            continue;
+        }
+        const double dist{ poly_centroid(pid).dist(p) };
+        if (dist < closest_dist)
+        {
+            closest_dist = dist;
+            closest_pid = pid;
+        }
     }
-    std::sort(closest.begin(), closest.end());
-    return closest.front().second;
+    return closest_pid;
 }
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
