@@ -1436,7 +1436,7 @@ unsigned int AbstractPolyhedralMesh<M,V,E,F,P>::face_shared_edge(const unsigned 
     {
         if (this->face_contains_edge(fid1, eid)) return eid;
     }
-    assert(false);
+    return -1;
 }
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
