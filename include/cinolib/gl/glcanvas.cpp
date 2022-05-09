@@ -784,11 +784,16 @@ void GLcanvas::draw_side_bar()
     ImGui::SetNextWindowPos({0,0}, ImGuiCond_Always);
     ImGui::SetNextWindowSize({ m_sidebarRelativeWidth * m_width, m_height*1.f}, ImGuiCond_Always);
     ImGui::SetNextWindowBgAlpha(1.0f);
-    ImGui::Begin("MENU");
+    bool visible{ true };
+    ImGui::Begin("Sidebar", &visible,  
+        ImGuiWindowFlags_NoTitleBar |
+        ImGuiWindowFlags_NoMove |
+        ImGuiWindowFlags_NoCollapse 
+    );
     if(callback_app_controls!=nullptr)
     {
         ImGui::SetNextItemOpen(true,ImGuiCond_Once);
-        if(ImGui::TreeNode("APP CONTROLS"))
+        if(ImGui::TreeNode("App controls"))
         {
             callback_app_controls();
             ImGui::TreePop();
