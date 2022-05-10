@@ -1016,9 +1016,8 @@ void GLcanvas::key_event(GLFWwindow* window, int key, int /*scancode*/, int acti
                     std::stringstream{ clipboard + camera_clipboard_token.length() }
                         >> v->camera
                         >> v->m_cameraPivotDepth;
-                    v->m_width = static_cast<int>(std::round(v->m_height * v->camera.projection.aspectRatio));
                     v->clamp_camera_pivot();
-                    glfwSetWindowSize(window, v->m_width, v->m_height);
+                    v->update_viewport(false);
                     v->camera.updateProjectionAndView();
                     v->update_GL_matrices();
                     v->draw();
