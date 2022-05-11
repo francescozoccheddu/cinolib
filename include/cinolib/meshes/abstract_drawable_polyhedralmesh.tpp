@@ -39,6 +39,7 @@
 #include <cinolib/gl/load_texture.h>
 #include <cinolib/color.h>
 #include <unordered_set>
+#include <algorithm>
 
 namespace cinolib
 {
@@ -53,6 +54,7 @@ void AbstractDrawablePolyhedralMesh<Mesh>::init_drawable_stuff()
     drawlist_marked.seg_width = 3;
     marked_edge_color         = Color::RED();
     marked_face_color         = Color::BLUE();
+    marked_poly_color         = Color::BLUE();
     AO_alpha                  = 1.0;
 
     updateGL();
@@ -96,7 +98,15 @@ void AbstractDrawablePolyhedralMesh<Mesh>::updateGL_marked()
 
     for(unsigned int fid=0; fid<this->num_faces(); ++fid)
     {
-        if(!this->face_data(fid).flags[MARKED]) continue;
+
+        const bool is_face_marked{ this->face_data(fid).flags[MARKED] };
+        const bool is_poly_marked{ std::any_of(this->adj_f2p(fid).begin(), this->adj_f2p(fid).end(), [this](unsigned int pid) { return this->poly_data(pid).flags[MARKED]; }) };
+        if (!is_face_marked && !is_poly_marked)
+        {
+            continue;
+        }
+
+        Color& mark_color{ is_face_marked ? marked_face_color : marked_poly_color };
 
         for(unsigned int i=0; i<this->face_tessellation(fid).size()/3; ++i)
         {
@@ -130,18 +140,18 @@ void AbstractDrawablePolyhedralMesh<Mesh>::updateGL_marked()
             drawlist_marked.tri_v_norms.push_back(this->face_data(fid).normal.y());
             drawlist_marked.tri_v_norms.push_back(this->face_data(fid).normal.z());
 
-            drawlist_marked.tri_v_colors.push_back(marked_face_color.r);
-            drawlist_marked.tri_v_colors.push_back(marked_face_color.g);
-            drawlist_marked.tri_v_colors.push_back(marked_face_color.b);
-            drawlist_marked.tri_v_colors.push_back(marked_face_color.a);
-            drawlist_marked.tri_v_colors.push_back(marked_face_color.r);
-            drawlist_marked.tri_v_colors.push_back(marked_face_color.g);
-            drawlist_marked.tri_v_colors.push_back(marked_face_color.b);
-            drawlist_marked.tri_v_colors.push_back(marked_face_color.a);
-            drawlist_marked.tri_v_colors.push_back(marked_face_color.r);
-            drawlist_marked.tri_v_colors.push_back(marked_face_color.g);
-            drawlist_marked.tri_v_colors.push_back(marked_face_color.b);
-            drawlist_marked.tri_v_colors.push_back(marked_face_color.a);
+            drawlist_marked.tri_v_colors.push_back(mark_color.r);
+            drawlist_marked.tri_v_colors.push_back(mark_color.g);
+            drawlist_marked.tri_v_colors.push_back(mark_color.b);
+            drawlist_marked.tri_v_colors.push_back(mark_color.a);
+            drawlist_marked.tri_v_colors.push_back(mark_color.r);
+            drawlist_marked.tri_v_colors.push_back(mark_color.g);
+            drawlist_marked.tri_v_colors.push_back(mark_color.b);
+            drawlist_marked.tri_v_colors.push_back(mark_color.a);
+            drawlist_marked.tri_v_colors.push_back(mark_color.r);
+            drawlist_marked.tri_v_colors.push_back(mark_color.g);
+            drawlist_marked.tri_v_colors.push_back(mark_color.b);
+            drawlist_marked.tri_v_colors.push_back(mark_color.a);
         }
     }
 
@@ -1051,6 +1061,26 @@ CINO_INLINE
 void AbstractDrawablePolyhedralMesh<Mesh>::show_marked_face_transparency(const float alpha)
 {
     marked_face_color.a = alpha;
+    updateGL_marked();
+}
+
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+template<class Mesh>
+CINO_INLINE
+void AbstractDrawablePolyhedralMesh<Mesh>::show_marked_poly_color(const Color& c)
+{
+    marked_poly_color = c;
+    updateGL_marked();
+}
+
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+template<class Mesh>
+CINO_INLINE
+void AbstractDrawablePolyhedralMesh<Mesh>::show_marked_poly_transparency(const float alpha)
+{
+    marked_poly_color.a = alpha;
     updateGL_marked();
 }
 
