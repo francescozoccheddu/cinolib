@@ -56,6 +56,7 @@ class AbstractDrawablePolyhedralMesh : public virtual Mesh, public DrawableObjec
         RenderData drawlist_marked; // rendering info about marked edges (can be extended to handle marked verts/faces/poly too)
         Color      marked_edge_color;
         Color      marked_face_color;
+        Color      marked_poly_color;
         float      AO_alpha;
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -134,6 +135,9 @@ class AbstractDrawablePolyhedralMesh : public virtual Mesh, public DrawableObjec
         void show_marked_face(const bool b);
         void show_marked_face_color(const Color & c);
         void show_marked_face_transparency(const float alpha);
+
+        void show_marked_poly_color(const Color& c);
+        void show_marked_poly_transparency(const float alpha);
 };
 
 }
