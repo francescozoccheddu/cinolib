@@ -102,7 +102,7 @@ class Color
         static Color red_white_blue_ramp_01(float val);
         static Color red_ramp_01(const float val, const bool zero_is_white = true);
         static Color normal2rgb(const vec3d & n, bool flip_neg_z);
-        static Color hsv2rgb(float h, float s, float v);
+        static Color hsv2rgb(float h, float s, float v, float a = 1.0f);
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
