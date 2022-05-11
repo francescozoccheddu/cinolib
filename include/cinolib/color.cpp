@@ -202,9 +202,9 @@ Color Color::normal2rgb(const vec3d & n, bool flip_neg_z)
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 CINO_INLINE
-Color Color::hsv2rgb(float h, float s, float v)
+Color Color::hsv2rgb(float h, float s, float v, float a)
 {
-    if(s==0.0) return Color(v,v,v); // gray color
+    if(s==0.0) return Color(v,v,v,a); // gray color
     if(h==1.0) h = 0.0;
 
     int i   = int( floor(h*6.f) );
@@ -216,12 +216,12 @@ Color Color::hsv2rgb(float h, float s, float v)
 
     switch(i)
     {
-        case 0: return Color(v,t,p);
-        case 1: return Color(q,v,p);
-        case 2: return Color(p,v,t);
-        case 3: return Color(p,q,v);
-        case 4: return Color(t,p,v);
-        case 5: return Color(v,p,q);
+        case 0: return Color(v,t,p,a);
+        case 1: return Color(q,v,p,a);
+        case 2: return Color(p,v,t,a);
+        case 3: return Color(p,q,v,a);
+        case 4: return Color(t,p,v,a);
+        case 5: return Color(v,p,q,a);
         default: assert(false);
     }
     return Color(); // warning killer
