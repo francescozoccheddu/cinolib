@@ -666,6 +666,7 @@ void GLcanvas::draw()
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
         draw_markers();
+        draw_custom_gui();
         if(m_showSidebar) draw_side_bar();
         ImGui::Render();
         ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
@@ -816,6 +817,39 @@ void GLcanvas::draw_side_bar()
     }
     sidebar_relative_width(relativeWidth, true, false);
     ImGui::End();        
+}
+
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+CINO_INLINE
+void GLcanvas::draw_custom_gui() const
+{
+    if (callback_custom_gui == nullptr) return;
+
+    assert(owns_ImGui && "Only the first canvas created handles the ImGui context");
+
+    ImGui::SetNextWindowPos({ current_sidebar_width() * 1.f, 0 }, ImGuiCond_Always);
+    ImGui::SetNextWindowSize({ canvas_width() * 1.f, m_height * 1.f}, ImGuiCond_Always);
+    ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0, 0, 0, 0));
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0);
+
+    bool visible = true;
+    ImGui::Begin("Custom GUI", &visible, 
+        ImGuiWindowFlags_NoTitleBar |
+        ImGuiWindowFlags_NoResize |
+        ImGuiWindowFlags_NoMove |
+        ImGuiWindowFlags_NoScrollbar |
+        ImGuiWindowFlags_NoBringToFrontOnFocus |
+        ImGuiWindowFlags_NoScrollWithMouse |
+        ImGuiWindowFlags_NoCollapse |
+        ImGuiWindowFlags_NoSavedSettings |
+        ImGuiWindowFlags_NoInputs);
+
+    callback_custom_gui();
+
+    ImGui::End();
+    ImGui::PopStyleColor();
+    ImGui::PopStyleVar();
 }
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::

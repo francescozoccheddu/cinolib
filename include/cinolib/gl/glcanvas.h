@@ -96,9 +96,10 @@ class GLcanvas
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-        void draw_side_bar();        // render side bar with visual controls (if any)
-        void draw_markers()   const; // render text labels with ImGui (3d markers are depth tested if culling is enabled)
-        void draw_axis()      const; // render the global frame XYZ
+        void draw_side_bar();         // render side bar with visual controls (if any)
+        void draw_markers()    const; // render text labels with ImGui (3d markers are depth tested if culling is enabled)
+        void draw_axis()       const; // render the global frame XYZ
+        void draw_custom_gui() const; // render the user defined gui (see callback_custom_gui)
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -312,6 +313,7 @@ class GLcanvas
         std::function<bool(double x_offset, double y_offset )> callback_mouse_scroll       = nullptr;
         std::function<void(void                             )> callback_app_controls       = nullptr; // useful to insert app-dependent visual controls (with ImGui)
         std::function<void(void                             )> callback_camera_changed     = nullptr; 
+        std::function<void(void                             )> callback_custom_gui         = nullptr; 
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 };
