@@ -64,8 +64,10 @@ class DrawableObject
 {
     public :
 
-        explicit  DrawableObject(){}
+        explicit  DrawableObject();
         virtual  ~DrawableObject(){}
+
+        mat4d transform;
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -73,8 +75,17 @@ class DrawableObject
         virtual  void        draw(const float scene_size = 1) const = 0;  // do rendering
         virtual  vec3d       scene_center()                   const = 0;  // get position in space
         virtual  float       scene_radius()                   const = 0;  // get size (approx. radius of the bounding sphere)
+
+        void draw_transformed(const float scene_size = 1) const;
+        vec3d scene_center_transformed() const;
+        float scene_radius_transformed() const;
+
 };
 
 }
+
+#ifndef  CINO_STATIC_LIB
+#include "drawable_object.cpp"
+#endif
 
 #endif // CINO_DRAWABLE_OBJECT_H

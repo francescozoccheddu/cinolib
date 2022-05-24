@@ -54,10 +54,8 @@ namespace cinolib
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-CINO_INLINE
 const int GLcanvas::KeyBindings::none{ 0 };
 
-CINO_INLINE
 const int GLcanvas::MouseBindings::none{ 0 };
 
 CINO_INLINE
@@ -269,7 +267,6 @@ void GLcanvas::update_viewport(bool update_gl, bool redraw)
     }
 }
 
-CINO_INLINE
 int GLcanvas::s_windowsCount{ 0 };
 
 CINO_INLINE
@@ -470,7 +467,7 @@ void GLcanvas::push(const DrawableObject *obj, const bool reset_camera)
 {
     drawlist.push_back(obj);
 
-    if(reset_camera && obj->scene_radius()>0)
+    if(reset_camera && obj->scene_radius_transformed()>0)
     {
         this->reset_camera();
     }
@@ -566,10 +563,11 @@ void GLcanvas::refit_scene(bool update_gl, bool redraw)
     unsigned int count = 0;
     for (auto obj : drawlist)
     {
-        if (obj->scene_radius() > 0)
+        const double radius{ obj->scene_radius_transformed() };
+        if (radius > 0)
         {
-            m_sceneCenter += obj->scene_center();
-            m_sceneRadius += obj->scene_radius();
+            m_sceneCenter += obj->scene_center_transformed();
+            m_sceneRadius += radius;
             ++count;
         }
     }
@@ -655,7 +653,7 @@ void GLcanvas::draw()
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 
     // draw your 3D scene
-    for(auto obj : drawlist) obj->draw();
+    for(auto obj : drawlist) obj->draw_transformed();
 
     if(show_axis) draw_axis();
 
