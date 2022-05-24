@@ -114,6 +114,7 @@ class GLcanvas
         bool m_showSidebar{ false };
         double m_dpiFactor;
         static int s_windowsCount;
+        bool m_drawing{ false };
 
         Trackball m_trackball{};
 

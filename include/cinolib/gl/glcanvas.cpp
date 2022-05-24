@@ -656,6 +656,11 @@ void GLcanvas::update_GL_projection() const
 CINO_INLINE
 void GLcanvas::draw()
 {
+    if (m_drawing)
+    {
+        return;
+    }
+    m_drawing = true;
     glfwMakeContextCurrent(window);
     glClearColor(background.r, background.g, background.b, 1);
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
@@ -679,6 +684,7 @@ void GLcanvas::draw()
     }
 
     glfwSwapBuffers(window);
+    m_drawing = false;
 }
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
