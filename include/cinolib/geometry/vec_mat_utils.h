@@ -39,6 +39,7 @@
 #include <cinolib/cino_inline.h>
 #include <initializer_list>
 #include <sys/types.h>
+#include <cinolib/geometry/vec_mat.h>
 
 namespace cinolib
 {
@@ -122,6 +123,11 @@ template<unsigned int r, unsigned int c, typename T> CINO_INLINE void mat_ssvd  
 template<unsigned int d,         typename T> CINO_INLINE void mat_solve_Cramer(const T m[][d], const T b[], T x[]);
 template<unsigned int r, unsigned int c, typename T> CINO_INLINE void mat_copy        (const T m[][c], T n[][c]);
 template<unsigned int r, unsigned int c, typename T> CINO_INLINE void mat_print       (const T m[][c]);
+
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+template<typename T>
+vec3<T> operator*(const mat4<T>& mat, const vec3<T>& vec); // TODO: this is handy but may be error prone; should probably be moved to a function with an explicit name
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 

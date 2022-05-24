@@ -1040,6 +1040,17 @@ void mat_print(const T m[][c])
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
+template<typename T>
+CINO_INLINE
+vec3<T> operator*(const mat4<T>& mat, const vec3<T>& vec)
+{
+    vec4<T> prod(mat * vec.add_coord(1));
+    prod /= prod[3];
+    return prod.rem_coord();
+}
+
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
 template<unsigned int r0, unsigned int c0, unsigned int c1, typename T>
 CINO_INLINE
 void mat_times(const T m0[][c0], const T m1[][c1], T m2[][c1])
