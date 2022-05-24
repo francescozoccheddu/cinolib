@@ -425,7 +425,7 @@ GLcanvas::GLcanvas(const int width, const int height, const int font_size)
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();
         ImGui::StyleColorsDark();
-        ImGui_ImplGlfw_InitForOpenGL(window, false);
+        ImGui_ImplGlfw_InitForOpenGL(window, true);
         ImGui_ImplOpenGL2_Init();
         // NOTE: since ImGui does not support dynamic font sizing, I am using oversized fonts
         // (10x) to account for zoom factor (downscaling is visually better than upscaling)
