@@ -507,4 +507,14 @@ std::vector<unsigned int> AABB::edges() const
     return e;
 }
 
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+CINO_INLINE AABB operator*(const mat4d& transform, const AABB& bb)
+{
+    return AABB{
+        transform * bb.min,
+        transform * bb.max
+    };
+}
+
 }

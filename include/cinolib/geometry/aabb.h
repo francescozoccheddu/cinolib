@@ -112,6 +112,8 @@ class AABB
 
 CINO_INLINE std::ostream & operator<<(std::ostream & in, const AABB & bb);
 
+CINO_INLINE AABB operator*(const mat4d& transform, const AABB& bb);
+
 }
 
 #ifndef  CINO_STATIC_LIB

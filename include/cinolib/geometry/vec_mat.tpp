@@ -34,6 +34,7 @@
 *     Italy                                                                     *
 *********************************************************************************/
 #include <cinolib/geometry/vec_mat.h>
+#include <cassert>
 
 namespace cinolib
 {

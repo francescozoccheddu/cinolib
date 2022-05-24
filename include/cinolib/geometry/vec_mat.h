@@ -38,7 +38,7 @@
 
 #include <ostream>
 #include <istream>
-#include <cinolib/geometry/vec_mat_utils.h>
+#include <cinolib/cino_inline.h>
 #include <cinolib/symbols.h>
 
 namespace cinolib
@@ -233,6 +233,12 @@ std::istream& operator>> (std::istream& in, mat<r, c, T>& mat);
 
 // useful types to have
 
+template<unsigned int d, typename T>
+using sqmat = mat<d, d, T>;
+
+template<typename T>
+using mat4 = sqmat<4, T>;
+
 typedef mat<2,2,double> mat2d;
 typedef mat<2,2,float>  mat2f;
 typedef mat<2,2,int>    mat2i;
@@ -253,7 +259,13 @@ template<unsigned int d, typename T>
 using vec = mat<d,1,T>;
 
 template<typename T>
-using vec3 = vec<3,T>;
+using vec2 = vec<2,T>;
+
+template<typename T>
+using vec3 = vec<3, T>;
+
+template<typename T>
+using vec4 = vec<4, T>;
 
 typedef mat<3,1,double> vec3d;
 typedef mat<3,1,float>  vec3f;
@@ -266,5 +278,6 @@ typedef mat<4,1,int>    vec4i;
 }
 
 #include "vec_mat.tpp"
+#include <cinolib/geometry/vec_mat_utils.h>
 
 #endif // CINO_VEC_MAT_H
