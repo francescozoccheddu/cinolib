@@ -484,6 +484,14 @@ void GLcanvas::push(SideBarItem *item)
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 CINO_INLINE
+void GLcanvas::push(CanvasGuiItem* item)
+{
+    canvas_gui_items.push_back(item);
+}
+
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+CINO_INLINE
 void GLcanvas::push(const Marker & m)
 {
     // ImGui uses 16 bits to index items. It cannot handle more than this
@@ -822,7 +830,7 @@ void GLcanvas::draw_side_bar()
 CINO_INLINE
 void GLcanvas::draw_custom_gui() const
 {
-    if (callback_custom_gui == nullptr) return;
+    if (callback_custom_gui == nullptr && canvas_gui_items.empty()) return;
 
     assert(owns_ImGui && "Only the first canvas created handles the ImGui context");
 
@@ -843,7 +851,15 @@ void GLcanvas::draw_custom_gui() const
         ImGuiWindowFlags_NoSavedSettings |
         ImGuiWindowFlags_NoInputs);
 
-    callback_custom_gui();
+    if (callback_custom_gui)
+    {
+        callback_custom_gui();
+    }
+
+    for (CanvasGuiItem* item : canvas_gui_items)
+    {
+        item->draw();
+    }
 
     ImGui::End();
     ImGui::PopStyleColor();

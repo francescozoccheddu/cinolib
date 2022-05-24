@@ -39,6 +39,7 @@
 #include <cinolib/gl/gl_glfw.h>
 #include <cinolib/drawable_object.h>
 #include <cinolib/gl/side_bar_item.h>
+#include <cinolib/gl/canvas_gui_item.h>
 #include <cinolib/gl/FreeCamera.hpp>
 #include <cinolib/min_max_inf.h>
 #include <cinolib/color.h>
@@ -203,6 +204,7 @@ class GLcanvas
         std::vector<const DrawableObject*> drawlist;
         std::vector<Marker>                markers;
         std::vector<SideBarItem*>          side_bar_items;
+        std::vector<CanvasGuiItem*>        canvas_gui_items;
         const int                          font_size;
         bool                               show_axis          = false;
         bool                               depth_cull_markers = true; // skip occluded 3D markers, testing their depth with the Z-buffer
@@ -250,6 +252,7 @@ class GLcanvas
         void push(const DrawableObject * obj, const bool reset_camera = true);
         void push(const Marker         & m);
         void push(SideBarItem          * item);
+        void push(CanvasGuiItem        * item);
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
