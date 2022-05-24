@@ -12,13 +12,13 @@ namespace cinolib
 
 	CINO_INLINE void DrawableObject::draw_transformed(const float scene_size) const
 	{
-		glMatrixMode(GL_MODELVIEW_MATRIX);
+		glMatrixMode(GL_MODELVIEW);
 		glPushMatrix();
 		glMultMatrixd(transform.transpose().ptr());
 
 		draw(scene_size);
 
-		glMatrixMode(GL_MODELVIEW_MATRIX);
+		glMatrixMode(GL_MODELVIEW);
 		glPopMatrix();
 	}
 
