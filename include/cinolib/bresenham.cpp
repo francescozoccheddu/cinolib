@@ -34,6 +34,8 @@
 *     Italy                                                                     *
 *********************************************************************************/
 #include <cinolib/bresenham.h>
+#include <cmath>
+#include <algorithm>
 
 namespace cinolib
 {
