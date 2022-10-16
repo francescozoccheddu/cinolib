@@ -38,6 +38,7 @@
 
 #include <cinolib/cino_inline.h>
 #include <cinolib/ipair.h>
+#include <array>
 
 namespace cinolib
 {

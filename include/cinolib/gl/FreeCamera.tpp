@@ -43,7 +43,7 @@ namespace cinolib
 	}
 
 	template<typename TScalar>
-	typename FreeCamera<TScalar>::mat FreeCamera<TScalar>::Projection::matrix() const
+	typename FreeCamera<TScalar>::Mat FreeCamera<TScalar>::Projection::matrix() const
 	{
 		validate();
 		const TScalar nfd{ nearZ - farZ };
@@ -51,7 +51,7 @@ namespace cinolib
 		if (perspective)
 		{
 			const TScalar f{ static_cast<TScalar>(cot(to_rad(static_cast<double>(verticalFieldOfView) / 2.0))) };
-			return mat({
+			return Mat({
 				//	1					2					3					4
 					f / aspectRatio,	0,					0,					0,
 					0,					f,					0,					0,
@@ -63,7 +63,7 @@ namespace cinolib
 		{
 			const TScalar right{ verticalFieldOfView * aspectRatio };
 			const TScalar top{ verticalFieldOfView };
-			return mat({
+			return Mat({
 				//	1					2					3					4
 					1 / right,			0,					0,					0,
 					0,					1 / top,			0,					0,
@@ -93,12 +93,12 @@ namespace cinolib
 	// FreeCamera::View
 
 	template<typename TScalar>
-	void FreeCamera<TScalar>::View::getYawAndPitch(const vec& _worldUp, const vec& _worldForward, TScalar& _yaw, TScalar& _pitch) const
+	void FreeCamera<TScalar>::View::getYawAndPitch(const Vec& _worldUp, const Vec& _worldForward, TScalar& _yaw, TScalar& _pitch) const
 	{		
 		// FIXME (francescozoccheddu) placeholder that only works for up=(0,1,0) and forward=(0,0,-1)
-		const vec& normWorldUp{ _worldUp.normalized() };
-		const vec& normWorldForward{ _worldForward.normalized() };
-		if (!(normWorldUp == vec{ 0,1,0 } && normWorldForward == vec{ 0,0,-1 }))
+		const Vec& normWorldUp{ _worldUp.normalized() };
+		const Vec& normWorldForward{ _worldForward.normalized() };
+		if (!(normWorldUp == Vec{ 0,1,0 } && normWorldForward == Vec{ 0,0,-1 }))
 		{
 			throw std::runtime_error{ "not implemented yet" };
 		}
@@ -115,7 +115,7 @@ namespace cinolib
 	}
 
 	template<typename TScalar>
-	void FreeCamera<TScalar>::View::validateWorldDirections(const vec& _worldUp, const vec& _worldForward)
+	void FreeCamera<TScalar>::View::validateWorldDirections(const Vec& _worldUp, const Vec& _worldForward)
 	{
 		if (_worldUp.is_deg())
 		{
@@ -146,73 +146,73 @@ namespace cinolib
 	}
 
 	template<typename TScalar>
-	typename FreeCamera<TScalar>::vec FreeCamera<TScalar>::View::normLeft() const
+	typename FreeCamera<TScalar>::Vec FreeCamera<TScalar>::View::normLeft() const
 	{
 		return -normRight();
 	}
 
 	template<typename TScalar>
-	typename FreeCamera<TScalar>::vec FreeCamera<TScalar>::View::normRight() const
+	typename FreeCamera<TScalar>::Vec FreeCamera<TScalar>::View::normRight() const
 	{
 		return forward.cross(up).normalized();
 	}
 
 	template<typename TScalar>
-	typename FreeCamera<TScalar>::vec FreeCamera<TScalar>::View::normDown() const
+	typename FreeCamera<TScalar>::Vec FreeCamera<TScalar>::View::normDown() const
 	{
 		return -normUp();
 	}
 
 	template<typename TScalar>
-	typename FreeCamera<TScalar>::vec FreeCamera<TScalar>::View::normUp() const
+	typename FreeCamera<TScalar>::Vec FreeCamera<TScalar>::View::normUp() const
 	{
 		return up.normalized();
 	}
 
 	template<typename TScalar>
-	typename FreeCamera<TScalar>::vec FreeCamera<TScalar>::View::normBack() const
+	typename FreeCamera<TScalar>::Vec FreeCamera<TScalar>::View::normBack() const
 	{
 		return -normForward();
 	}
 
 	template<typename TScalar>
-	typename FreeCamera<TScalar>::vec FreeCamera<TScalar>::View::normForward() const
+	typename FreeCamera<TScalar>::Vec FreeCamera<TScalar>::View::normForward() const
 	{
 		return forward.normalized();
 	}
 
 	template<typename TScalar>
-	typename FreeCamera<TScalar>::vec FreeCamera<TScalar>::View::centerAt(TScalar _depth) const
+	typename FreeCamera<TScalar>::Vec FreeCamera<TScalar>::View::centerAt(TScalar _depth) const
 	{
 		return eye + normForward() * _depth;
 	}
 
 	template<typename TScalar>
-	void FreeCamera<TScalar>::View::lookAt(const vec& _target)
+	void FreeCamera<TScalar>::View::lookAt(const Vec& _target)
 	{
 		forward = _target - eye;
-		const vec right{ normRight() };
+		const Vec right{ normRight() };
 		up = right.cross(forward);
 	}
 
 	template<typename TScalar>
-	void FreeCamera<TScalar>::View::lookAtFrom(const vec& _target, const vec& _eye)
+	void FreeCamera<TScalar>::View::lookAtFrom(const Vec& _target, const Vec& _eye)
 	{
 		eye = _eye;
 		lookAt(_target);
 	}
 
 	template<typename TScalar>
-	void FreeCamera<TScalar>::View::rotateAroundCenterAt(const vec& _axis, TScalar _angle, TScalar _depth)
+	void FreeCamera<TScalar>::View::rotateAroundCenterAt(const Vec& _axis, TScalar _angle, TScalar _depth)
 	{
 		const cinolib::mat<3, 3, TScalar> rotation(cinolib::mat<3, 3, TScalar>::ROT_3D(_axis.normalized(), static_cast<TScalar>(to_rad(_angle))));
-		const vec target{ centerAt(_depth) };
+		const Vec target{ centerAt(_depth) };
 		eye = rotation * (eye - target) + target;
 		lookAt(target);
 	}
 
 	template<typename TScalar>
-	void FreeCamera<TScalar>::View::rotate(const vec& _axis, TScalar _angle)
+	void FreeCamera<TScalar>::View::rotate(const Vec& _axis, TScalar _angle)
 	{
 		const cinolib::mat<3, 3, TScalar> rotation(cinolib::mat<3, 3, TScalar>::ROT_3D(_axis.normalized(), static_cast<TScalar>(to_rad(_angle))));
 		up = rotation * up;
@@ -220,7 +220,7 @@ namespace cinolib
 	}
 
 	template<typename TScalar>
-	void FreeCamera<TScalar>::View::rotateFps(const vec& _worldUp, const vec& _worldForward, TScalar _yaw, TScalar _pitch, TScalar _pitchLimit)
+	void FreeCamera<TScalar>::View::rotateFps(const Vec& _worldUp, const Vec& _worldForward, TScalar _yaw, TScalar _pitch, TScalar _pitchLimit)
 	{
 		validateWorldDirections(_worldUp, _worldForward);
 		validatePitchLimit(_pitchLimit);
@@ -233,7 +233,7 @@ namespace cinolib
 	}
 
 	template<typename TScalar>
-	void FreeCamera<TScalar>::View::rotateTps(const vec& _worldUp, const vec& _worldForward, TScalar _pivotDepth, TScalar _yaw, TScalar _pitch, TScalar _pitchLimit)
+	void FreeCamera<TScalar>::View::rotateTps(const Vec& _worldUp, const Vec& _worldForward, TScalar _pivotDepth, TScalar _yaw, TScalar _pitch, TScalar _pitchLimit)
 	{
 		validateWorldDirections(_worldUp, _worldForward);
 		validatePitchLimit(_pitchLimit);
@@ -246,7 +246,7 @@ namespace cinolib
 	}
 
 	template<typename TScalar>
-	typename FreeCamera<TScalar>::View FreeCamera<TScalar>::View::lookAt(const vec& _eye, const vec& _target, const vec& _up)
+	typename FreeCamera<TScalar>::View FreeCamera<TScalar>::View::lookAt(const Vec& _eye, const Vec& _target, const Vec& _up)
 	{
 		if (_eye == _target)
 		{
@@ -261,7 +261,7 @@ namespace cinolib
 	}
 
 	template<typename TScalar>
-	typename FreeCamera<TScalar>::View FreeCamera<TScalar>::View::fps(const vec& _worldUp, const vec& _worldForward, const vec& _eye, TScalar _yaw, TScalar _pitch)
+	typename FreeCamera<TScalar>::View FreeCamera<TScalar>::View::fps(const Vec& _worldUp, const Vec& _worldForward, const Vec& _eye, TScalar _yaw, TScalar _pitch)
 	{
 		validateWorldDirections(_worldUp, _worldForward);
 		_pitch = wrapAngle(_pitch);
@@ -276,7 +276,7 @@ namespace cinolib
 	}
 
 	template<typename TScalar>
-	typename FreeCamera<TScalar>::View FreeCamera<TScalar>::View::tps(const vec& _worldUp, const vec& _worldForward, const vec& _target, TScalar _distance, TScalar _yaw, TScalar _pitch)
+	typename FreeCamera<TScalar>::View FreeCamera<TScalar>::View::tps(const Vec& _worldUp, const Vec& _worldForward, const Vec& _target, TScalar _distance, TScalar _yaw, TScalar _pitch)
 	{
 		validateWorldDirections(_worldUp, _worldForward);
 		_pitch = wrapAngle(_pitch);
@@ -312,15 +312,15 @@ namespace cinolib
 	}
 
 	template<typename TScalar>
-	typename FreeCamera<TScalar>::mat FreeCamera<TScalar>::View::matrix() const
+	typename FreeCamera<TScalar>::Mat FreeCamera<TScalar>::View::matrix() const
 	{
 		validate();
 
-		const vec right(normRight());
-		const vec back(normBack());
-		const vec up(normUp());
+		const Vec right(normRight());
+		const Vec back(normBack());
+		const Vec up(normUp());
 
-		return mat({
+		return Mat({
 			//	1				2				3				4
 				right.x(),		right.y(),		right.z(),		-right.dot(eye),
 				up.x(),			up.y(),			up.z(),			-up.dot(eye),
@@ -387,7 +387,7 @@ namespace cinolib
 	}
 
 	template<typename TScalar>
-	typename const FreeCamera<TScalar>::mat& FreeCamera<TScalar>::projectionMatrix() const
+	const typename FreeCamera<TScalar>::Mat& FreeCamera<TScalar>::projectionMatrix() const
 	{
 		if (m_projectionDirty)
 		{
@@ -398,7 +398,7 @@ namespace cinolib
 	}
 
 	template<typename TScalar>
-	typename const FreeCamera<TScalar>::mat& FreeCamera<TScalar>::viewMatrix() const
+	const typename FreeCamera<TScalar>::Mat& FreeCamera<TScalar>::viewMatrix() const
 	{
 		if (m_viewDirty)
 		{
@@ -409,7 +409,7 @@ namespace cinolib
 	}
 
 	template<typename TScalar>
-	typename const FreeCamera<TScalar>::mat& FreeCamera<TScalar>::projectionViewMatrix() const
+	const typename FreeCamera<TScalar>::Mat& FreeCamera<TScalar>::projectionViewMatrix() const
 	{
 		if (m_projectionViewDirty)
 		{

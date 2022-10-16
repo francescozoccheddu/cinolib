@@ -41,6 +41,7 @@
 #include <unordered_map>
 #include <cinolib/ANSI_color_codes.h>
 #include <queue>
+#include <cinolib/standard_elements_tables.h>
 
 namespace cinolib
 {

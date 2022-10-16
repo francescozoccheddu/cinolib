@@ -35,6 +35,8 @@
 *********************************************************************************/
 #include <cinolib/memory_usage.h>
 #include <cassert>
+#include <stdio.h>
+#include <iostream>
 
 // Resources:
 // https://stackoverflow.com/questions/669438/how-to-get-memory-usage-at-runtime-using-c/19770392#19770392

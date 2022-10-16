@@ -34,10 +34,20 @@
 *     Italy                                                                     *
 *********************************************************************************/
 #include <cinolib/geometry/vec_mat.h>
+#include <cinolib/geometry/vec_mat_utils.h>
 #include <cassert>
 
 namespace cinolib
 {
+
+template<unsigned int r, unsigned int c, class T>
+CINO_INLINE
+mat<r, c, T> operator*(const T& scalar, const mat<r, c, T>& m)
+{
+    mat<r, c, T> res;
+    vec_times<r* c, T>(m._vec, scalar, res._vec);
+    return res;
+}
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -86,13 +96,20 @@ mat<r,c,T>::mat(const std::initializer_list<mat<r,1,T>> & il, const int mode)
     }
     else
     {
-        assert(mode==ROWS);
-        assert(il.size()==r);
-        auto it = il.begin();
-        for(unsigned int i=0; i<r; ++i)
+        if constexpr (r == c) // Can't convert mat<r,1,T> to mat<c,1,T> otherwise. It would be better to use SFINAE to choose the right mode. Anyway, this is only temporary since it requires C++17.
         {
-            set_row(i,*it);
-            ++it;
+            assert(mode==ROWS);
+            assert(il.size()==r);
+            auto it = il.begin();
+            for(unsigned int i=0; i<r; ++i)
+            {
+                set_row(i,*it);
+                ++it;
+            }
+        }
+        else
+        {
+            assert(false);
         }
     }
 }
