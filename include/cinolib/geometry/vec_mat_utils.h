@@ -39,7 +39,6 @@
 #include <cinolib/cino_inline.h>
 #include <initializer_list>
 #include <sys/types.h>
-#include <cinolib/geometry/vec_mat.h>
 
 namespace cinolib
 {

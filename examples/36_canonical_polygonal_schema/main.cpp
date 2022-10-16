@@ -28,6 +28,7 @@ int main(int argc, char **argv)
     m_xyz.copy_xyz_to_uvw(UV_param);
     m_cps.copy_xyz_to_uvw(UV_param);
     m_xyz.vector_verts() = xyz;
+    m_xyz.update_bbox();
 
     GLcanvas gui_xyz;
     GLcanvas gui_uvw;

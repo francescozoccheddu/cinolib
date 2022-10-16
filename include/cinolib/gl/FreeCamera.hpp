@@ -21,8 +21,8 @@ namespace cinolib
 
 	public:
 
-		using vec = vec3<TScalar>;
-		using mat = mat<4, 4, TScalar>;
+		using Vec = vec3<TScalar>;
+		using Mat = mat<4, 4, TScalar>;
 
 		class Projection final
 		{
@@ -38,7 +38,7 @@ namespace cinolib
 
 			void validate() const;
 
-			mat matrix() const; // not cached
+			Mat matrix() const; // not cached
 
 			std::string serialize() const;
 			static Projection deserialize(const std::string& _data);
@@ -72,42 +72,42 @@ namespace cinolib
 
 		private:
 
-			void getYawAndPitch(const vec& _worldUp, const vec& _worldForward, TScalar& _yaw, TScalar& _pitch) const;
+			void getYawAndPitch(const Vec& _worldUp, const Vec& _worldForward, TScalar& _yaw, TScalar& _pitch) const;
 			static TScalar wrapAngle(TScalar _angle);
-			static void validateWorldDirections(const vec& _worldUp, const vec& _worldForward);
+			static void validateWorldDirections(const Vec& _worldUp, const Vec& _worldForward);
 			static void validatePitch(TScalar _pitch);
 			static void validatePitchLimit(TScalar _pitchLimit);
 
 		public:
 
-			vec eye{ 0,0,0 };
-			vec up{ 0,1,0 };
-			vec forward{ 0,0,-1 };
+			Vec eye{ 0,0,0 };
+			Vec up{ 0,1,0 };
+			Vec forward{ 0,0,-1 };
 
-			vec normLeft() const;
-			vec normRight() const;
-			vec normDown() const;
-			vec normUp() const;
-			vec normBack() const;
-			vec normForward() const;
+			Vec normLeft() const;
+			Vec normRight() const;
+			Vec normDown() const;
+			Vec normUp() const;
+			Vec normBack() const;
+			Vec normForward() const;
 
-			vec centerAt(TScalar _depth) const;
+			Vec centerAt(TScalar _depth) const;
 
-			void lookAt(const vec& _target);
-			void lookAtFrom(const vec& _target, const vec& _eye);
-			void rotateAroundCenterAt(const vec& _axis, TScalar _angle, TScalar _depth);
-			void rotate(const vec& _axis, TScalar _angle);
+			void lookAt(const Vec& _target);
+			void lookAtFrom(const Vec& _target, const Vec& _eye);
+			void rotateAroundCenterAt(const Vec& _axis, TScalar _angle, TScalar _depth);
+			void rotate(const Vec& _axis, TScalar _angle);
 
-			void rotateFps(const vec& _worldUp, const vec& _worldForward, TScalar _yaw, TScalar _pitch, TScalar _pitchLimit = 10);
-			void rotateTps(const vec& _worldUp, const vec& _worldForward, TScalar _pivotDepth, TScalar _yaw, TScalar _pitch, TScalar _pitchLimit = 10);
+			void rotateFps(const Vec& _worldUp, const Vec& _worldForward, TScalar _yaw, TScalar _pitch, TScalar _pitchLimit = 10);
+			void rotateTps(const Vec& _worldUp, const Vec& _worldForward, TScalar _pivotDepth, TScalar _yaw, TScalar _pitch, TScalar _pitchLimit = 10);
 
-			static View lookAt(const vec& _eye, const vec& _target, const vec& _up);
-			static View fps(const vec& _worldUp, const vec& _worldForward, const vec& _eye, TScalar _yaw, TScalar _pitch);
-			static View tps(const vec& _worldUp, const vec& _worldForward, const vec& _target, const TScalar _distance, TScalar _yaw, TScalar _pitch);
+			static View lookAt(const Vec& _eye, const Vec& _target, const Vec& _up);
+			static View fps(const Vec& _worldUp, const Vec& _worldForward, const Vec& _eye, TScalar _yaw, TScalar _pitch);
+			static View tps(const Vec& _worldUp, const Vec& _worldForward, const Vec& _target, const TScalar _distance, TScalar _yaw, TScalar _pitch);
 
 			void validate() const;
 
-			mat matrix() const; // not cached
+			Mat matrix() const; // not cached
 
 			std::string serialize() const;
 			static View deserialize(const std::string& _data);
@@ -135,7 +135,7 @@ namespace cinolib
 
 	private:
 
-		mutable mat m_projectionCache, m_viewCache, m_projectionViewCache;
+		mutable Mat m_projectionCache, m_viewCache, m_projectionViewCache;
 		mutable bool m_projectionDirty{ true }, m_viewDirty{ true }, m_projectionViewDirty{ true };
 
 	public:
@@ -144,9 +144,9 @@ namespace cinolib
 		void updateView();
 		void updateProjectionAndView();
 
-		const mat& projectionMatrix() const; // cached
-		const mat& viewMatrix() const; // cached
-		const mat& projectionViewMatrix() const; // cached
+		const Mat& projectionMatrix() const; // cached
+		const Mat& viewMatrix() const; // cached
+		const Mat& projectionViewMatrix() const; // cached
 
 		std::string serialize() const;
 		static FreeCamera deserialize(const std::string& _data);

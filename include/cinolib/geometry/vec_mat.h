@@ -209,12 +209,7 @@ class mat
 
 template<unsigned int r, unsigned int c, class T>
 CINO_INLINE
-mat<r,c,T> operator*(const T & scalar, const mat<r,c,T> & m)
-{
-    mat<r,c,T> res;
-    vec_times<r*c,T>(m._vec, scalar, res._vec);
-    return res;
-}
+mat<r, c, T> operator*(const T& scalar, const mat<r, c, T>& m);
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -278,6 +273,5 @@ typedef mat<4,1,int>    vec4i;
 }
 
 #include "vec_mat.tpp"
-#include <cinolib/geometry/vec_mat_utils.h>
 
 #endif // CINO_VEC_MAT_H
