@@ -54,8 +54,10 @@ namespace cinolib
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
+CINO_INLINE
 const int GLcanvas::KeyBindings::none{ 0 };
 
+CINO_INLINE
 const int GLcanvas::MouseBindings::none{ 0 };
 
 CINO_INLINE
@@ -267,6 +269,7 @@ void GLcanvas::update_viewport(bool update_gl, bool redraw)
     }
 }
 
+CINO_INLINE
 int GLcanvas::s_windowsCount{ 0 };
 
 CINO_INLINE
@@ -379,6 +382,7 @@ void GLcanvas::camera_pivot_depth(double depth)
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
+CINO_INLINE
 const vec3d GLcanvas::world_right{ 1,0,0 }, GLcanvas::world_up{ 0,1,0 }, GLcanvas::world_forward{ 0,0,-1 };
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
