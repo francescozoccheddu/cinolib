@@ -3064,13 +3064,45 @@ std::vector<bool> AbstractPolyhedralMesh<M,V,E,F,P>::poly_faces_winding(const un
 
 template<class M, class V, class E, class F, class P>
 CINO_INLINE
-unsigned int AbstractPolyhedralMesh<M,V,E,F,P>::pick_face(const vec3d & p, bool include_hidden) const
+unsigned int AbstractPolyhedralMesh<M, V, E, F, P>::pick_poly(const vec3d& p, bool include_hidden, bool include_inner) const
+{
+    double closest_dist{ inf_double };
+    unsigned int closest_pid{};
+    for (unsigned int pid{ 0 }; pid < this->num_polys(); ++pid)
+    {
+        if (!include_hidden && this->poly_data(pid).flags[HIDDEN])
+        {
+            continue;
+        }
+        if (!include_inner && !poly_is_on_surf(pid))
+        {
+            continue;
+        }
+        const double dist{ this->poly_centroid(pid).dist(p) };
+        if (dist < closest_dist)
+        {
+            closest_dist = dist;
+            closest_pid = pid;
+        }
+    }
+    return closest_pid;
+}
+
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+template<class M, class V, class E, class F, class P>
+CINO_INLINE
+unsigned int AbstractPolyhedralMesh<M,V,E,F,P>::pick_face(const vec3d & p, bool include_hidden, bool include_inner) const
 {
     double closest_dist{ inf_double };
     unsigned int closest_fid{};
     for (unsigned int fid{ 0 }; fid < num_faces(); ++fid)
     {
         if (!include_hidden && face_data(fid).flags[HIDDEN])
+        {
+            continue;
+        }
+        if (!include_inner && !face_is_on_srf(fid))
         {
             continue;
         }
