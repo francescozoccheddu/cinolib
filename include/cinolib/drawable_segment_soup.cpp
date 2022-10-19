@@ -45,12 +45,28 @@ namespace cinolib
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 CINO_INLINE
-DrawableSegmentSoup::DrawableSegmentSoup()
+DrawableSegmentSoup::DrawableSegmentSoup() : bb{}
 {
     color         = Color::RED();
     thickness     = 1.0;
     use_gl_lines  = false;
     no_depth_test = false;
+}
+
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+CINO_INLINE
+vec3d DrawableSegmentSoup::scene_center() const 
+{ 
+    return bb.center(); 
+}
+
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+CINO_INLINE
+float DrawableSegmentSoup::scene_radius() const 
+{ 
+    return static_cast<float>(bb.diag()); 
 }
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -115,6 +131,15 @@ void DrawableSegmentSoup::pop_seg()
     assert(size()>1);
     pop_back();
     pop_back();
+}
+
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+CINO_INLINE
+void DrawableSegmentSoup::update_bbox()
+{
+    bb.reset();
+    bb.push(*this);
 }
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::

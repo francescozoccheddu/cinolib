@@ -40,6 +40,7 @@
 #include <cinolib/geometry/vec_mat.h>
 #include <cinolib/drawable_object.h>
 #include <cinolib/color.h>
+#include <cinolib/geometry/aabb.h>
 
 
 namespace cinolib
@@ -73,13 +74,14 @@ class DrawableSegmentSoup: public std::vector<vec3d>, public DrawableObject
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-        vec3d scene_center() const { return vec3d(); } // TODO
-        float scene_radius() const { return 0.0;     }
+        vec3d scene_center() const;
+        float scene_radius() const;
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
         void push_seg(const vec3d v0, const vec3d v1);
         void pop_seg();
+        void update_bbox();
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -92,6 +94,7 @@ class DrawableSegmentSoup: public std::vector<vec3d>, public DrawableObject
 
     private:
 
+        AABB  bb;
         bool  no_depth_test; // render segments always in front, regardless of what's in the GL scene
         bool  use_gl_lines;  // to speedup rendering (when lots of segments are to be rendered)
         Color color;
