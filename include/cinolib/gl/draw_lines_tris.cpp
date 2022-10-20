@@ -133,13 +133,22 @@ void render_segs(const RenderData & data)
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 CINO_INLINE
-void render(const RenderData & data)
+void render(const RenderData & data, bool draw_back_faces)
 {
     data.material.apply();
 
     glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
     glEnable(GL_DEPTH_TEST);
-    glDisable(GL_CULL_FACE);
+    if (draw_back_faces)
+    {
+        glDisable(GL_CULL_FACE);
+    }
+    else
+    {
+        glEnable(GL_CULL_FACE);
+    }
+    glCullFace(GL_BACK);
+    glFrontFace(GL_CCW);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_BLEND);
     glPolygonOffset(1.0, 1);

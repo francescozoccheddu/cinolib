@@ -62,8 +62,8 @@ template<class Mesh>
 CINO_INLINE
 void AbstractDrawablePolygonMesh<Mesh>::draw(const float) const
 {
-    render(drawlist_marked);
-    render(drawlist);
+    render(drawlist_marked, draw_back_faces);
+    render(drawlist, draw_back_faces);
 }
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::

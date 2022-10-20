@@ -93,6 +93,8 @@ class AbstractDrawablePolygonMesh : public virtual Mesh, public DrawableObject
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
+        bool draw_back_faces{ true };
+        
         void show_mesh(const bool b);
         void show_AO_alpha(const float alpha);
         void show_mesh_flat();

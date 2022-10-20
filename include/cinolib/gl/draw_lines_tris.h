@@ -111,7 +111,7 @@ struct RenderData
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 CINO_INLINE
-void render(const RenderData & data);
+void render(const RenderData & data, bool draw_back_faces = true);
 
 }
 
