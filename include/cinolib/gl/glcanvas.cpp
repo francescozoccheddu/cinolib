@@ -820,7 +820,6 @@ void GLcanvas::draw_side_bar()
     );
     if(callback_app_controls!=nullptr)
     {
-        ImGui::SetNextItemOpen(true,ImGuiCond_Once);
         if(ImGui::TreeNode("App controls"))
         {
             callback_app_controls();
@@ -829,8 +828,8 @@ void GLcanvas::draw_side_bar()
     }
     for(auto item : side_bar_items)
     {
-        ImGui::SetNextItemOpen(item->show_open,ImGuiCond_Once);
-        if(ImGui::TreeNode(item->name.c_str()))
+        ImGui::SetNextItemOpen(item->show_open, ImGuiCond_Always);
+        if(item->show_open = ImGui::TreeNode(item->name.c_str()))
         {
             item->draw();
             ImGui::TreePop();
