@@ -53,6 +53,7 @@ option(CINOLIB_USES_VTK               "Use VTK"                    OFF)
 
 if(CINOLIB_USES_OPENGL_GLFW_IMGUI)
 	message("CINOLIB OPTIONAL MODULES: OpenGL, GLFW, ImGui")
+	set(OpenGL_GL_PREFERENCE GLVND)
 	find_package(OpenGL)
 	if(OpenGL_FOUND)
 		target_link_libraries(cinolib ${CINOLIB_ACCESS} OpenGL::GL)
