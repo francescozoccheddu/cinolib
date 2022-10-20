@@ -771,13 +771,24 @@ void GLcanvas::draw_markers() const
             //  - Besides, I should probably use something like AddSquare or AddRect to save limit polygon vertices....
             drawList->AddCircleFilled(ImVec2(pos.x(),pos.y()),
                                       m.disk_radius,
-                                      ImGui::GetColorU32(ImVec4(m.color.r, m.color.g, m.color.b, m.color.a)), 20);
+                                      ImGui::GetColorU32(ImVec4(m.color.r, m.color.g, m.color.b, m.color.a)), 6);
         }
         if(m.font_size>0 && m.text.length()>0)
         {
+            ImVec2 offset;
+            if (m.disk_radius > 0)
+            {
+                offset = { static_cast<float>(m.disk_radius), static_cast<float>(m.disk_radius) };
+            }
+            else
+            {
+                const ImVec2 normTextSize{ ImGui::CalcTextSize(&m.text[0], &m.text[0] + m.text.size()) };
+                const ImVec2 textSize{ normTextSize.x * m.font_size / ImGui::GetFontSize(), normTextSize.y * m.font_size / ImGui::GetFontSize() };
+                offset = { -textSize.x / 2, -textSize.y / 2 };
+            }
             drawList->AddText(ImGui::GetFont(),
                               m.font_size,
-                              ImVec2(pos.x()+m.disk_radius, pos.y()-2*m.disk_radius),
+                              ImVec2(pos.x() + offset.x, pos.y() + offset.y),
                               ImGui::GetColorU32(ImVec4(m.color.r, m.color.g, m.color.b, m.color.a)),
                               &m.text[0],
                               &m.text[0] + m.text.size());
