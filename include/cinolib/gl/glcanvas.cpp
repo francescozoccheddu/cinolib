@@ -276,6 +276,7 @@ CINO_INLINE
 GLFWwindow* GLcanvas::createWindow(int width, int height)
 {
     glfwInit();
+    glfwWindowHint(GLFW_SAMPLES, 4);
     GLFWwindow* const window{ glfwCreateWindow(width, height, "Cinolib", nullptr, nullptr) };
     if (!window) glfwTerminate();
     return window;
