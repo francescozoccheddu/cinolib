@@ -775,7 +775,7 @@ bool mat<r, c, T>::is_finite() const // either null, nan or inf
 template<unsigned int r, unsigned int c, class T>
 template<typename TOther>
 CINO_INLINE
-std::enable_if<std::is_same<TOther, T>::value, const mat<r, c, TOther>&>::type mat<r, c, T>::cast() const
+typename std::enable_if<std::is_same<TOther, T>::value, const mat<r, c, TOther>&>::type mat<r, c, T>::cast() const
 {
     return *this;
 }
@@ -783,7 +783,7 @@ std::enable_if<std::is_same<TOther, T>::value, const mat<r, c, TOther>&>::type m
 template<unsigned int r, unsigned int c, class T>
 template<typename TOther>
 CINO_INLINE
-std::enable_if<!std::is_same<TOther, T>::value, mat<r, c, TOther>>::type mat<r, c, T>::cast() const
+typename std::enable_if<!std::is_same<TOther, T>::value, mat<r, c, TOther>>::type mat<r, c, T>::cast() const
 {
     mat<r, c, TOther> other;
     for (std::size_t i{}; i < r * c; i++)

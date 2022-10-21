@@ -200,10 +200,10 @@ class mat
         // consider moving to 'if constexpr' if cinolib goes to C++17
 
         template<typename TOther>
-        std::enable_if<std::is_same<TOther, T>::value, const mat<r, c, TOther>&>::type cast() const;
+        typename std::enable_if<std::is_same<TOther, T>::value, const mat<r, c, TOther>&>::type cast() const;
 
         template<typename TOther>
-        std::enable_if<!std::is_same<TOther, T>::value, mat<r, c, TOther>>::type cast() const;
+        typename std::enable_if<!std::is_same<TOther, T>::value, mat<r, c, TOther>>::type cast() const;
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
