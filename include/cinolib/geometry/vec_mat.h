@@ -40,6 +40,7 @@
 #include <istream>
 #include <cinolib/cino_inline.h>
 #include <cinolib/symbols.h>
+#include <type_traits>
 
 namespace cinolib
 {
@@ -193,6 +194,16 @@ class mat
               T & v()       { return _vec[1]; }
         const T & w() const { return _vec[2]; }
               T & w()       { return _vec[2]; }
+
+        //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+        
+        // consider moving to 'if constexpr' if cinolib goes to C++17
+
+        template<typename TOther>
+        std::enable_if<std::is_same<TOther, T>::value, const mat<r, c, TOther>&>::type cast() const;
+
+        template<typename TOther>
+        std::enable_if<!std::is_same<TOther, T>::value, mat<r, c, TOther>>::type cast() const;
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
