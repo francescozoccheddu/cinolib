@@ -43,6 +43,7 @@
 #include <cinolib/gl/FreeCamera.hpp>
 #include <cinolib/min_max_inf.h>
 #include <cinolib/color.h>
+#include <cinolib/geometry/ray.h>
 #include <vector>
 #include <functional>
 #include <chrono>
@@ -60,6 +61,7 @@ namespace cinolib
 		Color       color = Color::BLUE();     // color, for both the text and the disk
 		unsigned int        disk_radius = 1;                // disk radius (in pixels). Set to zero to not render the disk
 		unsigned int        font_size = 12;                // font size;
+		bool		filled = true;
 	};
 
 	//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -302,6 +304,8 @@ namespace cinolib
 		void project(const vec3d& p3d, vec2d& p2d, GLdouble& depth)      const;
 		bool unproject(const vec2d& p2d, vec3d& p3d)                        const;
 		bool unproject(const vec2d& p2d, const GLdouble& depth, vec3d& p3d) const;
+		Ray eye_to_screen_ray(const vec2d& p2d) const;
+		Ray eye_to_mouse_ray() const;
 
 		//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 

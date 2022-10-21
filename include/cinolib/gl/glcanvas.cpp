@@ -764,15 +764,23 @@ void GLcanvas::draw_markers() const
         }
 
         //
+        const ImU32 color{ ImGui::GetColorU32(ImVec4(m.color.r, m.color.g, m.color.b, m.color.a)) };
         if(m.disk_radius>0)
         {
             // ImGui uses 16bits to index vertices, hence it is likely to overflow if there are too many markers.
             //  - I noticed that the automatic segment count immediately triggers overflow with large amounts of zoom,
             //    so I am always approximating circles with 20-gons
             //  - Besides, I should probably use something like AddSquare or AddRect to save limit polygon vertices....
-            drawList->AddCircleFilled(ImVec2(pos.x(),pos.y()),
-                                      m.disk_radius,
-                                      ImGui::GetColorU32(ImVec4(m.color.r, m.color.g, m.color.b, m.color.a)), 6);
+            const int segCount{ 6 };
+            const ImVec2 center{ static_cast<float>(pos.x()), static_cast<float>(pos.y()) };
+            if (m.filled)
+            {
+                drawList->AddCircleFilled(center, m.disk_radius, color, segCount);
+            }
+            else
+            {
+                drawList->AddCircle(center, m.disk_radius, color, segCount);
+            }
         }
         if(m.font_size>0 && m.text.length()>0)
         {
@@ -790,7 +798,7 @@ void GLcanvas::draw_markers() const
             drawList->AddText(ImGui::GetFont(),
                               m.font_size,
                               ImVec2(pos.x() + offset.x, pos.y() + offset.y),
-                              ImGui::GetColorU32(ImVec4(m.color.r, m.color.g, m.color.b, m.color.a)),
+                              color,
                               &m.text[0],
                               &m.text[0] + m.text.size());
         }
@@ -989,6 +997,39 @@ void GLcanvas::project(const vec3d & p3d, vec2d & p2d, GLdouble & depth) const
                     canvas_width(),            -m_height});
 
     gl_project(p3d, camera.viewMatrix(), camera.projectionMatrix(), viewport, p2d, depth);
+}
+
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+CINO_INLINE
+Ray GLcanvas::eye_to_screen_ray(const vec2d& p2d) const
+{
+    const vec4d clipHomPos{ 
+        (p2d.x() - static_cast<double>(current_sidebar_width())) / static_cast<double>(canvas_width()) * 2.0 - 1.0,
+        1.0 - p2d.y() / static_cast<double>(m_height) * 2.0,
+        0.0, 
+        1.0 
+    };
+    const vec4d nearHomPos{ camera.projectionViewMatrix().inverse() * clipHomPos };
+    const vec3d nearPos{ (nearHomPos / nearHomPos[3]).rem_coord()};
+    if (camera.projection.perspective)
+    {
+        return Ray{ camera.view.eye, (nearPos - camera.view.eye).normalized() };
+    }
+    else
+    {
+        return Ray{ nearPos, camera.view.normForward() };
+    }
+}
+
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+CINO_INLINE
+Ray GLcanvas::eye_to_mouse_ray() const
+{
+    vec2d pos;
+    glfwGetCursorPos(window, &pos.x(), &pos.y());
+    return eye_to_screen_ray(pos);
 }
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
