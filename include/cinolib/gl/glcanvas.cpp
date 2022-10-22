@@ -580,14 +580,16 @@ void GLcanvas::refit_scene(bool update_gl, bool redraw)
         if (radius > 0)
         {
             m_sceneCenter += obj->scene_center_transformed();
-            m_sceneRadius += radius;
+            if (radius > m_sceneRadius)
+            {
+                m_sceneRadius = radius;
+            }
             ++count;
         }
     }
     if (count)
     {
         m_sceneCenter /= static_cast<double>(count);
-        m_sceneRadius /= static_cast<double>(count);
     }
     const double camera_scene_radius{ m_sceneRadius ? m_sceneRadius : 1 };
     camera.projection.nearZ = camera_scene_radius * camera_settings.near_scene_radius_factor;
@@ -728,8 +730,8 @@ void GLcanvas::draw_markers() const
     ImGui::SetNextWindowSize(ImGui::GetIO().DisplaySize, ImGuiCond_Always);
     ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0,0,0,0));
     ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0);
-    bool visible = true;
-    ImGui::Begin("Markers", &visible, ImGuiWindowFlags_NoTitleBar            |
+    bool shown = true;
+    ImGui::Begin("Markers", &shown, ImGuiWindowFlags_NoTitleBar            |
                                       ImGuiWindowFlags_NoResize              |
                                       ImGuiWindowFlags_NoMove                |
                                       ImGuiWindowFlags_NoScrollbar           |
@@ -821,8 +823,8 @@ void GLcanvas::draw_side_bar()
     ImGui::SetNextWindowPos({0,0}, ImGuiCond_Always);
     ImGui::SetNextWindowSize({ m_sidebarRelativeWidth * m_width, m_height*1.f}, ImGuiCond_Always);
     ImGui::SetNextWindowBgAlpha(1.0f);
-    bool visible{ true };
-    ImGui::Begin("Sidebar", &visible,  
+    bool shown{ true };
+    ImGui::Begin("Sidebar", &shown,  
         ImGuiWindowFlags_NoTitleBar |
         ImGuiWindowFlags_NoMove |
         ImGuiWindowFlags_NoCollapse 
@@ -868,8 +870,8 @@ void GLcanvas::draw_custom_gui() const
     ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0, 0, 0, 0));
     ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0);
 
-    bool visible = true;
-    ImGui::Begin("Custom GUI", &visible, 
+    bool shown = true;
+    ImGui::Begin("Custom GUI", &shown, 
         ImGuiWindowFlags_NoTitleBar |
         ImGuiWindowFlags_NoResize |
         ImGuiWindowFlags_NoMove |
