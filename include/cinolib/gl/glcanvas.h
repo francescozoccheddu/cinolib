@@ -277,7 +277,7 @@ namespace cinolib
 		//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 		void refit_scene(bool update_gl = true, bool redraw = true);
-		void reset_camera(bool update_gl = true, bool redraw = true, double _yaw = 0.0);
+		void reset_camera(bool update_gl = true, bool redraw = true);
 		void update_viewport(bool update_gl = true, bool redraw = true);
 
 		//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::

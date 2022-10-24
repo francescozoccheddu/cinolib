@@ -694,7 +694,7 @@ void GLcanvas::refit_scene(bool update_gl, bool redraw)
 }
 
 CINO_INLINE
-void GLcanvas::reset_camera(bool update_gl, bool redraw, double _yaw)
+void GLcanvas::reset_camera(bool update_gl, bool redraw)
 {
     refit_scene(false);
     update_viewport(false);
@@ -702,7 +702,7 @@ void GLcanvas::reset_camera(bool update_gl, bool redraw, double _yaw)
     camera.projection.verticalFieldOfView = (camera_settings.min_persp_fov + camera_settings.max_persp_fov) / 2.0;
     const double camera_scene_radius{ m_sceneRadius ? m_sceneRadius : 1 };
     const double distance{ camera_scene_radius * camera_settings.camera_distance_scene_radius_factor };
-    camera.view = FreeCamera<double>::View::tps(world_up, world_forward, m_sceneCenter, distance, _yaw, 0);
+    camera.view = FreeCamera<double>::View::tps(world_up, world_forward, m_sceneCenter, distance, 180, 0);
     camera_pivot_depth(m_sceneCenter.dist(camera.view.eye));
     if (update_gl)
     {
@@ -1253,11 +1253,11 @@ void GLcanvas::key_event(GLFWwindow* window, int key, int /*scancode*/, int acti
                 }
                 else if (binding == v->key_bindings.camera_look_at_minus_z)
                 {
-                    yaw = 180;
+                    yaw = 0;
                 }
                 else if (binding == v->key_bindings.camera_look_at_plus_x)
                 {
-                    yaw = 270;
+                    yaw = -90;
                 }
                 else if (binding == v->key_bindings.camera_look_at_plus_y)
                 {
@@ -1265,7 +1265,7 @@ void GLcanvas::key_event(GLFWwindow* window, int key, int /*scancode*/, int acti
                 }
                 else if (binding == v->key_bindings.camera_look_at_plus_z)
                 {
-                    yaw = 0;
+                    yaw = 180;
                 }
                 else
                 {
