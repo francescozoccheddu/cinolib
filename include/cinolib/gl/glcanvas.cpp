@@ -52,44 +52,143 @@
 namespace cinolib
 {
 
+CINO_INLINE
+constexpr GLcanvas::KeyBinding::KeyBinding(int key, int modifiers) : key{key}, modifiers{modifiers}
+{
+
+}
+
+const char* GLcanvas::KeyBinding::keyName(int key)
+{
+    const char* key_name{ glfwGetKeyName(key, 0) };
+    if (!key)
+    {
+        return "no key";
+    }
+    if (key_name)
+    {
+        return key_name;
+    }
+    switch (key)
+    {
+        case GLFW_KEY_LEFT_SHIFT:
+            return "left shift";
+        case GLFW_KEY_LEFT_ALT:
+            return "left alt";
+        case GLFW_KEY_LEFT_CONTROL:
+            return "left control";
+        case GLFW_KEY_TAB:
+            return "tab";
+        case GLFW_KEY_ESCAPE:
+            return "esc";
+    }
+    return "unknown";
+}
+
+const char* GLcanvas::KeyBinding::modName(int modifier)
+{
+    switch (modifier)
+    {
+        case GLFW_MOD_ALT:
+            return "alt";
+        case GLFW_MOD_CAPS_LOCK:
+            return "caps lock";
+        case GLFW_MOD_CONTROL:
+            return "control";
+        case GLFW_MOD_NUM_LOCK:
+            return "num lock";
+        case GLFW_MOD_SHIFT:
+            return "shift";
+        case GLFW_MOD_SUPER:
+            return "super";
+    }
+    return "unknown";
+}
+
+std::string GLcanvas::KeyBinding::modNames(int modifiers)
+{
+    static constexpr std::array<int, 6> flags{ GLFW_MOD_ALT, GLFW_MOD_CAPS_LOCK, GLFW_MOD_CONTROL, GLFW_MOD_NUM_LOCK, GLFW_MOD_SHIFT, GLFW_MOD_SUPER };
+    std::string out{};
+    for (int flag : flags)
+    {
+        if (modifiers & flag)
+        {
+            if (!out.empty())
+            {
+                out += " + ";
+            }
+            out += modName(flag);
+        }
+    }
+    return out;
+}
+
+std::string GLcanvas::KeyBinding::name() const
+{
+    if (modifiers)
+    {
+        return modNames(modifiers) + " + " + keyName(key);
+    }
+    return keyName(key);
+}
+
+constexpr GLcanvas::KeyBinding GLcanvas::KeyBinding::none()
+{
+    return {0};
+}
+
+bool GLcanvas::KeyBinding::operator==(const KeyBinding& other) const
+{
+    return other.key == key && other.modifiers == modifiers; // use defaulted spacechip operator if cinolib ever moves to c++20
+}
+
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+CINO_INLINE
+void GLcanvas::KeyBindings::print(int key, const char* desc)
+{
+    print(KeyBinding::keyName(key), desc);
+}
+
+CINO_INLINE
+void GLcanvas::KeyBindings::print(KeyBinding binding, const char* desc)
+{
+    print(binding.name().c_str(), desc);
+}
+
+CINO_INLINE
+void GLcanvas::KeyBindings::print(const char* binding, const char* desc)
+{
+    std::cout << binding << ": " << desc << std::endl;
+}
 
 CINO_INLINE
 void GLcanvas::KeyBindings::print() const
 {
-    auto binding = [](const char* binding, const char* desc)
-    {
-        std::cout << binding << ": " << desc << '\n';
-    };
-    auto key = [&binding](int key, const char* desc)
-    {
-        if (key != none)
-        {
-            const char* key_name{ glfwGetKeyName(key, 0) }; // TODO (francescozoccheddu) not working for non-character keys
-            if (key_name)
-            {
-                binding(key_name, desc);
-            }
-        }
-    };
-    key(toggle_sidebar, "toggle sidebar");
-    key(toggle_axes, "toggle axes");
-    key(toggle_ortho, "toggle perspective/orthographic camera");
-    key(reset_camera, "reset camera");
-    key(look_at_center, "look at center");
-    key(store_camera, "copy camera to clipboard");
-    key(restore_camera, "restore camera from clipboard");
-    key(camera_faster, "move camera faster (hold down)");
-    key(camera_slower, "move camera slower (hold down)");
-    key(camera_inplace_zoom, "change fov instead of moving forward when zooming (hold down)");
-    key(camera_inplace_rotation, "rotate camera around itself instead of the center (hold down)");
+    print(toggle_sidebar, "toggle sidebar");
+    print(toggle_axes, "toggle axes");
+    print(toggle_ortho, "toggle perspective/orthographic camera");
+    print(reset_camera, "reset camera");
+    print(look_at_center, "look at center");
+    print(store_camera, "copy camera to clipboard");
+    print(restore_camera, "restore camera from clipboard");
+    print(camera_faster, "move camera faster (hold down)");
+    print(camera_slower, "move camera slower (hold down)");
+    print(camera_inplace_zoom, "change fov instead of moving forward when zooming (hold down)");
+    print(camera_inplace_rotation, "rotate camera around itself instead of the center (hold down)");
+    print(camera_look_at_minus_x, "look at -x");
+    print(camera_look_at_minus_y, "look (almost) at -y");
+    print(camera_look_at_minus_z, "look at -z");
+    print(camera_look_at_plus_x, "look at +x");
+    print(camera_look_at_plus_y, "look (almost) at +y");
+    print(camera_look_at_plus_z, "look at +z");
     if (pan_with_arrow_keys)
     {
-        binding("arrows", "pan");
+        print("arrows", "pan");
     }
     if (pan_and_zoom_with_numpad_keys)
     {
-        binding("numpad", "pan and zoom");
+        print("numpad", "pan and zoom");
     }
 }
 
@@ -595,7 +694,7 @@ void GLcanvas::refit_scene(bool update_gl, bool redraw)
 }
 
 CINO_INLINE
-void GLcanvas::reset_camera(bool update_gl, bool redraw)
+void GLcanvas::reset_camera(bool update_gl, bool redraw, double _yaw)
 {
     refit_scene(false);
     update_viewport(false);
@@ -603,7 +702,7 @@ void GLcanvas::reset_camera(bool update_gl, bool redraw)
     camera.projection.verticalFieldOfView = (camera_settings.min_persp_fov + camera_settings.max_persp_fov) / 2.0;
     const double camera_scene_radius{ m_sceneRadius ? m_sceneRadius : 1 };
     const double distance{ camera_scene_radius * camera_settings.camera_distance_scene_radius_factor };
-    camera.view = FreeCamera<double>::View::tps(world_up, world_forward, m_sceneCenter, distance, 0, 0);
+    camera.view = FreeCamera<double>::View::tps(world_up, world_forward, m_sceneCenter, distance, _yaw, 0);
     camera_pivot_depth(m_sceneCenter.dist(camera.view.eye));
     if (update_gl)
     {
@@ -1095,10 +1194,11 @@ void GLcanvas::key_event(GLFWwindow* window, int key, int /*scancode*/, int acti
             }
         }
 
-        if (action == GLFW_PRESS && !modifiers)
+        if (action == GLFW_PRESS)
         {
+            const KeyBinding binding{ key, modifiers };
             static const std::string camera_clipboard_token{ "cinolib_gl_glcanvas_camera\n" };
-            if (key == v->key_bindings.store_camera)
+            if (binding == v->key_bindings.store_camera)
             {
                 constexpr char sep{ ' ' };
                 std::stringstream stream{};
@@ -1108,7 +1208,7 @@ void GLcanvas::key_event(GLFWwindow* window, int key, int /*scancode*/, int acti
                     << v->m_cameraPivotDepth;
                 glfwSetClipboardString(window, stream.str().c_str());
             }
-            if (key == v->key_bindings.restore_camera)
+            if (binding == v->key_bindings.restore_camera)
             {
                 const char* const clipboard{ glfwGetClipboardString(window) };
                 if (clipboard && std::strstr(clipboard, camera_clipboard_token.c_str()) == clipboard)
@@ -1124,11 +1224,11 @@ void GLcanvas::key_event(GLFWwindow* window, int key, int /*scancode*/, int acti
                     v->notify_camera_change();
                 }
             }
-            if (key == v->key_bindings.reset_camera)
+            if (binding == v->key_bindings.reset_camera)
             {
                 v->reset_camera();
             }
-            if (key == v->key_bindings.look_at_center)
+            if (binding == v->key_bindings.look_at_center)
             {
                 v->camera.view.lookAt(v->m_sceneCenter);
                 // get rid of roll
@@ -1139,12 +1239,53 @@ void GLcanvas::key_event(GLFWwindow* window, int key, int /*scancode*/, int acti
                 v->draw();
                 v->notify_camera_change();
             }
-            if (key == v->key_bindings.toggle_axes)
+            {
+                bool cameraUpdated{ true };
+                double yaw{}, pitch{};
+                static constexpr double maxPitch{ 89 }; // neither gimbal lock nor dutch angle, please
+                if (binding == v->key_bindings.camera_look_at_minus_x)
+                {
+                    yaw = 90;
+                }
+                else if (binding == v->key_bindings.camera_look_at_minus_y)
+                {
+                    pitch = -maxPitch;
+                }
+                else if (binding == v->key_bindings.camera_look_at_minus_z)
+                {
+                    yaw = 180;
+                }
+                else if (binding == v->key_bindings.camera_look_at_plus_x)
+                {
+                    yaw = 270;
+                }
+                else if (binding == v->key_bindings.camera_look_at_plus_y)
+                {
+                    pitch = maxPitch;
+                }
+                else if (binding == v->key_bindings.camera_look_at_plus_z)
+                {
+                    yaw = 0;
+                }
+                else
+                {
+                    cameraUpdated = false;
+                }
+                if (cameraUpdated)
+                {
+                    v->camera.view = FreeCamera<double>::View::tps(world_up, world_forward, v->m_sceneCenter, v->m_cameraPivotDepth, yaw, pitch);
+                    v->camera.updateView();
+                    v->update_GL_view();
+                    v->draw();
+                    v->notify_camera_change();
+                }
+            }
+            if (binding == v->key_bindings.toggle_axes)
             {
                 v->show_axis ^= true;
                 v->draw();
             }
-            if (key == v->key_bindings.toggle_ortho)
+            if (binding == v->key_bindings.toggle_ortho)
             {
                 v->camera.projection.perspective ^= true;
                 v->camera.projection.verticalFieldOfView = (v->camera.projection.perspective 
@@ -1156,7 +1297,7 @@ void GLcanvas::key_event(GLFWwindow* window, int key, int /*scancode*/, int acti
                 v->draw();
                 v->notify_camera_change();
             }
-            if (key == v->key_bindings.toggle_sidebar)
+            if (binding == v->key_bindings.toggle_sidebar)
             {
                 v->show_sidebar(!v->m_showSidebar);
             }
