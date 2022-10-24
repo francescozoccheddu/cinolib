@@ -64,7 +64,7 @@ void quad_barycentric_coords(const mat<3,1,T> & q0,
                    const mat<3,1,T> & v1,
                    const mat<3,1,T> & v2) -> T
     {
-        mat<3,3,T> m({v0-v2,v1-v2,vec3d(1,1,1)});
+        mat<3,3,T> m({v0-v2,v1-v2,vec3d{1,1,1}});
         return 0.5*m.det();
     };
 

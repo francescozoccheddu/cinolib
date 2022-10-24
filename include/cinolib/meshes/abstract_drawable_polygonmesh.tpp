@@ -205,9 +205,9 @@ void AbstractDrawablePolygonMesh<Mesh>::updateGL_mesh()
                 if (drawlist.draw_mode & DRAW_TRI_SMOOTH)
                 {
                     // average normals with adjacent visible faces having dihedral angle lower than 60 degrees
-                    vec3d n_vid0(0,0,0);
-                    vec3d n_vid1(0,0,0);
-                    vec3d n_vid2(0,0,0);
+                    vec3d n_vid0{0,0,0};
+                    vec3d n_vid1{0,0,0};
+                    vec3d n_vid2{0,0,0};
                     for(unsigned int pid : vid0_vis_pids) n_vid0 += this->poly_data(pid).normal;
                     for(unsigned int pid : vid1_vis_pids) n_vid1 += this->poly_data(pid).normal;
                     for(unsigned int pid : vid2_vis_pids) n_vid2 += this->poly_data(pid).normal;

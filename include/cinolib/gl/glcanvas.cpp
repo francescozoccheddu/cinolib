@@ -55,12 +55,6 @@ namespace cinolib
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 CINO_INLINE
-const int GLcanvas::KeyBindings::none{ 0 };
-
-CINO_INLINE
-const int GLcanvas::MouseBindings::none{ 0 };
-
-CINO_INLINE
 void GLcanvas::KeyBindings::print() const
 {
     auto binding = [](const char* binding, const char* desc)
@@ -270,9 +264,6 @@ void GLcanvas::update_viewport(bool update_gl, bool redraw)
 }
 
 CINO_INLINE
-int GLcanvas::s_windowsCount{ 0 };
-
-CINO_INLINE
 GLFWwindow* GLcanvas::createWindow(int width, int height)
 {
     glfwInit();
@@ -384,15 +375,12 @@ void GLcanvas::camera_pivot_depth(double depth)
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 CINO_INLINE
-const vec3d GLcanvas::world_right{ 1,0,0 }, GLcanvas::world_up{ 0,1,0 }, GLcanvas::world_forward{ 0,0,-1 };
-
-//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
-CINO_INLINE
 GLcanvas::GLcanvas(const int width, const int height, const int font_size)
-    : owns_ImGui{s_windowsCount == 0}, window{createWindow(width, height)}, m_width{width}, m_height{height}, font_size{ font_size }
+    : owns_ImGui{}, window{ createWindow(width, height) }, m_width{ width }, m_height{ height }, font_size{ font_size }
 {
 
+    static int s_windowsCount{};
+    owns_ImGui = !s_windowsCount;
     s_windowsCount++;
 
     glfwSwapInterval(1); // enable vsync

@@ -81,21 +81,21 @@ CINO_INLINE
 vec3d polygon_normal(const std::vector<vec3d> & poly)
 {
     Plane  best_fit(poly);
-    vec3d  Z     = vec3d(0,0,1);
+    vec3d  Z     = vec3d{0,0,1};
     vec3d  axis  = best_fit.n.cross(Z);
     double angle = best_fit.n.angle_rad(Z);
     mat3d  R     = mat3d::ROT_3D(axis,angle);
 
     // if the face is degenerate (i.e. does not span a plane),
     // return the null vector
-    if(best_fit.n.norm()==0) return vec3d(0,0,0);
+    if(best_fit.n.norm()==0) return vec3d{0,0,0};
 
     std::vector<vec2d> poly2d;
     for(auto p : poly)
     {
         vec3d tmp = best_fit.project_onto(p);
         tmp = R*tmp;
-        poly2d.push_back(vec2d(tmp._vec)); // will drop z
+        poly2d.push_back(vec2d{tmp._vec}); // will drop z
     }
 
     if(polygon_is_CCW(poly2d)) return best_fit.n;
@@ -119,7 +119,7 @@ bool polygon_flatten(const std::vector<vec3d> & poly3d,
     Plane best_fit(poly3d);
     if(best_fit.n.is_deg() || best_fit.n.norm()==0) return false;
 
-    vec3d  Z     = vec3d(0,0,1);
+    vec3d  Z     = vec3d{0,0,1};
     vec3d  axis  = best_fit.n.cross(Z);
     double angle = best_fit.n.angle_rad(Z);
     mat3d  R     = mat3d::ROT_3D(axis, angle);
@@ -128,7 +128,7 @@ bool polygon_flatten(const std::vector<vec3d> & poly3d,
     {
         vec3d tmp = best_fit.project_onto(p);
         tmp = R*tmp;
-        poly2d.push_back(vec2d(tmp._vec)); // will drop z
+        poly2d.push_back(vec2d{tmp._vec}); // will drop z
     }
     return true;
 }

@@ -102,7 +102,7 @@ template<class M, class V, class E, class P>
 CINO_INLINE
 vec3d AbstractMesh<M,V,E,P>::centroid() const
 {
-    vec3d bary(0,0,0);
+    vec3d bary{0,0,0};
     for(auto p : verts) bary += p;
     if (num_verts() > 0) bary/=static_cast<double>(num_verts());
     return bary;
@@ -911,7 +911,7 @@ template<class M, class V, class E, class P>
 CINO_INLINE
 vec3d AbstractMesh<M,V,E,P>::poly_centroid(const unsigned int pid) const
 {
-    vec3d c(0,0,0);
+    vec3d c{0,0,0};
     for(unsigned int vid : adj_p2v(pid)) c += vert(vid);
     c /= static_cast<double>(verts_per_poly(pid));
     return c;
@@ -923,7 +923,7 @@ template<class M, class V, class E, class P>
 CINO_INLINE
 vec3d AbstractMesh<M,V,E,P>::poly_sample_at(const unsigned int pid, const double bc[]) const
 {
-    vec3d p(0,0,0);
+    vec3d p{0,0,0};
     for(unsigned int off=0; off<verts_per_poly(pid); ++off)
     {
         p += bc[off] * poly_vert(pid,off);

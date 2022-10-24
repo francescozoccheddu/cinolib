@@ -209,7 +209,7 @@ CINO_INLINE
 unsigned int Trimesh<M,V,E,P>::vert_split(const unsigned int eid0, const unsigned int eid1)
 {    
     unsigned int v0 = this->vert_shared(eid0, eid1);
-    unsigned int v1 = this->vert_add(vec3d(0,0,0));
+    unsigned int v1 = this->vert_add(vec3d{0,0,0});
 
     // bi-partition the umbrella around the two split edges
     std::vector<unsigned int> p_ring = this->vert_ordered_polys_star(v0);
@@ -232,8 +232,8 @@ unsigned int Trimesh<M,V,E,P>::vert_split(const unsigned int eid0, const unsigne
 
     // put left and right verts at the centroid of their reference polys
     // WARNING: not ideal for highly non planar umbrellas. should rather project on the actual surface
-    vec3d xyz0(0,0,0);
-    vec3d xyz1(0,0,0);
+    vec3d xyz0{0,0,0};
+    vec3d xyz1{0,0,0};
     for(unsigned int pid : pids0) xyz0 += this->poly_centroid(pid);
     for(unsigned int pid : pids1) xyz1 += this->poly_centroid(pid);
     if(!pids0.empty()) xyz0 /= static_cast<double>(pids0.size()); else xyz0 = this->vert(v0);

@@ -65,7 +65,7 @@ CINO_INLINE
 vec3d VectorField::vec_at(const int pos) const
 {
     int ptr = pos * 3;
-    return vec3d((*this)[ptr], (*this)[ptr+1], (*this)[ptr+2]);
+    return vec3d{(*this)[ptr], (*this)[ptr+1], (*this)[ptr+2]};
 }
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -98,7 +98,7 @@ void VectorField::normalize()
     */
     for(int i=0; i<rows(); i+=3)
     {
-        vec3d tmp((*this)[i], (*this)[i+1], (*this)[i+2]);
+        vec3d tmp{ (*this)[i], (*this)[i + 1], (*this)[i + 2] };
         (*this)[i + 0] /= tmp.norm();
         (*this)[i + 1] /= tmp.norm();
         (*this)[i + 2] /= tmp.norm();

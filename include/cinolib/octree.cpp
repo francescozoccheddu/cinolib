@@ -199,14 +199,14 @@ void Octree::subdivide(OctreeNode * node)
     vec3d min = node->bbox.min;
     vec3d max = node->bbox.max;
     vec3d avg = node->bbox.center();
-    node->children[0] = new OctreeNode(node, AABB(vec3d(min[0], min[1], min[2]), vec3d(avg[0], avg[1], avg[2])));
-    node->children[1] = new OctreeNode(node, AABB(vec3d(avg[0], min[1], min[2]), vec3d(max[0], avg[1], avg[2])));
-    node->children[2] = new OctreeNode(node, AABB(vec3d(avg[0], avg[1], min[2]), vec3d(max[0], max[1], avg[2])));
-    node->children[3] = new OctreeNode(node, AABB(vec3d(min[0], avg[1], min[2]), vec3d(avg[0], max[1], avg[2])));
-    node->children[4] = new OctreeNode(node, AABB(vec3d(min[0], min[1], avg[2]), vec3d(avg[0], avg[1], max[2])));
-    node->children[5] = new OctreeNode(node, AABB(vec3d(avg[0], min[1], avg[2]), vec3d(max[0], avg[1], max[2])));
-    node->children[6] = new OctreeNode(node, AABB(vec3d(avg[0], avg[1], avg[2]), vec3d(max[0], max[1], max[2])));
-    node->children[7] = new OctreeNode(node, AABB(vec3d(min[0], avg[1], avg[2]), vec3d(avg[0], max[1], max[2])));
+    node->children[0] = new OctreeNode(node, AABB(vec3d{min[0], min[1], min[2]}, vec3d{avg[0], avg[1], avg[2]}));
+    node->children[1] = new OctreeNode(node, AABB(vec3d{avg[0], min[1], min[2]}, vec3d{max[0], avg[1], avg[2]}));
+    node->children[2] = new OctreeNode(node, AABB(vec3d{avg[0], avg[1], min[2]}, vec3d{max[0], max[1], avg[2]}));
+    node->children[3] = new OctreeNode(node, AABB(vec3d{min[0], avg[1], min[2]}, vec3d{avg[0], max[1], avg[2]}));
+    node->children[4] = new OctreeNode(node, AABB(vec3d{min[0], min[1], avg[2]}, vec3d{avg[0], avg[1], max[2]}));
+    node->children[5] = new OctreeNode(node, AABB(vec3d{avg[0], min[1], avg[2]}, vec3d{max[0], avg[1], max[2]}));
+    node->children[6] = new OctreeNode(node, AABB(vec3d{avg[0], avg[1], avg[2]}, vec3d{max[0], max[1], max[2]}));
+    node->children[7] = new OctreeNode(node, AABB(vec3d{min[0], avg[1], avg[2]}, vec3d{avg[0], max[1], max[2]}));
 
     for(unsigned int it : node->item_indices)
     {

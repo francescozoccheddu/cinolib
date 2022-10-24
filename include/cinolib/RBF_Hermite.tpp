@@ -165,7 +165,7 @@ vec3d Hermite_RBF<RBF>::eval_grad(const vec3d &p) const
         }
     }
 
-    return vec3d(grad[0], grad[1], grad[2]);
+    return vec3d{grad[0], grad[1], grad[2]};
 }
 
 }

@@ -73,7 +73,7 @@ class DrawableVectorField : public VectorField, public DrawableObject
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
         void  draw(const float) const;
-        vec3d scene_center() const { return vec3d(); }
+        vec3d scene_center() const { return vec3d{}; }
         float scene_radius() const { return 0.0;     }
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::

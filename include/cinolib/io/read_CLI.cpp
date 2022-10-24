@@ -70,7 +70,7 @@ std::vector<vec3d> read_polyline(std::string line, const double z)
     std::vector<vec3d> polyline;
     for(unsigned int i=0; i<n_points; ++i)
     {
-        vec3d p(0,0,z);
+        vec3d p{0,0,z};
         ss >> p.x() >> p.y();
         polyline.push_back(p);
     }

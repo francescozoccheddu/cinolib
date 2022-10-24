@@ -89,7 +89,7 @@ void MCF(AbstractPolygonMesh<M,V,E,P> & m,
         double residual = 0.0;
         for(unsigned int vid=0; vid<m.num_verts(); ++vid)
         {
-            vec3d new_pos(x[vid], y[vid], z[vid]);
+            vec3d new_pos{x[vid], y[vid], z[vid]};
             residual += (m.vert(vid) - new_pos).norm();
             m.vert(vid) = new_pos;
         }

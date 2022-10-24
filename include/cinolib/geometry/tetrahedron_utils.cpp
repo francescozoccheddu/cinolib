@@ -70,9 +70,9 @@ vec3d tetrahedron_circumcenter(const vec3d & A,
     double num_z = mat_det33(u.x(), u.y(), u_len, v.x(), v.y(), v_len, w.x(), w.y(), w_len);
     double den   = mat_det33(u.x(), u.y(), u.z(), v.x(), v.y(), v.z(), w.x(), w.y(), w.z()) * 2.0;
 
-    vec3d c(A.x() + num_x / den,
+    vec3d c{ A.x() + num_x / den,
             A.y() - num_y / den,
-            A.z() + num_z / den);
+            A.z() + num_z / den };
 
      return c;
 }

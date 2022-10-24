@@ -91,8 +91,8 @@ AABB::AABB(const std::vector<AABB> & list, const double scaling_factor)
 CINO_INLINE
 void AABB::reset()
 {
-    min = vec3d( inf_double,  inf_double,  inf_double);
-    max = vec3d(-inf_double, -inf_double, -inf_double);
+    min = vec3d{ inf_double,  inf_double,  inf_double};
+    max = vec3d{-inf_double, -inf_double, -inf_double};
 }
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -379,9 +379,9 @@ bool AABB::intersects_triangle(const vec3d t[3]) const
 
     vec3d XYZ[3] =
     {
-        vec3d(1,0,0),
-        vec3d(0,1,0),
-        vec3d(0,0,1)
+        vec3d{1,0,0},
+        vec3d{0,1,0},
+        vec3d{0,0,1}
     };
 
     // known issues:
@@ -425,13 +425,13 @@ std::vector<vec3d> AABB::corners(const double scaling_factor) const
     std::vector<vec3d> c =
     {
         min,
-        min + vec3d(dx,  0,  0),
-        min + vec3d(dx, dy,  0),
-        min + vec3d( 0, dy,  0),
-        min + vec3d( 0,  0, dz),
-        min + vec3d(dx,  0, dz),
-        min + vec3d(dx, dy, dz),
-        min + vec3d( 0, dy, dz),
+        min + vec3d{dx,  0,  0},
+        min + vec3d{dx, dy,  0},
+        min + vec3d{ 0, dy,  0},
+        min + vec3d{ 0,  0, dz},
+        min + vec3d{dx,  0, dz},
+        min + vec3d{dx, dy, dz},
+        min + vec3d{ 0, dy, dz},
     };
 
     if(scaling_factor!=1.0)

@@ -88,7 +88,7 @@ void read_OFF(const char                     * filename,
         double x, y, z;
         if(ss >> x >> y >> z)
         {
-            verts.push_back(vec3d(x,y,z));
+            verts.push_back(vec3d{x,y,z});
         }
         else --i;
     }

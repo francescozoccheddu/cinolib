@@ -345,7 +345,7 @@ template<class M, class V, class E, class P>
 CINO_INLINE
 void AbstractPolygonMesh<M,V,E,P>::update_v_normal(const unsigned int vid)
 {
-    vec3d n(0,0,0);
+    vec3d n{0,0,0};
     for(unsigned int pid : this->adj_v2p(vid))
     {
         n += this->poly_data(pid).normal;
@@ -469,7 +469,7 @@ double AbstractPolygonMesh<M,V,E,P>::mesh_volume() const
     // Proceedings of the International Conference on Image Processing, 2001
 
     double vol = 0.0;
-    vec3d O(0,0,0);
+    vec3d O{0,0,0};
     for(unsigned int pid=0; pid<this->num_polys(); ++pid)
     {
         for(unsigned int i=0; i<this->poly_tessellation(pid).size()/3; ++i)

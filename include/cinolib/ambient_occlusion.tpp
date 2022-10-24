@@ -77,7 +77,7 @@ void ambient_occlusion_srf_meshes(      Mesh & m,
         // by reading values from the Z buffer and comparing with the actual depth
 
         glMatrixMode(GL_MODELVIEW);
-        vec3d  Z(0,0,1);
+        vec3d  Z{0,0,1};
         vec3d  a = dir.cross(Z); a.normalize();
         vec3d  c = m.centroid();
         double s = 2.0/m.bbox().diag();
@@ -163,7 +163,7 @@ void ambient_occlusion_vol_meshes(      Mesh & m,
         // by reading values from the Z buffer and comparing with the actual depth
 
         glMatrixMode(GL_MODELVIEW);
-        vec3d  Z(0,0,1);
+        vec3d  Z{0,0,1};
         vec3d  a = dir.cross(Z); a.normalize();
         vec3d  c = m.centroid();
         double s = 2.0/m.bbox().diag();

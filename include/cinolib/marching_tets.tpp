@@ -286,7 +286,7 @@ void make_triangle(const Tetmesh<M,V,E,F,P> & m,
         if (query != e2v_map.end())
         {
             unsigned int vid = query->second;
-            tri_verts[i] = vec3d(verts.at(vid));
+            tri_verts[i] = vec3d{verts.at(vid)};
             tris.push_back(vid);
         }
         else

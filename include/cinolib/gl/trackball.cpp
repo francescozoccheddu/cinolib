@@ -52,7 +52,7 @@ vec3d trackball_to_sphere(const vec2d  & p,      // click point (screen coordina
     double x_val =  (2.0*p.x() - width )/width;
     double y_val = -(2.0*p.y() - height)/height;
     double norm2 = x_val*x_val + y_val*y_val;
-    return vec3d(x_val, y_val, (norm2 < 0.5*radius) ? sqrt(radius - norm2) : 0.5*radius/sqrt(norm2));
+    return vec3d{x_val, y_val, (norm2 < 0.5*radius) ? sqrt(radius - norm2) : 0.5*radius/sqrt(norm2)};
 }
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -65,7 +65,7 @@ void trackball_to_rotations(const vec3d  & p0,     // input sphere point #1
                             const double   radius) // trackball radius
 {
     axis = p0.cross(p1);
-    if(axis.norm_sqrd()<1e-7) axis = vec3d(1,0,0);
+    if(axis.norm_sqrd()<1e-7) axis = vec3d{1,0,0};
     axis.normalize();
     double t = p0.dist(p1)*0.5/radius;
     t = clamp(t, -1.0, 1.0);

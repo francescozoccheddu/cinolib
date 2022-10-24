@@ -54,7 +54,7 @@ class Curve
 
         struct Sample
         {
-            vec3d pos = vec3d(0,0,0);
+            vec3d pos = vec3d{0,0,0};
             float t   = -1; // arc-length param (t=0 => begin, t=1 => end)
 
             // OPTIONAL - Connection to a Mesh

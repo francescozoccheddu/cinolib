@@ -82,34 +82,16 @@ std::istream& operator>> (std::istream& in, mat<r, c, T>& mat)
 
 template<unsigned int r, unsigned int c, class T>
 CINO_INLINE
-mat<r,c,T>::mat(const std::initializer_list<mat<r,1,T>> & il, const int mode)
+constexpr mat<r,c,T>::mat(const std::initializer_list<mat<r,1,T>> & il) : _vec{}
 {
-    if(mode==COLS)
+    assert(il.size()==c);
+    std::size_t ci{};
+    for (const mat<r, 1, T>& col : il)
     {
-        assert(il.size()==c);
-        auto it = il.begin();
-        for(unsigned int i=0; i<c; ++i)
+        ci++;
+        for (std::size_t ri{}; ri < r; ri++)
         {
-            set_col(i,*it);
-            ++it;
-        }
-    }
-    else
-    {
-        if constexpr (r == c) // Can't convert mat<r,1,T> to mat<c,1,T> otherwise. It would be better to use SFINAE to choose the right mode. Anyway, this is only temporary since it requires C++17.
-        {
-            assert(mode==ROWS);
-            assert(il.size()==r);
-            auto it = il.begin();
-            for(unsigned int i=0; i<r; ++i)
-            {
-                set_row(i,*it);
-                ++it;
-            }
-        }
-        else
-        {
-            assert(false);
+            _mat[ri++][ci] = col._vec[ri];
         }
     }
 }
@@ -118,51 +100,37 @@ mat<r,c,T>::mat(const std::initializer_list<mat<r,1,T>> & il, const int mode)
 
 template<unsigned int r, unsigned int c, class T>
 CINO_INLINE
-mat<r,c,T>::mat(const std::initializer_list<T> & il)
+constexpr mat<r, c, T>::mat(const std::initializer_list<T>& il) : _vec{}
 {
-    mat_set<r,c,T>(_mat, il);
+    assert(il.size() <= r * c);
+    std::size_t i{};
+    for (const T v : il)
+    {
+        _vec[i++] = v;
+    }
+    const T last{ il.size() ? *(il.end()-1) : T{} };
+    while (i < r * c)
+    {
+        _vec[i++] = last;
+    }
 }
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 template<unsigned int r, unsigned int c, class T>
-CINO_INLINE
-mat<r,c,T>::mat(const T scalar)
+constexpr mat<r, c, T>::mat(const T* values) : _vec{}
 {
-    vec_set_dense<r*c,T>(_vec, scalar);
+    for (std::size_t i{}; i < r * c; i++)
+    {
+        _vec[i] = values[i];
+    }
 }
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 template<unsigned int r, unsigned int c, class T>
-CINO_INLINE
-mat<r,c,T>::mat(const T * values)
-{
-    vec_copy<r*c,T>(values,_vec);
-}
-
-//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
-template<unsigned int r, unsigned int c, class T>
-CINO_INLINE
-mat<r,c,T>::mat(const T v0, const T v1)
-{
-    assert(r==2 && c==1);
-    _vec[0] = v0;
-    _vec[1] = v1;
-}
-
-//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
-template<unsigned int r, unsigned int c, class T>
-CINO_INLINE
-mat<r,c,T>::mat(const T v0, const T v1, const T v2)
-{
-    assert(r==3 && c==1);
-    _vec[0] = v0;
-    _vec[1] = v1;
-    _vec[2] = v2;
-}
+constexpr mat<r, c, T>::mat() : _vec{}
+{}
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -289,7 +257,7 @@ void mat<r,c,T>::set_row(const unsigned int i, const mat<c,1,T> & row)
 
 template<unsigned int r, unsigned int c, class T>
 CINO_INLINE
-void mat<r,c,T>::set_col(const unsigned int i, const mat<r,1,T> & col )
+constexpr void mat<r,c,T>::set_col(const unsigned int i, const mat<r,1,T> & col )
 {
     mat_set_col<r,c,T>(_mat, i, col._vec);
 }
@@ -625,7 +593,7 @@ template<unsigned int r, unsigned int c, class T>
 CINO_INLINE
 mat<r,c,T> mat<r, c, T>::normalized() const
 {
-    mat clone(*this);
+    mat clone{*this};
     clone.normalize();
     return clone;
 }

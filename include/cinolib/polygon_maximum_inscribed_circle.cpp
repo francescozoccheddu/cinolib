@@ -62,10 +62,10 @@ void polygon_maximum_inscribed_circle(const std::vector<vec2d> & poly,
                                             double             & radius)
 {
     radius = 0.0;
-    center = vec2d(0,0);
+    center = vec2d{0,0};
 
-    vec2d min( inf_double,  inf_double);
-    vec2d max(-inf_double, -inf_double);
+    vec2d min{ inf_double,  inf_double};
+    vec2d max{-inf_double, -inf_double};
     for(auto p : poly)
     {
         min = min.min(p);
@@ -106,9 +106,9 @@ void polygon_maximum_inscribed_circle(const std::vector<vec2d> & poly,
         // do not consider Voronoi vertices outside the polygon
         if (boost::geometry::within(BoostPoint(v.x()/scale_factor, v.y()/scale_factor), boost_poly))
         {
-            // annoying wrap to vec3d (TODO: template cinolib::Segment to make it work in 2D too)
-            vec3d beg(s.p0.x, s.p0.y, 0);
-            vec3d end(s.p1.x, s.p1.y, 0);
+            // annoying wrap to vec3d {TODO: template cinolib::Segment to make it work in 2D too}
+            vec3d beg{s.p0.x, s.p0.y, 0};
+            vec3d end{s.p1.x, s.p1.y, 0};
             vec3d c3d(v.x(),  v.y(),  0);
             cinolib::Segment tmp(0, beg,end);
             double d = tmp.dist(c3d);
@@ -116,7 +116,7 @@ void polygon_maximum_inscribed_circle(const std::vector<vec2d> & poly,
             if(d>radius)
             {
                 radius = d;
-                center = vec2d(c3d._vec); // will automatically drop z
+                center = vec2d{c3d._vec}; // will automatically drop z
             }
         }
     }
@@ -137,7 +137,7 @@ void polygon_maximum_inscribed_circle(const std::vector<vec3d> & poly,   // will
 
     vec2d center_2d;
     polygon_maximum_inscribed_circle(poly_2d, center_2d, radius);
-    center = vec3d(center_2d.x(), center_2d.y(), 0);
+    center = vec3d{center_2d.x(), center_2d.y(), 0};
 }
 
 #endif // CINOLIB_USES_BOOST

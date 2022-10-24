@@ -45,7 +45,7 @@ void covariance_matrix(const std::vector<vec3d> & points, double cov[3][3], cons
     double norm_fact = static_cast<double>(points.size());
 
     // mean
-    vec3d avg(0,0,0);
+    vec3d avg{0,0,0};
     if(!centered)
     {
         for(auto p : points) avg += p;

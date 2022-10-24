@@ -107,7 +107,7 @@ std::vector<vec3d> harmonic_map_3d(const AbstractMesh<M,V,E,P> & m,
     std::vector<vec3d> res(m.num_verts());
     for(unsigned int vid=0; vid<m.num_verts(); ++vid)
     {
-        res.at(vid) = vec3d(f[vid], f[y_off+vid], f[z_off+vid]);
+        res.at(vid) = vec3d{f[vid], f[y_off+vid], f[z_off+vid]};
     }
 
     return res;

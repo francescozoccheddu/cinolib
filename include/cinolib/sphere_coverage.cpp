@@ -65,7 +65,7 @@ void sphere_coverage(const unsigned int n_samples, std::vector<vec3d> & points)
         double phi = ((i + int(rnd)) % n_samples) * increment;
         double x   = cos(phi) * r;
         double z   = sin(phi) * r;
-        points.push_back(vec3d(x,y,z));
+        points.push_back(vec3d{x,y,z});
     }
 }
 

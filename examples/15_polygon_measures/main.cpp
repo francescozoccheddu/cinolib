@@ -11,11 +11,11 @@ int main(int, char **)
     using namespace cinolib;
 
     DrawablePolygonmesh<> m({
-        vec3d(0,0,0), // v0
-        vec3d(2,0,0), // v1
-        vec3d(2,1,0), // v2
-        vec3d(1,1,0), // v3
-        vec3d(0,1,0), // v4
+        vec3d{0,0,0}, // v0
+        vec3d{2,0,0}, // v1
+        vec3d{2,1,0}, // v2
+        vec3d{1,1,0}, // v3
+        vec3d{0,1,0}, // v4
     });
     m.show_wireframe(true);
     m.show_marked_edge(false);
@@ -59,9 +59,9 @@ int main(int, char **)
         static float t = 0;
         if(ImGui::SliderFloat("##t", &t, 0, 1))
         {
-            m.vert(2) = vec3d(2,  3,0)*t + vec3d(2,1,0)*(1.0-t);
-            m.vert(3) = vec3d(1,0.1,0)*t + vec3d(1,1,0)*(1.0-t);
-            m.vert(4) = vec3d(0,  3,0)*t + vec3d(0,1,0)*(1.0-t);
+            m.vert(2) = vec3d{2,  3,0}*t + vec3d{2,1,0}*(1.0-t);
+            m.vert(3) = vec3d{1,0.1,0}*t + vec3d{1,1,0}*(1.0-t);
+            m.vert(4) = vec3d{0,  3,0}*t + vec3d{0,1,0}*(1.0-t);
             m.update_p_tessellations();
             m.updateGL();
 

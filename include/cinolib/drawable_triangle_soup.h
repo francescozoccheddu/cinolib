@@ -25,7 +25,7 @@ class DrawableTriangleSoup : public DrawableObject
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
         ObjectType object_type()  const { return DRAWABLE_TRIMESH; }
-        vec3d      scene_center() const { return vec3d(0,0,0);     } // TODO
+        vec3d      scene_center() const { return vec3d{0,0,0};     } // TODO
         float      scene_radius() const { return 0.0;              } // TODO
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::

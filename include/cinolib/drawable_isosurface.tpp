@@ -92,7 +92,7 @@ template<class M, class V, class E, class F, class P>
 CINO_INLINE
 vec3d DrawableIsosurface<M,V,E,F,P>::scene_center() const
 {
-    return vec3d();
+    return vec3d{};
 }
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::

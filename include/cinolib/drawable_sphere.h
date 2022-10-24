@@ -52,7 +52,7 @@ class DrawableSphere : public DrawableObject
 
        ~DrawableSphere() override {}
 
-        DrawableSphere(const vec3d & center = vec3d(0,0,0),
+        DrawableSphere(const vec3d & center = vec3d{0,0,0},
                        const float   radius = 1.0,
                        const Color & color  = Color::RED(),
                        const unsigned int    subdiv = 1) // number of subdivisions of the regular icosahedron

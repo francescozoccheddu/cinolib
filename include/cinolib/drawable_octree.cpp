@@ -61,7 +61,7 @@ void DrawableOctree::draw(const float ) const
 CINO_INLINE
 vec3d DrawableOctree::scene_center() const
 {
-    if(this->root==nullptr) return vec3d(0,0,0);
+    if(this->root==nullptr) return vec3d{0,0,0};
     return this->root->bbox.center();
 }
 

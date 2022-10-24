@@ -52,9 +52,9 @@ Ray::Ray(const vec3d & p, const vec3d & dir)
 CINO_INLINE
 std::vector<Plane> Ray::to_planes() const
 {
-    vec3d n0(-direction.y(),  direction.x(),             0);
-    vec3d n1(-direction.z(),              0, direction.x());
-    vec3d n2(             0, -direction.z(), direction.y());
+    vec3d n0{ -direction.y(), direction.x(), 0 };
+    vec3d n1{ -direction.z(), 0, direction.x() };
+    vec3d n2{             0, -direction.z(), direction.y()};
 
     std::vector<Plane> planes;
     if (n0.norm() > 0) planes.push_back(Plane(start, n0));

@@ -78,7 +78,7 @@ CINO_INLINE
 Plane::Plane(const std::vector<vec3d> & samples)
 {
     // centroid
-    vec3d c(0,0,0);
+    vec3d c{0,0,0};
     for(auto p : samples) c += p;
     c /= static_cast<double>(samples.size());
 
@@ -106,9 +106,9 @@ Plane::Plane(const std::vector<vec3d> & samples)
     //if(fabs(det_max) <= 1e-5) std::cerr << "WARNING : the samples don't span a plane!" << std::endl;
 
     vec3d n;
-    if (det_max == det_x) n = vec3d(1.0, (xz*yz - xy*zz) / det_x, (xy*yz - xz*yy) / det_x); else
-    if (det_max == det_y) n = vec3d((yz*xz - xy*zz) / det_y, 1.0, (xy*xz - yz*xx) / det_y); else
-    if (det_max == det_z) n = vec3d((yz*xy - xz*yy) / det_z, (xz*xy - yz*xx) / det_z, 1.0);
+    if (det_max == det_x) n = vec3d{1.0, (xz*yz - xy*zz) / det_x, (xy*yz - xz*yy) / det_x}; else
+    if (det_max == det_y) n = vec3d{(yz*xz - xy*zz) / det_y, 1.0, (xy*xz - yz*xx) / det_y}; else
+    if (det_max == det_z) n = vec3d{(yz*xy - xz*yy) / det_z, (xz*xy - yz*xx) / det_z, 1.0};
     else assert(false);
 
     set_plane(c,n);
@@ -122,8 +122,8 @@ void Plane::set_plane(const vec3d & point, const vec3d & normal)
     if(point.is_nan() || point.is_inf() || normal.is_deg())
     {
         //std::cout << "WARNING : failed to set degenerate plane!" << std::endl;
-        p = vec3d(0,0,0);
-        n = vec3d(0,0,0);
+        p = vec3d{0,0,0};
+        n = vec3d{0,0,0};
         return;
     }
     p = point;

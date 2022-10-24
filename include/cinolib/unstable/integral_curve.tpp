@@ -228,7 +228,7 @@ Curve::Sample IntegralCurve<Trimesh<>>::move_forward_from_vertex(const unsigned 
     vec3d n = m_ptr->vert_data(vid).normal;
     Plane tangent_plane(v,n);
 
-    vec3d grad(0,0,0);
+    vec3d grad{0,0,0};
     for(unsigned int fid : m_ptr->adj_v2p(vid)) grad += grad_ptr->vec_at(fid);
     grad = tangent_plane.project_onto(v+grad) - v;
     grad.normalize();
@@ -539,7 +539,7 @@ CINO_INLINE
 Curve::Sample IntegralCurve<Tetmesh<>>::move_forward_from_vertex(const unsigned int vid)
 {
     vec3d p = m_ptr->vert(vid);
-    vec3d grad(0,0,0);
+    vec3d grad{0,0,0};
     for(unsigned int pid : m_ptr->adj_v2p(vid)) grad += grad_ptr->vec_at(pid);
     grad.normalize();
     assert(grad.norm() > 0);
@@ -575,7 +575,7 @@ template<>
 CINO_INLINE
 Curve::Sample IntegralCurve<Tetmesh<>>::move_forward_from_edge(const unsigned int eid, const vec3d & p)
 {
-    vec3d grad(0,0,0);
+    vec3d grad{0,0,0};
     for(unsigned int pid : m_ptr->adj_e2p(eid)) grad += grad_ptr->vec_at(pid);
     grad.normalize();
     assert(grad.norm() > 0);

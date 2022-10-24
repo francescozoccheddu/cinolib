@@ -162,7 +162,7 @@ void read_STL(const char         * filename,
             // read normal
             float nf[3];
             if(fread(&nf, sizeof(float), 3, fp)!=3) assert(false && "error reading normal");
-            vec3d n(nf[0], nf[1], nf[2]);
+            vec3d n{nf[0], nf[1], nf[2]};
             normals.push_back(n);
 
             // read verts
@@ -171,7 +171,7 @@ void read_STL(const char         * filename,
                 float vf[3];
                 if(fread(&vf, sizeof(float), 3, fp)!=3) assert(false && "error reading vertex");
 
-                vec3d v(vf[0], vf[1], vf[2]);                
+                vec3d v{vf[0], vf[1], vf[2]};                
                 if(merge_duplicated_verts)
                 {
                     auto it = vmap.find(v);

@@ -52,7 +52,7 @@ void tangential_smoothing(Trimesh<M,V,E,P> & m, const unsigned int vid)
 {
     if(m.vert_is_boundary(vid)) return;
 
-    vec3d  delta(0,0,0);
+    vec3d  delta{0,0,0};
     double norm_fact = 0.0;
     for(unsigned int nbr : m.adj_v2v(vid))
     {

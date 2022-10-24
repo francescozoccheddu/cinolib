@@ -248,7 +248,7 @@ void mesh_smoother(      AbstractPolygonMesh<M1,V1,E1,P1> & m,
         unsigned int nv = m.num_verts();
         for(unsigned int vid=0; vid<nv; ++vid)
         {
-            vec3d p(res[vid], res[nv+vid], res[2*nv+vid]);
+            vec3d p{res[vid], res[nv+vid], res[2*nv+vid]};
 
             switch(m.vert_data(vid).label)
             {

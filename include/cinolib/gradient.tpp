@@ -146,7 +146,7 @@ Eigen::SparseMatrix<double> gradient_matrix(const AbstractPolyhedralMesh<M,V,E,F
 
             for(unsigned int vid : m.adj_p2v(pid))
             {
-                vec3d per_vert_sum_over_f_normals(0,0,0);
+                vec3d per_vert_sum_over_f_normals{0,0,0};
                 for(unsigned int fid : m.adj_p2f(pid))
                 {
                     if (m.face_contains_vert(fid,vid))
@@ -179,7 +179,7 @@ Eigen::SparseMatrix<double> gradient_matrix(const AbstractPolyhedralMesh<M,V,E,F
 
             for(unsigned int vid : m.adj_p2v(pid))
             {
-                vec3d per_vert_sum_over_f_normals(0,0,0);
+                vec3d per_vert_sum_over_f_normals{0,0,0};
                 for(unsigned int fid : m.adj_p2f(pid))
                 {
                     if (m.face_contains_vert(fid,vid))

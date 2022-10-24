@@ -133,9 +133,9 @@ struct Mesh_std_attributes
 
 struct Vert_std_attributes
 {
-    vec3d          normal  = vec3d(0,0,0);
+    vec3d          normal  = vec3d{0,0,0};
     Color          color   = Color::WHITE();
-    vec3d          uvw     = vec3d(0,0,0);
+    vec3d          uvw     = vec3d{0,0,0};
     int            label   = -1;
     float          quality = 0.0;
     std::bitset<8> flags   = 0x00;
@@ -154,7 +154,7 @@ struct Edge_std_attributes
 
 struct Polygon_std_attributes
 {
-    vec3d          normal  = vec3d(0,0,0);
+    vec3d          normal  = vec3d{0,0,0};
     Color          color   = Color::WHITE();
     int            label   = -1;
     float          quality = 0.0;

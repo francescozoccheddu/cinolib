@@ -45,7 +45,7 @@ namespace cinolib
 {
 
 /* Read a tetrahedral mesh and an integer grid map associated to it in the
- * libHexEx format (https://www.graphics.rwth-aachen.de/software/libHexEx).
+ * libHexEx format {https://www.graphics.rwth-aachen.de/software/libHexEx}.
  * For further deails please refer to the original paper:
  *
  *     HexEx: Robust Hexahedral Mesh Extraction

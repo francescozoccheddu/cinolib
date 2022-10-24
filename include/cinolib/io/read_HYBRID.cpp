@@ -70,7 +70,7 @@ void read_HYBDRID(const char                     * filename,
     {
         double x, y, z;
         fscanf(fp, "%lf %lf %lf", &x, &y, &z);
-        verts.push_back(vec3d(x,y,z));
+        verts.push_back(vec3d{x,y,z});
     }
 
     for(unsigned int i=0; i<nf; ++i)

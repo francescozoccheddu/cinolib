@@ -65,7 +65,7 @@ void read_VTU(const char                      * filename,
         double pnt[3];
         grid->GetPoint(i, pnt);
 
-        verts.push_back(vec3d(pnt[0],pnt[1],pnt[2]));
+        verts.push_back(vec3d{pnt[0],pnt[1],pnt[2]});
     }
 
     for(unsigned int i=0; i<grid->GetNumberOfCells(); ++i)

@@ -72,7 +72,7 @@ void ARAP_2D_mapping(const Trimesh<M,V,E,P> & m, ARAP_2D_map_data & data)
         unsigned int nv = m.num_verts();
         for(unsigned int vid=0; vid<nv; ++vid)
         {
-            data.uv.at(vid) = vec2d(f[vid], f[vid+nv]);
+            data.uv.at(vid) = vec2d{f[vid], f[vid+nv]};
         }
 
         // per edge weights
@@ -158,9 +158,9 @@ void ARAP_2D_mapping(const Trimesh<M,V,E,P> & m, ARAP_2D_map_data & data)
         Eigen::VectorXd v = data.cache.solve(rhs_v);
         for(unsigned int vid=0; vid<m.num_verts()-1; ++vid)
         {
-            data.uv[vid] = vec2d(u[vid],v[vid]);
+            data.uv[vid] = vec2d{u[vid],v[vid]};
         }
-        data.uv[bc] = vec2d(0,0); // last vertex
+        data.uv[bc] = vec2d{0,0}; // last vertex
     };
 
     //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::

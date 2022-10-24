@@ -74,7 +74,7 @@ void cast_shadow(const Mesh       & m,           // mesh to be rendered
     glPushMatrix();
     glLoadIdentity();
     glMatrixMode(GL_MODELVIEW);
-    vec3d  Z(0,0,1);
+    vec3d  Z{0,0,1};
     vec3d  a = dir.cross(Z); a.normalize();
     vec3d  c = m.centroid();
     double s = 2.0/m.bbox().diag();

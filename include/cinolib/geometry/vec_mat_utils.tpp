@@ -464,7 +464,7 @@ void vec_print(const T * v)
 
 template<unsigned int r, unsigned int c, typename T>
 CINO_INLINE
-void mat_set(T m[][c], const std::initializer_list<T> & il)
+constexpr void mat_set(T m[][c], const std::initializer_list<T> & il)
 {
     assert(il.size()==r*c);
     auto it = il.begin();
@@ -521,7 +521,7 @@ void mat_set_row(T m[][c], const unsigned int i, const T row[])
 
 template<unsigned int r, unsigned int c, typename T>
 CINO_INLINE
-void mat_set_col(T m[][c], const unsigned int i, const T col[])
+constexpr void mat_set_col(T m[][c], const unsigned int i, const T col[])
 {
     assert(i<c);
     for(unsigned int j=0; j<r; ++j)

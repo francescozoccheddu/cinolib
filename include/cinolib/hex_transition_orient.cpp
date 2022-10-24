@@ -79,7 +79,7 @@ void rotate(std::vector<vec3d> & verts,
             const std::string  & axis,
             const double       & angle)
 {
-    vec3d vec(0,0,0);
+    vec3d vec{0,0,0};
     if(axis == "x") vec.x() = 1; else
     if(axis == "y") vec.y() = 1; else
     if(axis == "z") vec.z() = 1; else
@@ -169,7 +169,7 @@ void orient_flat(std::vector<vec3d>             & verts,
         verts.reserve(Flat::verts.size()/3);
         for(unsigned int vid=0; vid<Flat::verts.size(); vid+=3)
         {
-            verts.push_back(vec3d(Flat::verts[vid]-0.5, Flat::verts[vid+1]-0.5, Flat::verts[vid+2]-0.5));
+            verts.push_back(vec3d{Flat::verts[vid]-0.5, Flat::verts[vid+1]-0.5, Flat::verts[vid+2]-0.5});
         }
         polys   = Flat::polys;
         faces   = Flat::faces;
@@ -180,7 +180,7 @@ void orient_flat(std::vector<vec3d>             & verts,
         verts.reserve(Flat_Convex::verts.size()/3);
         for(unsigned int vid=0; vid<Flat_Convex::verts.size(); vid+=3)
         {
-            verts.push_back(vec3d(Flat_Convex::verts[vid]-0.5, Flat_Convex::verts[vid+1]-0.5, Flat_Convex::verts[vid+2]-0.5));
+            verts.push_back(vec3d{Flat_Convex::verts[vid]-0.5, Flat_Convex::verts[vid+1]-0.5, Flat_Convex::verts[vid+2]-0.5});
         }
         polys   = Flat_Convex::polys;
         faces   = Flat_Convex::faces;
@@ -353,7 +353,7 @@ void orient_convex(std::vector<vec3d>             & verts,
         verts.reserve(Convex_1::verts.size()/3);
         for(unsigned int vid=0; vid<Convex_1::verts.size(); vid+=3)
         {
-            verts.push_back(vec3d(Convex_1::verts[vid]-0.5, Convex_1::verts[vid+1]-0.5, Convex_1::verts[vid+2]-0.5));
+            verts.push_back(vec3d{Convex_1::verts[vid]-0.5, Convex_1::verts[vid+1]-0.5, Convex_1::verts[vid+2]-0.5});
         }
         polys   = Convex_1::polys;
         faces   = Convex_1::faces;
@@ -384,7 +384,7 @@ void orient_convex(std::vector<vec3d>             & verts,
         verts.reserve(Convex_2::verts.size()/3);
         for(unsigned int vid=0; vid<Convex_2::verts.size(); vid+=3)
         {
-            verts.push_back(vec3d(Convex_2::verts[vid]-0.5, Convex_2::verts[vid+1]-0.5, Convex_2::verts[vid+2]-0.5));
+            verts.push_back(vec3d{Convex_2::verts[vid]-0.5, Convex_2::verts[vid+1]-0.5, Convex_2::verts[vid+2]-0.5});
         }
         polys   = Convex_2::polys;
         faces   = Convex_2::faces;
@@ -408,7 +408,7 @@ void orient_convex(std::vector<vec3d>             & verts,
         verts.reserve(Convex_3::verts.size()/3);
         for(unsigned int vid=0; vid<Convex_3::verts.size(); vid+=3)
         {
-            verts.push_back(vec3d(Convex_3::verts[vid]-0.5, Convex_3::verts[vid+1]-0.5, Convex_3::verts[vid+2]-0.5));
+            verts.push_back(vec3d{Convex_3::verts[vid]-0.5, Convex_3::verts[vid+1]-0.5, Convex_3::verts[vid+2]-0.5});
         }
         polys   = Convex_3::polys;
         faces   = Convex_3::faces;
@@ -474,7 +474,7 @@ void orient_concave_edge(std::vector<vec3d>             & verts,
         verts.reserve(Edge::verts.size()/3);
         for(unsigned int vid=0; vid<Edge::verts.size(); vid+=3)
         {
-            verts.push_back(vec3d(Edge::verts[vid]-0.5, Edge::verts[vid+1]-0.5, Edge::verts[vid+2]-0.5));
+            verts.push_back(vec3d{Edge::verts[vid]-0.5, Edge::verts[vid+1]-0.5, Edge::verts[vid+2]-0.5});
         }
         polys   = Edge::polys;
         faces   = Edge::faces;
@@ -485,7 +485,7 @@ void orient_concave_edge(std::vector<vec3d>             & verts,
         verts.reserve(Edge_WB::verts.size()/3);
         for(unsigned int vid=0; vid<Edge_WB::verts.size(); vid+=3)
         {
-            verts.push_back(vec3d(Edge_WB::verts[vid]-0.5, Edge_WB::verts[vid+1]-0.5, Edge_WB::verts[vid+2]-0.5));
+            verts.push_back(vec3d{Edge_WB::verts[vid]-0.5, Edge_WB::verts[vid+1]-0.5, Edge_WB::verts[vid+2]-0.5});
         }
         polys   = Edge_WB::polys;
         faces   = Edge_WB::faces;
@@ -530,7 +530,7 @@ void orient_concave_vert(std::vector<vec3d>             & verts,
         verts.reserve(Vert_center_WB_1::verts.size()/3);
         for(unsigned int vid=0; vid<Vert_center_WB_1::verts.size(); vid+=3)
         {
-            verts.push_back(vec3d(Vert_center_WB_1::verts[vid]-0.5, Vert_center_WB_1::verts[vid+1]-0.5, Vert_center_WB_1::verts[vid+2]-0.5));
+            verts.push_back(vec3d{Vert_center_WB_1::verts[vid]-0.5, Vert_center_WB_1::verts[vid+1]-0.5, Vert_center_WB_1::verts[vid+2]-0.5});
         }
         polys   = Vert_center_WB_1::polys;
         faces   = Vert_center_WB_1::faces;
@@ -541,7 +541,7 @@ void orient_concave_vert(std::vector<vec3d>             & verts,
         verts.reserve(Vert_center_WB_2::verts.size()/3);
         for(unsigned int vid=0; vid<Vert_center_WB_2::verts.size(); vid+=3)
         {
-            verts.push_back(vec3d(Vert_center_WB_2::verts[vid]-0.5, Vert_center_WB_2::verts[vid+1]-0.5, Vert_center_WB_2::verts[vid+2]-0.5));
+            verts.push_back(vec3d{Vert_center_WB_2::verts[vid]-0.5, Vert_center_WB_2::verts[vid+1]-0.5, Vert_center_WB_2::verts[vid+2]-0.5});
         }
         polys   = Vert_center_WB_2::polys;
         faces   = Vert_center_WB_2::faces;
@@ -552,7 +552,7 @@ void orient_concave_vert(std::vector<vec3d>             & verts,
         verts.reserve(Vert_center_WB_3::verts.size()/3);
         for(unsigned int vid=0; vid<Vert_center_WB_3::verts.size(); vid+=3)
         {
-            verts.push_back(vec3d(Vert_center_WB_3::verts[vid]-0.5, Vert_center_WB_3::verts[vid+1]-0.5, Vert_center_WB_3::verts[vid+2]-0.5));
+            verts.push_back(vec3d{Vert_center_WB_3::verts[vid]-0.5, Vert_center_WB_3::verts[vid+1]-0.5, Vert_center_WB_3::verts[vid+2]-0.5});
         }
         polys   = Vert_center_WB_3::polys;
         faces   = Vert_center_WB_3::faces;
@@ -563,7 +563,7 @@ void orient_concave_vert(std::vector<vec3d>             & verts,
         verts.reserve(Vert_center::verts.size()/3);
         for(unsigned int vid=0; vid<Vert_center::verts.size(); vid+=3)
         {
-            verts.push_back(vec3d(Vert_center::verts[vid]-0.5, Vert_center::verts[vid+1]-0.5, Vert_center::verts[vid+2]-0.5));
+            verts.push_back(vec3d{Vert_center::verts[vid]-0.5, Vert_center::verts[vid+1]-0.5, Vert_center::verts[vid+2]-0.5});
         }
         polys   = Vert_center::polys;
         faces   = Vert_center::faces;
@@ -675,7 +675,7 @@ void orient_concave_vert_side(std::vector<vec3d>             & verts,
         verts.reserve(Vert_side_WB::verts.size()/3);
         for(unsigned int vid=0; vid<Vert_side_WB::verts.size(); vid+=3)
         {
-            verts.push_back(vec3d(Vert_side_WB::verts[vid]-0.5, Vert_side_WB::verts[vid+1]-0.5, Vert_side_WB::verts[vid+2]-0.5));
+            verts.push_back(vec3d{Vert_side_WB::verts[vid]-0.5, Vert_side_WB::verts[vid+1]-0.5, Vert_side_WB::verts[vid+2]-0.5});
         }
         polys   = Vert_side_WB::polys;
         faces   = Vert_side_WB::faces;
@@ -688,7 +688,7 @@ void orient_concave_vert_side(std::vector<vec3d>             & verts,
         verts.reserve(Vert_side::verts.size()/3);
         for(unsigned int vid=0; vid<Vert_side::verts.size(); vid+=3)
         {
-            verts.push_back(vec3d(Vert_side::verts[vid]-0.5, Vert_side::verts[vid+1]-0.5, Vert_side::verts[vid+2]-0.5));
+            verts.push_back(vec3d{Vert_side::verts[vid]-0.5, Vert_side::verts[vid+1]-0.5, Vert_side::verts[vid+2]-0.5});
         }
         polys   = Vert_side::polys;
         faces   = Vert_side::faces;

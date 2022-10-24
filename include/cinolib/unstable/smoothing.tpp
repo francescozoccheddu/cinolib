@@ -79,7 +79,7 @@ void smooth_taubin(AbstractMesh<M,V,E,P> & m,
             for(auto  w : wgts) sum += w.second;
             for(auto &w : wgts) w.second /= sum;
 
-            vec3d delta(0,0,0);
+            vec3d delta{0,0,0};
             for(auto w : wgts) delta += (m.vert(w.first) - m.vert(vid)) * w.first;
             m.vert(vid) = m.vert(vid) + delta * lambda;
         }
@@ -98,7 +98,7 @@ void smooth_taubin(AbstractMesh<M,V,E,P> & m,
             for(auto  w : wgts) sum += w.second;
             for(auto &w : wgts) w.second /= sum;
 
-            vec3d delta(0,0,0);
+            vec3d delta{0,0,0};
             for(auto w : wgts) delta += (m.vert(w.first) - m.vert(vid)) * w.first;
             m.vert(vid) = m.vert(vid) + delta * mu;
         }

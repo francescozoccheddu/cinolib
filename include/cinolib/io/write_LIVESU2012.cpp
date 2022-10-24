@@ -64,9 +64,9 @@ void write_Livesu2012(const char                       * filename,
 
     for(unsigned int vid=0; vid<nv; ++vid)
     {
-        vec3d pos(coords[3*vid+0],
-                  coords[3*vid+1],
-                  coords[3*vid+2]);
+        vec3d pos{ coords[3 * vid + 0],
+                  coords[3 * vid + 1],
+                  coords[3 * vid + 2] };
 
         std::vector<int> nbrs = adj_vtx2vtx.at(vid);
 

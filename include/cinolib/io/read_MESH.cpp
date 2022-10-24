@@ -85,7 +85,7 @@ void read_MESH(const char                     * filename,
            !eat_double(f, y) ||
            !eat_double(f, z) ||
            !eat_int(f, l)) assert(false && "failed reading vert");
-        verts.push_back(vec3d(x,y,z));
+        verts.push_back(vec3d{x,y,z});
         vert_labels.push_back(l);
         v_unique_labels.insert(l);
     }

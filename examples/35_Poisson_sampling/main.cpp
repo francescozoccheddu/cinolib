@@ -31,15 +31,15 @@ int main(int, char **)
 
         std::vector<vec2d> samples_2d;
         profiler.push("Poisson sampling 2D");
-        Poisson_sampling<2,vec2d>(radius, vec2d(0,0), vec2d(1,1), samples_2d);
+        Poisson_sampling<2,vec2d>(radius, vec2d{0,0}, vec2d{1,1}, samples_2d);
         profiler.pop();
-        for(auto p : samples_2d) m_2d.vert_add(vec3d(p.x(),p.y(),0));
+        for(auto p : samples_2d) m_2d.vert_add(vec3d{p.x(),p.y(),0});
         m_2d.vert_set_color(Color::BLACK());
         gui_2d.reset_camera();
 
         std::vector<vec3d> samples_3d;
         profiler.push("Poisson sampling 3D");
-        Poisson_sampling<3,vec3d>(radius, vec3d(0,0,0), vec3d(1,1,1), samples_3d);
+        Poisson_sampling<3,vec3d>(radius, vec3d{0,0,0}, vec3d{1,1,1}, samples_3d);
         profiler.pop();
         for(auto & p : samples_3d) m_3d.vert_add(p);
         m_3d.vert_set_color(Color::BLACK());

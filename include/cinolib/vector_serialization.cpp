@@ -43,7 +43,7 @@ std::vector<vec3d> vec3d_from_serialized_xyz(const std::vector<double> & coords)
 {
     unsigned int nv = (unsigned int)coords.size()/3;
     std::vector<vec3d> tmp(nv);
-    for(unsigned int vid=0; vid<nv; ++vid) tmp.at(vid) = vec3d(coords.at(3*vid+0), coords.at(3*vid+1), coords.at(3*vid+2));
+    for(unsigned int vid=0; vid<nv; ++vid) tmp.at(vid) = vec3d{coords.at(3*vid+0), coords.at(3*vid+1), coords.at(3*vid+2)};
     return tmp;
 }
 
@@ -54,7 +54,7 @@ std::vector<vec3d> vec3d_from_serialized_xy(const std::vector<double> & coords, 
 {
     unsigned int nv = (unsigned int)coords.size()/2;
     std::vector<vec3d> tmp(nv);
-    for(unsigned int vid=0; vid<nv; ++vid) tmp.at(vid) = vec3d(coords.at(2*vid+0), coords.at(2*vid+1), z);
+    for(unsigned int vid=0; vid<nv; ++vid) tmp.at(vid) = vec3d{coords.at(2*vid+0), coords.at(2*vid+1), z};
     return tmp;
 }
 
@@ -65,7 +65,7 @@ std::vector<vec3d> vec3d_from_vec2d(const std::vector<vec2d> & verts, const doub
 {
     unsigned int nv = (unsigned int)verts.size();
     std::vector<vec3d> tmp(nv);
-    for(unsigned int vid=0; vid<nv; ++vid) tmp.at(vid) = vec3d(verts.at(vid).x(), verts.at(vid).y(), z);
+    for(unsigned int vid=0; vid<nv; ++vid) tmp.at(vid) = vec3d{verts.at(vid).x(), verts.at(vid).y(), z};
     return tmp;
 }
 
@@ -124,7 +124,7 @@ std::vector<vec2d> vec2d_from_serialized_xy(const std::vector<double> & coords)
 {
     unsigned int nv = (unsigned int)coords.size()/2;
     std::vector<vec2d> tmp(nv);
-    for(unsigned int vid=0; vid<nv; ++vid) tmp.at(vid) = vec2d(coords.at(2*vid), coords.at(2*vid+1));
+    for(unsigned int vid=0; vid<nv; ++vid) tmp.at(vid) = vec2d{coords.at(2*vid), coords.at(2*vid+1)};
     return tmp;
 }
 
@@ -135,7 +135,7 @@ std::vector<vec2d> vec2d_from_serialized_xyz(const std::vector<double> & coords)
 {
     unsigned int nv = (unsigned int)coords.size()/3;
     std::vector<vec2d> tmp(nv);
-    for(unsigned int vid=0; vid<nv; ++vid) tmp.at(vid) = vec2d(coords.at(3*vid), coords.at(3*vid+1));
+    for (unsigned int vid = 0; vid < nv; ++vid) tmp.at(vid) = vec2d{ coords.at(3 * vid), coords.at(3 * vid + 1) };
     return tmp;
 }
 
@@ -146,7 +146,7 @@ std::vector<vec2d> vec2d_from_vec3d(const std::vector<vec3d>  & verts)
 {
     unsigned int nv = (unsigned int)verts.size();
     std::vector<vec2d> tmp(nv);
-    for(unsigned int vid=0; vid<nv; ++vid) tmp.at(vid) = vec2d(verts.at(vid).x(), verts.at(vid).y());
+    for (unsigned int vid = 0; vid < nv; ++vid) tmp.at(vid) = vec2d{ verts.at(vid).x(), verts.at(vid).y() };
     return tmp;
 }
 

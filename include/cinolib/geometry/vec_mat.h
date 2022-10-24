@@ -46,7 +46,7 @@ namespace cinolib
 {
 
 template<unsigned int r, unsigned int c, class T>
-class mat
+class mat final
 {
     public:
 
@@ -58,14 +58,10 @@ class mat
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-        explicit mat(const std::initializer_list<mat<r,1,T>> & il, const int mode = COLS);
-        explicit mat(const std::initializer_list<T> & il);
-        explicit mat(const T   scalar);
-        explicit mat(const T * values);
-        explicit mat(const T v0, const T v1);
-        explicit mat(const T v0, const T v1, const T v2);
-        explicit mat() {}
-        virtual ~mat() {}
+        constexpr mat(const std::initializer_list<mat<r,1,T>> & il);
+        constexpr mat(const std::initializer_list<T> & il);
+        constexpr mat(const T * values);
+        constexpr mat();
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -91,7 +87,7 @@ class mat
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
         void set_row (const unsigned int i, const mat<c,1,T> & row);
-        void set_col (const unsigned int i, const mat<r,1,T> & col );
+        constexpr void set_col (const unsigned int i, const mat<r,1,T> & col );
         void set_diag(              const mat<r,1,T> & diag);
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::

@@ -66,8 +66,8 @@ void arrow(const T            height,
     tris    = {};
 
     // tessellate the base
-    mat<2,1,T> b(b_radius,0);
-    mat<2,1,T> t(radius,0);
+    mat<2, 1, T> b{ b_radius,0 };
+    mat<2, 1, T> t{ radius,0 };
     mat<2,2,T> R = mat<2,2,T>::ROT_2D(2*M_PI/n_sides);
     unsigned int off = 0;
     for(unsigned int i=1; i<n_sides; ++i)

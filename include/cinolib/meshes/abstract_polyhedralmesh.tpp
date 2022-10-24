@@ -478,7 +478,7 @@ template<class M, class V, class E, class F, class P>
 CINO_INLINE
 void AbstractPolyhedralMesh<M,V,E,F,P>::update_v_normal(const unsigned int vid)
 {
-    vec3d n(0,0,0);
+    vec3d n{0,0,0};
     for(unsigned int fid : adj_v2f(vid))
     {        
         if(face_is_on_srf(fid))
@@ -1529,7 +1529,7 @@ template<class M, class V, class E, class F, class P>
 CINO_INLINE
 vec3d AbstractPolyhedralMesh<M,V,E,F,P>::face_centroid(const unsigned int fid) const
 {
-    vec3d c(0,0,0);
+    vec3d c{0,0,0};
     for(unsigned int off=0; off<verts_per_face(fid); ++off) c += face_vert(fid,off);
     c /= static_cast<double>(verts_per_face(fid));
     return c;

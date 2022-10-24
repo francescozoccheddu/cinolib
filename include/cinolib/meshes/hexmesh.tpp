@@ -314,7 +314,7 @@ template<class M, class V, class E, class F, class P>
 CINO_INLINE
 vec3d Hexmesh<M,V,E,F,P>::verts_average(const std::vector<unsigned int> & vids) const
 {
-    vec3d res(0,0,0);
+    vec3d res{0,0,0};
     for(unsigned int vid: vids) res += this->vert(vid);
     res /= static_cast<double>(vids.size());
     return res;

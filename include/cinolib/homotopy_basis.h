@@ -212,7 +212,7 @@ unsigned int detach_loops_by_vert_split(Trimesh<M,V,E,P>  & m,
                                 HomotopyBasisData & data,
                                 const unsigned int          e_in,
                                 const unsigned int          e_out,
-                                const vec3d         new_pos = vec3d(inf_double, inf_double, inf_double));
+                                const vec3d         new_pos = vec3d{inf_double, inf_double, inf_double});
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 

@@ -51,11 +51,11 @@ std::vector<vec3d> n_sided_polygon(const unsigned int n,
         case CIRCLE:
         {
             assert(n>=3);
-            verts[0] = vec3d(1,0,0);
+            verts[0] = vec3d{1,0,0};
             for(unsigned int i=1; i<n; ++i)
             {
                 verts[i] = verts[i-1];
-                verts[i].rotate(vec3d(0,0,1), 2.0*M_PI/double(n));
+                verts[i].rotate(vec3d{0,0,1}, 2.0*M_PI/double(n));
             }
             break;
         }
@@ -67,10 +67,10 @@ std::vector<vec3d> n_sided_polygon(const unsigned int n,
             unsigned int b = n/4;   assert(a<b);
             unsigned int c = 2*n/4; assert(b<c);
             unsigned int d = 3*n/4; assert(c<d);
-            verts.at(a) = vec3d( 1, 1, 0);
-            verts.at(b) = vec3d(-1, 1, 0);
-            verts.at(c) = vec3d(-1,-1, 0);
-            verts.at(d) = vec3d( 1,-1, 0);
+            verts.at(a) = vec3d{ 1, 1, 0};
+            verts.at(b) = vec3d{-1, 1, 0};
+            verts.at(c) = vec3d{-1,-1, 0};
+            verts.at(d) = vec3d{ 1,-1, 0};
             for(unsigned int i=a+1; i<b; ++i)
             {
                 double t = (double)(i-a)/(double)(b-a);
@@ -97,11 +97,11 @@ std::vector<vec3d> n_sided_polygon(const unsigned int n,
         case STAR:
         {
             assert(n>=4);// && n%2==0);
-            verts[0] = vec3d(1,0,0);
+            verts[0] = vec3d{1,0,0};
             for(unsigned int i=1; i<n; ++i)
             {
                 verts[i] = verts[i-1];
-                verts[i].rotate(vec3d(0,0,1), 2.0*M_PI/double(n));
+                verts[i].rotate(vec3d{0,0,1}, 2.0*M_PI/double(n));
             }
             for(unsigned int i=1; i<n; i+=2) verts[i] -= 0.5*verts[i];
             break;

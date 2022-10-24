@@ -52,7 +52,7 @@ void polycube(Trimesh<M,V,E,P> & pc, const unsigned int genus)
     for(unsigned int r=0; r<=nrows; ++r)
     for(unsigned int c=0; c<=ncols; ++c)
     {
-        pc.vert_add(vec3d(c,r,0));
+        pc.vert_add(vec3d{c,r,0});
     }
 
     for(unsigned int r=0; r<=nrows; ++r)
@@ -72,7 +72,7 @@ void polycube(Trimesh<M,V,E,P> & pc, const unsigned int genus)
         }
     }
 
-    extrude_mesh(pc, vec3d(0,0,1));
+    extrude_mesh(pc, vec3d{0,0,1});
 }
 
 }

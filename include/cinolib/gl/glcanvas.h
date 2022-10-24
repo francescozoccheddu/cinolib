@@ -55,8 +55,8 @@ namespace cinolib
 
 	struct Marker
 	{
-		vec2d       pos_2d = vec2d(inf_double); // first choice to position the marker
-		vec3d       pos_3d = vec3d(inf_double); // used to position a 3D marker IFF pos_2d is INF
+		vec2d       pos_2d = vec2d{inf_double}; // first choice to position the marker
+		vec3d       pos_3d = vec3d{inf_double}; // used to position a 3D marker IFF pos_2d is INF
 		std::string text = "";                // text to render. Set to the empty string to not render the text
 		Color       color = Color::BLUE();     // color, for both the text and the disk
 		unsigned int        disk_radius = 1;                // disk radius (in pixels). Set to zero to not render the disk
@@ -68,7 +68,7 @@ namespace cinolib
 
 	struct Trackball
 	{
-		vec2d last_cursor_pos = vec2d(inf_double);
+		vec2d last_cursor_pos = vec2d{inf_double};
 		std::chrono::high_resolution_clock::time_point t_last_click;
 	};
 
@@ -115,7 +115,6 @@ namespace cinolib
 		float m_sidebarRelativeWidth{ 0.4f };
 		bool m_showSidebar{ false };
 		double m_dpiFactor;
-		static int s_windowsCount;
 		bool m_drawing{ false };
 
 		Trackball m_trackball{};
@@ -127,11 +126,11 @@ namespace cinolib
 
 		//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-		static const vec3d world_right, world_up, world_forward;
+		static constexpr vec3d world_right{1,0,0}, world_up{0,1,0}, world_forward{0,0,-1};
 
 		struct KeyBindings final
 		{
-			static const int none;
+			static constexpr int none{0};
 
 			int toggle_ortho{ GLFW_KEY_O };
 			int camera_faster{ GLFW_KEY_LEFT_SHIFT };
@@ -153,7 +152,7 @@ namespace cinolib
 
 		struct MouseBindings final
 		{
-			static const int none;
+			static constexpr int none{0};
 
 			int camera_pan{ GLFW_MOUSE_BUTTON_RIGHT };
 			int camera_zoom{ GLFW_MOUSE_BUTTON_MIDDLE };
@@ -222,7 +221,7 @@ namespace cinolib
 		// window will benefit from the functionalities implemented
 		// with ImGui, such as the side bar with visual controls and
 		// the visual markers
-		const bool owns_ImGui;
+		bool owns_ImGui;
 
 		//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 

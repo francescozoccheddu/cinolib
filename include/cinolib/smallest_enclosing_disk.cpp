@@ -170,7 +170,7 @@ void smallest_enclosing_disk(const std::vector<vec3d> & points,  // will drop z 
 
     vec2d center_2d;
     smallest_enclosing_disk(points_2d, center_2d, radius);
-    center = vec3d(center_2d.x(), center_2d.y(), 0);
+    center = vec3d{center_2d.x(), center_2d.y(), 0};
 }
 
 }

@@ -58,8 +58,8 @@ class Plane
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-        explicit Plane(const vec3d & point  = vec3d(0,0,0),
-                       const vec3d & normal = vec3d(0,0,1));
+        explicit Plane(const vec3d & point  = vec3d{0,0,0},
+                       const vec3d & normal = vec3d{0,0,1});
 
         explicit Plane(const vec3d & p0,
                        const vec3d & p1,

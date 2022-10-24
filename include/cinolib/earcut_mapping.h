@@ -99,7 +99,7 @@ struct EarcutMapping_data
     std::vector<unsigned int>  tris;   // serialized triangles (for both A and B)
 
     bool   strictly_convex = true;     // true if polygon B is strictly convex, false otherwise
-    vec3d  disk_center = vec3d(0,0,0); // center of a disk inside polygon B (used when strictly_convex is false)
+    vec3d  disk_center = vec3d{0,0,0}; // center of a disk inside polygon B (used when strictly_convex is false)
     float  disk_radius = 0.4f;          // radius of a disk inside polygon B (used when strictly_convex is false)
 };
 

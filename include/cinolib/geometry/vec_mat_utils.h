@@ -92,10 +92,10 @@ template<unsigned int d, typename T> CINO_INLINE void   vec_print    (const T * 
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-template<unsigned int r, unsigned int c, typename T> CINO_INLINE void mat_set         (      T m[][c], const std::initializer_list<T> & il);
+template<unsigned int r, unsigned int c, typename T> CINO_INLINE constexpr void mat_set         (      T m[][c], const std::initializer_list<T> & il);
 template<unsigned int d,         typename T> CINO_INLINE void mat_set_diag    (      T m[][d], const T val);
 template<unsigned int d,         typename T> CINO_INLINE void mat_set_diag    (      T m[][d], const T diag[]);
-template<unsigned int r, unsigned int c, typename T> CINO_INLINE void mat_set_col     (      T m[][c], const unsigned int i, const T col []);
+template<unsigned int r, unsigned int c, typename T> CINO_INLINE constexpr void mat_set_col     (      T m[][c], const unsigned int i, const T col []);
 template<unsigned int r, unsigned int c, typename T> CINO_INLINE void mat_set_row     (      T m[][c], const unsigned int i, const T row []);
 template<unsigned int d,         typename T> CINO_INLINE void mat_set_rot_2d  (      T m[][d], const T ang_rad);
 template<unsigned int d,         typename T> CINO_INLINE void mat_set_rot_3d  (      T m[][d], const T ang_rad, const T axis[]);

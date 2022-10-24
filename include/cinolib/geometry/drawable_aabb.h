@@ -47,8 +47,8 @@ class DrawableAABB : public AABB, public DrawableObject
 {
     public:
 
-        explicit DrawableAABB(const vec3d min = vec3d( inf_double,  inf_double,  inf_double),
-                              const vec3d max = vec3d(-inf_double, -inf_double, -inf_double));
+        explicit DrawableAABB(const vec3d min = vec3d{ inf_double,  inf_double,  inf_double},
+                              const vec3d max = vec3d{-inf_double, -inf_double, -inf_double});
         explicit DrawableAABB(const std::vector<vec3d> & p_list, const double scaling_factor = 1.0);
         explicit DrawableAABB(const std::vector<AABB>  & b_list, const double scaling_factor = 1.0);
 

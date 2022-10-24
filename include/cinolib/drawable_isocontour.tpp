@@ -86,7 +86,7 @@ template<class M, class V, class E, class P>
 CINO_INLINE
 vec3d DrawableIsocontour<M,V,E,P>::scene_center() const
 {
-    return vec3d();
+    return vec3d{};
 }
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::

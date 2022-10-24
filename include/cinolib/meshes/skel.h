@@ -213,7 +213,7 @@ class Skel
         {
             int vid_ptr = vid * 3;
             CHECK_BOUNDS(coords, vid_ptr);
-            return vec3d(coords[vid_ptr+0], coords[vid_ptr+1], coords[vid_ptr+2]);
+            return vec3d{coords[vid_ptr+0], coords[vid_ptr+1], coords[vid_ptr+2]};
         }
 
         inline seg segment(int sid) const
