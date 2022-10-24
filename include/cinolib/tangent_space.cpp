@@ -69,11 +69,11 @@ bool tangent_space_2d_coords(const vec3d & p0,  // 3D coordinates of triangle <p
                                    vec2d & P2)
 {
     vec3d u,v;
-    if(tangent_frame(p0,p1,p2,u,v))
+    if (tangent_frame(p0, p1, p2, u, v))
     {
-        P0 = vec2d{0,0};
-        P1 = vec2d((p1-p0).dot(u), (p1-p0).dot(v));
-        P2 = vec2d((p2-p0).dot(u), (p2-p0).dot(v));
+        P0 = vec2d{ 0,0 };
+        P1 = vec2d{ (p1 - p0).dot(u), (p1 - p0).dot(v) };
+        P2 = vec2d{ (p2 - p0).dot(u), (p2 - p0).dot(v) };
         return true;
     }
     P0 = P1 = P2 = vec2d{0,0};

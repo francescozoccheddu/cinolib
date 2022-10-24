@@ -197,7 +197,7 @@ void GLcanvas::handle_zoom(double amount, bool update_gl)
 CINO_INLINE
 void GLcanvas::handle_rotation(const vec2d& amount, bool update_gl)
 {
-    const vec2d angles(amount * get_camera_speed_modifier());
+    const vec2d angles{amount * get_camera_speed_modifier()};
     if (glfwGetKey(window, key_bindings.camera_inplace_rotation) == GLFW_PRESS)
     {
         camera.view.rotateFps(world_up, world_forward, angles.x(), angles.y());

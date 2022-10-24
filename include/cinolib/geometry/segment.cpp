@@ -170,9 +170,9 @@ bool Segment::intersects_triangle(const vec3d t[], const bool ignore_if_valid_co
 //{
 //    vec3d d = dir();
 
-//    vec3d n0(-d.y(),  d.x(),     0);
-//    vec3d n1(-d.z(),      0, d.x());
-//    vec3d n2(     0, -d.z(), d.y());
+//    vec3d n0{-d.y(),  d.x(),     0};
+//    vec3d n1{-d.z(),      0, d.x()};
+//    vec3d n2{     0, -d.z(), d.y()};
 
 //    std::vector<Plane> planes;
 //    if(n0.norm() > 0) planes.push_back(Plane(first, n0));

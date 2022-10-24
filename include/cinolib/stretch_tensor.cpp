@@ -89,7 +89,7 @@ void stretch_tensor(const vec3d & p0,    // reference triangle <p0,p1,p2>
 
     // right Green Cauchy deformation tensor C (multiplying F by its transpose cancels out rotations)
     mat2d U_ref({ u1_ref.x(), u2_ref.x(), u1_ref.y(), u2_ref.y() });
-    mat2d U({ u1.x(), u2.x(), u1.y(), u2.y() });
+    mat2d U{ u1.x(), u2.x(), u1.y(), u2.y() };
     mat2d F = U * U_ref.inverse();
     mat2d C = F.transpose() * F;
 

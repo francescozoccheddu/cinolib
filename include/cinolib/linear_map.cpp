@@ -66,8 +66,8 @@ void linear_map(const vec2d & u0,
 {
     // compute the transformation as T = |u1 v1| * |u0 v0|^-1
 
-    mat2d uv0({u0[0],v0[0], u0[1],v0[1]});
-    mat2d uv1({u1[0],v1[0], u1[1],v1[1]});
+    mat2d uv0{u0[0],v0[0], u0[1],v0[1]};
+    mat2d uv1{u1[0],v1[0], u1[1],v1[1]};
 
     T = uv1 * uv0.inverse();
 }

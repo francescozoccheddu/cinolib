@@ -166,7 +166,7 @@ void smallest_enclosing_disk(const std::vector<vec3d> & points,  // will drop z 
                                    double             & radius)
 {
     std::vector<vec2d> points_2d;
-    for(auto p : points) points_2d.push_back(vec2d(p.x(), p.y()));
+    for (auto p : points) points_2d.push_back(vec2d{ p.x(), p.y() });
 
     vec2d center_2d;
     smallest_enclosing_disk(points_2d, center_2d, radius);

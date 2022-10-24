@@ -441,9 +441,9 @@ void Hexmesh<M,V,E,F,P>::poly_local_frame(const unsigned int    pid,
                                                 mat3d & xyz)
 {
     auto verts = this->poly_verts(pid);
-    mat3d m({(verts[0]+verts[1]+verts[2]+verts[3])/4 - (verts[4]+verts[5]+verts[6]+verts[7])/4,
-             (verts[1]+verts[2]+verts[6]+verts[5])/4 - (verts[0]+verts[3]+verts[7]+verts[4])/4,
-             (verts[0]+verts[1]+verts[5]+verts[4])/4 - (verts[3]+verts[2]+verts[6]+verts[7])/4});
+    mat3d m{(verts[0]+verts[1]+verts[2]+verts[3])/4 - (verts[4]+verts[5]+verts[6]+verts[7])/4,
+            (verts[1]+verts[2]+verts[6]+verts[5])/4 - (verts[0]+verts[3]+verts[7]+verts[4])/4,
+            (verts[0]+verts[1]+verts[5]+verts[4])/4 - (verts[3]+verts[2]+verts[6]+verts[7])/4};
 
     // find the local frame that is closest to the segments joining the centroids of opposite hex faces
     mat3d u,v; vec3d s;

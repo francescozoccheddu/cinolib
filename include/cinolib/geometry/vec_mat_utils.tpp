@@ -1045,7 +1045,7 @@ template<typename T>
 CINO_INLINE
 vec3<T> operator*(const mat4<T>& mat, const vec3<T>& vec)
 {
-    vec4<T> prod(mat * vec.add_coord(1));
+    vec4<T> prod{mat * vec.add_coord(1)};
     prod /= prod[3];
     return prod.rem_coord();
 }

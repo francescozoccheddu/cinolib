@@ -99,9 +99,9 @@ void icosphere(const T             radius, // sphere radius
             unsigned int vid1 = *it; ++it;
             unsigned int vid2 = *it;
 
-            mat<3,1,T> v0(&(verts[vid0*3]));
-            mat<3,1,T> v1(&(verts[vid1*3]));
-            mat<3,1,T> v2(&(verts[vid2*3]));
+            mat<3,1,T> v0{&(verts[vid0*3])};
+            mat<3,1,T> v1{&(verts[vid1*3])};
+            mat<3,1,T> v2{&(verts[vid2*3])};
 
             // split edges and project midpoints to the sphere
             mat<3,1,T> v01 = v0 + v1;

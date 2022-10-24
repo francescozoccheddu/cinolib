@@ -58,9 +58,9 @@ DrawableTriangleSoup::DrawableTriangleSoup(const std::vector<double> & coords,
         unsigned int  v0_ptr  = 3*tris.at( i );
         unsigned int  v1_ptr  = 3*tris.at(i+1);
         unsigned int  v2_ptr  = 3*tris.at(i+2);
-        vec3d v0(coords.at(v0_ptr), coords.at(v0_ptr+1), coords.at(v0_ptr+2));
-        vec3d v1(coords.at(v1_ptr), coords.at(v1_ptr+1), coords.at(v1_ptr+2));
-        vec3d v2(coords.at(v2_ptr), coords.at(v2_ptr+1), coords.at(v2_ptr+2));
+        vec3d v0{coords.at(v0_ptr), coords.at(v0_ptr+1), coords.at(v0_ptr+2)};
+        vec3d v1{coords.at(v1_ptr), coords.at(v1_ptr+1), coords.at(v1_ptr+2)};
+        vec3d v2{coords.at(v2_ptr), coords.at(v2_ptr+1), coords.at(v2_ptr+2)};
         drawlist.tri_coords.push_back(static_cast<float>(v0.x()));
         drawlist.tri_coords.push_back(static_cast<float>(v0.y()));
         drawlist.tri_coords.push_back(static_cast<float>(v0.z()));

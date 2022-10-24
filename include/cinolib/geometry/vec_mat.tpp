@@ -129,8 +129,13 @@ constexpr mat<r, c, T>::mat(const T* values) : _vec{}
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 template<unsigned int r, unsigned int c, class T>
-constexpr mat<r, c, T>::mat() : _vec{}
-{}
+constexpr mat<r, c, T>::mat() 
+{
+    for (std::size_t i{}; i < r * c; i++)
+    {
+        _vec[i] = T{};
+    }
+}
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -138,7 +143,7 @@ template<unsigned int r, unsigned int c, class T>
 CINO_INLINE
 mat<r,c,T> mat<r,c,T>::ZERO()
 {
-    return mat<r,c,T>((T)0);
+    return mat<r, c, T>{};
 }
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -147,7 +152,7 @@ template<unsigned int r, unsigned int c, class T>
 CINO_INLINE
 mat<r,c,T> mat<r,c,T>::ONES()
 {
-    return mat<r,c,T>((T)1);
+    return mat<r, c, T>{(T)1};
 }
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::

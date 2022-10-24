@@ -55,9 +55,9 @@ std::vector<Plane> Line::to_planes() const
 {
     vec3d d = dir();
 
-    vec3d n0(-d.y(),  d.x(),     0);
-    vec3d n1(-d.z(),      0, d.x());
-    vec3d n2(     0, -d.z(), d.y());
+    vec3d n0{-d.y(),  d.x(),     0};
+    vec3d n1{-d.z(),      0, d.x()};
+    vec3d n2{     0, -d.z(), d.y()};
 
     std::vector<Plane> planes;
     if (n0.norm() > 0) planes.push_back(Plane(p0, n0));

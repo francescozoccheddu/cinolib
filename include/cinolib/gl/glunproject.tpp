@@ -50,10 +50,10 @@ bool gl_unproject(const mat<2,1,T>   & p_in,       // 2d point in screen space
     // depth must be in the closed range (0,1)
     if(depth<=0 || depth>=1) return false;
 
-    vec4d p({(p_in[0]-viewport[0])/viewport[2]*2 - 1,
-             (p_in[1]-viewport[1])/viewport[3]*2 - 1,
-                                         depth*2 - 1,
-                                                    1});
+    vec4d p{(p_in[0]-viewport[0])/viewport[2]*2 - 1,
+            (p_in[1]-viewport[1])/viewport[3]*2 - 1,
+                                        depth*2 - 1,
+                                                  1};
     vec4d res = (projection * modelview).inverse() * p;
 
     // convert from homogeneous to cartesian coordinates
