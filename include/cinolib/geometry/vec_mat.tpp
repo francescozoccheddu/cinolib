@@ -84,14 +84,26 @@ template<unsigned int r, unsigned int c, class T>
 CINO_INLINE
 constexpr mat<r,c,T>::mat(const std::initializer_list<mat<r,1,T>> & il) : _vec{}
 {
-    assert(il.size()==c);
+    assert(il.size() <= c);
     std::size_t ci{};
     for (const mat<r, 1, T>& col : il)
     {
-        ci++;
         for (std::size_t ri{}; ri < r; ri++)
         {
-            _mat[ri++][ci] = col._vec[ri];
+            _mat[ri][ci] = col._vec[ri];
+        }
+        ci++;
+    }
+    if (ci < c)
+    {
+        const mat<r, 1, T> last{ il.size() ? *(il.end() - 1) : mat<r, 1, T>{} };
+        while (ci < c)
+        {
+            for (std::size_t ri{}; ri < r; ri++)
+            {
+                _mat[ri][ci] = last[ri];
+            }
+            ci++;
         }
     }
 }
