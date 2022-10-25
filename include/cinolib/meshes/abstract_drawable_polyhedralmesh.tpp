@@ -99,6 +99,8 @@ void AbstractDrawablePolyhedralMesh<Mesh>::updateGL_marked()
 
     for(unsigned int fid=0; fid<this->num_faces(); ++fid)
     {
+        unsigned int pid_beneath;
+        if (!this->face_is_visible(fid, pid_beneath)) continue;
 
         const bool is_face_marked{ this->face_data(fid).flags[MARKED] };
         const bool is_poly_marked{ std::any_of(this->adj_f2p(fid).begin(), this->adj_f2p(fid).end(), [this](unsigned int pid) { return this->poly_data(pid).flags[MARKED]; }) };
@@ -108,12 +110,18 @@ void AbstractDrawablePolyhedralMesh<Mesh>::updateGL_marked()
         }
 
         Color& mark_color{ is_face_marked ? marked_face_color : marked_poly_color };
+        const vec3d n = this->poly_face_normal(pid_beneath, fid);
 
         for(unsigned int i=0; i<this->face_tessellation(fid).size()/3; ++i)
         {
             unsigned int vid0 = this->face_tessellation(fid).at(3*i+0);
             unsigned int vid1 = this->face_tessellation(fid).at(3*i+1);
             unsigned int vid2 = this->face_tessellation(fid).at(3*i+2);
+
+            if (this->poly_face_is_CW(pid_beneath, fid))
+            {
+                std::swap(vid0, vid2);
+            }
 
             int base_addr = drawlist_marked.tri_coords.size()/3;
 
@@ -131,15 +139,15 @@ void AbstractDrawablePolyhedralMesh<Mesh>::updateGL_marked()
             drawlist_marked.tri_coords.push_back(this->vert(vid2).y());
             drawlist_marked.tri_coords.push_back(this->vert(vid2).z());
 
-            drawlist_marked.tri_v_norms.push_back(this->face_data(fid).normal.x());
-            drawlist_marked.tri_v_norms.push_back(this->face_data(fid).normal.y());
-            drawlist_marked.tri_v_norms.push_back(this->face_data(fid).normal.z());
-            drawlist_marked.tri_v_norms.push_back(this->face_data(fid).normal.x());
-            drawlist_marked.tri_v_norms.push_back(this->face_data(fid).normal.y());
-            drawlist_marked.tri_v_norms.push_back(this->face_data(fid).normal.z());
-            drawlist_marked.tri_v_norms.push_back(this->face_data(fid).normal.x());
-            drawlist_marked.tri_v_norms.push_back(this->face_data(fid).normal.y());
-            drawlist_marked.tri_v_norms.push_back(this->face_data(fid).normal.z());
+            drawlist_marked.tri_v_norms.push_back(n.x());
+            drawlist_marked.tri_v_norms.push_back(n.y());
+            drawlist_marked.tri_v_norms.push_back(n.z());
+            drawlist_marked.tri_v_norms.push_back(n.x());
+            drawlist_marked.tri_v_norms.push_back(n.y());
+            drawlist_marked.tri_v_norms.push_back(n.z());
+            drawlist_marked.tri_v_norms.push_back(n.x());
+            drawlist_marked.tri_v_norms.push_back(n.y());
+            drawlist_marked.tri_v_norms.push_back(n.z());
 
             drawlist_marked.tri_v_colors.push_back(mark_color.r());
             drawlist_marked.tri_v_colors.push_back(mark_color.g());
