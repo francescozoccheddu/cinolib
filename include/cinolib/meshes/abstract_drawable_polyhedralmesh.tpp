@@ -40,6 +40,7 @@
 #include <cinolib/color.h>
 #include <unordered_set>
 #include <algorithm>
+#include <utility>
 
 namespace cinolib
 {
@@ -214,6 +215,11 @@ void AbstractDrawablePolyhedralMesh<Mesh>::updateGL_out()
             unsigned int vid0 = this->face_tessellation(fid).at(3*i+0);
             unsigned int vid1 = this->face_tessellation(fid).at(3*i+1);
             unsigned int vid2 = this->face_tessellation(fid).at(3*i+2);
+
+            if (this->poly_face_is_CW(pid_beneath, fid))
+            {
+                std::swap(vid0, vid2);
+            }
 
             // average AO with adjacent visible faces having dihedral angle lower than 60 degrees
             auto  vid0_vis_fids = this->vert_adj_visible_faces(vid0, n, 60.0);
