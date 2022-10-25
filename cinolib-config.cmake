@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.14)
 
-# https://cmake.org/cmake/help/git-stage/module/FetchContent.html
 include(FetchContent)
+set(FETCHCONTENT_QUIET FALSE)
 
 #::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 # CORE LIBRARY ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::

@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.2)
+cmake_minimum_required(VERSION 3.14)
 
 project(examples)
 
@@ -13,7 +13,7 @@ set(CINOLIB_USES_VTK               ON ) # optional, if added VTK formats will be
 
 # pass cinolib and the external dependencies to all examples
 set (CINOLIB_HEADER_ONLY ON)
-set (cinolib_DIR "${PROJECT_SOURCE_DIR}/..")
+set (cinolib_DIR "${CMAKE_CURRENT_LIST_DIR}/..")
 find_package(cinolib REQUIRED)
 link_libraries(cinolib)
 
