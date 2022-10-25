@@ -36,7 +36,7 @@
 #include <cinolib/gl/glcanvas.h>
 #include <cinolib/gl/trackball.h>
 #include <cinolib/how_many_seconds.h>
-#include <cinolib/fonts/droid_sans.h>
+#include <cinolib/fonts/droid_sans.hpp>
 #include <../external/imgui/imgui_impl_opengl2.h>
 #include <../external/imgui/imgui_impl_glfw.h>
 #include <cinolib/gl/draw_arrow.h>
@@ -48,180 +48,12 @@
 #include <string>
 #include <cstring>
 #include <cmath>
+#include <iomanip>
+#include <cctype>
+#include <algorithm>
 
 namespace cinolib
 {
-
-CINO_INLINE
-const char* GLcanvas::KeyBinding::keyName(int key)
-{
-    const char* key_name{ glfwGetKeyName(key, 0) };
-    if (!key)
-    {
-        return "no key";
-    }
-    if (key_name)
-    {
-        return key_name;
-    }
-    switch (key)
-    {
-        case GLFW_KEY_LEFT_SHIFT:
-            return "left shift";
-        case GLFW_KEY_LEFT_ALT:
-            return "left alt";
-        case GLFW_KEY_LEFT_CONTROL:
-            return "left control";
-        case GLFW_KEY_TAB:
-            return "tab";
-        case GLFW_KEY_ESCAPE:
-            return "esc";
-    }
-    return "unknown";
-}
-
-CINO_INLINE
-const char* GLcanvas::KeyBinding::modName(int modifier)
-{
-    switch (modifier)
-    {
-        case GLFW_MOD_ALT:
-            return "alt";
-        case GLFW_MOD_CAPS_LOCK:
-            return "caps lock";
-        case GLFW_MOD_CONTROL:
-            return "control";
-        case GLFW_MOD_NUM_LOCK:
-            return "num lock";
-        case GLFW_MOD_SHIFT:
-            return "shift";
-        case GLFW_MOD_SUPER:
-            return "super";
-    }
-    return "unknown";
-}
-
-CINO_INLINE
-std::string GLcanvas::KeyBinding::modNames(int modifiers)
-{
-    static constexpr std::array<int, 6> flags{ GLFW_MOD_ALT, GLFW_MOD_CAPS_LOCK, GLFW_MOD_CONTROL, GLFW_MOD_NUM_LOCK, GLFW_MOD_SHIFT, GLFW_MOD_SUPER };
-    std::string out{};
-    for (int flag : flags)
-    {
-        if (modifiers & flag)
-        {
-            if (!out.empty())
-            {
-                out += " + ";
-            }
-            out += modName(flag);
-        }
-    }
-    return out;
-}
-
-CINO_INLINE
-std::string GLcanvas::KeyBinding::name() const
-{
-    if (modifiers)
-    {
-        return modNames(modifiers) + " + " + keyName(key);
-    }
-    return keyName(key);
-}
-
-CINO_INLINE
-constexpr GLcanvas::KeyBinding GLcanvas::KeyBinding::none()
-{
-    return {0};
-}
-
-CINO_INLINE
-bool GLcanvas::KeyBinding::operator==(const KeyBinding& other) const
-{
-    return other.key == key && other.modifiers == modifiers; // use defaulted spacechip operator if cinolib ever moves to c++20
-}
-
-//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
-CINO_INLINE
-void GLcanvas::KeyBindings::print(int key, const char* desc)
-{
-    print(KeyBinding::keyName(key), desc);
-}
-
-CINO_INLINE
-void GLcanvas::KeyBindings::print(KeyBinding binding, const char* desc)
-{
-    print(binding.name().c_str(), desc);
-}
-
-CINO_INLINE
-void GLcanvas::KeyBindings::print(const char* binding, const char* desc)
-{
-    std::cout << binding << ": " << desc << std::endl;
-}
-
-CINO_INLINE
-void GLcanvas::KeyBindings::print() const
-{
-    print(toggle_sidebar, "toggle sidebar");
-    print(toggle_axes, "toggle axes");
-    print(toggle_ortho, "toggle perspective/orthographic camera");
-    print(reset_camera, "reset camera");
-    print(look_at_center, "look at center");
-    print(store_camera, "copy camera to clipboard");
-    print(restore_camera, "restore camera from clipboard");
-    print(camera_faster, "move camera faster (hold down)");
-    print(camera_slower, "move camera slower (hold down)");
-    print(camera_inplace_zoom, "change fov instead of moving forward when zooming (hold down)");
-    print(camera_inplace_rotation, "rotate camera around itself instead of the center (hold down)");
-    print(camera_look_at_minus_x, "look at -x");
-    print(camera_look_at_minus_y, "look (almost) at -y");
-    print(camera_look_at_minus_z, "look at -z");
-    print(camera_look_at_plus_x, "look at +x");
-    print(camera_look_at_plus_y, "look (almost) at +y");
-    print(camera_look_at_plus_z, "look at +z");
-    if (pan_with_arrow_keys)
-    {
-        print("arrows", "pan");
-    }
-    if (pan_and_zoom_with_numpad_keys)
-    {
-        print("numpad", "pan and zoom");
-    }
-}
-
-CINO_INLINE
-void GLcanvas::MouseBindings::print() const
-{
-    auto binding = [](const char* binding, const char* desc)
-    {
-        std::cout << binding << ": " << desc << '\n';
-    };
-    auto button = [&binding](int button, const char* desc)
-    {
-        switch (button)
-        {
-            case GLFW_MOUSE_BUTTON_LEFT:
-                binding("left mouse button", desc);
-                break;
-            case GLFW_MOUSE_BUTTON_MIDDLE:
-                binding("middle mouse button", desc);
-                break;
-            case GLFW_MOUSE_BUTTON_RIGHT:
-                binding("right mouse button", desc);
-                break;
-        }
-    };
-    button(camera_pan, "pan (drag)");
-    button(camera_zoom, "zoom (drag)");
-    button(camera_rotate, "rotate camera (drag)");
-    if (zoom_with_wheel)
-    {
-        binding("scroll wheel", "zoom");
-    }
-}
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -529,10 +361,10 @@ GLcanvas::GLcanvas(const int width, const int height, const int font_size)
         io.FontGlobalScale = 0.1f; // compensate for high-res fonts
     }
 
-    std::cout << "--------------\n";
+    std::cout << "---- GLcanvas key bindings ----\n";
     key_bindings.print();
     mouse_bindings.print();
-    std::cout << "--------------\n";
+    std::cout << "-------------------------------\n";
 
     reset_camera();
 }

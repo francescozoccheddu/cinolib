@@ -37,6 +37,7 @@
 #define CINO_GLCANVAS_H
 
 #include <cinolib/gl/gl_glfw.h>
+#include <cinolib/gl/key_bindings.hpp>
 #include <cinolib/drawable_object.h>
 #include <cinolib/gl/side_bar_item.h>
 #include <cinolib/gl/canvas_gui_item.h>
@@ -128,71 +129,8 @@ namespace cinolib
 
 		static constexpr vec3d world_right{1,0,0}, world_up{0,1,0}, world_forward{0,0,-1};
 
-		struct KeyBinding final
-		{
-
-			static const char* keyName(int key);
-			static const char* modName(int modifier);
-			static std::string modNames(int modifiers);
-
-			constexpr static KeyBinding none();
-
-			int key;
-			int modifiers;
-
-			constexpr KeyBinding(int key, int modifiers = 0) : key{key}, modifiers{modifiers} {}
-
-			bool operator==(const KeyBinding& other) const;
-
-			std::string name() const;
-
-		};
-
-		struct KeyBindings final
-		{
-
-			static void print(int key, const char* desc);
-			static void print(KeyBinding key, const char* desc);
-			static void print(const char* binding, const char* desc);
-
-			static constexpr int none{0};
-
-			KeyBinding toggle_ortho{ GLFW_KEY_O };
-			int camera_faster{ GLFW_KEY_LEFT_SHIFT };
-			int camera_slower{ GLFW_KEY_LEFT_CONTROL };
-			int camera_inplace_zoom{ GLFW_KEY_LEFT_ALT };
-			int camera_inplace_rotation{ GLFW_KEY_LEFT_ALT };
-			KeyBinding reset_camera{ GLFW_KEY_R };
-			KeyBinding look_at_center{ GLFW_KEY_L };
-			KeyBinding toggle_axes{ GLFW_KEY_A };
-			KeyBinding toggle_sidebar{ GLFW_KEY_TAB };
-			KeyBinding store_camera{ GLFW_KEY_C };
-			KeyBinding restore_camera{ GLFW_KEY_V };
-			KeyBinding camera_look_at_plus_x{ GLFW_KEY_X, GLFW_MOD_ALT };
-			KeyBinding camera_look_at_plus_y{ GLFW_KEY_Y, GLFW_MOD_ALT };
-			KeyBinding camera_look_at_plus_z{ GLFW_KEY_Z, GLFW_MOD_ALT };
-			KeyBinding camera_look_at_minus_x{ GLFW_KEY_X, GLFW_MOD_ALT | GLFW_MOD_SHIFT };
-			KeyBinding camera_look_at_minus_y{ GLFW_KEY_Y, GLFW_MOD_ALT | GLFW_MOD_SHIFT };
-			KeyBinding camera_look_at_minus_z{ GLFW_KEY_Z, GLFW_MOD_ALT | GLFW_MOD_SHIFT };
-			bool pan_with_arrow_keys{ true };
-			bool pan_and_zoom_with_numpad_keys{ true };
-
-			void print() const;
-
-		} key_bindings;
-
-		struct MouseBindings final
-		{
-			static constexpr int none{0};
-
-			int camera_pan{ GLFW_MOUSE_BUTTON_RIGHT };
-			int camera_zoom{ GLFW_MOUSE_BUTTON_MIDDLE };
-			int camera_rotate{ GLFW_MOUSE_BUTTON_LEFT };
-			bool zoom_with_wheel{ true };
-
-			void print() const;
-
-		} mouse_bindings;
+		KeyBindings key_bindings;
+		MouseBindings mouse_bindings;
 
 		struct CameraSettings final
 		{

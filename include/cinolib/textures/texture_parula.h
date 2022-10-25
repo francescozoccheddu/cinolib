@@ -41,6 +41,7 @@
 namespace cinolib
 {
 
+// TODO: split into separate hpp and cpp files (see fonts/droid_sans.hpp)
 static const uint8_t parula_texture1D[192] =
 {
     53, 42, 134,

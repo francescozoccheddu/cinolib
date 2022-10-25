@@ -41,6 +41,7 @@
 namespace cinolib
 {
 
+// TODO: split into separate hpp and cpp files (see fonts/droid_sans.hpp)
 static const uint8_t hsv_texture1D_with_isolines[768] =
 {
     0, 0, 255,
