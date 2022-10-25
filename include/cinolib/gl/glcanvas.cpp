@@ -52,12 +52,6 @@
 namespace cinolib
 {
 
-CINO_INLINE
-constexpr GLcanvas::KeyBinding::KeyBinding(int key, int modifiers) : key{key}, modifiers{modifiers}
-{
-
-}
-
 const char* GLcanvas::KeyBinding::keyName(int key)
 {
     const char* key_name{ glfwGetKeyName(key, 0) };
@@ -927,7 +921,7 @@ void GLcanvas::draw_side_bar()
     for(auto item : side_bar_items)
     {
         ImGui::SetNextItemOpen(item->show_open, ImGuiCond_Always);
-        if(item->show_open = ImGui::TreeNode(item->name.c_str()))
+        if((item->show_open = ImGui::TreeNode(item->name.c_str())))
         {
             item->draw();
             ImGui::TreePop();

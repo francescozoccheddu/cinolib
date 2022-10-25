@@ -140,7 +140,7 @@ namespace cinolib
 			int key;
 			int modifiers;
 
-			constexpr KeyBinding(int key, int modifiers = 0);
+			constexpr KeyBinding(int key, int modifiers = 0) : key{key}, modifiers{modifiers} {}
 
 			bool operator==(const KeyBinding& other) const;
 

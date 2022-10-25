@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.2)
 # https://cmake.org/cmake/help/git-stage/module/FetchContent.html
 include(FetchContent)
 
+cmake_policy(SET CMP0077 NEW)
 option(CINOLIB_HEADER_ONLY "Use cinolib as header-only library" OFF)
 
 #::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
