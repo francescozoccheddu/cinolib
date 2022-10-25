@@ -52,6 +52,7 @@
 namespace cinolib
 {
 
+CINO_INLINE
 const char* GLcanvas::KeyBinding::keyName(int key)
 {
     const char* key_name{ glfwGetKeyName(key, 0) };
@@ -79,6 +80,7 @@ const char* GLcanvas::KeyBinding::keyName(int key)
     return "unknown";
 }
 
+CINO_INLINE
 const char* GLcanvas::KeyBinding::modName(int modifier)
 {
     switch (modifier)
@@ -99,6 +101,7 @@ const char* GLcanvas::KeyBinding::modName(int modifier)
     return "unknown";
 }
 
+CINO_INLINE
 std::string GLcanvas::KeyBinding::modNames(int modifiers)
 {
     static constexpr std::array<int, 6> flags{ GLFW_MOD_ALT, GLFW_MOD_CAPS_LOCK, GLFW_MOD_CONTROL, GLFW_MOD_NUM_LOCK, GLFW_MOD_SHIFT, GLFW_MOD_SUPER };
@@ -117,6 +120,7 @@ std::string GLcanvas::KeyBinding::modNames(int modifiers)
     return out;
 }
 
+CINO_INLINE
 std::string GLcanvas::KeyBinding::name() const
 {
     if (modifiers)
@@ -126,11 +130,13 @@ std::string GLcanvas::KeyBinding::name() const
     return keyName(key);
 }
 
+CINO_INLINE
 constexpr GLcanvas::KeyBinding GLcanvas::KeyBinding::none()
 {
     return {0};
 }
 
+CINO_INLINE
 bool GLcanvas::KeyBinding::operator==(const KeyBinding& other) const
 {
     return other.key == key && other.modifiers == modifiers; // use defaulted spacechip operator if cinolib ever moves to c++20
