@@ -115,14 +115,14 @@ void AbstractDrawablePolygonMesh<Mesh>::updateGL_marked()
         drawlist_marked.seg_coords.push_back(vid1.y());
         drawlist_marked.seg_coords.push_back(vid1.z());
 
-        drawlist_marked.seg_colors.push_back(marked_edge_color.r);
-        drawlist_marked.seg_colors.push_back(marked_edge_color.g);
-        drawlist_marked.seg_colors.push_back(marked_edge_color.b);
-        drawlist_marked.seg_colors.push_back(marked_edge_color.a);
-        drawlist_marked.seg_colors.push_back(marked_edge_color.r);
-        drawlist_marked.seg_colors.push_back(marked_edge_color.g);
-        drawlist_marked.seg_colors.push_back(marked_edge_color.b);
-        drawlist_marked.seg_colors.push_back(marked_edge_color.a);
+        drawlist_marked.seg_colors.push_back(marked_edge_color.r());
+        drawlist_marked.seg_colors.push_back(marked_edge_color.g());
+        drawlist_marked.seg_colors.push_back(marked_edge_color.b());
+        drawlist_marked.seg_colors.push_back(marked_edge_color.a());
+        drawlist_marked.seg_colors.push_back(marked_edge_color.r());
+        drawlist_marked.seg_colors.push_back(marked_edge_color.g());
+        drawlist_marked.seg_colors.push_back(marked_edge_color.b());
+        drawlist_marked.seg_colors.push_back(marked_edge_color.a());
     }
 }
 
@@ -152,10 +152,10 @@ void AbstractDrawablePolygonMesh<Mesh>::updateGL_mesh()
             drawlist.tri_coords.push_back(this->vert(vid).y());
             drawlist.tri_coords.push_back(this->vert(vid).z());
 
-            drawlist.tri_v_colors.push_back(this->vert_data(vid).color.r);
-            drawlist.tri_v_colors.push_back(this->vert_data(vid).color.g);
-            drawlist.tri_v_colors.push_back(this->vert_data(vid).color.b);
-            drawlist.tri_v_colors.push_back(this->vert_data(vid).color.a);
+            drawlist.tri_v_colors.push_back(this->vert_data(vid).color.r());
+            drawlist.tri_v_colors.push_back(this->vert_data(vid).color.g());
+            drawlist.tri_v_colors.push_back(this->vert_data(vid).color.b());
+            drawlist.tri_v_colors.push_back(this->vert_data(vid).color.a());
         }
     }
     else
@@ -256,50 +256,50 @@ void AbstractDrawablePolygonMesh<Mesh>::updateGL_mesh()
 
                 if (drawlist.draw_mode & DRAW_TRI_FACECOLOR) // replicate f color on each vertex
                 {
-                    drawlist.tri_v_colors.push_back(this->poly_data(pid).color.r*AO_vid0);
-                    drawlist.tri_v_colors.push_back(this->poly_data(pid).color.g*AO_vid0);
-                    drawlist.tri_v_colors.push_back(this->poly_data(pid).color.b*AO_vid0);
-                    drawlist.tri_v_colors.push_back(this->poly_data(pid).color.a);
-                    drawlist.tri_v_colors.push_back(this->poly_data(pid).color.r*AO_vid1);
-                    drawlist.tri_v_colors.push_back(this->poly_data(pid).color.g*AO_vid1);
-                    drawlist.tri_v_colors.push_back(this->poly_data(pid).color.b*AO_vid1);
-                    drawlist.tri_v_colors.push_back(this->poly_data(pid).color.a);
-                    drawlist.tri_v_colors.push_back(this->poly_data(pid).color.r*AO_vid2);
-                    drawlist.tri_v_colors.push_back(this->poly_data(pid).color.g*AO_vid2);
-                    drawlist.tri_v_colors.push_back(this->poly_data(pid).color.b*AO_vid2);
-                    drawlist.tri_v_colors.push_back(this->poly_data(pid).color.a);
+                    drawlist.tri_v_colors.push_back(this->poly_data(pid).color.r()*AO_vid0);
+                    drawlist.tri_v_colors.push_back(this->poly_data(pid).color.g()*AO_vid0);
+                    drawlist.tri_v_colors.push_back(this->poly_data(pid).color.b()*AO_vid0);
+                    drawlist.tri_v_colors.push_back(this->poly_data(pid).color.a());
+                    drawlist.tri_v_colors.push_back(this->poly_data(pid).color.r()*AO_vid1);
+                    drawlist.tri_v_colors.push_back(this->poly_data(pid).color.g()*AO_vid1);
+                    drawlist.tri_v_colors.push_back(this->poly_data(pid).color.b()*AO_vid1);
+                    drawlist.tri_v_colors.push_back(this->poly_data(pid).color.a());
+                    drawlist.tri_v_colors.push_back(this->poly_data(pid).color.r()*AO_vid2);
+                    drawlist.tri_v_colors.push_back(this->poly_data(pid).color.g()*AO_vid2);
+                    drawlist.tri_v_colors.push_back(this->poly_data(pid).color.b()*AO_vid2);
+                    drawlist.tri_v_colors.push_back(this->poly_data(pid).color.a());
                 }
                 else if (drawlist.draw_mode & DRAW_TRI_VERTCOLOR)
                 {
-                    drawlist.tri_v_colors.push_back(this->vert_data(vid0).color.r*AO_vid0);
-                    drawlist.tri_v_colors.push_back(this->vert_data(vid0).color.g*AO_vid0);
-                    drawlist.tri_v_colors.push_back(this->vert_data(vid0).color.b*AO_vid0);
-                    drawlist.tri_v_colors.push_back(this->vert_data(vid0).color.a);
-                    drawlist.tri_v_colors.push_back(this->vert_data(vid1).color.r*AO_vid1);
-                    drawlist.tri_v_colors.push_back(this->vert_data(vid1).color.g*AO_vid1);
-                    drawlist.tri_v_colors.push_back(this->vert_data(vid1).color.b*AO_vid1);
-                    drawlist.tri_v_colors.push_back(this->vert_data(vid1).color.a);
-                    drawlist.tri_v_colors.push_back(this->vert_data(vid2).color.r*AO_vid2);
-                    drawlist.tri_v_colors.push_back(this->vert_data(vid2).color.g*AO_vid2);
-                    drawlist.tri_v_colors.push_back(this->vert_data(vid2).color.b*AO_vid2);
-                    drawlist.tri_v_colors.push_back(this->vert_data(vid2).color.a);
+                    drawlist.tri_v_colors.push_back(this->vert_data(vid0).color.r()*AO_vid0);
+                    drawlist.tri_v_colors.push_back(this->vert_data(vid0).color.g()*AO_vid0);
+                    drawlist.tri_v_colors.push_back(this->vert_data(vid0).color.b()*AO_vid0);
+                    drawlist.tri_v_colors.push_back(this->vert_data(vid0).color.a());
+                    drawlist.tri_v_colors.push_back(this->vert_data(vid1).color.r()*AO_vid1);
+                    drawlist.tri_v_colors.push_back(this->vert_data(vid1).color.g()*AO_vid1);
+                    drawlist.tri_v_colors.push_back(this->vert_data(vid1).color.b()*AO_vid1);
+                    drawlist.tri_v_colors.push_back(this->vert_data(vid1).color.a());
+                    drawlist.tri_v_colors.push_back(this->vert_data(vid2).color.r()*AO_vid2);
+                    drawlist.tri_v_colors.push_back(this->vert_data(vid2).color.g()*AO_vid2);
+                    drawlist.tri_v_colors.push_back(this->vert_data(vid2).color.b()*AO_vid2);
+                    drawlist.tri_v_colors.push_back(this->vert_data(vid2).color.a());
                 }
                 else if (drawlist.draw_mode & DRAW_TRI_QUALITY)
                 {
                     float q = this->poly_data(pid).quality;
                     Color c = Color::red_white_blue_ramp_01(q);
-                    drawlist.tri_v_colors.push_back(c.r*AO_vid0);
-                    drawlist.tri_v_colors.push_back(c.g*AO_vid0);
-                    drawlist.tri_v_colors.push_back(c.b*AO_vid0);
-                    drawlist.tri_v_colors.push_back(c.a);
-                    drawlist.tri_v_colors.push_back(c.r*AO_vid1);
-                    drawlist.tri_v_colors.push_back(c.g*AO_vid1);
-                    drawlist.tri_v_colors.push_back(c.b*AO_vid1);
-                    drawlist.tri_v_colors.push_back(c.a);
-                    drawlist.tri_v_colors.push_back(c.r*AO_vid2);
-                    drawlist.tri_v_colors.push_back(c.g*AO_vid2);
-                    drawlist.tri_v_colors.push_back(c.b*AO_vid2);
-                    drawlist.tri_v_colors.push_back(c.a);
+                    drawlist.tri_v_colors.push_back(c.r()*AO_vid0);
+                    drawlist.tri_v_colors.push_back(c.g()*AO_vid0);
+                    drawlist.tri_v_colors.push_back(c.b()*AO_vid0);
+                    drawlist.tri_v_colors.push_back(c.a());
+                    drawlist.tri_v_colors.push_back(c.r()*AO_vid1);
+                    drawlist.tri_v_colors.push_back(c.g()*AO_vid1);
+                    drawlist.tri_v_colors.push_back(c.b()*AO_vid1);
+                    drawlist.tri_v_colors.push_back(c.a());
+                    drawlist.tri_v_colors.push_back(c.r()*AO_vid2);
+                    drawlist.tri_v_colors.push_back(c.g()*AO_vid2);
+                    drawlist.tri_v_colors.push_back(c.b()*AO_vid2);
+                    drawlist.tri_v_colors.push_back(c.a());
                 }
             }
         }
@@ -331,14 +331,14 @@ void AbstractDrawablePolygonMesh<Mesh>::updateGL_mesh()
             drawlist.seg_coords.push_back(vid1.y());
             drawlist.seg_coords.push_back(vid1.z());
 
-            drawlist.seg_colors.push_back(this->edge_data(eid).color.r);
-            drawlist.seg_colors.push_back(this->edge_data(eid).color.g);
-            drawlist.seg_colors.push_back(this->edge_data(eid).color.b);
-            drawlist.seg_colors.push_back(this->edge_data(eid).color.a);
-            drawlist.seg_colors.push_back(this->edge_data(eid).color.r);
-            drawlist.seg_colors.push_back(this->edge_data(eid).color.g);
-            drawlist.seg_colors.push_back(this->edge_data(eid).color.b);
-            drawlist.seg_colors.push_back(this->edge_data(eid).color.a);
+            drawlist.seg_colors.push_back(this->edge_data(eid).color.r());
+            drawlist.seg_colors.push_back(this->edge_data(eid).color.g());
+            drawlist.seg_colors.push_back(this->edge_data(eid).color.b());
+            drawlist.seg_colors.push_back(this->edge_data(eid).color.a());
+            drawlist.seg_colors.push_back(this->edge_data(eid).color.r());
+            drawlist.seg_colors.push_back(this->edge_data(eid).color.g());
+            drawlist.seg_colors.push_back(this->edge_data(eid).color.b());
+            drawlist.seg_colors.push_back(this->edge_data(eid).color.a());
         }
     }
 }
@@ -549,7 +549,7 @@ template<class Mesh>
 CINO_INLINE
 void AbstractDrawablePolygonMesh<Mesh>::show_marked_edge_transparency(const float alpha)
 {
-    marked_edge_color.a = alpha;
+    marked_edge_color.a() = alpha;
     updateGL_marked();
 }
 

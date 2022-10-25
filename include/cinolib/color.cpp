@@ -48,7 +48,7 @@ namespace cinolib
 CINO_INLINE
 std::ostream & operator<<(std::ostream & in, const Color & c)
 {
-    in << "r:" << c.r << " g:" << c.g << " b:" << c.b << " a:" << c.a << " ";
+    in << "r:" << c.r() << " g:" << c.g() << " b:" << c.b() << " a:" << c.a() << " ";
     return in;
 }
 
@@ -65,9 +65,9 @@ const float & Color::operator[](const unsigned int i) const
 CINO_INLINE
 Color & Color::operator*=(const double d)
 {
-    r*=d;
-    g*=d;
-    b*=d;
+    r() *= d;
+    g() *= d;
+    b() *= d;
     return *this;
 }
 
@@ -140,17 +140,17 @@ Color Color::red_white_blue_ramp_01(float val)
     if(val<=0.5)
     {
         val *= 2.f;
-        return Color(WHITE().r * val + RED().r * (1.f - val),
-                     WHITE().g * val + RED().g * (1.f - val),
-                     WHITE().b * val + RED().b * (1.f - val));
+        return Color(WHITE().r() * val + RED().r() * (1.f - val),
+                     WHITE().g() * val + RED().g() * (1.f - val),
+                     WHITE().b() * val + RED().b() * (1.f - val));
     }
 
     if(val<=1)
     {
         val = 2.f*val - 1.f;
-        return Color(BLUE().r * val + WHITE().r * (1.f - val),
-                     BLUE().g * val + WHITE().g * (1.f - val),
-                     BLUE().b * val + WHITE().b * (1.f - val));
+        return Color(BLUE().r() * val + WHITE().r() * (1.f - val),
+                     BLUE().g() * val + WHITE().g() * (1.f - val),
+                     BLUE().b() * val + WHITE().b() * (1.f - val));
     }
 
     assert(false);
@@ -197,34 +197,6 @@ Color Color::normal2rgb(const vec3d & n, bool flip_neg_z)
     }
 
     return Color(c[0], c[1], c[2]);
-}
-
-//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
-CINO_INLINE
-Color Color::hsv2rgb(float h, float s, float v, float a)
-{
-    if(s==0.0) return Color(v,v,v,a); // gray color
-    if(h==1.0) h = 0.0;
-
-    int i   = int( floor(h*6.f) );
-    float f = float(h*6.f - floor(h*6.f));
-
-    float p = v*(1.f-s);
-    float q = v*(1.f-s*f);
-    float t = v*(1.f-s*(1.f-f));
-
-    switch(i)
-    {
-        case 0: return Color(v,t,p,a);
-        case 1: return Color(q,v,p,a);
-        case 2: return Color(p,v,t,a);
-        case 3: return Color(p,q,v,a);
-        case 4: return Color(t,p,v,a);
-        case 5: return Color(v,p,q,a);
-        default: assert(false);
-    }
-    return Color(); // warning killer
 }
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::

@@ -150,7 +150,7 @@ void write_OBJ(const char                * filename,
         {
             unsigned int fresh_id = color_map.size();
             color_map[c]  = fresh_id;
-            fprintf(f_mtl, "newmtl color_%d\nKd %f %f %f\n", fresh_id, c.r, c.g, c.b);
+            fprintf(f_mtl, "newmtl color_%d\nKd %f %f %f\n", fresh_id, c.r(), c.g(), c.b());
         }
     }
 
@@ -203,7 +203,7 @@ void write_OBJ(const char                * filename,
         exit(-1);
     }
 
-    fprintf(f_mtl, "newmtl color\nKd %f %f %f\n", color.r, color.g, color.b);
+    fprintf(f_mtl, "newmtl color\nKd %f %f %f\n", color.r(), color.g(), color.b());
     fprintf(f_obj, "mtllib %s\n", get_file_name(mtl_filename).c_str());
 
     for(unsigned int i=0; i<xyz.size(); i+=3)
@@ -262,7 +262,7 @@ void write_OBJ(const char                           * filename,
         {
             unsigned int fresh_id = color_map.size();
             color_map[c]  = fresh_id;
-            fprintf(f_mtl, "newmtl color_%d\nKd %f %f %f\n", fresh_id, c.r, c.g, c.b);
+            fprintf(f_mtl, "newmtl color_%d\nKd %f %f %f\n", fresh_id, c.r(), c.g(), c.b());
         }
     }
 
@@ -317,7 +317,7 @@ void write_OBJ(const char                           *filename,
     for(int l = min; l <= max; l++)
     {
         Color c = Color::scatter(delta, l);
-        fprintf(f_mtl, "newmtl label_%d\nKd %f %f %f\n", l, c.r, c.g, c.b);
+        fprintf(f_mtl, "newmtl label_%d\nKd %f %f %f\n", l, c.r(), c.g(), c.b());
     }
 
     fprintf(f_obj, "mtllib %s\n", get_file_name(mtl_filename).c_str());

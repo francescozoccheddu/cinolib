@@ -672,7 +672,7 @@ void AbstractMesh<M,V,E,P>::vert_set_alpha(const float alpha)
 {
     for(unsigned int vid=0; vid<num_verts(); ++vid)
     {
-        vert_data(vid).color.a = alpha;
+        vert_data(vid).color.a() = alpha;
     }
 }
 
@@ -877,7 +877,7 @@ void AbstractMesh<M,V,E,P>::edge_set_alpha(const float alpha)
 {
     for(unsigned int eid=0; eid<num_edges(); ++eid)
     {
-        edge_data(eid).color.a = alpha;
+        edge_data(eid).color.a() = alpha;
     }
 }
 
@@ -1103,7 +1103,7 @@ void AbstractMesh<M,V,E,P>::poly_set_alpha(const float alpha)
 {
     for(unsigned int pid=0; pid<num_polys(); ++pid)
     {
-        poly_data(pid).color.a = alpha;
+        poly_data(pid).color.a() = alpha;
     }
 }
 

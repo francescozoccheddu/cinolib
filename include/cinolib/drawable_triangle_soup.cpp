@@ -84,18 +84,18 @@ DrawableTriangleSoup::DrawableTriangleSoup(const std::vector<double> & coords,
         drawlist.tri_v_norms.push_back(n.z());
 
         // face colors
-        drawlist.tri_v_colors.push_back(poly_color.r);
-        drawlist.tri_v_colors.push_back(poly_color.g);
-        drawlist.tri_v_colors.push_back(poly_color.b);
-        drawlist.tri_v_colors.push_back(poly_color.a);
-        drawlist.tri_v_colors.push_back(poly_color.r);
-        drawlist.tri_v_colors.push_back(poly_color.g);
-        drawlist.tri_v_colors.push_back(poly_color.b);
-        drawlist.tri_v_colors.push_back(poly_color.a);
-        drawlist.tri_v_colors.push_back(poly_color.r);
-        drawlist.tri_v_colors.push_back(poly_color.g);
-        drawlist.tri_v_colors.push_back(poly_color.b);
-        drawlist.tri_v_colors.push_back(poly_color.a);
+        drawlist.tri_v_colors.push_back(poly_color.r());
+        drawlist.tri_v_colors.push_back(poly_color.g());
+        drawlist.tri_v_colors.push_back(poly_color.b());
+        drawlist.tri_v_colors.push_back(poly_color.a());
+        drawlist.tri_v_colors.push_back(poly_color.r());
+        drawlist.tri_v_colors.push_back(poly_color.g());
+        drawlist.tri_v_colors.push_back(poly_color.b());
+        drawlist.tri_v_colors.push_back(poly_color.a());
+        drawlist.tri_v_colors.push_back(poly_color.r());
+        drawlist.tri_v_colors.push_back(poly_color.g());
+        drawlist.tri_v_colors.push_back(poly_color.b());
+        drawlist.tri_v_colors.push_back(poly_color.a());
 
         // edges
         drawlist.segs.push_back(i  );
@@ -116,18 +116,18 @@ DrawableTriangleSoup::DrawableTriangleSoup(const std::vector<double> & coords,
         drawlist.seg_coords.push_back(v2.z());
 
         // edge colors
-        drawlist.seg_colors.push_back(edge_color.r);
-        drawlist.seg_colors.push_back(edge_color.g);
-        drawlist.seg_colors.push_back(edge_color.b);
-        drawlist.seg_colors.push_back(edge_color.a);
-        drawlist.seg_colors.push_back(edge_color.r);
-        drawlist.seg_colors.push_back(edge_color.g);
-        drawlist.seg_colors.push_back(edge_color.b);
-        drawlist.seg_colors.push_back(edge_color.a);
-        drawlist.seg_colors.push_back(edge_color.r);
-        drawlist.seg_colors.push_back(edge_color.g);
-        drawlist.seg_colors.push_back(edge_color.b);
-        drawlist.seg_colors.push_back(edge_color.a);
+        drawlist.seg_colors.push_back(edge_color.r());
+        drawlist.seg_colors.push_back(edge_color.g());
+        drawlist.seg_colors.push_back(edge_color.b());
+        drawlist.seg_colors.push_back(edge_color.a());
+        drawlist.seg_colors.push_back(edge_color.r());
+        drawlist.seg_colors.push_back(edge_color.g());
+        drawlist.seg_colors.push_back(edge_color.b());
+        drawlist.seg_colors.push_back(edge_color.a());
+        drawlist.seg_colors.push_back(edge_color.r());
+        drawlist.seg_colors.push_back(edge_color.g());
+        drawlist.seg_colors.push_back(edge_color.b());
+        drawlist.seg_colors.push_back(edge_color.a());
     }
 }
 

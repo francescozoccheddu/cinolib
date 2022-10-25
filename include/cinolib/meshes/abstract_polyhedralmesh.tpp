@@ -1054,7 +1054,7 @@ void AbstractPolyhedralMesh<M,V,E,F,P>::face_set_alpha(const float alpha)
 {
     for(unsigned int fid=0; fid<num_faces(); ++fid)
     {
-        face_data(fid).color.a = alpha;
+        face_data(fid).color.a() = alpha;
     }
 }
 

@@ -195,12 +195,20 @@ void GLcanvas::update_viewport(bool update_gl, bool redraw)
 }
 
 CINO_INLINE
+int& GLcanvas::windowCount()
+{
+    static int windowCount{ 0 };
+    return windowCount;
+}
+
+CINO_INLINE
 GLFWwindow* GLcanvas::createWindow(int width, int height)
 {
     glfwInit();
     glfwWindowHint(GLFW_SAMPLES, 4);
     GLFWwindow* const window{ glfwCreateWindow(width, height, "Cinolib", nullptr, nullptr) };
     if (!window) glfwTerminate();
+    windowCount()++;
     return window;
 }
 
@@ -307,12 +315,8 @@ void GLcanvas::camera_pivot_depth(double depth)
 
 CINO_INLINE
 GLcanvas::GLcanvas(const int width, const int height, const int font_size)
-    : owns_ImGui{}, window{ createWindow(width, height) }, m_width{ width }, m_height{ height }, font_size{ font_size }
+    : owns_ImGui{windowCount() == 0}, window{createWindow(width, height)}, m_width{width}, m_height{height}, font_size{font_size}
 {
-
-    static int s_windowsCount{};
-    owns_ImGui = !s_windowsCount;
-    s_windowsCount++;
 
     glfwSwapInterval(1); // enable vsync
 
@@ -420,42 +424,46 @@ void GLcanvas::push(const Marker & m)
 {
     // ImGui uses 16 bits to index items. It cannot handle more than this
     //if(markers.size() >= (1 << 16)) return;
-    markers.push_back(m);
+    if (marker_sets.empty())
+    {
+        marker_sets.push_back({});
+    }
+    marker_sets[0].push_back(m);
 }
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 CINO_INLINE
-void GLcanvas::push_marker(const vec2d       & p,
-                           const std::string & text,
-                           const Color         color,
-                           const unsigned int          disk_radius,
-                           const unsigned int          font_size)
+void GLcanvas::push_marker(const vec2d       &  p,
+                           const std::string &  text,
+                           const Color          color,
+                           const unsigned int   shape_radius,
+                           const unsigned int   font_size)
 {
     Marker m;
-    m.pos_2d      = p;
-    m.text        = text;
-    m.color       = color;
-    m.disk_radius = disk_radius;
-    m.font_size   = font_size;
+    m.pos_2d        = p;
+    m.text          = text;
+    m.color         = color;
+    m.shape_radius  = shape_radius;
+    m.font_size     = font_size;
     push(m);
 }
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 CINO_INLINE
-void GLcanvas::push_marker(const vec3d       & p,
-                           const std::string & text,
-                           const Color         color,
-                           const unsigned int          disk_radius,
-                           const unsigned int          font_size)
+void GLcanvas::push_marker(const vec3d       &  p,
+                           const std::string &  text,
+                           const Color          color,
+                           const unsigned int   shape_radius,
+                           const unsigned int   font_size)
 {
     Marker m;
-    m.pos_3d      = p;
-    m.text        = text;
-    m.color       = color;
-    m.disk_radius = disk_radius;
-    m.font_size   = font_size;
+    m.pos_3d        = p;
+    m.text          = text;
+    m.color         = color;
+    m.shape_radius  = shape_radius;
+    m.font_size     = font_size;
     push(m);
 }
 
@@ -481,7 +489,11 @@ bool GLcanvas::pop(const DrawableObject *obj)
 CINO_INLINE
 void GLcanvas::pop_all_markers()
 {
-    markers.clear();
+    if (!marker_sets.empty())
+    {
+        marker_sets[0].clear();
+        marker_sets.resize(1);
+    }
 }
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -588,7 +600,7 @@ void GLcanvas::draw()
     }
     m_drawing = true;
     glfwMakeContextCurrent(window);
-    glClearColor(background.r, background.g, background.b, 1);
+    glClearColor(background.r(), background.g(), background.b(), 1);
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 
     // draw your 3D scene
@@ -643,7 +655,10 @@ void GLcanvas::draw_markers() const
 {
     assert(owns_ImGui && "Only the first canvas created handles the ImGui context");
 
-    if(markers.empty()) return;
+    if (std::all_of(marker_sets.begin(), marker_sets.end(), [](auto& ms) { return ms.empty(); }))
+    {
+        return;
+    }
 
     ImGui::SetNextWindowPos(ImVec2(0,0), ImGuiCond_Always);
     ImGui::SetNextWindowSize(ImGui::GetIO().DisplaySize, ImGuiCond_Always);
@@ -667,61 +682,73 @@ void GLcanvas::draw_markers() const
     GLfloat *z_buf = (depth_cull_markers) ? new GLfloat[W*H] : nullptr;
     if(depth_cull_markers) whole_Z_buffer(z_buf);
 
-    for(const Marker & m : markers)
+    for (const std::vector<Marker>& marker_set : marker_sets)
     {
-        vec2d pos = m.pos_2d;
-        if(pos.is_inf()) // 3D marker
+        for (const Marker& m : marker_set)
         {
-            assert(!m.pos_3d.is_inf());
-            GLdouble z;
-            project(m.pos_3d, pos, z);
-            int x  = static_cast<int>(pos.x()* m_dpiFactor);
-            int y  = static_cast<int>(pos.y()* m_dpiFactor);
-            // marker is outside the frustum
-            if(z<0 || z>=1 || x<=0 || x>=W || y<=0 || y>=H) continue;
-            // marker is occluded in the current view
-            assert((x+W*(H-y-1)<W*H));
-            if(depth_cull_markers && fabs(z-z_buf[x+W*(H-y-1)])>0.01) continue;
-        }
+            if (!m.enabled)
+            {
+                continue;
+            }
+            vec2d pos = m.pos_2d;
+            if (pos.is_inf()) // 3D marker
+            {
+                assert(!m.pos_3d.is_inf());
+                GLdouble z;
+                project(m.pos_3d, pos, z);
+                int x = static_cast<int>(pos.x() * m_dpiFactor);
+                int y = static_cast<int>(pos.y() * m_dpiFactor);
+                // marker is outside the frustum
+                if (z < 0 || z >= 1 || x <= 0 || x >= W || y <= 0 || y >= H) continue;
+                // marker is occluded in the current view
+                assert((x + W * (H - y - 1) < W * H));
+                if (depth_cull_markers && fabs(z - z_buf[x + W * (H - y - 1)]) > 0.01) continue;
+            }
 
-        //
-        const ImU32 color{ ImGui::GetColorU32(ImVec4(m.color.r, m.color.g, m.color.b, m.color.a)) };
-        if(m.disk_radius>0)
-        {
-            // ImGui uses 16bits to index vertices, hence it is likely to overflow if there are too many markers.
-            //  - I noticed that the automatic segment count immediately triggers overflow with large amounts of zoom,
-            //    so I am always approximating circles with 20-gons
-            //  - Besides, I should probably use something like AddSquare or AddRect to save limit polygon vertices....
-            const int segCount{ 6 };
-            const ImVec2 center{ static_cast<float>(pos.x()), static_cast<float>(pos.y()) };
-            if (m.filled)
+            const ImU32 color{ ImGui::GetColorU32(ImVec4(m.color.r(), m.color.g(), m.color.b(), m.color.a())) };
+            const bool drawShape{m.shape_radius > 0 && (m.shape == Marker::EShape::CircleFilled || m.line_thickness > 0)};
+            if (drawShape)
             {
-                drawList->AddCircleFilled(center, m.disk_radius, color, segCount);
+                static constexpr int segCount{ 6 };
+                const ImVec2 center{ static_cast<float>(pos.x()), static_cast<float>(pos.y()) };
+                switch (m.shape)
+                {
+                    case Marker::EShape::CircleFilled:
+                        drawList->AddCircleFilled(center, m.shape_radius, color, segCount);
+                        break;
+                    case Marker::EShape::CircleOutline:
+                        drawList->AddCircle(center, m.shape_radius, color, segCount, m.line_thickness);
+                        break;
+                    case Marker::EShape::Cross90:
+                        drawList->AddLine({center.x - m.shape_radius, center.y}, { center.x + m.shape_radius, center.y }, color, m.line_thickness);
+                        drawList->AddLine({center.x, center.y - m.shape_radius}, { center.x, center.y + m.shape_radius }, color, m.line_thickness);
+                        break;
+                    case Marker::EShape::Cross45:
+                        drawList->AddLine({center.x - m.shape_radius, center.y - m.shape_radius}, { center.x + m.shape_radius, center.y + m.shape_radius }, color, m.line_thickness);
+                        drawList->AddLine({center.x - m.shape_radius, center.y + m.shape_radius}, { center.x + m.shape_radius, center.y - m.shape_radius }, color, m.line_thickness);
+                        break;
+                }
             }
-            else
+            if (m.font_size > 0 && m.text.length() > 0)
             {
-                drawList->AddCircle(center, m.disk_radius, color, segCount);
+                ImVec2 offset;
+                if (drawShape)
+                {
+                    offset = { static_cast<float>(m.shape_radius), static_cast<float>(m.shape_radius) };
+                }
+                else
+                {
+                    const ImVec2 normTextSize{ ImGui::CalcTextSize(&m.text[0], &m.text[0] + m.text.size()) };
+                    const ImVec2 textSize{ normTextSize.x * m.font_size / ImGui::GetFontSize(), normTextSize.y * m.font_size / ImGui::GetFontSize() };
+                    offset = { -textSize.x / 2, -textSize.y / 2 };
+                }
+                drawList->AddText(ImGui::GetFont(),
+                    m.font_size,
+                    ImVec2(pos.x() + offset.x, pos.y() + offset.y),
+                    color,
+                    &m.text[0],
+                    &m.text[0] + m.text.size());
             }
-        }
-        if(m.font_size>0 && m.text.length()>0)
-        {
-            ImVec2 offset;
-            if (m.disk_radius > 0)
-            {
-                offset = { static_cast<float>(m.disk_radius), static_cast<float>(m.disk_radius) };
-            }
-            else
-            {
-                const ImVec2 normTextSize{ ImGui::CalcTextSize(&m.text[0], &m.text[0] + m.text.size()) };
-                const ImVec2 textSize{ normTextSize.x * m.font_size / ImGui::GetFontSize(), normTextSize.y * m.font_size / ImGui::GetFontSize() };
-                offset = { -textSize.x / 2, -textSize.y / 2 };
-            }
-            drawList->AddText(ImGui::GetFont(),
-                              m.font_size,
-                              ImVec2(pos.x() + offset.x, pos.y() + offset.y),
-                              color,
-                              &m.text[0],
-                              &m.text[0] + m.text.size());
         }
     }
     if(depth_cull_markers) delete[] z_buf;

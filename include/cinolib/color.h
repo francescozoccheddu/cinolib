@@ -40,6 +40,7 @@
 #include <cinolib/geometry/vec_mat.h>
 #include <stdint.h>
 #include <iostream>
+#include <cmath>
 
 namespace cinolib
 {
@@ -50,32 +51,34 @@ class Color
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-        static Color BLACK() { return Color( 0, 0, 0); }
-        static Color WHITE() { return Color( 1, 1, 1); }
+        static constexpr Color BLACK() { return Color( 0, 0, 0); }
+        static constexpr Color WHITE() { return Color( 1, 1, 1); }
         //
-        static Color RED    (const float lum = 1.f) { return Color( lum*1.f,     0.f,     0.f); }
-        static Color GREEN  (const float lum = 1.f) { return Color(     0.f, lum*1.f,     0.f); }
-        static Color BLUE   (const float lum = 1.f) { return Color(     0.f,     0.f, lum*1.f); }
-        static Color YELLOW (const float lum = 1.f) { return Color( lum*1.f, lum*1.f,     0.f); }
-        static Color MAGENTA(const float lum = 1.f) { return Color( lum*1.f,     0.f, lum*1.f); }
-        static Color CYAN   (const float lum = 1.f) { return Color(     0.f, lum*1.f, lum*1.f); }
-        static Color GRAY   (const float lum = 1.f) { return Color( lum*.5f, lum*.5f, lum*.5f); }
+        static constexpr Color RED    (const float lum = 1.f) { return Color( lum*1.f,     0.f,     0.f); }
+        static constexpr Color GREEN  (const float lum = 1.f) { return Color(     0.f, lum*1.f,     0.f); }
+        static constexpr Color BLUE   (const float lum = 1.f) { return Color(     0.f,     0.f, lum*1.f); }
+        static constexpr Color YELLOW (const float lum = 1.f) { return Color( lum*1.f, lum*1.f,     0.f); }
+        static constexpr Color MAGENTA(const float lum = 1.f) { return Color( lum*1.f,     0.f, lum*1.f); }
+        static constexpr Color CYAN   (const float lum = 1.f) { return Color(     0.f, lum*1.f, lum*1.f); }
+        static constexpr Color GRAY   (const float lum = 1.f) { return Color( lum*.5f, lum*.5f, lum*.5f); }
         //
-        static Color PASTEL_YELLOW()  { return Color(254.f/255.f, 229.f/255.f, 157.f/255.f); }
-        static Color PASTEL_MAGENTA() { return Color(252.f/255.f,  89.f/255.f, 148.f/255.f); }
-        static Color PASTEL_GREEN()   { return Color(198.f/255.f, 223.f/255.f, 182.f/255.f); }
-        static Color PASTEL_CYAN()    { return Color( 77.f/255.f, 193.f/255.f, 198.f/255.f); }
-        static Color PASTEL_VIOLET()  { return Color(124.f/255.f, 158.f/255.f, 251.f/255.f); }
-        static Color PASTEL_PINK()    { return Color(182.f/255.f, 200.f/255.f, 230.f/255.f); }
-        static Color PASTEL_RED()     { return Color(253.f/255.f, 104.f/255.f, 118.f/255.f); }
-        static Color PASTEL_ORANGE()  { return Color(253.f/255.f, 135.f/255.f,  86.f/255.f); }
+        static constexpr Color PASTEL_YELLOW()  { return Color(254.f/255.f, 229.f/255.f, 157.f/255.f); }
+        static constexpr Color PASTEL_MAGENTA() { return Color(252.f/255.f,  89.f/255.f, 148.f/255.f); }
+        static constexpr Color PASTEL_GREEN()   { return Color(198.f/255.f, 223.f/255.f, 182.f/255.f); }
+        static constexpr Color PASTEL_CYAN()    { return Color( 77.f/255.f, 193.f/255.f, 198.f/255.f); }
+        static constexpr Color PASTEL_VIOLET()  { return Color(124.f/255.f, 158.f/255.f, 251.f/255.f); }
+        static constexpr Color PASTEL_PINK()    { return Color(182.f/255.f, 200.f/255.f, 230.f/255.f); }
+        static constexpr Color PASTEL_RED()     { return Color(253.f/255.f, 104.f/255.f, 118.f/255.f); }
+        static constexpr Color PASTEL_ORANGE()  { return Color(253.f/255.f, 135.f/255.f,  86.f/255.f); }
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-        explicit Color(const float r=1.0,
-                       const float g=1.0,
-                       const float b=1.0,
-                       const float a=1.0) : r(r), g(g), b(b), a(a) {}
+        explicit constexpr Color(
+            const float r = 1.0,
+            const float g = 1.0,
+            const float b = 1.0,
+            const float a = 1.0) : rgba{ r,g,b,a }
+        {}
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -89,10 +92,10 @@ class Color
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-        uint8_t r_uchar() const { return static_cast<uint8_t>(r*255.0); }
-        uint8_t g_uchar() const { return static_cast<uint8_t>(g*255.0); }
-        uint8_t b_uchar() const { return static_cast<uint8_t>(b*255.0); }
-        uint8_t a_uchar() const { return static_cast<uint8_t>(a*255.0); }
+        uint8_t r_uchar() const { return static_cast<uint8_t>(r() * 255.0); }
+        uint8_t g_uchar() const { return static_cast<uint8_t>(g() * 255.0); }
+        uint8_t b_uchar() const { return static_cast<uint8_t>(b() * 255.0); }
+        uint8_t a_uchar() const { return static_cast<uint8_t>(a() * 255.0); }
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -102,18 +105,44 @@ class Color
         static Color red_white_blue_ramp_01(float val);
         static Color red_ramp_01(const float val, const bool zero_is_white = true);
         static Color normal2rgb(const vec3d & n, bool flip_neg_z);
-        static Color hsv2rgb(float h, float s, float v, float a = 1.0f);
+        static constexpr Color hsv2rgb(float h, float s, float v, float a = 1.0f) 
+        {
+            if (s == 0.0) return Color(v, v, v, a); // gray color
+            if (h == 1.0) h = 0.0;
+
+            int i = static_cast<int>(h * 6.f);
+            float f = h * 6.f - static_cast<float>(i);
+
+            float p = v * (1.f - s);
+            float q = v * (1.f - s * f);
+            float t = v * (1.f - s * (1.f - f));
+
+            switch (i)
+            {
+                case 0: return Color(v, t, p, a);
+                case 1: return Color(q, v, p, a);
+                case 2: return Color(p, v, t, a);
+                case 3: return Color(p, q, v, a);
+                case 4: return Color(t, p, v, a);
+                case 5: return Color(v, p, q, a);
+                default: assert(false);
+            }
+            return Color(); // warning killer
+        }
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-        union
-        {
-            struct
-            {
-                float r, g, b, a;
-            };
-            float rgba[4];
-        };
+
+        constexpr float& r() { return rgba[0]; }
+        constexpr float& g() { return rgba[1]; }
+        constexpr float& b() { return rgba[2]; }
+        constexpr float& a() { return rgba[3]; }
+        constexpr const float& r() const { return rgba[0]; }
+        constexpr const float& g() const { return rgba[1]; }
+        constexpr const float& b() const { return rgba[2]; }
+        constexpr const float& a() const { return rgba[3]; }
+
+        float rgba[4];
 };
 
 CINO_INLINE std::ostream & operator<<(std::ostream & in, const Color & c);

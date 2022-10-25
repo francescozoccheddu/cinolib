@@ -56,13 +56,21 @@ namespace cinolib
 
 	struct Marker
 	{
-		vec2d       pos_2d = vec2d{inf_double}; // first choice to position the marker
-		vec3d       pos_3d = vec3d{inf_double}; // used to position a 3D marker IFF pos_2d is INF
-		std::string text = "";                // text to render. Set to the empty string to not render the text
-		Color       color = Color::BLUE();     // color, for both the text and the disk
-		unsigned int        disk_radius = 1;                // disk radius (in pixels). Set to zero to not render the disk
-		unsigned int        font_size = 12;                // font size;
-		bool		filled = true;
+
+		enum class EShape
+		{
+			CircleFilled, CircleOutline, Cross90, Cross45
+		};
+
+		vec2d			pos_2d = vec2d{inf_double};		// first choice to position the marker
+		vec3d			pos_3d = vec3d{inf_double};		// used to position a 3D marker IFF pos_2d is INF
+		std::string		text = "";						// text to render. Set to the empty string to not render the text
+		Color			color = Color::BLUE();			// color, for both the text and the disk
+		unsigned int    shape_radius = 1;				// shape radius (in pixels). Set to zero to not render the disk
+		unsigned int	font_size = 12;					// font size;
+		EShape			shape = EShape::CircleFilled;
+		bool			enabled = true;
+		float			line_thickness = 1.0f;
 	};
 
 	//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -107,6 +115,7 @@ namespace cinolib
 
 		//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
+		static int& windowCount();
 		static GLFWwindow* createWindow(int width, int height);
 
 		vec3d m_sceneCenter{ 0,0,0 };
@@ -171,26 +180,26 @@ namespace cinolib
 
 		//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-		GLFWwindow* const                 window;
-		std::vector<const DrawableObject*> drawlist;
-		std::vector<Marker>                markers;
-		std::vector<SideBarItem*>          side_bar_items;
-		std::vector<CanvasGuiItem*>        canvas_gui_items;
-		const int                          font_size;
-		bool                               show_axis = false;
-		bool                               depth_cull_markers = true; // skip occluded 3D markers, testing their depth with the Z-buffer
-		FreeCamera<double>                 camera{};
-		cinolib::Color                     background{ cinolib::Color::WHITE() };
-
-		//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
 		// ImGui and GLFW do not yet handle multi windows properly.
 		// This variable ensures that only one window will create
 		// and handle the ImGui context. As a result, only that
 		// window will benefit from the functionalities implemented
 		// with ImGui, such as the side bar with visual controls and
 		// the visual markers
-		bool owns_ImGui;
+		const bool owns_ImGui;
+
+		//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+		GLFWwindow* const					window;
+		std::vector<const DrawableObject*>	drawlist;
+		std::vector<std::vector<Marker>>	marker_sets;
+		std::vector<SideBarItem*>			side_bar_items;
+		std::vector<CanvasGuiItem*>			canvas_gui_items;
+		const int							font_size;
+		bool								show_axis = false;
+		bool								depth_cull_markers = true; // skip occluded 3D markers, testing their depth with the Z-buffer
+		FreeCamera<double>					camera{};
+		cinolib::Color						background{ cinolib::Color::WHITE() };
 
 		//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -227,16 +236,16 @@ namespace cinolib
 
 		//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-		void push_marker(const vec2d& p,
-			const std::string& text = "",
-			const Color         color = Color::BLUE(),
-			const unsigned int          disk_radius = 5,
+		void push_marker(const vec2d&	p,
+			const std::string&			text = "",
+			const Color					color = Color::BLUE(),
+			const unsigned int          shape_radius = 5,
 			const unsigned int          font_size = 10);
 
-		void push_marker(const vec3d& p,
-			const std::string& text = "",
-			const Color         color = Color::BLUE(),
-			const unsigned int          disk_radius = 5,
+		void push_marker(const vec3d&	p,
+			const std::string&			text = "",
+			const Color					color = Color::BLUE(),
+			const unsigned int          shape_radius = 5,
 			const unsigned int          font_size = 10);
 
 		//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
