@@ -44,7 +44,7 @@ int main(int argc, char **argv)
                     float dist = 1.f - f[vid];
                     if(dist<=brush_size)
                     {
-                        float val = m.vert_data(vid).color.g;
+                        float val = m.vert_data(vid).color.g();
                         val -= (brush_size-dist)/brush_size;
                         if(val<0) val = 0.f;
                         m.vert_data(vid).color = Color(1,val,val);

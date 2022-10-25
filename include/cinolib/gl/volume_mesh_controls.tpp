@@ -34,7 +34,7 @@
 *     Italy                                                                     *
 *********************************************************************************/
 #include <cinolib/gl/volume_mesh_controls.h>
-#include <../external/imgui/imgui.h>
+#include <imgui.h>
 #include <cinolib/gl/file_dialog_open.h>
 #include <cinolib/gl/file_dialog_save.h>
 #include <cinolib/gradient.h>

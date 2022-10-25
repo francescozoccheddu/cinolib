@@ -41,7 +41,7 @@
 #include <cinolib/meshes/abstract_mesh.h>
 
 #ifdef CINOLIB_USES_GRAPH_CUT
-#include <../external/graph_cut/GCoptimization.h>
+#include <GCoptimization.h>
 #endif
 
 namespace cinolib

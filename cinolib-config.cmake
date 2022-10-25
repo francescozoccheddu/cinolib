@@ -1,7 +1,11 @@
-cmake_minimum_required(VERSION 3.2)
+cmake_minimum_required(VERSION 3.14)
 
 # https://cmake.org/cmake/help/git-stage/module/FetchContent.html
 include(FetchContent)
+
+#::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+# CORE LIBRARY ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+#::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 cmake_policy(SET CMP0077 NEW)
 option(CINOLIB_HEADER_ONLY "Use cinolib as header-only library" OFF)
@@ -16,17 +20,52 @@ else()
     target_compile_definitions(cinolib ${CINOLIB_ACCESS} CINO_STATIC_LIB)
 endif()
 
+# include cinolib source files
+target_include_directories(cinolib ${CINOLIB_ACCESS} "${cinolib_DIR}/include")
+
 # suppress MSVC unsafe function warnings
 if (MSVC)
     target_compile_definitions (cinolib ${CINOLIB_ACCESS} _CRT_SECURE_NO_WARNINGS) # TODO: actually MSVC is right; it would be better to use the STL in place of the old C-style functions
 endif()
 
-target_include_directories(cinolib ${CINOLIB_ACCESS} "${cinolib_DIR}/include" "${cinolib_DIR}/external/eigen")
-
+# set C++ language properties
 # https://cliutils.gitlab.io/modern-cmake/chapters/features/cpp11.html
 # (bugfix: cinoLib requires only C++11 but modern Boost requires C++14)
 target_compile_features(cinolib ${CINOLIB_ACCESS} cxx_std_14)
 set_target_properties(cinolib PROPERTIES CXX_EXTENSIONS OFF)
+
+#::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+# REQUIRED MODULES ::::::::::::::::::::::::::::::::::::::::::::::::::::::
+#::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+# include Eigen
+FetchContent_Declare(
+  eigen
+  GIT_REPOSITORY https://gitlab.com/libeigen/eigen.git
+  GIT_TAG 3.4.0
+  GIT_SHALLOW TRUE
+  GIT_PROGRESS TRUE
+)
+set(BUILD_TESTING OFF)
+set(EIGEN_BUILD_DOC OFF)
+set(EIGEN_BUILD_PKGCONFIG OFF)
+set(EIGEN_BUILD_TESTING OFF)
+set(EIGEN_BUILD_BLAS OFF)
+set(EIGEN_BUILD_LAPACK OFF)
+FetchContent_MakeAvailable(eigen)
+target_link_libraries(cinolib ${CINOLIB_ACCESS} eigen)
+unset(BUILD_TESTING)
+
+# include STB
+FetchContent_Declare(
+  stb
+  GIT_REPOSITORY https://github.com/nothings/stb
+  GIT_TAG master
+  GIT_SHALLOW TRUE
+  GIT_PROGRESS TRUE
+)
+FetchContent_MakeAvailable(stb)
+target_include_directories(cinolib ${CINOLIB_ACCESS} "${stb_SOURCE_DIR}")
 
 #::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 # OPTIONAL MODULES ::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -50,12 +89,45 @@ if(CINOLIB_USES_OPENGL_GLFW_IMGUI)
     find_package(OpenGL)
     if(OpenGL_FOUND)
         target_link_libraries(cinolib ${CINOLIB_ACCESS} OpenGL::GL)
-        add_subdirectory(${cinolib_DIR}/external/imgui imgui)
-        target_link_libraries(cinolib ${CINOLIB_ACCESS} imgui)
+        # include GLFW
+        FetchContent_Declare(
+            glfw
+            GIT_REPOSITORY https://github.com/glfw/glfw.git
+            GIT_TAG 3.3.8
+            GIT_SHALLOW TRUE
+            GIT_PROGRESS TRUE
+        )
+        set(GLFW_BUILD_EXAMPLES OFF)
+        set(GLFW_BUILD_TESTS OFF)
+        set(GLFW_BUILD_DOCS OFF)
+        set(GLFW_INSTALL OFF)
+        FetchContent_MakeAvailable(glfw)
+        # include ImGui
+        FetchContent_Declare(
+            imgui
+            GIT_REPOSITORY https://github.com/ocornut/imgui
+            GIT_TAG v1.88
+            GIT_SHALLOW TRUE
+            GIT_PROGRESS TRUE
+        )
+        FetchContent_MakeAvailable(imgui)
+        add_library(imgui
+            ${imgui_SOURCE_DIR}/imgui.cpp
+            ${imgui_SOURCE_DIR}/imgui.h
+            ${imgui_SOURCE_DIR}/imgui_demo.cpp
+            ${imgui_SOURCE_DIR}/imgui_draw.cpp
+            ${imgui_SOURCE_DIR}/imgui_widgets.cpp
+            ${imgui_SOURCE_DIR}/imgui_tables.cpp
+            ${imgui_SOURCE_DIR}/backends/imgui_impl_opengl2.cpp
+            ${imgui_SOURCE_DIR}/backends/imgui_impl_glfw.cpp
+        )
+        target_include_directories(imgui PUBLIC ${imgui_SOURCE_DIR} ${imgui_SOURCE_DIR}/backends)
+        target_link_libraries(imgui PUBLIC glfw)
+        target_link_libraries(cinolib ${CINOLIB_ACCESS} imgui glfw)
         target_compile_definitions(cinolib ${CINOLIB_ACCESS} CINOLIB_USES_OPENGL_GLFW_IMGUI GL_SILENCE_DEPRECATION)
     else()
         message("Could not find OpenGL!")
-    set(CINOLIB_USES_OPENGL_GLFW_IMGUI OFF)
+        set(CINOLIB_USES_OPENGL_GLFW_IMGUI OFF)
     endif()
 endif()
 
@@ -87,7 +159,8 @@ endif()
 
 if(CINOLIB_USES_EXACT_PREDICATES)
     message("CINOLIB OPTIONAL MODULE: Exact Predicates")
-    add_subdirectory(${cinolib_DIR}/external/predicates predicates)
+    FetchContent_Declare(predicates GIT_REPOSITORY "https://github.com/cinolib-dev-team/shewchuk_predicates.git")
+    FetchContent_MakeAvailable(predicates)
     target_link_libraries(cinolib ${CINOLIB_ACCESS} predicates)
     target_compile_definitions(cinolib ${CINOLIB_ACCESS} CINOLIB_USES_EXACT_PREDICATES)
 endif()

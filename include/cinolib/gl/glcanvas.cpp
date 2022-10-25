@@ -37,8 +37,8 @@
 #include <cinolib/gl/trackball.h>
 #include <cinolib/how_many_seconds.h>
 #include <cinolib/fonts/droid_sans.hpp>
-#include <../external/imgui/imgui_impl_opengl2.h>
-#include <../external/imgui/imgui_impl_glfw.h>
+#include <imgui_impl_opengl2.h>
+#include <imgui_impl_glfw.h>
 #include <cinolib/gl/draw_arrow.h>
 #include <cinolib/gl/draw_sphere.h>
 #include <cinolib/gl/glproject.h>

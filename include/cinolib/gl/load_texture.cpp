@@ -55,7 +55,7 @@
 #ifndef CINO_STATIC_LIB
 #define STBIDEF inline
 #endif
-#include "../external/stb/stb_image.h"
+#include <stb_image.h>
 
 // this is the only symbol not in OpenGL 1.1 in the whole library.
 // useful to define it when compiling CinoLib in Windows without
