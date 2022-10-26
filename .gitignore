@@ -1,7 +1,16 @@
-examples/build*
+# MacOS
 *.DS_Store
-examples/bin/*
-examples/CMakeLists.txt.user
-examples/out/
+
+# Qt Creator
+CMakeLists.txt.user
+
+# Visual studio
 .vs/
 .vscode/
+CMakePresets.json
+CMakeSettings.json
+
+# build files
+out/
+build/
+bin/
