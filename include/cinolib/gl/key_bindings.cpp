@@ -82,16 +82,6 @@ namespace cinolib
 		return key_name(key);
 	}
 
-	CINO_INLINE bool KeyBinding::operator==(const KeyBinding& other) const
-	{
-		return other.key == key && other.modifiers == modifiers; // use defaulted spacechip operator if cinolib ever moves to c++20
-	}
-
-	CINO_INLINE bool KeyBinding::operator!=(const KeyBinding& other) const
-	{
-		return !(*this == other);
-	}
-
 	CINO_INLINE void KeyBindings::print(int key, const char* desc)
 	{
 		if (key != no_key)

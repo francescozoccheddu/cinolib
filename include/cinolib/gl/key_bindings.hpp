@@ -21,8 +21,20 @@ namespace cinolib
 
 		constexpr KeyBinding(int key, int modifiers = 0) : key{ key }, modifiers{ modifiers } {}
 
-		bool operator==(const KeyBinding& other) const;
-		bool operator!=(const KeyBinding& other) const;
+		constexpr KeyBinding operator|(int additional_modifiers) const
+		{
+			return { key, modifiers | additional_modifiers };
+		}
+
+		constexpr bool operator==(const KeyBinding& other) const
+		{
+			return key == other.key && modifiers == other.modifiers;
+		}
+
+		constexpr bool operator!=(const KeyBinding& other) const 
+		{
+			return !(*this == other);
+		}
 
 		std::string name() const;
 
