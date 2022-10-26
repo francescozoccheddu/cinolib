@@ -785,12 +785,14 @@ void GLcanvas::draw_side_bar()
     }
     for(auto item : side_bar_items)
     {
+        ImGui::PushId(item);
         ImGui::SetNextItemOpen(item->show_open, ImGuiCond_Always);
-        if((item->show_open = ImGui::TreeNode(item->name.c_str())))
+        if((item->show_open = ImGui::TreeNode("%s##cinolib_glcanvas_sidebar_item_title", item->name.c_str())))
         {
             item->draw();
             ImGui::TreePop();
         }
+        ImGui::PopId();
     }    
     // this allows the user to interactively resize the width of the side bar
     const float relativeWidth = ImGui::GetWindowWidth() / m_width;
@@ -835,7 +837,9 @@ void GLcanvas::draw_custom_gui() const
 
     for (CanvasGuiItem* item : canvas_gui_items)
     {
+        ImGui::PushId(item);
         item->draw();
+        ImGui::PopId();
     }
 
     ImGui::End();
