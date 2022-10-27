@@ -10,10 +10,6 @@
 namespace cinolib
 {
 
-	constexpr int KeyBindings::no_key;
-	constexpr KeyBinding KeyBindings::no_key_binding;
-	constexpr int MouseBindings::no_button;
-
 	CINO_INLINE std::string KeyBinding::key_name(int key)
 	{
 		const char* key_name{ glfwGetKeyName(key, 0) };
@@ -88,7 +84,7 @@ namespace cinolib
 
 	CINO_INLINE void KeyBindings::print(int key, const char* desc)
 	{
-		if (key != no_key)
+		if (key != no_key())
 		{
 			print_binding(KeyBinding::key_name(key).c_str(), desc);
 		}
@@ -96,7 +92,7 @@ namespace cinolib
 
 	CINO_INLINE void KeyBindings::print(KeyBinding binding, const char* desc)
 	{
-		if (binding != no_key_binding)
+		if (binding != no_key_binding())
 		{
 			print_binding(binding.name().c_str(), desc);
 		}
@@ -133,7 +129,7 @@ namespace cinolib
 
 	CINO_INLINE void MouseBindings::print(int button, const char* desc)
 	{
-		if (button != no_button)
+		if (button != no_button())
 		{
 			print_binding(MouseBindings::button_name(button).c_str(), desc);
 		}

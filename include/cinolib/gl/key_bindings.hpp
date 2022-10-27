@@ -50,8 +50,8 @@ namespace cinolib
 
 	public:
 
-		static constexpr int no_key{ -1 };
-		static constexpr KeyBinding no_key_binding{ -1 };
+		static constexpr int no_key() { return -1; };
+		static constexpr KeyBinding no_key_binding(){ return -1; };
 
 		KeyBinding toggle_ortho{ GLFW_KEY_O };
 		int camera_faster{ GLFW_KEY_LEFT_SHIFT };
@@ -88,7 +88,7 @@ namespace cinolib
 
 		static std::string button_name(int button);
 
-		static constexpr int no_button{ -1 };
+		static constexpr int no_button() { return -1; };
 
 		int camera_pan{ GLFW_MOUSE_BUTTON_RIGHT };
 		int camera_zoom{ GLFW_MOUSE_BUTTON_MIDDLE };

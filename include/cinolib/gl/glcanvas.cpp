@@ -55,10 +55,6 @@
 namespace cinolib
 {
 
-constexpr vec3d GLcanvas::world_right;
-constexpr vec3d GLcanvas::world_up;
-constexpr vec3d GLcanvas::world_forward;
-
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 CINO_INLINE
@@ -135,11 +131,11 @@ void GLcanvas::handle_rotation(const vec2d& amount, bool update_gl)
     const vec2d angles{amount * get_camera_speed_modifier()};
     if (glfwGetKey(window, key_bindings.camera_inplace_rotation) == GLFW_PRESS)
     {
-        camera.view.rotateFps(world_up, world_forward, angles.x(), angles.y());
+        camera.view.rotateFps(world_up(), world_forward(), angles.x(), angles.y());
     }
     else
     {
-        camera.view.rotateTps(world_up, world_forward, m_cameraPivotDepth, angles.x(), angles.y());
+        camera.view.rotateTps(world_up(), world_forward(), m_cameraPivotDepth, angles.x(), angles.y());
     }
     if (update_gl)
     {
@@ -550,7 +546,7 @@ void GLcanvas::reset_camera(bool update_gl, bool redraw)
     camera.projection.verticalFieldOfView = (camera_settings.min_persp_fov + camera_settings.max_persp_fov) / 2.0;
     const double camera_scene_radius{ m_sceneRadius ? m_sceneRadius : 1 };
     const double distance{ camera_scene_radius * camera_settings.camera_distance_scene_radius_factor };
-    camera.view = FreeCamera<double>::View::tps(world_up, world_forward, m_sceneCenter, distance, 180, 0);
+    camera.view = FreeCamera<double>::View::tps(world_up(), world_forward(), m_sceneCenter, distance, 180, 0);
     camera_pivot_depth(m_sceneCenter.dist(camera.view.eye));
     if (update_gl)
     {
@@ -635,9 +631,9 @@ CINO_INLINE
 void GLcanvas::draw_axis() const
 {
     vec3d  O = m_sceneCenter;
-    vec3d  X = O + world_right * m_sceneRadius;
-    vec3d  Y = O + world_up * m_sceneRadius;
-    vec3d  Z = O + world_forward * m_sceneRadius;
+    vec3d  X = O + world_right() * m_sceneRadius;
+    vec3d  Y = O + world_up() * m_sceneRadius;
+    vec3d  Z = O + world_forward() * m_sceneRadius;
     double r = m_sceneRadius * 0.02;
     glfwMakeContextCurrent(window);
     glDisable(GL_DEPTH_TEST);
@@ -1099,7 +1095,7 @@ void GLcanvas::key_event(GLFWwindow* window, int key, int /*scancode*/, int acti
             {
                 v->camera.view.lookAt(v->m_sceneCenter);
                 // get rid of roll
-                v->camera.view.rotateFps(world_up, world_forward, 0,0); // TODO (francescozoccheddu) this is ugly
+                v->camera.view.rotateFps(world_up(), world_forward(), 0,0); // TODO (francescozoccheddu) this is ugly
                 v->camera_pivot_depth(v->m_sceneCenter.dist(v->camera.view.eye));
                 v->camera.updateView();
                 v->update_GL_view();
@@ -1140,7 +1136,7 @@ void GLcanvas::key_event(GLFWwindow* window, int key, int /*scancode*/, int acti
                 }
                 if (cameraUpdated)
                 {
-                    v->camera.view = FreeCamera<double>::View::tps(world_up, world_forward, v->m_sceneCenter, v->m_cameraPivotDepth, yaw, pitch);
+                    v->camera.view = FreeCamera<double>::View::tps(world_up(), world_forward(), v->m_sceneCenter, v->m_cameraPivotDepth, yaw, pitch);
                     v->camera.updateView();
                     v->update_GL_view();
                     v->draw();

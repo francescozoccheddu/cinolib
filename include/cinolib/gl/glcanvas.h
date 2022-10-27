@@ -136,7 +136,9 @@ namespace cinolib
 
 		//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-		static constexpr vec3d world_right{1,0,0}, world_up{0,1,0}, world_forward{0,0,-1};
+		static constexpr vec3d world_right() { return {1,0,0}; };
+		static constexpr vec3d world_up() { return {0,1,0}; };
+		static constexpr vec3d world_forward() { return {0,0,-1}; };
 
 		KeyBindings key_bindings;
 		MouseBindings mouse_bindings;
