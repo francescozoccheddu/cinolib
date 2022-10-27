@@ -74,6 +74,8 @@ float DrawableSegmentSoup::scene_radius() const
 CINO_INLINE
 void DrawableSegmentSoup::draw(const float scene_size) const
 {
+    if (!show) return;
+
     if(no_depth_test) glDisable(GL_DEPTH_TEST);
 
     if(!use_gl_lines)
