@@ -10,6 +10,10 @@
 namespace cinolib
 {
 
+	constexpr int KeyBindings::no_key;
+	constexpr KeyBinding KeyBindings::no_key_binding;
+	constexpr int MouseBindings::no_button;
+
 	CINO_INLINE std::string KeyBinding::key_name(int key)
 	{
 		const char* key_name{ glfwGetKeyName(key, 0) };

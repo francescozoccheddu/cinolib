@@ -55,6 +55,10 @@
 namespace cinolib
 {
 
+constexpr vec3d GLcanvas::world_right;
+constexpr vec3d GLcanvas::world_up;
+constexpr vec3d GLcanvas::world_forward;
+
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 CINO_INLINE
@@ -787,7 +791,7 @@ void GLcanvas::draw_side_bar()
     {
         ImGui::PushID(item);
         ImGui::SetNextItemOpen(item->show_open, ImGuiCond_Always);
-        if((item->show_open = ImGui::TreeNode("%s##cinolib_glcanvas_sidebar_item_title", item->name.c_str())))
+        if((item->show_open = ImGui::TreeNode("cinolib_glcanvas_sidebar_item_title", "%s", item->name.c_str())))
         {
             item->draw();
             ImGui::TreePop();
