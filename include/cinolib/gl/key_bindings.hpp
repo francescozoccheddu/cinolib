@@ -99,6 +99,7 @@ namespace cinolib
 
 	};
 
+	void print_binding(const std::string& binding, const char* desc);
 	void print_binding(const char* binding, const char* desc);
 
 }

@@ -31,6 +31,18 @@ namespace cinolib
 				return "TAB";
 			case GLFW_KEY_ESCAPE:
 				return "ESC";
+			case GLFW_KEY_UP:
+				return "UP";
+			case GLFW_KEY_DOWN:
+				return "DOWN";
+			case GLFW_KEY_LEFT:
+				return "LEFT";
+			case GLFW_KEY_RIGHT:
+				return "RIGHT";
+			case GLFW_KEY_ENTER:
+				return "ENTER";
+			case GLFW_KEY_DELETE:
+				return "DEL";
 		}
 		return "UNKNOWN";
 	}
@@ -160,6 +172,11 @@ namespace cinolib
 			default:
 				return "UNKNOWN";
 		}
+	}
+
+	CINO_INLINE void print_binding(const std::string& binding, const char* desc)
+	{
+		print_binding(binding.c_str(), desc);
 	}
 
 	CINO_INLINE void print_binding(const char* binding, const char* desc)
