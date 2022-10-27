@@ -51,6 +51,7 @@ DrawableSegmentSoup::DrawableSegmentSoup() : bb{}
     thickness     = 1.0;
     use_gl_lines  = false;
     no_depth_test = false;
+    show          = true;
 }
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
