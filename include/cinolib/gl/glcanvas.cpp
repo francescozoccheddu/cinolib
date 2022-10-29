@@ -34,7 +34,6 @@
 *     Italy                                                                     *
 *********************************************************************************/
 #include <cinolib/gl/glcanvas.h>
-#include <cinolib/gl/trackball.h>
 #include <cinolib/how_many_seconds.h>
 #include <cinolib/fonts/droid_sans.hpp>
 #include <imgui_impl_opengl2.h>
@@ -1010,11 +1009,16 @@ void GLcanvas::key_event(GLFWwindow* window, int key, int /*scancode*/, int acti
     // if visual controls claim the event, let them handle it!
     if (ImGui::GetIO().WantCaptureKeyboard) return;
 
+    GLcanvas* v = static_cast<GLcanvas*>(glfwGetWindowUserPointer(window));
+
+    if (v->callback_key_event)
+    {
+        v->callback_key_event(key, action, modifiers);
+    }
 
     // handle repeated keys as if they were a sequence of single key press events
     if (action == GLFW_PRESS || action == GLFW_REPEAT)
     {
-        GLcanvas* v = static_cast<GLcanvas*>(glfwGetWindowUserPointer(window));
 
         if (v->callback_key_pressed && v->callback_key_pressed(key, modifiers))
         {
@@ -1180,49 +1184,25 @@ void GLcanvas::mouse_button_event(GLFWwindow* window, int button, int action, in
 
     if (action == GLFW_PRESS)
     {
-
-        // thanks GLFW for asking me to handle the single/double click burden...
-        auto double_click = [&]() -> bool
+        if (button == GLFW_MOUSE_BUTTON_LEFT)
         {
-            auto   t = std::chrono::high_resolution_clock::now();
-            double dt = how_many_seconds(v->m_trackball.t_last_click, t);
-            v->m_trackball.t_last_click = t;
-            return (dt < 0.2);
-        };
-
-
-        if (double_click())
-        {
-            if (button == GLFW_MOUSE_BUTTON_LEFT)
+            if (v->callback_mouse_left_click)
             {
-                if (v->callback_mouse_left_click2 && v->callback_mouse_left_click2(modifiers))
-                {
-                    return;
-                }
-            }
-            else if (button == GLFW_MOUSE_BUTTON_RIGHT)
-            {
-                if (v->callback_mouse_right_click2 && v->callback_mouse_right_click2(modifiers))
-                {
-                    return;
-                }
+                v->m_ignore_left_mb = v->callback_mouse_left_click(modifiers);
             }
         }
-        else // single click
+        else if (button == GLFW_MOUSE_BUTTON_MIDDLE)
         {
-            if (button == GLFW_MOUSE_BUTTON_LEFT)
+            if (v->callback_mouse_middle_click && v->callback_mouse_middle_click(modifiers))
             {
-                if (v->callback_mouse_left_click && v->callback_mouse_left_click(modifiers))
-                {
-                    return;
-                }
+                v->m_ignore_middle_mb = v->callback_mouse_middle_click(modifiers);
             }
-            else if (button == GLFW_MOUSE_BUTTON_RIGHT)
+        }
+        else if (button == GLFW_MOUSE_BUTTON_RIGHT)
+        {
+            if (v->callback_mouse_right_click && v->callback_mouse_right_click(modifiers))
             {
-                if (v->callback_mouse_right_click && v->callback_mouse_right_click(modifiers))
-                {
-                    return;
-                }
+                v->m_ignore_right_mb = v->callback_mouse_right_click(modifiers);
             }
         }
     }
@@ -1239,29 +1219,37 @@ void GLcanvas::cursor_event(GLFWwindow* window, double x_pos, double y_pos)
 
     GLcanvas* v = static_cast<GLcanvas*>(glfwGetWindowUserPointer(window));
     const vec2d cursor_pos{ v->cursor_pos() };
-    const vec2d delta{ cursor_pos - v->m_trackball.last_cursor_pos };
-    v->m_trackball.last_cursor_pos = cursor_pos;
+    const vec2d delta{ cursor_pos - v->m_last_cursor_pos };
+    v->m_last_cursor_pos = cursor_pos;
 
     if (v->callback_mouse_moved && v->callback_mouse_moved(x_pos, y_pos))
     {
         return;
     }
 
+    const auto get_button{ [v](int button) {
+        return !(
+                (button == GLFW_MOUSE_BUTTON_LEFT && v->m_ignore_left_mb) ||
+                (button == GLFW_MOUSE_BUTTON_MIDDLE && v->m_ignore_middle_mb) ||
+                (button == GLFW_MOUSE_BUTTON_RIGHT && v->m_ignore_right_mb)
+            ) && glfwGetMouseButton(v->window, button) == GLFW_PRESS;
+    }};
+
     if (!delta.is_inf())
     {
-        if (glfwGetMouseButton(window, v->mouse_bindings.camera_rotate) == GLFW_PRESS)
+        if (get_button(v->mouse_bindings.camera_rotate))
         {
             const vec2d amount{ -delta * v->camera_settings.rotate_drag_speed / 10 };
             v->handle_rotation(amount);
         }
 
-        if (glfwGetMouseButton(window, v->mouse_bindings.camera_zoom) == GLFW_PRESS)
+        if (get_button(v->mouse_bindings.camera_zoom))
         {
             const double amount{ delta.y() * v->camera_settings.zoom_drag_speed / 300 };
             v->handle_zoom(-amount);
         }
 
-        if (glfwGetMouseButton(window, v->mouse_bindings.camera_pan) == GLFW_PRESS)
+        if (get_button(v->mouse_bindings.camera_pan))
         {
             const vec2d amount{ delta * v->camera_settings.pan_drag_speed / 200 };
             v->handle_pan(vec2d{ -amount.x(), amount.y() });

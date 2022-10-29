@@ -73,13 +73,6 @@ namespace cinolib
 		float			line_thickness = 1.0f;
 	};
 
-	//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
-	struct Trackball
-	{
-		vec2d last_cursor_pos = vec2d{inf_double};
-		std::chrono::high_resolution_clock::time_point t_last_click;
-	};
 
 	//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -127,7 +120,8 @@ namespace cinolib
 		double m_dpiFactor;
 		bool m_drawing{ false };
 
-		Trackball m_trackball{};
+		vec2d m_last_cursor_pos{};
+		bool m_ignore_left_mb{false}, m_ignore_middle_mb{false}, m_ignore_right_mb{false};
 
 		int current_sidebar_width() const;
 		void clamp_camera_pivot();
@@ -291,11 +285,11 @@ namespace cinolib
 		// these callbacks can be used to execute external code when mouse and keyboard
 		// events occurr (e.g. for picking, drawing). If defined, they will be called
 		// **before** the internal event handlers
-		std::function<bool(int    key, int    modifiers)> callback_key_pressed = nullptr;
+		std::function<bool(int    key, int modifiers)> callback_key_pressed = nullptr;
+		std::function<void(int    key, int action, int modifiers)> callback_key_event = nullptr;
 		std::function<bool(int    modifiers)> callback_mouse_left_click = nullptr;
-		std::function<bool(int    modifiers)> callback_mouse_left_click2 = nullptr; // double click
+		std::function<bool(int    modifiers)> callback_mouse_middle_click = nullptr;
 		std::function<bool(int    modifiers)> callback_mouse_right_click = nullptr;
-		std::function<bool(int    modifiers)> callback_mouse_right_click2 = nullptr; // double click
 		std::function<bool(double x_pos, double y_pos)> callback_mouse_moved = nullptr;
 		std::function<bool(double x_offset, double y_offset)> callback_mouse_scroll = nullptr;
 		std::function<void(void)> callback_app_controls = nullptr; // useful to insert app-dependent visual controls (with ImGui)
