@@ -1186,24 +1186,15 @@ void GLcanvas::mouse_button_event(GLFWwindow* window, int button, int action, in
     {
         if (button == GLFW_MOUSE_BUTTON_LEFT)
         {
-            if (v->callback_mouse_left_click)
-            {
-                v->m_ignore_left_mb = v->callback_mouse_left_click(modifiers);
-            }
+            v->m_ignore_left_mb = v->callback_mouse_left_click && v->callback_mouse_left_click(modifiers);
         }
         else if (button == GLFW_MOUSE_BUTTON_MIDDLE)
         {
-            if (v->callback_mouse_middle_click && v->callback_mouse_middle_click(modifiers))
-            {
-                v->m_ignore_middle_mb = v->callback_mouse_middle_click(modifiers);
-            }
+            v->m_ignore_middle_mb = v->callback_mouse_middle_click && v->callback_mouse_middle_click(modifiers);
         }
         else if (button == GLFW_MOUSE_BUTTON_RIGHT)
         {
-            if (v->callback_mouse_right_click && v->callback_mouse_right_click(modifiers))
-            {
-                v->m_ignore_right_mb = v->callback_mouse_right_click(modifiers);
-            }
+            v->m_ignore_right_mb = v->callback_mouse_right_click && v->callback_mouse_right_click(modifiers);
         }
     }
 }
