@@ -157,6 +157,8 @@ namespace cinolib
 			double min_camera_pivot_distance_scene_radius_factor{ 1.0 / 100 };
 		} camera_settings;
 
+		void print_key_bindings() const;
+
 		//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 		vec3d scene_center() const;
@@ -211,7 +213,7 @@ namespace cinolib
 		// can be passed as additional parameters, such that rendering and
 		// event polling are all controlled from a single place. Closing
 		// *any* of the windows will cause a termination of the program.
-		int launch(std::initializer_list<GLcanvas*> additional_windows = {});
+		int launch(std::initializer_list<GLcanvas*> additional_windows = {}, bool print_keys=true);
 
 		//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 

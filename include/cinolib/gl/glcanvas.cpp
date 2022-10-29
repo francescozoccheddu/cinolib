@@ -360,11 +360,6 @@ GLcanvas::GLcanvas(const int width, const int height, const int font_size)
         io.FontGlobalScale = 0.1f; // compensate for high-res fonts
     }
 
-    std::cout << "---- GLcanvas key bindings ----\n";
-    key_bindings.print();
-    mouse_bindings.print();
-    std::cout << "-------------------------------\n";
-
     reset_camera();
 }
 
@@ -845,9 +840,25 @@ void GLcanvas::draw_custom_gui() const
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 CINO_INLINE
-int GLcanvas::launch(std::initializer_list<GLcanvas*> additional_windows)
+void GLcanvas::print_key_bindings() const
 {
-    while(true)
+    std::cout << "---- GLcanvas key bindings ----\n";
+    key_bindings.print();
+    mouse_bindings.print();
+    std::cout << "-------------------------------\n";
+}
+
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+CINO_INLINE
+int GLcanvas::launch(std::initializer_list<GLcanvas*> additional_windows, bool print_keys)
+{
+    if (print_keys)
+    {
+        print_key_bindings();
+    }
+    
+    while (true)
     {
         glfwMakeContextCurrent(window);
         draw();
