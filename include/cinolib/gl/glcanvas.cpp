@@ -119,7 +119,6 @@ void GLcanvas::handle_zoom(double amount, bool update_gl)
     }
     if (update_gl)
     {
-        draw();
         notify_camera_change();
     }
 }
@@ -140,7 +139,6 @@ void GLcanvas::handle_rotation(const vec2d& amount, bool update_gl)
     {
         camera.updateView();
         update_GL_view();
-        draw();
         notify_camera_change();
     }
 }
@@ -157,7 +155,6 @@ void GLcanvas::handle_pan(const vec2d& amount, bool update_gl)
     {
         camera.updateView();
         update_GL_view();
-        draw();
         notify_camera_change();
     }
 }
@@ -171,7 +168,6 @@ void GLcanvas::handle_pan_and_zoom(const vec3d& amount, bool update_gl)
     {
         camera.updateProjectionAndView();
         update_GL_matrices();
-        draw();
         notify_camera_change();
     }
 }
@@ -185,10 +181,10 @@ void GLcanvas::update_viewport(bool update_gl, bool redraw)
         glViewport(current_sidebar_width(), 0, canvas_width(), m_height);
         camera.updateProjection();
         update_GL_projection();
+        notify_camera_change();
         if (redraw)
         {
             draw();
-            notify_camera_change();
         }
     }
 }
@@ -528,10 +524,10 @@ void GLcanvas::refit_scene(bool update_gl, bool redraw)
     {
         camera.updateProjection();
         update_GL_projection();
+        notify_camera_change();
         if (redraw)
         {
             draw();
-            notify_camera_change();
         }
     }
 }
@@ -551,10 +547,10 @@ void GLcanvas::reset_camera(bool update_gl, bool redraw)
     {
         camera.updateProjectionAndView();
         update_GL_matrices();
+        notify_camera_change();
         if (redraw)
         {
             draw();
-            notify_camera_change();
         }
     }
 }
@@ -864,7 +860,7 @@ int GLcanvas::launch(std::initializer_list<GLcanvas*> additional_windows)
             if(glfwWindowShouldClose((*it)->window)) return EXIT_SUCCESS;
         }
 
-        glfwPollEvents();
+        glfwWaitEvents();
     }
     return EXIT_SUCCESS;
 }
@@ -1087,7 +1083,6 @@ void GLcanvas::key_event(GLFWwindow* window, int key, int /*scancode*/, int acti
                     v->update_viewport(false);
                     v->camera.updateProjectionAndView();
                     v->update_GL_matrices();
-                    v->draw();
                     v->notify_camera_change();
                 }
             }
@@ -1103,7 +1098,6 @@ void GLcanvas::key_event(GLFWwindow* window, int key, int /*scancode*/, int acti
                 v->camera_pivot_depth(v->m_sceneCenter.dist(v->camera.view.eye));
                 v->camera.updateView();
                 v->update_GL_view();
-                v->draw();
                 v->notify_camera_change();
             }
             {
@@ -1143,14 +1137,12 @@ void GLcanvas::key_event(GLFWwindow* window, int key, int /*scancode*/, int acti
                     v->camera.view = FreeCamera<double>::View::tps(world_up(), world_forward(), v->m_sceneCenter, v->m_cameraPivotDepth, yaw, pitch);
                     v->camera.updateView();
                     v->update_GL_view();
-                    v->draw();
                     v->notify_camera_change();
                 }
             }
             if (binding == v->key_bindings.toggle_axes)
             {
                 v->show_axis ^= true;
-                v->draw();
             }
             if (binding == v->key_bindings.toggle_ortho)
             {
@@ -1161,7 +1153,6 @@ void GLcanvas::key_event(GLFWwindow* window, int key, int /*scancode*/, int acti
                     / 2;
                 v->camera.updateProjection();
                 v->update_GL_projection();
-                v->draw();
                 v->notify_camera_change();
             }
             if (binding == v->key_bindings.toggle_sidebar)
