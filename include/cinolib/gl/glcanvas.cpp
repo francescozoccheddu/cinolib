@@ -771,9 +771,15 @@ void GLcanvas::draw_side_bar()
     }
     if (callback_app_controls != nullptr)
     {
-        if (ImGui::CollapsingHeader("App controls"))
+        if (side_bar_items.empty())
         {
+            ImGui::SetNextItemOpen(true, ImGuiCond_Always);
+        }
+        if (ImGui::CollapsingHeader("App controls", side_bar_items.empty() ? ImGuiTreeNodeFlags_Leaf : 0))
+        {
+            ImGui::Spacing();
             callback_app_controls();
+            ImGui::Spacing();
         }
     }
     for(auto item : side_bar_items)
@@ -785,7 +791,9 @@ void GLcanvas::draw_side_bar()
         {
             ImGui::PopID();
             ImGui::PushID(1);
+            ImGui::Spacing();
             item->draw();
+            ImGui::Spacing();
         }
         ImGui::PopID();
         ImGui::PopID(); // item
