@@ -587,8 +587,10 @@ void GLcanvas::draw()
 {
     if (m_drawing)
     {
+        m_needsRedraw = true;
         return;
     }
+    m_needsRedraw = false;
     m_drawing = true;
     glfwMakeContextCurrent(window);
     glViewport(current_sidebar_width(), 0, canvas_width(), m_height);
@@ -885,7 +887,14 @@ int GLcanvas::launch(std::initializer_list<GLcanvas*> additional_windows, bool p
             if(glfwWindowShouldClose((*it)->window)) return EXIT_SUCCESS;
         }
 
-        glfwWaitEvents();
+        if (m_needsRedraw)
+        {
+            glfwPollEvents();
+        }
+        else
+        {
+            glfwWaitEvents();
+        }
     }
     return EXIT_SUCCESS;
 }

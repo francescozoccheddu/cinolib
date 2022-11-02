@@ -119,6 +119,7 @@ namespace cinolib
 		bool m_showSidebar{ false };
 		double m_dpiFactor;
 		bool m_drawing{ false };
+		bool m_needsRedraw{ false };
 
 		vec2d m_last_cursor_pos{};
 		bool m_ignore_left_mb{false}, m_ignore_middle_mb{false}, m_ignore_right_mb{false};
