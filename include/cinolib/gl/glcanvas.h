@@ -201,7 +201,7 @@ namespace cinolib
 
 		//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-		GLcanvas(const int width = 700, const int height = 700, const int font_size = 13);
+		GLcanvas(const int width = 700, const int height = 700, const int font_size = 13, float font_oversize = 10.0f);
 		~GLcanvas();
 
 		//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::

@@ -310,7 +310,7 @@ void GLcanvas::camera_pivot_depth(double depth)
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 CINO_INLINE
-GLcanvas::GLcanvas(const int width, const int height, const int font_size)
+GLcanvas::GLcanvas(const int width, const int height, const int font_size, float font_oversize)
     : owns_ImGui{windowCount() == 0}, window{createWindow(width, height)}, m_width{width}, m_height{height}, font_size{font_size}
 {
 
@@ -357,8 +357,8 @@ GLcanvas::GLcanvas(const int width, const int height, const int font_size)
         ImGuiIO &io = ImGui::GetIO();
         io.IniFilename = NULL;
         io.Fonts->Clear();
-        io.Fonts->AddFontFromMemoryCompressedTTF(droid_sans_data, droid_sans_size, font_size*10.f);
-        io.FontGlobalScale = 0.1f; // compensate for high-res fonts
+        io.Fonts->AddFontFromMemoryCompressedTTF(droid_sans_data, droid_sans_size, font_size * font_oversize);
+        io.FontGlobalScale = 1.0f / font_oversize; // compensate for high-res fonts
     }
 
     reset_camera();
