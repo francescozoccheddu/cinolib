@@ -47,7 +47,8 @@ namespace cinolib
 CINO_INLINE
 DrawableSegmentSoup::DrawableSegmentSoup() : bb{}
 {
-    color         = Color::RED();
+    color_first   = Color::RED();
+    color_second  = Color::RED();
     thickness     = 1.0;
     use_gl_lines  = false;
     no_depth_test = false;
@@ -83,14 +84,11 @@ void DrawableSegmentSoup::draw(const float scene_size) const
     {
         double cylind_rad = scene_size*0.002*thickness;
 
-        for(vec3d p : *this)
-        {
-            draw_sphere(p, cylind_rad, color);
-        }
-
         for(unsigned int i=0; i<size()/2; ++i)
         {
-            draw_cylinder(at(2*i+0), at(2*i+1), cylind_rad, cylind_rad, color);
+            draw_sphere(at(2*i+0), cylind_rad, color_first);
+            draw_sphere(at(2*i+1), cylind_rad, color_second);
+            draw_cylinder(at(2*i+0), at(2*i+1), cylind_rad, cylind_rad, color_first);
         }
     }
     else
@@ -99,13 +97,14 @@ void DrawableSegmentSoup::draw(const float scene_size) const
         glEnable(GL_LINE_SMOOTH);
         glHint(GL_LINE_SMOOTH_HINT,  GL_NICEST);
         glDisable(GL_LIGHTING);
-        glColor3fv(color.rgba);
         for(unsigned int i=0; i<size()/2; ++i)
         {
             vec3d a = at(2*i+0);
             vec3d b = at(2*i+1);
             glBegin(GL_LINES);
+                glColor3fv(color_first.rgba);
                 glVertex3d(a.x(), a.y(), a.z());
+                glColor3fv(color_second.rgba);
                 glVertex3d(b.x(), b.y(), b.z());
             glEnd();
         }
@@ -166,7 +165,16 @@ void DrawableSegmentSoup::set_always_in_front(const bool b)
 CINO_INLINE
 void DrawableSegmentSoup::set_color(const Color & c)
 {
-    color = c;
+    color_first = color_second = c;
+}
+
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+CINO_INLINE
+void DrawableSegmentSoup::set_color(const Color& first, const Color& second)
+{
+    color_first = first;
+    color_second = second;
 }
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::

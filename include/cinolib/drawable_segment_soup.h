@@ -86,13 +86,14 @@ class DrawableSegmentSoup: public std::vector<vec3d>, public DrawableObject
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
         void set_color          (const Color & c);
+        void set_color          (const Color & first, const Color & second);
         void set_thickness      (float t);
         void set_cheap_rendering(const bool b);
         void set_always_in_front(const bool b);
 
         bool  no_depth_test; // render segments always in front, regardless of what's in the GL scene
         bool  use_gl_lines;  // to speedup rendering (when lots of segments are to be rendered)
-        Color color;
+        Color color_first, color_second;
         float thickness;
         bool show;
 
