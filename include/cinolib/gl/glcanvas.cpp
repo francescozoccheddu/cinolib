@@ -175,7 +175,7 @@ void GLcanvas::handle_pan_and_zoom(const vec3d& amount, bool update_gl)
 CINO_INLINE
 void GLcanvas::update_viewport(bool update_gl, bool redraw)
 {
-    camera.projection.setAspect(canvas_width(), m_height);
+    camera.projection.setAspect(std::max(canvas_width(),1), std::max(m_height, 1));
     if (update_gl)
     {
         glViewport(current_sidebar_width(), 0, canvas_width(), m_height);
@@ -280,6 +280,7 @@ bool GLcanvas::show_sidebar() const
 CINO_INLINE
 void GLcanvas::show_sidebar(bool show, bool update_gl, bool redraw)
 {
+    show &= owns_ImGui;
     if (m_showSidebar != show)
     {
         m_showSidebar = show;
@@ -590,6 +591,7 @@ void GLcanvas::draw()
     }
     m_drawing = true;
     glfwMakeContextCurrent(window);
+    glViewport(current_sidebar_width(), 0, canvas_width(), m_height);
     glClearColor(background.r(), background.g(), background.b(), 1);
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 
@@ -752,8 +754,6 @@ void GLcanvas::draw_markers() const
 CINO_INLINE
 void GLcanvas::draw_side_bar()
 {
-    if(callback_app_controls==nullptr && side_bar_items.empty()) return;
-
     assert(owns_ImGui && "Only the first canvas created handles the ImGui context");
 
     ImGui::SetNextWindowPos({0,0}, ImGuiCond_Always);
@@ -763,26 +763,32 @@ void GLcanvas::draw_side_bar()
     ImGui::Begin("Sidebar", &shown,  
         ImGuiWindowFlags_NoTitleBar |
         ImGuiWindowFlags_NoMove |
-        ImGuiWindowFlags_NoCollapse 
+        ImGuiWindowFlags_NoCollapse
     );
-    if(callback_app_controls!=nullptr)
+    if (!callback_app_controls && side_bar_items.empty())
     {
-        if(ImGui::TreeNode("App controls"))
+        ImGui::TextDisabled("Nothing to show here");
+    }
+    if (callback_app_controls != nullptr)
+    {
+        if (ImGui::CollapsingHeader("App controls"))
         {
             callback_app_controls();
-            ImGui::TreePop();
         }
     }
     for(auto item : side_bar_items)
     {
-        ImGui::PushID(item);
+        ImGui::PushID(item); // item
+        ImGui::PushID(0);
         ImGui::SetNextItemOpen(item->show_open, ImGuiCond_Always);
-        if((item->show_open = ImGui::TreeNode("cinolib_glcanvas_sidebar_item_title", "%s", item->name.c_str())))
+        if ((item->show_open = ImGui::CollapsingHeader(item->name.c_str())))
         {
+            ImGui::PopID();
+            ImGui::PushID(1);
             item->draw();
-            ImGui::TreePop();
         }
         ImGui::PopID();
+        ImGui::PopID(); // item
     }    
     // this allows the user to interactively resize the width of the side bar
     const float relativeWidth = ImGui::GetWindowWidth() / m_width;
