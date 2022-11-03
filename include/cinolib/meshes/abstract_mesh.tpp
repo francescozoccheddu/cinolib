@@ -586,8 +586,7 @@ unsigned int AbstractMesh<M,V,E,P>::vert_shared(const unsigned int eid0, const u
     unsigned int e11 = edge_vert_id(eid1,1);
     if (e00 == e10 || e00 == e11) return e00;
     if (e01 == e10 || e01 == e11) return e01;
-    assert(false);
-    return 0; // warning killer
+    return -1;
 }
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
