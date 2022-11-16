@@ -42,8 +42,7 @@ set_target_properties(cinolib PROPERTIES CXX_EXTENSIONS OFF)
 FetchContent_Declare(
   eigen
   GIT_REPOSITORY https://gitlab.com/libeigen/eigen.git
-  GIT_TAG 3.4.0
-  GIT_SHALLOW TRUE
+  GIT_TAG 6431dfdb50a86715bd519a4572058c250451e651
   GIT_PROGRESS TRUE
 )
 set(BUILD_TESTING OFF)
@@ -54,7 +53,6 @@ set(EIGEN_BUILD_BLAS OFF)
 set(EIGEN_BUILD_LAPACK OFF)
 FetchContent_MakeAvailable(eigen)
 target_link_libraries(cinolib ${CINOLIB_ACCESS} eigen)
-unset(BUILD_TESTING)
 
 # include STB
 FetchContent_Declare(
