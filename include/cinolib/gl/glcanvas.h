@@ -48,6 +48,7 @@
 #include <vector>
 #include <functional>
 #include <chrono>
+#include <string>
 
 namespace cinolib
 {
@@ -98,6 +99,7 @@ namespace cinolib
 		static void mouse_button_event(GLFWwindow* w, int    butt, int    action, int modif);
 		static void cursor_event(GLFWwindow* w, double x_pos, double y_pos);
 		static void scroll_event(GLFWwindow* w, double x_off, double y_off);
+		static void drop_event(GLFWwindow* w, int count, const char* paths[]);
 
 		//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -298,6 +300,7 @@ namespace cinolib
 		std::function<void(void)> callback_app_controls = nullptr; // useful to insert app-dependent visual controls (with ImGui)
 		std::function<void(void)> callback_camera_changed = nullptr;
 		std::function<void(void)> callback_custom_gui = nullptr;
+		std::function<void(std::vector<std::string>)> callback_drop_files = nullptr;
 
 		//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 	};

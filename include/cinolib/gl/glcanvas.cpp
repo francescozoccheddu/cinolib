@@ -331,7 +331,8 @@ GLcanvas::GLcanvas(const int width, const int height, const int font_size, float
     glfwSetKeyCallback        (window, key_event         );
     glfwSetMouseButtonCallback(window, mouse_button_event);
     glfwSetCursorPosCallback  (window, cursor_event      );
-    glfwSetScrollCallback     (window, scroll_event      );
+    glfwSetScrollCallback(window, scroll_event);
+    glfwSetDropCallback(window, drop_event);
 
     // intialize OpenGL environment
     glfwMakeContextCurrent(window);
@@ -1294,5 +1295,19 @@ void GLcanvas::scroll_event(GLFWwindow* window, double x_offset, double y_offset
         v->handle_zoom(amount);
     }
 }
+
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+CINO_INLINE
+void GLcanvas::drop_event(GLFWwindow* window, int count, const char* paths[])
+{
+    GLcanvas* v = static_cast<GLcanvas*>(glfwGetWindowUserPointer(window));
+
+    if (v->callback_drop_files)
+    {
+        v->callback_drop_files(std::vector<std::string>{paths, paths + count});
+    }
+}
+
 
 }
