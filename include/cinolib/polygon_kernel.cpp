@@ -98,7 +98,7 @@ double polygon_kernel(std::vector<vec2d>   poly,
         vec2d A   = poly.at(i);
         vec2d B   = poly.at((i+1)%poly.size());
         vec2d u = B - A; u.normalize(); // edge direction
-        vec2d v = vec2d(-u.y(), u.x()); // direction orthogonal to u (rotated CCW)
+        vec2d v = vec2d{ -u.y(), u.x() }; // direction orthogonal to u (rotated CCW)
         A -= u * delta;
         B += u * delta;
         vec2d C = B + v * delta;
@@ -127,8 +127,8 @@ double polygon_kernel(std::vector<vec2d>   poly,
     // convert from BoostPolygon to vec2d array
     for(unsigned int i=0; i<kernel_boost.outer().size()-1; ++i)
     {
-        kernel.push_back(vec2d(boost::geometry::get<0>(kernel_boost.outer()[i]),
-                               boost::geometry::get<1>(kernel_boost.outer()[i])));
+        kernel.push_back(vec2d{ boost::geometry::get<0>(kernel_boost.outer()[i]),
+                                boost::geometry::get<1>(kernel_boost.outer()[i]) });
     }
 
     // Boost uses CW ordered vertices, so here I make the kernel CCW

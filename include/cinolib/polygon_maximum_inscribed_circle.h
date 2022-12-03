@@ -43,6 +43,8 @@
 namespace cinolib
 {
 
+#ifdef CINOLIB_USES_BOOST
+
 CINO_INLINE
 void polygon_maximum_inscribed_circle(const std::vector<vec2d> & poly,  // ordered polygon vertex list
                                             vec2d              & center,
@@ -55,6 +57,8 @@ void polygon_maximum_inscribed_circle(const std::vector<vec3d> & poly,   // will
                                             vec3d              & center, // will have z=0
                                             double             & radius);
 }
+
+#endif
 
 #include "polygon_maximum_inscribed_circle.tpp"
 
