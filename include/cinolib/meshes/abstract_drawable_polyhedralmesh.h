@@ -91,9 +91,9 @@ class AbstractDrawablePolyhedralMesh : public virtual Mesh, public DrawableObjec
         void updateGL_in();      // regenerates rendering data for mesh inside
         void updateGL_out();     // regenerates rendering data for mesh outside
         void updateGL_marked();  // regenerates rendering data for mesh marked elements
-        void updateGL_out_f(unsigned int fid);
+        void updateGL_out_f(unsigned int fid, unsigned int triangles_per_face);
         void updateGL_out_e(unsigned int eid);
-        void updateGL_marked_f(unsigned int fid);
+        void updateGL_marked_f(unsigned int fid, unsigned int triangles_per_face);
         void updateGL_marked_e(unsigned int eid);
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::

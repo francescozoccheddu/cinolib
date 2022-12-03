@@ -644,7 +644,7 @@ void AbstractDrawablePolyhedralMesh<Mesh>::updateGL_in()
 
 template<class Mesh>
 CINO_INLINE
-void AbstractDrawablePolyhedralMesh<Mesh>::updateGL_marked_f(unsigned int fid)
+void AbstractDrawablePolyhedralMesh<Mesh>::updateGL_marked_f(unsigned int fid, unsigned int triangles_per_face)
 {
     unsigned int pid_beneath;
     if (!this->face_is_visible(fid, pid_beneath)) return;
@@ -671,10 +671,10 @@ void AbstractDrawablePolyhedralMesh<Mesh>::updateGL_marked_f(unsigned int fid)
         }
 
         int base_addr = drawlist_marked.tri_coords.size() / 3;
-
-        const unsigned int i3 = fid + i * 3;
-        const unsigned int i9 = fid + i * 9;
-        const unsigned int i12 = fid + i * 12;
+        
+        const unsigned int i3 = (fid * triangles_per_face + i) * 3;
+        const unsigned int i9 = (fid * triangles_per_face + i) * 9;
+        const unsigned int i12 = (fid * triangles_per_face + i) * 12;
 
         drawlist_marked.tris[i3 + 0] = base_addr;
         drawlist_marked.tris[i3 + 1] = base_addr + 1;
@@ -719,7 +719,7 @@ void AbstractDrawablePolyhedralMesh<Mesh>::updateGL_marked_f(unsigned int fid)
 
 template<class Mesh>
 CINO_INLINE
-void AbstractDrawablePolyhedralMesh<Mesh>::updateGL_out_f(unsigned int fid)
+void AbstractDrawablePolyhedralMesh<Mesh>::updateGL_out_f(unsigned int fid, unsigned int triangles_per_face)
 {
     if (!this->face_is_on_srf(fid)) return;
 
@@ -755,10 +755,10 @@ void AbstractDrawablePolyhedralMesh<Mesh>::updateGL_out_f(unsigned int fid)
 
         int base_addr = drawlist_out.tri_coords.size() / 3;
 
-        const unsigned int i3 = fid + i * 3;
-        const unsigned int i6 = fid + i * 6;
-        const unsigned int i9 = fid + i * 9;
-        const unsigned int i12 = fid + i * 12;
+        const unsigned int i3 = (fid * triangles_per_face + i) * 3;
+        const unsigned int i6 = (fid * triangles_per_face + i) * 6;
+        const unsigned int i9 = (fid * triangles_per_face + i) * 9;
+        const unsigned int i12 = (fid * triangles_per_face + i) * 12;
 
         drawlist_out.tris[i3 + 0] = base_addr;
         drawlist_out.tris[i3 + 1] = base_addr + 1;
@@ -889,24 +889,28 @@ void AbstractDrawablePolyhedralMesh<Mesh>::updateGL_marked_e(unsigned int eid)
 
     int base_addr = drawlist_marked.seg_coords.size() / 3;
 
-    drawlist_marked.segs[eid + 0] = base_addr;
-    drawlist_marked.segs[eid + 1] = base_addr + 1;
+    const unsigned int i2 = eid * 2;
+    const unsigned int i6 = eid * 6;
+    const unsigned int i8 = eid * 8;
 
-    drawlist_marked.seg_coords[eid + 0] = vid0.x();
-    drawlist_marked.seg_coords[eid + 1] = vid0.y();
-    drawlist_marked.seg_coords[eid + 2] = vid0.z();
-    drawlist_marked.seg_coords[eid + 3] = vid1.x();
-    drawlist_marked.seg_coords[eid + 4] = vid1.y();
-    drawlist_marked.seg_coords[eid + 5] = vid1.z();
+    drawlist_marked.segs[i2 + 0] = base_addr;
+    drawlist_marked.segs[i2 + 1] = base_addr + 1;
 
-    drawlist_marked.seg_colors[eid + 0] = marked_edge_color.r();
-    drawlist_marked.seg_colors[eid + 1] = marked_edge_color.g();
-    drawlist_marked.seg_colors[eid + 2] = marked_edge_color.b();
-    drawlist_marked.seg_colors[eid + 3] = marked_edge_color.a();
-    drawlist_marked.seg_colors[eid + 4] = marked_edge_color.r();
-    drawlist_marked.seg_colors[eid + 5] = marked_edge_color.g();
-    drawlist_marked.seg_colors[eid + 6] = marked_edge_color.b();
-    drawlist_marked.seg_colors[eid + 7] = marked_edge_color.a();
+    drawlist_marked.seg_coords[i6 + 0] = vid0.x();
+    drawlist_marked.seg_coords[i6 + 1] = vid0.y();
+    drawlist_marked.seg_coords[i6 + 2] = vid0.z();
+    drawlist_marked.seg_coords[i6 + 3] = vid1.x();
+    drawlist_marked.seg_coords[i6 + 4] = vid1.y();
+    drawlist_marked.seg_coords[i6 + 5] = vid1.z();
+
+    drawlist_marked.seg_colors[i8 + 0] = marked_edge_color.r();
+    drawlist_marked.seg_colors[i8 + 1] = marked_edge_color.g();
+    drawlist_marked.seg_colors[i8 + 2] = marked_edge_color.b();
+    drawlist_marked.seg_colors[i8 + 3] = marked_edge_color.a();
+    drawlist_marked.seg_colors[i8 + 4] = marked_edge_color.r();
+    drawlist_marked.seg_colors[i8 + 5] = marked_edge_color.g();
+    drawlist_marked.seg_colors[i8 + 6] = marked_edge_color.b();
+    drawlist_marked.seg_colors[i8 + 7] = marked_edge_color.a();
 }
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -918,6 +922,10 @@ void AbstractDrawablePolyhedralMesh<Mesh>::updateGL_out_e(unsigned int eid)
     vec3d vid0 = this->edge_vert(eid, 0);
     vec3d vid1 = this->edge_vert(eid, 1);
 
+    const unsigned int i2 = eid * 2;
+    const unsigned int i6 = eid * 6;
+    const unsigned int i8 = eid * 8;
+    
     if (this->edge_is_on_srf(eid))
     {
         bool hidden = true;
@@ -931,48 +939,49 @@ void AbstractDrawablePolyhedralMesh<Mesh>::updateGL_out_e(unsigned int eid)
         }
         if (hidden) return;
 
+
         int base_addr = drawlist_out.seg_coords.size() / 3;
-        drawlist_out.segs[eid + 0] = base_addr;
-        drawlist_out.segs[eid + 1] = base_addr + 1;
+        drawlist_out.segs[i2 + 0] = base_addr;
+        drawlist_out.segs[i2 + 1] = base_addr + 1;
 
-        drawlist_out.seg_coords[eid + 0] = vid0.x();
-        drawlist_out.seg_coords[eid + 1] = vid0.y();
-        drawlist_out.seg_coords[eid + 2] = vid0.z();
-        drawlist_out.seg_coords[eid + 3] = vid1.x();
-        drawlist_out.seg_coords[eid + 4] = vid1.y();
-        drawlist_out.seg_coords[eid + 5] = vid1.z();
+        drawlist_out.seg_coords[i6 + 0] = vid0.x();
+        drawlist_out.seg_coords[i6 + 1] = vid0.y();
+        drawlist_out.seg_coords[i6 + 2] = vid0.z();
+        drawlist_out.seg_coords[i6 + 3] = vid1.x();
+        drawlist_out.seg_coords[i6 + 4] = vid1.y();
+        drawlist_out.seg_coords[i6 + 5] = vid1.z();
 
-        drawlist_out.seg_colors[eid + 0] = this->edge_data(eid).color.r();
-        drawlist_out.seg_colors[eid + 1] = this->edge_data(eid).color.g();
-        drawlist_out.seg_colors[eid + 2] = this->edge_data(eid).color.b();
-        drawlist_out.seg_colors[eid + 3] = this->edge_data(eid).color.a();
-        drawlist_out.seg_colors[eid + 4] = this->edge_data(eid).color.r();
-        drawlist_out.seg_colors[eid + 5] = this->edge_data(eid).color.g();
-        drawlist_out.seg_colors[eid + 6] = this->edge_data(eid).color.b();
-        drawlist_out.seg_colors[eid + 7] = this->edge_data(eid).color.a();
+        drawlist_out.seg_colors[i8 + 0] = this->edge_data(eid).color.r();
+        drawlist_out.seg_colors[i8 + 1] = this->edge_data(eid).color.g();
+        drawlist_out.seg_colors[i8 + 2] = this->edge_data(eid).color.b();
+        drawlist_out.seg_colors[i8 + 3] = this->edge_data(eid).color.a();
+        drawlist_out.seg_colors[i8 + 4] = this->edge_data(eid).color.r();
+        drawlist_out.seg_colors[i8 + 5] = this->edge_data(eid).color.g();
+        drawlist_out.seg_colors[i8 + 6] = this->edge_data(eid).color.b();
+        drawlist_out.seg_colors[i8 + 7] = this->edge_data(eid).color.a();
     }
 
     if (this->edge_data(eid).flags[MARKED])
     {
         int base_addr = drawlist_marked.seg_coords.size() / 3;
-        drawlist_marked.segs[eid + 0] = base_addr;
-        drawlist_marked.segs[eid + 1] = base_addr + 1;
+        drawlist_marked.segs[i2 + 0] = base_addr;
+        drawlist_marked.segs[i2 + 1] = base_addr + 1;
 
-        drawlist_marked.seg_coords[eid + 0] = vid0.x();
-        drawlist_marked.seg_coords[eid + 1] = vid0.y();
-        drawlist_marked.seg_coords[eid + 2] = vid0.z();
-        drawlist_marked.seg_coords[eid + 3] = vid1.x();
-        drawlist_marked.seg_coords[eid + 4] = vid1.y();
-        drawlist_marked.seg_coords[eid + 5] = vid1.z();
+        drawlist_marked.seg_coords[i6 + 0] = vid0.x();
+        drawlist_marked.seg_coords[i6 + 1] = vid0.y();
+        drawlist_marked.seg_coords[i6 + 2] = vid0.z();
+        drawlist_marked.seg_coords[i6 + 3] = vid1.x();
+        drawlist_marked.seg_coords[i6 + 4] = vid1.y();
+        drawlist_marked.seg_coords[i6 + 5] = vid1.z();
 
-        drawlist_marked.seg_colors[eid + 0] = marked_edge_color.r();
-        drawlist_marked.seg_colors[eid + 1] = marked_edge_color.g();
-        drawlist_marked.seg_colors[eid + 2] = marked_edge_color.b();
-        drawlist_marked.seg_colors[eid + 3] = marked_edge_color.a();
-        drawlist_marked.seg_colors[eid + 4] = marked_edge_color.r();
-        drawlist_marked.seg_colors[eid + 5] = marked_edge_color.g();
-        drawlist_marked.seg_colors[eid + 6] = marked_edge_color.b();
-        drawlist_marked.seg_colors[eid + 7] = marked_edge_color.a();
+        drawlist_marked.seg_colors[i8 + 0] = marked_edge_color.r();
+        drawlist_marked.seg_colors[i8 + 1] = marked_edge_color.g();
+        drawlist_marked.seg_colors[i8 + 2] = marked_edge_color.b();
+        drawlist_marked.seg_colors[i8 + 3] = marked_edge_color.a();
+        drawlist_marked.seg_colors[i8 + 4] = marked_edge_color.r();
+        drawlist_marked.seg_colors[i8 + 5] = marked_edge_color.g();
+        drawlist_marked.seg_colors[i8 + 6] = marked_edge_color.b();
+        drawlist_marked.seg_colors[i8 + 7] = marked_edge_color.a();
     }
 }
 
