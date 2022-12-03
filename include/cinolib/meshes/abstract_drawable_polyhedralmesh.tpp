@@ -678,7 +678,7 @@ void AbstractDrawablePolyhedralMesh<Mesh>::updateGL_out_f(unsigned int fid, unsi
         AO_vid1 /= static_cast<float>(vid1_vis_fids.size());
         AO_vid2 /= static_cast<float>(vid2_vis_fids.size());
 
-        int base_addr = visible_tri_i * 3;
+        int base_addr = (visible_tri_i + i) * 3;
 
         const unsigned int i3 = (visible_tri_i + i) * 3;
         const unsigned int i6 = (visible_tri_i + i) * 6;
