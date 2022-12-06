@@ -2753,67 +2753,91 @@ template<class M, class V, class E, class F, class P>
 CINO_INLINE
 void AbstractPolyhedralMesh<M, V, E, F, P>::poly_remove(const unsigned int pid, const bool delete_dangling_elements)
 {
-    std::set<unsigned int, std::greater<unsigned int>>& dangling_verts, dangling_edges, dangling_faces;
-    poly_remove(pid, delete_dangling_elements, dangling_verts, dangling_edges, dangling_faces);
+    std::vector<unsigned int> vids, eids, fids;
+    poly_dangling_ids(pid, vids, eids, fids);
+    poly_disconnect(pid, vids, eids, fids);
+    if (delete_dangling_elements)
+    {
+        for (unsigned int fid : fids) face_remove_unreferenced(fid);
+        for (unsigned int eid : eids) edge_remove_unreferenced(eid);
+        for (unsigned int vid : vids) vert_remove_unreferenced(vid);
+    }
+    poly_remove_unreferenced(pid);
 }
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 template<class M, class V, class E, class F, class P>
 CINO_INLINE
-void AbstractPolyhedralMesh<M, V, E, F, P>::poly_remove(const unsigned int pid, const bool delete_dangling_elements, std::set<unsigned int, std::greater<unsigned int>>& dangling_verts, std::set<unsigned int, std::greater<unsigned int>>& dangling_edges, std::set<unsigned int, std::greater<unsigned int>>& dangling_faces)
+void AbstractPolyhedralMesh<M, V, E, F, P>::poly_dangling_ids(const unsigned int pid, std::vector<unsigned int>& vids, std::vector<unsigned int>& eids, std::vector<unsigned int>& fids)
 {
-    dangling_verts.clear();
-    dangling_edges.clear();
-    dangling_faces.clear();
+    vids.clear();
+    eids.clear();
+    fids.clear();
+    
+    for (unsigned int vid : this->adj_p2v(pid))
+    {
+        if (this->v2p.at(vid).size() == 1) dangling_verts.push_back(vid);
+    }
 
-    std::vector<unsigned int> verts_to_update;
-    std::vector<unsigned int> edges_to_update;
-    std::vector<unsigned int> faces_to_update;
+    for (unsigned int eid : this->adj_p2e(pid))
+    {
+        if (this->e2p.at(eid).size() == 1) dangling_edges.push_back(eid);
+    }
 
+    for (unsigned int fid : this->adj_p2f(pid))
+    {
+        if (this->f2p.at(fid).size() == 1) dangling_faces.push_back(fid);
+    }
+
+    std::sort(dangling_verts.begin(), dangling_verts.end(), std::greater<unsigned int>());
+    std::sort(dangling_edges.begin(), dangling_edges.end(), std::greater<unsigned int>());
+    std::sort(dangling_faces.begin(), dangling_faces.end(), std::greater<unsigned int>());
+}
+
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+template<class M, class V, class E, class F, class P>
+CINO_INLINE
+void AbstractPolyhedralMesh<M, V, E, F, P>::poly_disconnect(const unsigned int pid, const std::vector<unsigned int>& vids, const std::vector<unsigned int>& eids, const std::vector<unsigned int>& fids)
+{
     // disconnect from vertices
-    for(unsigned int vid : this->adj_p2v(pid))
+    for (unsigned int vid : this->adj_p2v(pid))
     {
         REMOVE_FROM_VEC(this->v2p.at(vid), pid);
-        if(this->v2p.at(vid).empty()) dangling_verts.insert(vid);
-        else                          verts_to_update.push_back(vid);
     }
 
     // disconnect from edges
-    for(unsigned int eid : this->adj_p2e(pid))
+    for (unsigned int eid : this->adj_p2e(pid))
     {
         REMOVE_FROM_VEC(this->e2p.at(eid), pid);
-        if(this->e2p.at(eid).empty()) dangling_edges.insert(eid);
-        else                          edges_to_update.push_back(eid);
     }
 
     // disconnect from faces
-    for(unsigned int fid : this->adj_p2f(pid))
+    for (unsigned int fid : this->adj_p2f(pid))
     {
         REMOVE_FROM_VEC(this->f2p.at(fid), pid);
-        if(this->f2p.at(fid).empty()) dangling_faces.insert(fid);
-        else                          faces_to_update.push_back(fid);
     }
 
     // disconnect from other polyhedra
-    for(unsigned int nbr : this->adj_p2p(pid)) REMOVE_FROM_VEC(this->p2p.at(nbr), pid);
+    for (unsigned int nbr : this->adj_p2p(pid)) REMOVE_FROM_VEC(this->p2p.at(nbr), pid);
 
     // disconnect dangling faces
-    for(unsigned int fid : dangling_faces)
+    for (unsigned int fid : fids)
     {
         assert(this->adj_f2p(fid).empty());
-        for(unsigned int vid : this->faces.at(fid)) REMOVE_FROM_VEC(this->v2f.at(vid), fid);
-        for(unsigned int eid : this->f2e.at(fid))   REMOVE_FROM_VEC(this->e2f.at(eid), fid);
-        for(unsigned int nbr : this->f2f.at(fid))   REMOVE_FROM_VEC(this->f2f.at(nbr), fid);
+        for (unsigned int vid : this->faces.at(fid)) REMOVE_FROM_VEC(this->v2f.at(vid), fid);
+        for (unsigned int eid : this->f2e.at(fid))   REMOVE_FROM_VEC(this->e2f.at(eid), fid);
+        for (unsigned int nbr : this->f2f.at(fid))   REMOVE_FROM_VEC(this->f2f.at(nbr), fid);
     }
 
     // disconnect dangling edges
-    for(unsigned int eid : dangling_edges)
+    for (unsigned int eid : eids)
     {
         assert(this->adj_e2f(eid).empty());
         assert(this->adj_e2p(eid).empty());
-        unsigned int vid0 = this->edge_vert_id(eid,0);
-        unsigned int vid1 = this->edge_vert_id(eid,1);
+        unsigned int vid0 = this->edge_vert_id(eid, 0);
+        unsigned int vid1 = this->edge_vert_id(eid, 1);
         REMOVE_FROM_VEC(this->v2e.at(vid0), eid);
         REMOVE_FROM_VEC(this->v2e.at(vid1), eid);
         REMOVE_FROM_VEC(this->v2v.at(vid0), vid1);
@@ -2821,22 +2845,13 @@ void AbstractPolyhedralMesh<M, V, E, F, P>::poly_remove(const unsigned int pid, 
     }
 
     // disconnect dangling vertices
-    for(unsigned int vid : dangling_verts)
+    for (unsigned int vid : vids)
     {
         assert(this->adj_v2e(vid).empty());
         assert(this->adj_v2f(vid).empty());
         assert(this->adj_v2p(vid).empty());
-        for(unsigned int nbr : this->adj_v2v(vid)) REMOVE_FROM_VEC(this->v2v.at(nbr), vid);
+        for (unsigned int nbr : this->adj_v2v(vid)) REMOVE_FROM_VEC(this->v2v.at(nbr), vid);
     }
-
-    // remove dangling elements
-    if(delete_dangling_elements)
-    {
-        for(unsigned int fid : dangling_faces) face_remove_unreferenced(fid);
-        for(unsigned int eid : dangling_edges) edge_remove_unreferenced(eid);
-        for(unsigned int vid : dangling_verts) vert_remove_unreferenced(vid);
-    }
-    poly_remove_unreferenced(pid);
 }
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
