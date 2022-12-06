@@ -347,6 +347,51 @@ void AbstractDrawablePolygonMesh<Mesh>::updateGL_mesh()
 
 template<class Mesh>
 CINO_INLINE
+void AbstractDrawablePolygonMesh<Mesh>::updateGL_mesh_e(unsigned int eid, unsigned int visible_e_i)
+{
+    bool hidden = true;
+    for (unsigned int pid : this->adj_e2p(eid))
+    {
+        if (!this->poly_data(pid).flags[HIDDEN])
+        {
+            hidden = false;
+            break;
+        }
+    }
+    if (hidden) return;
+
+    const unsigned int i2 = visible_e_i * 2;
+    const unsigned int i6 = visible_e_i * 6;
+    const unsigned int i8 = visible_e_i * 8;
+
+    int base_addr = visible_e_i * 2;
+    drawlist.segs[i2 + 0] = base_addr;
+    drawlist.segs[i2 + 1] = base_addr + 1;
+
+    vec3d vid0 = this->edge_vert(eid, 0);
+    vec3d vid1 = this->edge_vert(eid, 1);
+
+    drawlist.seg_coords[i6 + 0] = vid0.x();
+    drawlist.seg_coords[i6 + 1] = vid0.y();
+    drawlist.seg_coords[i6 + 2] = vid0.z();
+    drawlist.seg_coords[i6 + 3] = vid1.x();
+    drawlist.seg_coords[i6 + 4] = vid1.y();
+    drawlist.seg_coords[i6 + 5] = vid1.z();
+
+    drawlist.seg_colors[i8 + 0] = this->edge_data(eid).color.r();
+    drawlist.seg_colors[i8 + 1] = this->edge_data(eid).color.g();
+    drawlist.seg_colors[i8 + 2] = this->edge_data(eid).color.b();
+    drawlist.seg_colors[i8 + 3] = this->edge_data(eid).color.a();
+    drawlist.seg_colors[i8 + 4] = this->edge_data(eid).color.r();
+    drawlist.seg_colors[i8 + 5] = this->edge_data(eid).color.g();
+    drawlist.seg_colors[i8 + 6] = this->edge_data(eid).color.b();
+    drawlist.seg_colors[i8 + 7] = this->edge_data(eid).color.a();
+}
+
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+template<class Mesh>
+CINO_INLINE
 void AbstractDrawablePolygonMesh<Mesh>::show_mesh(const bool b)
 {
     if (b) drawlist.draw_mode |=  DRAW_TRIS;

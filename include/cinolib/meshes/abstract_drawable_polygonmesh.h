@@ -85,6 +85,7 @@ class AbstractDrawablePolygonMesh : public virtual Mesh, public DrawableObject
         void updateGL();        // regenerates rendering data for both mesh and marked elements
         void updateGL_mesh();   // regenerates rendering data for mesh elements
         void updateGL_marked(); // regenerates rendering data for marked mesh elements
+        void updateGL_mesh_e(unsigned int eid, unsigned int visible_e_i);
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
