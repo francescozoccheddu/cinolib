@@ -2777,22 +2777,22 @@ void AbstractPolyhedralMesh<M, V, E, F, P>::poly_dangling_ids(const unsigned int
     
     for (unsigned int vid : this->adj_p2v(pid))
     {
-        if (this->v2p.at(vid).size() == 1) dangling_verts.push_back(vid);
+        if (this->v2p.at(vid).size() == 1) vids.push_back(vid);
     }
 
     for (unsigned int eid : this->adj_p2e(pid))
     {
-        if (this->e2p.at(eid).size() == 1) dangling_edges.push_back(eid);
+        if (this->e2p.at(eid).size() == 1) eids.push_back(eid);
     }
 
     for (unsigned int fid : this->adj_p2f(pid))
     {
-        if (this->f2p.at(fid).size() == 1) dangling_faces.push_back(fid);
+        if (this->f2p.at(fid).size() == 1) fids.push_back(fid);
     }
 
-    std::sort(dangling_verts.begin(), dangling_verts.end(), std::greater<unsigned int>());
-    std::sort(dangling_edges.begin(), dangling_edges.end(), std::greater<unsigned int>());
-    std::sort(dangling_faces.begin(), dangling_faces.end(), std::greater<unsigned int>());
+    std::sort(vids.begin(), vids.end(), std::greater<unsigned int>());
+    std::sort(eids.begin(), eids.end(), std::greater<unsigned int>());
+    std::sort(fids.begin(), fids.end(), std::greater<unsigned int>());
 }
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
