@@ -292,6 +292,7 @@ class AbstractPolyhedralMesh : public AbstractMesh<M,V,E,P>
                 unsigned int               poly_add                    (const std::vector<unsigned int> & vlist);
                 void               poly_remove_unreferenced    (const unsigned int pid);
                 void               poly_remove                 (const unsigned int pid, const bool delete_dangling_elements = true);
+                void               poly_remove                 (const unsigned int pid, const bool delete_dangling_elements, std::set<unsigned int, std::greater<unsigned int>>&removed_vids, std::set<unsigned int, std::greater<unsigned int>>& removed_eids, std::set<unsigned int, std::greater<unsigned int>>& removed_fids);
                 void               polys_remove                (const std::vector<unsigned int> & pids);
                 unsigned int               poly_face_adj_through_edge  (const unsigned int pid, const unsigned int fid, const unsigned int eid) const;
                 bool               poly_faces_share_orientation(const unsigned int pid, const unsigned int fid0, const unsigned int fid1) const;

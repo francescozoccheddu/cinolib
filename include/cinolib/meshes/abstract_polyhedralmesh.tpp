@@ -2751,11 +2751,21 @@ void AbstractPolyhedralMesh<M,V,E,F,P>::poly_remove_unreferenced(const unsigned 
 
 template<class M, class V, class E, class F, class P>
 CINO_INLINE
-void AbstractPolyhedralMesh<M,V,E,F,P>::poly_remove(const unsigned int pid, const bool delete_dangling_elements)
+void AbstractPolyhedralMesh<M, V, E, F, P>::poly_remove(const unsigned int pid, const bool delete_dangling_elements)
 {
-    std::set<unsigned int,std::greater<unsigned int>> dangling_verts; // higher ids first
-    std::set<unsigned int,std::greater<unsigned int>> dangling_edges; // higher ids first
-    std::set<unsigned int,std::greater<unsigned int>> dangling_faces; // higher ids first
+    std::set<unsigned int, std::greater<unsigned int>>& dangling_verts, dangling_edges, dangling_faces;
+    poly_remove(pid, delete_dangling_elements, dangling_verts, dangling_edges, dangling_faces);
+}
+
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+template<class M, class V, class E, class F, class P>
+CINO_INLINE
+void AbstractPolyhedralMesh<M, V, E, F, P>::poly_remove(const unsigned int pid, const bool delete_dangling_elements, std::set<unsigned int, std::greater<unsigned int>>& dangling_verts, std::set<unsigned int, std::greater<unsigned int>>& dangling_edges, std::set<unsigned int, std::greater<unsigned int>>& dangling_faces)
+{
+    dangling_verts.clear();
+    dangling_edges.clear();
+    dangling_faces.clear();
 
     std::vector<unsigned int> verts_to_update;
     std::vector<unsigned int> edges_to_update;
