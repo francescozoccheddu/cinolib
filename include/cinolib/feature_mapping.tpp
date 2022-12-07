@@ -39,6 +39,7 @@
 #include <cinolib/clamp.h>
 #include <cinolib/dijkstra.h>
 #include <cinolib/export_surface.h>
+#include <cinolib/parallel_for.h>
 
 namespace cinolib
 {
