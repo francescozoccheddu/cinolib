@@ -525,6 +525,23 @@ bool Octree::intersects_ray(const vec3d & p, const vec3d & dir, double & min_t, 
         }
     }
 
+    // temporary fix
+    if (!q.empty() && q.top().node == root)
+    {
+        q.pop();
+        for (unsigned int i : root->item_indices)
+        {
+            if (items.at(i)->intersects_ray(p, dir, t, pos))
+            {
+                Obj obj;
+                obj.node = nullptr;
+                obj.index = items.at(i)->id;
+                obj.dist = t;
+                q.push(obj);
+            }
+        }
+    }
+
     if(print_debug_info)
     {
         Time::time_point t1 = Time::now();
@@ -533,7 +550,7 @@ bool Octree::intersects_ray(const vec3d & p, const vec3d & dir, double & min_t, 
 
     if(q.empty()) return false;
     assert(q.top().index>=0);
-    id    = items.at(q.top().index)->id;
+    id    = q.top().index;
     min_t = q.top().dist;
     return true;
 }
