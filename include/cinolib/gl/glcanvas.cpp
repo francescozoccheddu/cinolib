@@ -1203,18 +1203,18 @@ void GLcanvas::key_event(GLFWwindow* window, int key, int /*scancode*/, int acti
 CINO_INLINE
 void GLcanvas::mouse_button_event(GLFWwindow* window, int button, int action, int modifiers)
 {
+    GLcanvas* v = static_cast<GLcanvas*>(glfwGetWindowUserPointer(window));
+    
     // if visual controls claim the event, let them handle it
     if (ImGui::GetIO().WantCaptureMouse) 
     {
         if (action == GLFW_RELEASE)
         {
-            draw();
-            m_needsRedraw = true;
+            v->draw();
+            v->m_needsRedraw = true;
         }
         return;
     }
-
-    GLcanvas* v = static_cast<GLcanvas*>(glfwGetWindowUserPointer(window));
 
     if (action == GLFW_PRESS)
     {
