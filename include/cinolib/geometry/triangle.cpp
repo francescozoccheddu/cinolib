@@ -52,17 +52,33 @@ vec3d Triangle::point_closest_to(const vec3d & p) const
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 CINO_INLINE
-bool Triangle::intersects_ray(const vec3d & p, const vec3d & dir, double & t, vec3d & pos) const
+bool Triangle::intersects_ray_or_line(const vec3d & p, const vec3d & dir, double & t, vec3d & pos, bool line) const
 {
     bool  hits_backside;
     bool  coplanar;
     vec3d bary;
-    if(Moller_Trumbore_intersection(p, dir, v[0], v[1], v[2], hits_backside, coplanar, t, bary) && t>=0)
+    if(Moller_Trumbore_intersection(p, dir, v[0], v[1], v[2], hits_backside, coplanar, t, bary) && (line || t>=0))
     {
         pos = p + t * dir;
         return true;
     }
     return false;
+}
+
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+CINO_INLINE
+bool Triangle::intersects_ray(const vec3d& p, const vec3d& dir, double& t, vec3d& pos) const
+{
+    return intersects_ray_or_line(p, dir, t, pos, false);
+}
+
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+CINO_INLINE
+bool Triangle::intersects_line(const vec3d& p, const vec3d& dir, double& t, vec3d& pos) const
+{
+    return intersects_ray_or_line(p, dir, t, pos, true);
 }
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::

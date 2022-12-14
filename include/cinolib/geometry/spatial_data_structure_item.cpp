@@ -35,6 +35,8 @@
 *********************************************************************************/
 #include <cinolib/geometry/spatial_data_structure_item.h>
 
+#include <stdexcept>
+
 namespace cinolib
 {
 
@@ -50,6 +52,14 @@ CINO_INLINE
 double SpatialDataStructureItem::dist_sqrd(const vec3d &p) const
 {
     return p.dist_sqrd(point_closest_to(p));
+}
+
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+CINO_INLINE
+bool SpatialDataStructureItem::intersects_line(const vec3d& p, const vec3d& dir, double& t, vec3d& pos) const
+{
+    throw std::runtime_error{ "not implemented" };
 }
 
 }

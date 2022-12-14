@@ -475,14 +475,17 @@ bool Octree::contains(const vec3d & p, const bool strict, std::unordered_set<uns
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 CINO_INLINE
-bool Octree::intersects_ray(const vec3d & p, const vec3d & dir, double & min_t, unsigned int & id) const
+bool Octree::intersects_ray_or_line(const vec3d& p, const vec3d& dir, double& min_t, unsigned int& id, bool line) const
 {
     typedef std::chrono::high_resolution_clock Time;
     Time::time_point t0 = Time::now();
 
+    const auto intersects_item{ line ? &SpatialDataStructureItem::intersects_line : &SpatialDataStructureItem::intersects_ray };
+    const auto intersects_bbox{ line ? &AABB::intersects_line : &AABB::intersects_ray };
+
     vec3d  pos;
     double t=0.0;
-    if(root && !root->bbox.intersects_ray(p, dir, t, pos)) return false;
+    if(root && !(root->bbox.*intersects_bbox)(p, dir, t, pos)) return false;
     Obj obj;
     obj.node = root;
     obj.dist = t;
@@ -498,7 +501,7 @@ bool Octree::intersects_ray(const vec3d & p, const vec3d & dir, double & min_t, 
         for(int i=0; i<8; ++i)
         {
             OctreeNode *child = obj.node->children[i];
-            if(child->bbox.intersects_ray(p, dir, t, pos))
+            if((child->bbox.*intersects_bbox)(p, dir, t, pos))
             {
                 if(child->is_inner)
                 {
@@ -511,7 +514,7 @@ bool Octree::intersects_ray(const vec3d & p, const vec3d & dir, double & min_t, 
                 {
                     for(unsigned int i : child->item_indices)
                     {
-                        if(items.at(i)->intersects_ray(p, dir, t, pos))
+                        if((items.at(i)->*intersects_item)(p, dir, t, pos))
                         {
                             Obj obj;
                             obj.node  = child;
@@ -531,7 +534,7 @@ bool Octree::intersects_ray(const vec3d & p, const vec3d & dir, double & min_t, 
         q.pop();
         for (unsigned int i : root->item_indices)
         {
-            if (items.at(i)->intersects_ray(p, dir, t, pos))
+            if ((items.at(i)->*intersects_item)(p, dir, t, pos))
             {
                 Obj obj;
                 obj.node = nullptr;
@@ -553,6 +556,22 @@ bool Octree::intersects_ray(const vec3d & p, const vec3d & dir, double & min_t, 
     id    = q.top().index;
     min_t = q.top().dist;
     return true;
+}
+
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+CINO_INLINE
+bool Octree::intersects_ray(const vec3d& p, const vec3d& dir, double& min_t, unsigned int& id) const
+{
+    return intersects_ray_or_line(p, dir, min_t, id, false);
+}
+
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+CINO_INLINE
+bool Octree::intersects_line(const vec3d& p, const vec3d& dir, double& min_t, unsigned int& id) const
+{
+    return intersects_ray_or_line(p, dir, min_t, id, true);
 }
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::

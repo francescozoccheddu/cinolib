@@ -197,6 +197,8 @@ class Octree
         bool contains(const vec3d & p, const bool strict, unsigned int & id) const;
         bool contains(const vec3d & p, const bool strict, std::unordered_set<unsigned int> & ids) const;
 
+        bool intersects_line(const vec3d& p, const vec3d& dir, double& min_t, unsigned int& id) const; // first hit
+        
         // returns respectively the first and the full list of intersections
         // between items in the octree and a ray R(t) := p + t * dir
         bool intersects_ray(const vec3d & p, const vec3d & dir, double & min_t, unsigned int & id) const; // first hit
@@ -221,7 +223,11 @@ class Octree
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-        protected:
+    private:
+
+        bool intersects_ray_or_line(const vec3d& p, const vec3d& dir, double& min_t, unsigned int& id, bool line) const; // first hit
+
+    protected:
 
         unsigned int max_depth;      // maximum allowed depth of the tree
         unsigned int items_per_leaf; // prescribed number of items per leaf (can't go deeper than max_depth anyways)

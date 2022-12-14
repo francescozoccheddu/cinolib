@@ -89,6 +89,7 @@ namespace cinolib
             virtual bool intersects_segment (const vec3d s[], const bool ignore_if_valid_complex) const = 0;
             virtual bool intersects_triangle(const vec3d t[], const bool ignore_if_valid_complex) const = 0;
             virtual bool intersects_ray     (const vec3d & p, const vec3d & dir, double & t, vec3d & pos) const = 0;
+            virtual bool intersects_line    (const vec3d & p, const vec3d & dir, double & t, vec3d & pos) const; // optional because added later
     };
 }
 

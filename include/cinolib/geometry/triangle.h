@@ -63,6 +63,7 @@ class Triangle : public SpatialDataStructureItem
 
         vec3d    point_closest_to       (const vec3d & p) const override;
         bool     intersects_ray         (const vec3d & p, const vec3d & dir, double & t, vec3d & pos) const override;
+        bool     intersects_line        (const vec3d & p, const vec3d & dir, double & t, vec3d & pos) const override;
         void     barycentric_coordinates(const vec3d & p, double bc[]) const override;
         bool     contains               (const vec3d & p, const bool strict) const override;
         bool     intersects_segment     (const vec3d   s[], const bool ignore_if_valid_complex) const override;
@@ -71,6 +72,11 @@ class Triangle : public SpatialDataStructureItem
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
         vec3d v[3];
+
+    private:
+
+        bool intersects_ray_or_line(const vec3d& p, const vec3d& dir, double& t, vec3d& pos, bool line) const;
+
 };
 
 }

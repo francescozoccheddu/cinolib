@@ -37,6 +37,7 @@
 #include <algorithm>
 #include <cmath>
 #include <cassert>
+#include <limits>
 
 namespace cinolib
 {
@@ -285,9 +286,9 @@ bool AABB::intersects_box(const AABB & box, const bool strict) const
  * http://realtimecollisiondetection.net/books/rtcd/errata/
 */
 CINO_INLINE
-bool AABB::intersects_ray(const vec3d & p, const vec3d & dir, double & t_min, vec3d & pos) const
+bool AABB::intersects_ray_or_line(const vec3d & p, const vec3d & dir, double & t_min, vec3d & pos, bool line) const
 {
-           t_min = 0.0;        // set to -FLT_MAX to get first hit on line
+           t_min = line ? -std::numeric_limits<double>::max() : 0.0;
     double t_max = inf_double; // set to max distance ray can travel (for segment)
 
     for(int i=0; i<3; ++i)
@@ -318,6 +319,22 @@ bool AABB::intersects_ray(const vec3d & p, const vec3d & dir, double & t_min, ve
     // Ray intersects all 3 slabs. Return point (q) and intersection t value (tmin)
     pos = p + dir*t_min;
     return true;
+}
+
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+CINO_INLINE
+bool AABB::intersects_ray(const vec3d& p, const vec3d& dir, double& t_min, vec3d& pos) const
+{
+    return intersects_ray_or_line(p, dir, t_min, pos, false);
+}
+
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+CINO_INLINE
+bool AABB::intersects_line(const vec3d& p, const vec3d& dir, double& t_min, vec3d& pos) const
+{
+    return intersects_ray_or_line(p, dir, t_min, pos, true);
 }
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
