@@ -614,6 +614,11 @@ void GLcanvas::draw()
         if(m_showSidebar) draw_side_bar();
         ImGui::Render();
         ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
+        if (m_imGuiPendingRedraws > 0)
+        {
+            m_imGuiPendingRedraws--;
+            m_needsRedraw = true;
+        }
     }
 
     glfwSwapBuffers(window);
@@ -1201,17 +1206,24 @@ void GLcanvas::key_event(GLFWwindow* window, int key, int /*scancode*/, int acti
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 CINO_INLINE
+void GLcanvas::imGuiRequestRedraw(int _count)
+{
+    m_imGuiPendingRedraws = std::max(m_imGuiPendingRedraws, _count);
+}
+
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+CINO_INLINE
 void GLcanvas::mouse_button_event(GLFWwindow* window, int button, int action, int modifiers)
 {
     GLcanvas* v = static_cast<GLcanvas*>(glfwGetWindowUserPointer(window));
-    
+
     // if visual controls claim the event, let them handle it
-    if (ImGui::GetIO().WantCaptureMouse) 
+    if (ImGui::GetIO().WantCaptureMouse)
     {
         if (action == GLFW_RELEASE)
         {
-            v->draw();
-            v->m_needsRedraw = true;
+            v->imGuiRequestRedraw();
         }
         return;
     }

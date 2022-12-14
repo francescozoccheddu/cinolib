@@ -122,12 +122,15 @@ namespace cinolib
 		double m_dpiFactor;
 		bool m_drawing{ false };
 		bool m_needsRedraw{ false };
+		int m_imGuiPendingRedraws{};
 
 		vec2d m_last_cursor_pos{};
 		bool m_ignore_left_mb{false}, m_ignore_middle_mb{false}, m_ignore_right_mb{false};
 
 		int current_sidebar_width() const;
 		void clamp_camera_pivot();
+
+		void imGuiRequestRedraw(int _count = 1);
 
 	public:
 
