@@ -4,13 +4,15 @@
 namespace cinolib
 {
 
+	class GLcanvas;
+
 	class CanvasGuiItem
 	{
 
 	public:
 
-		virtual  ~CanvasGuiItem() = default;
-		virtual void draw() = 0;
+		virtual ~CanvasGuiItem() = default;
+		virtual void draw(const GLcanvas& _canvas) = 0;
 
 	};
 

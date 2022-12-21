@@ -850,7 +850,7 @@ void GLcanvas::draw_custom_gui() const
     for (CanvasGuiItem* item : canvas_gui_items)
     {
         ImGui::PushID(item);
-        item->draw();
+        item->draw(*this);
         ImGui::PopID();
     }
 
