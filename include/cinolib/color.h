@@ -99,6 +99,15 @@ class Color
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
+        static constexpr Color lerp(const Color& a, const Color& b, const float progress) {
+            const float invProgress{ 1.0f - progress };
+            return Color{
+                a.r() * invProgress + b.r() * progress,
+                a.g() * invProgress + b.g() * progress,
+                a.b() * invProgress + b.b() * progress,
+                a.a() * invProgress + b.a() * progress
+            };
+        }
         static Color scatter(unsigned int range, unsigned int value, float sat=.5f, float val=.85f);
         static Color hsv_ramp(unsigned int range, unsigned int value);
         static Color parula_ramp(unsigned int range, unsigned int value);
