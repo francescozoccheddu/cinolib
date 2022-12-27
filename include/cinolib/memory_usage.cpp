@@ -64,11 +64,9 @@ CINO_INLINE
 size_t memory_usage_in_bytes()
 {
 #ifdef _WIN32
-    assert(false && "THIS CODE HASN'T BEEN TESTED YET!");
-    return 0;
-    //PROCESS_MEMORY_COUNTERS_EX pmc;
-    //GetProcessMemoryInfo(GetCurrentProcess(), &pmc, sizeof(pmc));
-    //return (size_t) pmc.WorkingSetSize;
+    PROCESS_MEMORY_COUNTERS pmc;
+    GetProcessMemoryInfo(GetCurrentProcess(), &pmc, sizeof(pmc));
+    return (size_t)pmc.WorkingSetSize;
 #endif
 
 #ifdef __linux__
