@@ -842,16 +842,16 @@ void GLcanvas::draw_custom_gui() const
         ImGuiWindowFlags_NoSavedSettings |
         ImGuiWindowFlags_NoInputs);
 
-    if (callback_custom_gui)
-    {
-        callback_custom_gui();
-    }
-
     for (CanvasGuiItem* item : canvas_gui_items)
     {
         ImGui::PushID(item);
         item->draw(*this);
         ImGui::PopID();
+    }
+
+    if (callback_custom_gui)
+    {
+        callback_custom_gui();
     }
 
     ImGui::End();
