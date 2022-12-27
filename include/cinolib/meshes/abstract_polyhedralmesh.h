@@ -211,6 +211,7 @@ class AbstractPolyhedralMesh : public AbstractMesh<M,V,E,P>
         void              edge_remove                (const unsigned int eid);
         void              edge_remove_unreferenced   (const unsigned int eid);
         bool              edge_is_on_srf             (const unsigned int eid) const;
+        bool              edge_is_visible            (const unsigned int eid) const;
         bool              edge_is_incident_to_srf    (const unsigned int eid) const;
         bool              edge_has_border_on_srf     (const unsigned int eid) const;
         std::vector<unsigned int> edge_ordered_poly_ring     (const unsigned int eid) const;
@@ -257,6 +258,7 @@ class AbstractPolyhedralMesh : public AbstractMesh<M,V,E,P>
                 void               face_remove_unreferenced   (const unsigned int fid);
                 std::vector<unsigned int>  face_tessellation          (const unsigned int fid) const;
                 bool               face_is_visible            (const unsigned int fid, unsigned int & pid_beneath) const;
+                bool               face_is_visible            (const unsigned int fid) const;
                 void               face_apply_labels          (const std::vector<int> & labels);
                 void               face_apply_label           (const int label);
                 bool               face_verts_are_CCW         (const unsigned int fid, const unsigned int curr, const unsigned int prev) const;

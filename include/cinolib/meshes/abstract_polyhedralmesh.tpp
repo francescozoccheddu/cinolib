@@ -555,6 +555,16 @@ std::vector<vec3d> AbstractPolyhedralMesh<M,V,E,F,P>::face_verts(const unsigned 
 
 template<class M, class V, class E, class F, class P>
 CINO_INLINE
+bool AbstractPolyhedralMesh<M, V, E, F, P>::face_is_visible(const unsigned int fid) const
+{
+    unsigned int pid;
+    return face_is_visible(fid, pid);
+}
+
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+template<class M, class V, class E, class F, class P>
+CINO_INLINE
 bool AbstractPolyhedralMesh<M,V,E,F,P>::face_is_visible(const unsigned int fid, unsigned int & pid_beneath) const
 {
     // note: returns also the ID of the poly that makes the face visible
@@ -1878,6 +1888,22 @@ void AbstractPolyhedralMesh<M,V,E,F,P>::vert_ordered_srf_one_ring(const unsigned
             std::rotate(v_ring.begin(), v_ring.begin()+last, v_ring.end());
         }
     }
+}
+
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+template<class M, class V, class E, class F, class P>
+CINO_INLINE
+bool AbstractPolyhedralMesh<M, V, E, F, P>::edge_is_visible(const unsigned int eid) const
+{
+    for (unsigned int pid : this->adj_e2p(eid))
+    {
+        if (!this->poly_data(pid).flags[HIDDEN])
+        {
+            return true;
+        }
+    }
+    return false;
 }
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
