@@ -44,10 +44,11 @@ namespace cinolib
 template<class M, class V, class E, class F, class P>
 CINO_INLINE
 void export_surface(const AbstractPolyhedralMesh<M,V,E,F,P> & m,
-                          AbstractPolygonMesh<M,V,E,F>      & srf)
+                          AbstractPolygonMesh<M,V,E,F>      & srf,
+                          bool include_hidden)
 {
     std::unordered_map<unsigned int,unsigned int> m2srf_vmap, srf2m_vmap;
-    export_surface(m, srf, m2srf_vmap, srf2m_vmap);
+    export_surface(m, srf, m2srf_vmap, srf2m_vmap, include_hidden);
 }
 
 
@@ -58,7 +59,8 @@ CINO_INLINE
 void export_surface(const AbstractPolyhedralMesh<M,V,E,F,P> & m,
                           AbstractPolygonMesh<M,V,E,F>      & srf,
                           std::unordered_map<unsigned int,unsigned int>     & m2srf_vmap,
-                          std::unordered_map<unsigned int,unsigned int>     & srf2m_vmap)
+                          std::unordered_map<unsigned int,unsigned int>     & srf2m_vmap,
+                          bool include_hidden)
 {
     m2srf_vmap.clear();
     srf2m_vmap.clear();
@@ -70,7 +72,8 @@ void export_surface(const AbstractPolyhedralMesh<M,V,E,F,P> & m,
 
     for(unsigned int fid=0; fid<m.num_faces(); ++fid)
     {
-        if (m.face_is_on_srf(fid))
+        unsigned int pid;
+        if (include_hidden ? m.face_is_on_srf(fid) : m.face_is_visible(fid, pid))
         {
             std::vector<unsigned int> p;
             for(unsigned int off=0; off<m.verts_per_face(fid); ++off)

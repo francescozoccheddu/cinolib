@@ -49,7 +49,8 @@ namespace cinolib
 template<class M, class V, class E, class F, class P>
 CINO_INLINE
 void export_surface(const AbstractPolyhedralMesh<M,V,E,F,P> & m,
-                          AbstractPolygonMesh<M,V,E,F>      & srf);
+                          AbstractPolygonMesh<M,V,E,F>      & srf,
+                          bool include_hidden = true);
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -58,7 +59,8 @@ CINO_INLINE
 void export_surface(const AbstractPolyhedralMesh<M,V,E,F,P> & m,
                           AbstractPolygonMesh<M,V,E,F>      & srf,
                           std::unordered_map<unsigned int,unsigned int>     & m2srf_vmap,
-                          std::unordered_map<unsigned int,unsigned int>     & srf2m_vmap);
+                          std::unordered_map<unsigned int,unsigned int>     & srf2m_vmap,
+                          bool include_hidden = true);
 
 }
 
