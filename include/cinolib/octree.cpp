@@ -76,11 +76,20 @@ Octree::Octree(const unsigned int max_depth,
 CINO_INLINE
 Octree::~Octree()
 {
+    clear();
+}
+
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+CINO_INLINE
+void Octree::clear()
+{
     // delete Octree
-    if(root!=nullptr) delete root;
+    if (root != nullptr) delete root;
+    root = nullptr;
 
     // delete item list
-    while(!items.empty())
+    while (!items.empty())
     {
         delete items.back();
         items.pop_back();
