@@ -2769,30 +2769,56 @@ void AbstractPolyhedralMesh<M, V, E, F, P>::poly_remove(const unsigned int pid, 
 
 template<class M, class V, class E, class F, class P>
 CINO_INLINE
-void AbstractPolyhedralMesh<M, V, E, F, P>::poly_dangling_ids(const unsigned int pid, std::vector<unsigned int>& vids, std::vector<unsigned int>& eids, std::vector<unsigned int>& fids)
+std::vector<unsigned int> AbstractPolyhedralMesh<M, V, E, F, P>::poly_dangling_vids(const unsigned int pid) const
 {
-    vids.clear();
-    eids.clear();
-    fids.clear();
-    
+    std::vector<unsigned int> vids;
     for (unsigned int vid : this->adj_p2v(pid))
     {
         if (this->v2p.at(vid).size() == 1) vids.push_back(vid);
     }
+    std::sort(vids.begin(), vids.end(), std::greater<unsigned int>());
+    return vids;
+}
 
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+template<class M, class V, class E, class F, class P>
+CINO_INLINE
+std::vector<unsigned int> AbstractPolyhedralMesh<M, V, E, F, P>::poly_dangling_eids(const unsigned int pid) const
+{
+    std::vector<unsigned int> eids;
     for (unsigned int eid : this->adj_p2e(pid))
     {
         if (this->e2p.at(eid).size() == 1) eids.push_back(eid);
     }
+    std::sort(eids.begin(), eids.end(), std::greater<unsigned int>());
+    return eids;
+}
 
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+template<class M, class V, class E, class F, class P>
+CINO_INLINE
+std::vector<unsigned int> AbstractPolyhedralMesh<M, V, E, F, P>::poly_dangling_fids(const unsigned int pid) const
+{
+    std::vector<unsigned int> fids;
     for (unsigned int fid : this->adj_p2f(pid))
     {
         if (this->f2p.at(fid).size() == 1) fids.push_back(fid);
     }
-
-    std::sort(vids.begin(), vids.end(), std::greater<unsigned int>());
-    std::sort(eids.begin(), eids.end(), std::greater<unsigned int>());
     std::sort(fids.begin(), fids.end(), std::greater<unsigned int>());
+    return fids;
+}
+
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+template<class M, class V, class E, class F, class P>
+CINO_INLINE
+void AbstractPolyhedralMesh<M, V, E, F, P>::poly_dangling_ids(const unsigned int pid, std::vector<unsigned int>& vids, std::vector<unsigned int>& eids, std::vector<unsigned int>& fids) const
+{
+    vids = poly_dangling_vids(pid);
+    eids = poly_dangling_eids(pid);
+    fids = poly_dangling_fids(pid);
 }
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::

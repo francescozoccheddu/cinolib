@@ -292,7 +292,10 @@ class AbstractPolyhedralMesh : public AbstractMesh<M,V,E,P>
                 unsigned int               poly_add                    (const std::vector<unsigned int> & vlist);
                 void               poly_remove_unreferenced    (const unsigned int pid);
                 void               poly_remove                 (const unsigned int pid, const bool delete_dangling_elements = true);
-                void               poly_dangling_ids           (const unsigned int pid, std::vector<unsigned int>&vids, std::vector<unsigned int>& eids, std::vector<unsigned int>& fids);
+                std::vector<unsigned int>  poly_dangling_vids  (const unsigned int pid) const;
+                std::vector<unsigned int>  poly_dangling_eids  (const unsigned int pid) const;
+                std::vector<unsigned int>  poly_dangling_fids  (const unsigned int pid) const;
+                void               poly_dangling_ids           (const unsigned int pid, std::vector<unsigned int>& vids, std::vector<unsigned int>& eids, std::vector<unsigned int>& fids) const;
                 void               poly_disconnect             (const unsigned int pid, const std::vector<unsigned int>& dangling_vids, const std::vector<unsigned int>& dangling_eids, const std::vector<unsigned int>& dangling_fids);
                 void               polys_remove                (const std::vector<unsigned int> & pids);
                 unsigned int               poly_face_adj_through_edge  (const unsigned int pid, const unsigned int fid, const unsigned int eid) const;
