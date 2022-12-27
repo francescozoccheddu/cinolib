@@ -72,6 +72,7 @@ class mat final
         static mat<r,c,T> TRANS (const mat<r-1,1,T> & tx);
         static mat<r,c,T> ROT_3D(const mat<r,  1,T> & axis, const T angle_rad);
         static mat<r,c,T> ROT_2D(const T angle_rad);
+        static mat<r,c,T> HOMOGENEOUS(const mat<r-1,c-1,T>& non_homogeneous);
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 

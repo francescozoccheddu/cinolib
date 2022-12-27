@@ -207,6 +207,25 @@ mat<r,c,T> mat<r,c,T>::ROT_2D(const T angle_rad)
 
 template<unsigned int r, unsigned int c, class T>
 CINO_INLINE
+mat<r,c,T> mat<r,c,T>::HOMOGENEOUS(const mat<r-1,c-1,T>& non_homogeneous)
+{
+    static_assert(r == c);
+    mat<r, c, T> m;
+    mat_set_diag<r, T>(m._mat, 1);
+    for (unsigned int ri{}; ri < r - 1; ri++)
+    {
+        for (unsigned int ci{}; ci < c - 1; ci++)
+        {
+            m(ri,ci) = non_homogeneous(ri,ci);
+        }
+    }
+    return m;
+}
+
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+template<unsigned int r, unsigned int c, class T>
+CINO_INLINE
 mat<r,c,T> mat<r,c,T>::ROT_3D(const mat<r,1,T> & axis, const T angle_rad)
 {
     assert(r==c);
