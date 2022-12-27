@@ -209,7 +209,7 @@ template<unsigned int r, unsigned int c, class T>
 CINO_INLINE
 mat<r,c,T> mat<r,c,T>::HOMOGENEOUS(const mat<r-1,c-1,T>& non_homogeneous)
 {
-    static_assert(r == c);
+    static_assert(r == c, "matrix must be square");
     mat<r, c, T> m;
     mat_set_diag<r, T>(m._mat, 1);
     for (unsigned int ri{}; ri < r - 1; ri++)
