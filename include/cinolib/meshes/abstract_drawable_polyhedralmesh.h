@@ -41,13 +41,14 @@
 #include <cinolib/drawable_object.h>
 #include <cinolib/gl/draw_lines_tris.h>
 #include <cinolib/meshes/mesh_slicer.h>
+#include <vector>
 
 namespace cinolib
 {
 
-template<class Mesh>
-class AbstractDrawablePolyhedralMesh : public virtual Mesh, public DrawableObject
-{
+    template<class Mesh>
+    class AbstractDrawablePolyhedralMesh: public virtual Mesh, public DrawableObject
+    {
     public:
 
         Material   material_;
@@ -61,21 +62,21 @@ class AbstractDrawablePolyhedralMesh : public virtual Mesh, public DrawableObjec
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-        explicit AbstractDrawablePolyhedralMesh() : Mesh() {}
+        explicit AbstractDrawablePolyhedralMesh(): Mesh() {}
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-        void       draw(const float scene_size=1) const;
-        vec3d      scene_center() const { return this->bb.center();     }
+        void       draw(const float scene_size = 1) const;
+        vec3d      scene_center() const { return this->bb.center(); }
         float      scene_radius() const { return this->bb.diag() * 0.5; }
         ObjectType object_type()  const = 0;
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-        void vert_set_color(const Color & c) { Mesh::vert_set_color(c); updateGL(); }
-        void edge_set_color(const Color & c) { Mesh::edge_set_color(c); updateGL(); }
-        void face_set_color(const Color & c) { Mesh::face_set_color(c); updateGL(); }
-        void poly_set_color(const Color & c) { Mesh::poly_set_color(c); updateGL(); }
+        void vert_set_color(const Color& c) { Mesh::vert_set_color(c); updateGL(); }
+        void edge_set_color(const Color& c) { Mesh::edge_set_color(c); updateGL(); }
+        void face_set_color(const Color& c) { Mesh::face_set_color(c); updateGL(); }
+        void poly_set_color(const Color& c) { Mesh::poly_set_color(c); updateGL(); }
         void vert_set_alpha(const float   a) { Mesh::vert_set_alpha(a); updateGL(); }
         void edge_set_alpha(const float   a) { Mesh::edge_set_alpha(a); updateGL(); }
         void face_set_alpha(const float   a) { Mesh::face_set_alpha(a); updateGL(); }
@@ -89,15 +90,21 @@ class AbstractDrawablePolyhedralMesh : public virtual Mesh, public DrawableObjec
 
         void updateGL();         // regenerates rendering data for mesh inside/outside and marked elements
         void updateGL_in();      // regenerates rendering data for mesh inside
+        void updateGL_in(std::vector<unsigned int>& visible_tri_i_by_fid, std::vector<unsigned int>& visible_e_i_by_eid);
         void updateGL_out();     // regenerates rendering data for mesh outside
+        void updateGL_out(std::vector<unsigned int>& visible_tri_i_by_fid, std::vector<unsigned int>& visible_e_i_by_eid);
         void updateGL_marked();  // regenerates rendering data for mesh marked elements
         void updateGL_out_f(unsigned int fid, unsigned int visible_tri_i);
         void updateGL_out_e(unsigned int eid, unsigned int visible_e_i);
+        void updateGL_in_f(unsigned int fid, unsigned int visible_tri_i);
+        void updateGL_in_e(unsigned int eid, unsigned int visible_e_i);
+        void updateGL_f(RenderData& drawlist, unsigned int fid, unsigned int visible_tri_i);
+        void updateGL_e(RenderData& drawlist, unsigned int eid, unsigned int visible_e_i);
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-        const Material & material() const { return material_; }
-              Material & material()       { return material_; }
+        const Material& material() const { return material_; }
+        Material& material() { return material_; }
 
         //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -114,9 +121,9 @@ class AbstractDrawablePolyhedralMesh : public virtual Mesh, public DrawableObjec
         void show_out_poly_color();
         void show_out_poly_quality();
         void show_out_texture1D(const int tex_type);
-        void show_out_texture2D(const int tex_type, const double tex_unit_scalar, const char *bitmap = NULL);
+        void show_out_texture2D(const int tex_type, const double tex_unit_scalar, const char* bitmap = NULL);
         void show_out_wireframe(const bool b);
-        void show_out_wireframe_color(const Color & c);
+        void show_out_wireframe_color(const Color& c);
         void show_out_wireframe_width(const float width);
         void show_out_wireframe_transparency(const float alpha);
 
@@ -125,24 +132,24 @@ class AbstractDrawablePolyhedralMesh : public virtual Mesh, public DrawableObjec
         void show_in_poly_color();
         void show_in_poly_quality();
         void show_in_texture1D(const int tex_type);
-        void show_in_texture2D(const int tex_type, const double tex_unit_scalar, const char *bitmap = NULL);
+        void show_in_texture2D(const int tex_type, const double tex_unit_scalar, const char* bitmap = NULL);
         void show_in_wireframe(const bool b);
-        void show_in_wireframe_color(const Color & c);
+        void show_in_wireframe_color(const Color& c);
         void show_in_wireframe_width(const float width);
         void show_in_wireframe_transparency(const float alpha);
 
         void show_marked_edge(const bool b);
-        void show_marked_edge_color(const Color & c);
+        void show_marked_edge_color(const Color& c);
         void show_marked_edge_width(const float width);
         void show_marked_edge_transparency(const float alpha);
 
         void show_marked_face(const bool b);
-        void show_marked_face_color(const Color & c);
+        void show_marked_face_color(const Color& c);
         void show_marked_face_transparency(const float alpha);
 
         void show_marked_poly_color(const Color& c);
         void show_marked_poly_transparency(const float alpha);
-};
+    };
 
 }
 
