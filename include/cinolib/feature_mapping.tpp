@@ -98,6 +98,10 @@ bool feature_mapping(const AbstractPolygonMesh<M1,V1,E1,P1> & m_source,
     std::unordered_map<unsigned int,unsigned int> corners; // maps corners in verts of m_source to corners in verts of m_target
     for(auto f : f_source)
     {
+        if (f.empty())
+        {
+            continue;
+        }
         unsigned int   vid;
         vec3d  p;
         double dist;
@@ -114,6 +118,10 @@ bool feature_mapping(const AbstractPolygonMesh<M1,V1,E1,P1> & m_source,
     std::vector<bool> mask(m_target.num_verts(),false);
     for(auto f : f_source)
     {
+        if (f.empty())
+        {
+            continue;
+        }
         std::vector<double> l;
         l.push_back(0);
         for(unsigned int i=1; i<f.size(); ++i)
@@ -147,7 +155,7 @@ bool feature_mapping(const AbstractPolygonMesh<M1,V1,E1,P1> & m_source,
         });
         std::vector<unsigned int> path;
         dijkstra(m_target, corners.at(f.front()), corners.at(f.back()), w, mask, path);
-        if(!path.empty())
+        if(path.size() > 1)
         {
             f_target.push_back(path);
             for(unsigned int i=2; i<path.size()-2; ++i) mask.at(path.at(i)) = true;
