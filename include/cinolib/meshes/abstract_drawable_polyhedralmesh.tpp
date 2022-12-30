@@ -705,8 +705,6 @@ template<class Mesh>
 CINO_INLINE
 void AbstractDrawablePolyhedralMesh<Mesh>::updateGL_f(RenderData& drawlist, unsigned int fid, unsigned int visible_tri_i)
 {
-    if (!this->face_is_on_srf(fid)) return;
-
     unsigned int pid_beneath;
     if (!this->face_is_visible(fid, pid_beneath)) return;
 
@@ -885,10 +883,6 @@ CINO_INLINE
 void AbstractDrawablePolyhedralMesh<Mesh>::updateGL_e(RenderData& drawlist, unsigned int eid, unsigned int visible_e_i)
 {
    
-    if (!this->edge_is_on_srf(eid))
-    {
-        return;
-    }
     bool hidden = true;
     for (unsigned int pid : this->adj_e2p(eid))
     {
