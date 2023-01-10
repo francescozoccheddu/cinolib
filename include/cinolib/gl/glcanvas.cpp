@@ -331,7 +331,7 @@ void GLcanvas::create_fonts_if_needed()
                 ImVector<ImWchar> ranges{};
                 ImFontGlyphRangesBuilder builder{};
                 std::vector<char> subset{ font.subset.begin(), font.subset.end() };
-                builder.AddText(&subset[0]);
+                builder.AddText(&subset[0], &subset[0] + subset.size());
                 builder.BuildRanges(&ranges);
                 ImFontConfig config{};
                 io.Fonts->AddFontFromMemoryCompressedTTF(cinolib::droid_sans_data, static_cast<int>(cinolib::droid_sans_size), targetSize, &config, ranges.Data);
