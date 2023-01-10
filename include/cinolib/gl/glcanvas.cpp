@@ -310,6 +310,12 @@ void GLcanvas::camera_pivot_depth(double depth)
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 CINO_INLINE
+bool GLcanvas::Font::operator==(const Font& _other) const
+{
+    return _other.size == size && _other.subset == subset;
+}
+
+CINO_INLINE
 void GLcanvas::create_fonts_if_needed()
 {
     if (m_needsFontUpdate)
@@ -319,12 +325,13 @@ void GLcanvas::create_fonts_if_needed()
         io.Fonts->Clear();
         for (const Font& font : fonts)
         {
-            const float targetSize{ std::round(font.size * font_oversize) };
-            if (font.subset)
+            const float targetSize{ static_cast<float>(font.size * font_oversize) };
+            if (!font.subset.empty())
             {
                 ImVector<ImWchar> ranges{};
                 ImFontGlyphRangesBuilder builder{};
-                builder.AddText(font.subset);
+                std::vector<char> subset{ font.subset.begin(), font.subset.end() };
+                builder.AddText(&subset[0]);
                 builder.BuildRanges(&ranges);
                 ImFontConfig config{};
                 io.Fonts->AddFontFromMemoryCompressedTTF(cinolib::droid_sans_data, static_cast<int>(cinolib::droid_sans_size), targetSize, &config, ranges.Data);
@@ -350,8 +357,8 @@ void GLcanvas::update_fonts()
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 CINO_INLINE
-GLcanvas::GLcanvas(const int width, const int height, const int font_size, float font_oversize)
-        : owns_ImGui{ windowCount() == 0 }, window{ createWindow(width, height) }, m_width{ width }, m_height{ height }, fonts{ Font{static_cast<float>(font_size), {}} }, font_oversize{ font_oversize }
+GLcanvas::GLcanvas(const int width, const int height, const unsigned int font_size, const unsigned int font_oversize)
+        : owns_ImGui{ windowCount() == 0 }, window{ createWindow(width, height) }, m_width{ width }, m_height{ height }, fonts{ Font{font_size, {}} }, font_oversize{ font_oversize }
 {
 
     glfwSwapInterval(1); // enable vsync

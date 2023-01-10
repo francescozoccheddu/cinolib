@@ -49,6 +49,7 @@
 #include <functional>
 #include <chrono>
 #include <string>
+#include <unordered_set>
 
 namespace cinolib
 {
@@ -148,11 +149,13 @@ namespace cinolib
 
 		struct Font final
 		{
-			float size{ 13.0f };
-			const char* subset{ nullptr };
+			unsigned int size{ 13 };
+			std::unordered_set<char> subset{};
+
+			bool operator==(const Font&) const;
 		};
 
-		float font_oversize{ 1.0f };
+		unsigned int font_oversize{ 1 };
 
 		std::vector<Font> fonts;
 
@@ -221,7 +224,7 @@ namespace cinolib
 
 		//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-		GLcanvas(const int width = 700, const int height = 700, const int font_size = 13, float font_oversize = 10.0f);
+		GLcanvas(const int width = 700, const int height = 700, const unsigned int font_size = 13, const unsigned int font_oversize = 10);
 		~GLcanvas();
 
 		//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
