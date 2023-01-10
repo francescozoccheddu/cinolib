@@ -123,6 +123,7 @@ namespace cinolib
 		bool m_drawing{ false };
 		bool m_needsRedraw{ false };
 		int m_imGuiPendingRedraws{};
+		bool m_needsFontUpdate{ true };
 
 		vec2d m_last_cursor_pos{};
 		bool m_ignore_left_mb{false}, m_ignore_middle_mb{false}, m_ignore_right_mb{false};
@@ -132,16 +133,30 @@ namespace cinolib
 
 		void imGuiRequestRedraw(int _count = 1);
 
+		void create_fonts_if_needed();
+
 	public:
 
 		//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-		static constexpr vec3d world_right() { return {1,0,0}; };
-		static constexpr vec3d world_up() { return {0,1,0}; };
-		static constexpr vec3d world_forward() { return {0,0,-1}; };
+		static constexpr vec3d world_right() { return { 1,0,0 }; };
+		static constexpr vec3d world_up() { return { 0,1,0 }; };
+		static constexpr vec3d world_forward() { return { 0,0,-1 }; };
 
 		KeyBindings key_bindings;
 		MouseBindings mouse_bindings;
+
+		struct Font final
+		{
+			float size{ 13.0f };
+			const char* subset{ nullptr };
+		};
+
+		float font_oversize{ 1.0f };
+
+		std::vector<Font> fonts;
+
+		void update_fonts();
 
 		struct CameraSettings final
 		{
@@ -199,7 +214,6 @@ namespace cinolib
 		std::vector<std::vector<Marker>>	marker_sets;
 		std::vector<SideBarItem*>			side_bar_items;
 		std::vector<CanvasGuiItem*>			canvas_gui_items;
-		const int							font_size;
 		bool								show_axis = false;
 		bool								depth_cull_markers = true; // skip occluded 3D markers, testing their depth with the Z-buffer
 		FreeCamera<double>					camera{};

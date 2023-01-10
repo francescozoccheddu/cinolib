@@ -310,8 +310,48 @@ void GLcanvas::camera_pivot_depth(double depth)
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 CINO_INLINE
+void GLcanvas::create_fonts_if_needed()
+{
+    if (m_needsFontUpdate)
+    {
+        m_needsFontUpdate = false;
+        ImGuiIO& io{ ImGui::GetIO() };
+        io.Fonts->Clear();
+        for (const Font& font : fonts)
+        {
+            const float targetSize{ std::round(font.size * font_oversize) };
+            if (font.subset)
+            {
+                ImVector<ImWchar> ranges{};
+                ImFontGlyphRangesBuilder builder{};
+                builder.AddText(font.subset);
+                builder.BuildRanges(&ranges);
+                ImFontConfig config{};
+                io.Fonts->AddFontFromMemoryCompressedTTF(cinolib::droid_sans_data, static_cast<int>(cinolib::droid_sans_size), targetSize, &config, ranges.Data);
+            }
+            else
+            {
+                io.Fonts->AddFontFromMemoryCompressedTTF(cinolib::droid_sans_data, static_cast<int>(cinolib::droid_sans_size), targetSize);
+            }
+        }
+        io.Fonts->Build();
+        ImGui_ImplOpenGL2_DestroyFontsTexture();
+        ImGui_ImplOpenGL2_CreateFontsTexture();
+        io.FontGlobalScale = 1.0f / font_oversize;
+    }
+}
+
+CINO_INLINE
+void GLcanvas::update_fonts()
+{
+    m_needsFontUpdate = true;
+}
+
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+CINO_INLINE
 GLcanvas::GLcanvas(const int width, const int height, const int font_size, float font_oversize)
-    : owns_ImGui{windowCount() == 0}, window{createWindow(width, height)}, m_width{width}, m_height{height}, font_size{font_size}
+        : owns_ImGui{ windowCount() == 0 }, window{ createWindow(width, height) }, m_width{ width }, m_height{ height }, fonts{ Font{static_cast<float>(font_size), {}} }, font_oversize{ font_oversize }
 {
 
     glfwSwapInterval(1); // enable vsync
@@ -352,14 +392,9 @@ GLcanvas::GLcanvas(const int width, const int height, const int font_size, float
         ImGui::StyleColorsDark();
         ImGui_ImplGlfw_InitForOpenGL(window, true);
         ImGui_ImplOpenGL2_Init();
-        // NOTE: since ImGui does not support dynamic font sizing, I am using oversized fonts
-        // (10x) to account for zoom factor (downscaling is visually better than upscaling)
-        // https://github.com/ocornut/imgui/issues/797
-        ImGuiIO &io = ImGui::GetIO();
+        ImGuiIO& io = ImGui::GetIO();
         io.IniFilename = NULL;
-        io.Fonts->Clear();
-        io.Fonts->AddFontFromMemoryCompressedTTF(droid_sans_data, droid_sans_size, font_size * font_oversize);
-        io.FontGlobalScale = 1.0f / font_oversize; // compensate for high-res fonts
+        update_fonts();
     }
 
     reset_camera();
@@ -591,6 +626,7 @@ void GLcanvas::draw()
         m_needsRedraw = true;
         return;
     }
+    create_fonts_if_needed();
     m_needsRedraw = false;
     m_drawing = true;
     glfwMakeContextCurrent(window);
