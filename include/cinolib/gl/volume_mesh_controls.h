@@ -84,6 +84,7 @@ class VolumeMeshControls : public SideBarItem
     bool       show_vecfield     = false;
     bool       show_face_normals = false;
     bool       show_vert_normals = false;
+    bool       export_visible_surf_only = false;
     int        wireframe_width   = 1;
     int        marked_edge_width = 1;
     int        isoline_width     = 1;

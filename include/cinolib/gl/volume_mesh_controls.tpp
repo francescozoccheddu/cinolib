@@ -816,11 +816,13 @@ void VolumeMeshControls<Mesh>::header_actions(const bool open)
         if(ImGui::SmallButton("Export Surface"))
         {
             Polygonmesh<M,V,E,F> tmp;
-            export_surface(*m, tmp);
+            export_surface(*m, tmp, !export_visible_surf_only);
             std::string filename = file_dialog_save();
             if(!filename.empty()) tmp.save(filename.c_str());
             refresh = true;
         }
+        ImGui::SameLine();
+        ImGui::Checkbox("Visible only", &export_visible_surf_only);
         if(ImGui::SmallButton("Mark Creases"))
         {
             m->edge_mark_sharp_creases(to_rad(crease_deg));
