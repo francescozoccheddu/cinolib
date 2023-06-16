@@ -119,6 +119,9 @@ if(CINOLIB_USES_OPENGL_GLFW_IMGUI)
             ${imgui_SOURCE_DIR}/backends/imgui_impl_opengl2.cpp
             ${imgui_SOURCE_DIR}/backends/imgui_impl_glfw.cpp
         )
+        target_compile_definitions(imgui
+            PUBLIC ImDrawIdx=unsigned\ int
+        )
         target_include_directories(imgui PUBLIC ${imgui_SOURCE_DIR} ${imgui_SOURCE_DIR}/backends)
         target_link_libraries(imgui PUBLIC glfw)
         target_link_libraries(cinolib ${CINOLIB_ACCESS} imgui glfw)
