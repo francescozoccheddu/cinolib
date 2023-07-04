@@ -201,6 +201,7 @@ GLFWwindow* GLcanvas::createWindow(int width, int height)
 {
     glfwInit();
     glfwWindowHint(GLFW_SAMPLES, 4);
+    glfwWindowHint(GLFW_COCOA_RETINA_FRAMEBUFFER, GLFW_FALSE);
     GLFWwindow* const window{ glfwCreateWindow(width, height, "Cinolib", nullptr, nullptr) };
     if (!window) glfwTerminate();
     windowCount()++;
@@ -286,12 +287,6 @@ void GLcanvas::show_sidebar(bool show, bool update_gl, bool redraw)
         m_showSidebar = show;
         update_viewport(update_gl, redraw);
     }
-}
-
-CINO_INLINE
-double GLcanvas::dpi_factor() const
-{
-    return m_dpiFactor;
 }
 
 CINO_INLINE
@@ -387,9 +382,6 @@ GLcanvas::GLcanvas(const int width, const int height, const unsigned int font_si
     glEnable(GL_LIGHT0);
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LEQUAL);
-
-    // to handle high DPI displays
-    update_DPI_factor();
 
     if(owns_ImGui)
     {
@@ -720,8 +712,8 @@ void GLcanvas::draw_markers() const
     ImDrawList* drawList = ImGui::GetWindowDrawList();
 
     // if marker culling is enabled, read the Z buffer to depth-test 3D markers
-    GLint    W     = static_cast<GLint>(m_width  * m_dpiFactor);
-    GLint    H     = static_cast<GLint>(m_height * m_dpiFactor);
+    GLint    W     = static_cast<GLint>(m_width);
+    GLint    H     = static_cast<GLint>(m_height);
     GLfloat *z_buf = (depth_cull_markers) ? new GLfloat[W*H] : nullptr;
     if(depth_cull_markers) whole_Z_buffer(z_buf);
 
@@ -739,8 +731,8 @@ void GLcanvas::draw_markers() const
                 assert(!m.pos_3d.is_inf());
                 GLdouble z;
                 project(m.pos_3d, pos, z);
-                int x = static_cast<int>(pos.x() * m_dpiFactor);
-                int y = static_cast<int>(pos.y() * m_dpiFactor);
+                int x = static_cast<int>(pos.x());
+                int y = static_cast<int>(pos.y());
                 // marker is outside the frustum
                 if (z < 0 || z >= 1 || x <= 0 || x >= W || y <= 0 || y >= H) continue;
                 // marker is occluded in the current view
@@ -951,18 +943,6 @@ int GLcanvas::launch(std::initializer_list<GLcanvas*> additional_windows, bool p
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 CINO_INLINE
-void GLcanvas::update_DPI_factor()
-{
-    // https://www.glfw.org/docs/latest/intro_guide.html#coordinate_systems
-    // https://www.glfw.org/docs/latest/window_guide.html#window_fbsize
-    int fb_width, fb_height;
-    glfwGetFramebufferSize(window, &fb_width, &fb_height);
-    m_dpiFactor = (float)fb_width/m_width;
-}
-
-//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
-CINO_INLINE
 vec2d GLcanvas::cursor_pos() const
 {
     vec2d pos;
@@ -987,9 +967,9 @@ CINO_INLINE
 GLfloat GLcanvas::query_Z_buffer(const vec2d & p) const
 {
     glfwMakeContextCurrent(window);
-    GLint x = p.x()         * m_dpiFactor;
-    GLint y = p.y()         * m_dpiFactor;
-    GLint H = m_height * m_dpiFactor;
+    GLint x = p.x();
+    GLint y = p.y();
+    GLint H = m_height;
     GLfloat depth;
     glReadPixels(x, H-1-y, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &depth);
     return depth;
@@ -1076,7 +1056,6 @@ void GLcanvas::window_size_event(GLFWwindow *window, int width, int height)
     GLcanvas* v = static_cast<GLcanvas*>(glfwGetWindowUserPointer(window));
     v->m_height           = height;
     v->m_width            = width;
-    v->update_DPI_factor();
     v->update_viewport();
 }
 

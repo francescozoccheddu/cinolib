@@ -120,7 +120,6 @@ namespace cinolib
 		int m_width, m_height;
 		float m_sidebarRelativeWidth{ 0.4f };
 		bool m_showSidebar{ false };
-		double m_dpiFactor;
 		bool m_drawing{ false };
 		bool m_needsRedraw{ false };
 		int m_imGuiPendingRedraws{};
@@ -196,7 +195,6 @@ namespace cinolib
 		void sidebar_relative_width(float width, bool update_gl = true, bool redraw = true);
 		bool show_sidebar() const;
 		void show_sidebar(bool show, bool update_gl = true, bool redraw = true);
-		double dpi_factor() const;
 		double camera_pivot_depth() const;
 		void camera_pivot_depth(double depth);
 
@@ -279,10 +277,6 @@ namespace cinolib
 		void update_GL_matrices()   const;
 		void update_GL_view()  const;
 		void update_GL_projection() const;
-
-		//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
-		void update_DPI_factor();
 
 		//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
