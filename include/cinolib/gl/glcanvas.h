@@ -96,6 +96,7 @@ namespace cinolib
 
 		// internal event handlers
 		static void window_size_event(GLFWwindow* w, int    width, int    height);
+		static void framebuffer_size_event(GLFWwindow* w, int    width, int    height);
 		static void key_event(GLFWwindow* w, int    key, int    unused, int action, int modif);
 		static void mouse_button_event(GLFWwindow* w, int    butt, int    action, int modif);
 		static void cursor_event(GLFWwindow* w, double x_pos, double y_pos);
@@ -124,6 +125,7 @@ namespace cinolib
 		bool m_needsRedraw{ false };
 		int m_imGuiPendingRedraws{};
 		bool m_needsFontUpdate{ true };
+		double m_dpiFactor{ 1.0 };
 
 		vec2d m_last_cursor_pos{};
 		bool m_ignore_left_mb{false}, m_ignore_middle_mb{false}, m_ignore_right_mb{false};
@@ -134,6 +136,9 @@ namespace cinolib
 		void imGuiRequestRedraw(int _count = 1);
 
 		void create_fonts_if_needed();
+
+		void update_dpi_factor();
+		void set_viewport();
 
 	public:
 
@@ -197,6 +202,7 @@ namespace cinolib
 		void show_sidebar(bool show, bool update_gl = true, bool redraw = true);
 		double camera_pivot_depth() const;
 		void camera_pivot_depth(double depth);
+		double dpi_factor() const;
 
 		//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 

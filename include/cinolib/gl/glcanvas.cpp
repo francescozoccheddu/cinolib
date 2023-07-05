@@ -178,7 +178,7 @@ void GLcanvas::update_viewport(bool update_gl, bool redraw)
     camera.projection.setAspect(std::max(canvas_width(),1), std::max(m_height, 1));
     if (update_gl)
     {
-        glViewport(current_sidebar_width(), 0, canvas_width(), m_height);
+        set_viewport();
         camera.updateProjection();
         update_GL_projection();
         notify_camera_change();
@@ -201,7 +201,7 @@ GLFWwindow* GLcanvas::createWindow(int width, int height)
 {
     glfwInit();
     glfwWindowHint(GLFW_SAMPLES, 4);
-    glfwWindowHint(GLFW_COCOA_RETINA_FRAMEBUFFER, GLFW_FALSE);
+    //glfwWindowHint(GLFW_COCOA_RETINA_FRAMEBUFFER, GLFW_FALSE);
     GLFWwindow* const window{ glfwCreateWindow(width, height, "Cinolib", nullptr, nullptr) };
     if (!window) glfwTerminate();
     windowCount()++;
@@ -235,6 +235,12 @@ CINO_INLINE
 int GLcanvas::height() const
 {
     return m_height;
+}
+
+CINO_INLINE
+double GLcanvas::dpi_factor() const
+{
+    return m_dpiFactor;
 }
 
 CINO_INLINE
@@ -320,7 +326,7 @@ void GLcanvas::create_fonts_if_needed()
         io.Fonts->Clear();
         for (const Font& font : fonts)
         {
-            const float targetSize{ static_cast<float>(font.size * font_oversize) };
+            const float targetSize{ static_cast<float>(font.size * font_oversize * m_dpiFactor) };
             if (!font.subset.empty())
             {
                 ImVector<ImWchar> ranges{};
@@ -339,7 +345,7 @@ void GLcanvas::create_fonts_if_needed()
         io.Fonts->Build();
         ImGui_ImplOpenGL2_DestroyFontsTexture();
         ImGui_ImplOpenGL2_CreateFontsTexture();
-        io.FontGlobalScale = 1.0f / font_oversize;
+        io.FontGlobalScale = 1.0f / font_oversize / m_dpiFactor;
     }
 }
 
@@ -370,6 +376,7 @@ GLcanvas::GLcanvas(const int width, const int height, const unsigned int font_si
 
     // register GLFW callbacks
     glfwSetWindowSizeCallback (window, window_size_event );
+    glfwSetFramebufferSizeCallback (window, framebuffer_size_event );
     glfwSetKeyCallback        (window, key_event         );
     glfwSetMouseButtonCallback(window, mouse_button_event);
     glfwSetCursorPosCallback  (window, cursor_event      );
@@ -396,6 +403,7 @@ GLcanvas::GLcanvas(const int width, const int height, const unsigned int font_si
         update_fonts();
     }
 
+    update_dpi_factor();
     reset_camera();
 }
 
@@ -629,7 +637,7 @@ void GLcanvas::draw()
     m_needsRedraw = false;
     m_drawing = true;
     glfwMakeContextCurrent(window);
-    glViewport(current_sidebar_width(), 0, canvas_width(), m_height);
+    set_viewport();
     glClearColor(background.r(), background.g(), background.b(), 1);
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 
@@ -1042,6 +1050,33 @@ Ray GLcanvas::eye_to_mouse_ray() const
     return eye_to_screen_ray(pos);
 }
 
+CINO_INLINE
+void GLcanvas::update_dpi_factor() 
+{
+    int fbWidth, fbHeight;
+    int width, height;
+    glfwGetWindowSize(window, &width, &height);
+    glfwGetFramebufferSize(window, &fbWidth, &fbHeight);
+    if (width > 0 && fbWidth > 0) {
+        const double dpiFactor{static_cast<double>(fbWidth) / width};
+        if (dpiFactor != m_dpiFactor) {
+            m_dpiFactor = dpiFactor;
+            m_needsFontUpdate = true;
+        } 
+    }
+}
+
+CINO_INLINE
+void GLcanvas::set_viewport() 
+{
+    glViewport(
+        static_cast<GLint>(current_sidebar_width() * m_dpiFactor), 
+        0, 
+        static_cast<GLint>(canvas_width() * m_dpiFactor), 
+        static_cast<GLint>(m_height * m_dpiFactor)
+    );
+}
+
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 //:::::::::::::::::::::::: STATIC GLFW CALLBACKS :::::::::::::::::::::::::
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -1056,7 +1091,19 @@ void GLcanvas::window_size_event(GLFWwindow *window, int width, int height)
     GLcanvas* v = static_cast<GLcanvas*>(glfwGetWindowUserPointer(window));
     v->m_height           = height;
     v->m_width            = width;
+    v->update_dpi_factor();
     v->update_viewport();
+}
+
+CINO_INLINE
+void GLcanvas::framebuffer_size_event(GLFWwindow *window, int width, int height)
+{
+    if (width <= 0 || height <= 0)
+    {
+        return;
+    }
+    GLcanvas* v = static_cast<GLcanvas*>(glfwGetWindowUserPointer(window));
+    v->update_dpi_factor();
 }
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
